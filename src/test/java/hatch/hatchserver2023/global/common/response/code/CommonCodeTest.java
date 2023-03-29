@@ -23,7 +23,7 @@ class CommonCodeTest {
         //when
         //then
         assertThat(CommonCode.OK.getCode())
-                .isEqualTo("C200");
+                .isEqualTo("COMMON-200");
     }
 
     @Test

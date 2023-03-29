@@ -18,7 +18,7 @@ class CommonResponseTest {
         //then
         CommonResponse response = CommonResponse.toResponse(code);
         assertThat(response.getCode())
-                .isEqualTo("C200");
+                .isEqualTo("COMMON-200");
         assertThat(response.getMessage())
                 .isEqualTo("[공통] 정상 처리");
     }
@@ -33,7 +33,7 @@ class CommonResponseTest {
         //then
         CommonResponse response = CommonResponse.toResponse(code);
         assertThat(response.getCode())
-                .isEqualTo("C400");
+                .isEqualTo("COMMON-400");
         assertThat(response.getMessage())
                 .isEqualTo("[공통] 잘못된 요청");
     }

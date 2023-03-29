@@ -35,6 +35,6 @@ public enum CommonCode implements StatusCode {
 
     @Override
     public String getMessage() {
-        return DomainLabel.COMMON.getLabel() + " " + message;
+        return DomainLabel.COMMON.getLabel() + message;
     }
 }
