@@ -78,14 +78,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> handleExceptionInternal(StatusCode code){
         CommonResponse errorResponse = CommonResponse.toErrorResponse(code);
         return ResponseEntity
-                .status(code.getCode())
+                .status(code.getStatus())
                 .body(errorResponse);
     }
 
     private ResponseEntity<Object> handleExceptionInternal(StatusCode code, String message){
         CommonResponse errorResponse = CommonResponse.toErrorResponse(code, message);
         return ResponseEntity
-                .status(code.getCode())
+                .status(code.getStatus())
                 .body(errorResponse);
     }
 }
