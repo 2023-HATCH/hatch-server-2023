@@ -17,4 +17,5 @@ sudo docker pull realginger/popoback:1.0
 docker run -d --env-file ./.env -p 8080:8080 --name popoback realginger/popoback:1.0
 
 # 사용하지 않는 불필요한 이미지 삭제 -> 현재 컨테이너가 물고 있는 이미지는 삭제되지 않습니다.
+#이거 jenkins 로그보니까 잘 안되고 있는 것 같은데 왜 잘되지? 이런 부분 몇개 있음
 docker rmi -f $(docker images -f "dangling=true" -q) || true
