@@ -1,0 +1,16 @@
+// 도메인 명 : h1
+= Status Code
+
+상태 코드 명세서
+
+// api 명 : h3
+=== COMMON
+include::{snippets}/status-code/code-response-fields-beneath-statusCodes.adoc[]
+
+//opertation 쓰면 스니펫 여러개 한번에 넣어줄 수 있지만, 같이 들어가는 자동 헤더를 못지우겠음
+// operation::status-code[snippets='code-response-fields-beneath-status_codes']
+// :operation-code-response-fields-beneath-status_codes-title: hihi
+// 이걸로 헤더 지울 수 있다는데 왜 안되는지 모르겠음...
+
+// :noheader:
+

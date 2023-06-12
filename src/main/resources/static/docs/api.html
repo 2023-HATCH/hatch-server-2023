@@ -445,26 +445,35 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_healthcheck_api">HealthCheck API</a>
+<ul class="sectlevel0">
+<li><a href="#_health_check">HEALTH CHECK</a>
 <ul class="sectlevel2">
-<li><a href="#_healthcheck_api_http_request">HTTP request</a></li>
-<li><a href="#_healthcheck_api_response_fields">Response fields</a></li>
-<li><a href="#_healthcheck_api_http_response">HTTP response</a></li>
+<li><a href="#_health_check_2"><strong>Health Check</strong></a></li>
+</ul>
+</li>
+<li><a href="#_user">USER</a>
+<ul class="sectlevel2">
+<li><a href="#_login"><strong>Login</strong></a></li>
+<li><a href="#_sign_up"><strong>Sign up</strong></a></li>
+</ul>
+</li>
+<li><a href="#_status_code">Status Code</a>
+<ul class="sectlevel2">
+<li><a href="#_common">COMMON</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_healthcheck_api"><a class="link" href="#_healthcheck_api">HealthCheck API</a></h2>
-<div class="sectionbody">
+<h1 id="_health_check" class="sect0"><a class="link" href="#_health_check">HEALTH CHECK</a></h1>
+<div class="sect2">
+<h3 id="_health_check_2"><a class="link" href="#_health_check_2"><strong>Health Check</strong></a></h3>
 <div class="paragraph">
 <p>서버 상태 확인 api</p>
 </div>
-<div class="sect2">
-<h3 id="_healthcheck_api_http_request"><a class="link" href="#_healthcheck_api_http_request">HTTP request</a></h3>
+<div class="sect3">
+<h4 id="_health_check_2_http_request"><a class="link" href="#_health_check_2_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET / HTTP/1.1
@@ -472,8 +481,8 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_healthcheck_api_response_fields"><a class="link" href="#_healthcheck_api_response_fields">Response fields</a></h3>
+<div class="sect3">
+<h4 id="_health_check_2_response_fields"><a class="link" href="#_health_check_2_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -515,8 +524,8 @@ Host: localhost:8080</code></pre>
 </tbody>
 </table>
 </div>
-<div class="sect2">
-<h3 id="_healthcheck_api_http_response"><a class="link" href="#_healthcheck_api_http_response">HTTP response</a></h3>
+<div class="sect3">
+<h4 id="_health_check_2_http_response"><a class="link" href="#_health_check_2_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -529,17 +538,91 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 159
 
-{"timeStamp":"2023/06/12 16:14:44","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
+{"timeStamp":"2023/06/12 23:38:57","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
 </div>
 </div>
 </div>
+<hr>
 </div>
+<h1 id="_user" class="sect0"><a class="link" href="#_user">USER</a></h1>
+<div class="sect2">
+<h3 id="_login"><a class="link" href="#_login"><strong>Login</strong></a></h3>
+<div class="paragraph">
+<p>로그인 api</p>
+</div>
+<div class="paragraph">
+<p>내용..</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sign_up"><a class="link" href="#_sign_up"><strong>Sign up</strong></a></h3>
+<div class="paragraph">
+<p>회원가입 api</p>
+</div>
+<div class="paragraph">
+<p>내용..</p>
+</div>
+<hr>
+</div>
+<h1 id="_status_code" class="sect0"><a class="link" href="#_status_code">Status Code</a></h1>
+<div class="openblock partintro">
+<div class="content">
+상태 코드 명세서
+</div>
+</div>
+<div class="sect2">
+<h3 id="_common"><a class="link" href="#_common">COMMON</a></h3>
+<div class="paragraph">
+<p>공통 상태 코드</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">코드</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-200</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 정상 처리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-201</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 새로운 리소스 생성</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-400</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 잘못된 요청</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-401</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 인증되지 않음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-403</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 권한 부족</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-404</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 요청 리소스를 찾을 수 없음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-500</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 서버 내부 오류</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-06-12 15:19:04 +0900
+Last updated 2023-06-12 23:36:28 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

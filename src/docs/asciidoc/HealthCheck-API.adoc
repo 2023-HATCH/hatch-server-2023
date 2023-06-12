@@ -1,7 +1,9 @@
-// [[HealthCheck-API]]
-== HealthCheck API
+// 도메인 명 : h1
+// [[HEALTH-CHECK]] //이거 애 필요한지 모르겠음.. 일단 따 뺌
+= HEALTH CHECK
 
-// [[서버_상태_확인]]
+// api 명 : h3
+=== *Health Check*
 서버 상태 확인 api
 
 operation::health-check[snippets='http-request,response-fields,http-response']
