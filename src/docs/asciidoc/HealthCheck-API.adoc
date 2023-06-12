@@ -1,0 +1,7 @@
+// [[HealthCheck-API]]
+== HealthCheck API
+
+// [[서버_상태_확인]]
+서버 상태 확인 api
+
+operation::health-check[snippets='http-request,response-fields,http-response']
