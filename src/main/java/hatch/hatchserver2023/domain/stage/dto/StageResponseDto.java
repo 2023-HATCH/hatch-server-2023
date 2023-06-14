@@ -13,9 +13,9 @@ public class StageResponseDto {
     @AllArgsConstructor
     public static class GetSimilarity {
 
-        private Double similarity;
+        private Float similarity;
 
-        public static StageResponseDto.GetSimilarity toDto(Double similarity) {
+        public static StageResponseDto.GetSimilarity toDto(Float similarity) {
             return GetSimilarity.builder()
                     .similarity(similarity)
                     .build();

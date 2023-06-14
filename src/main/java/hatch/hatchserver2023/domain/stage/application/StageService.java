@@ -29,7 +29,7 @@ public class StageService {
      * @return similarity
      */
     // TODO: 어떤 사용자인지도 필요한가?
-    public Double calculateSimilarity(String musicTitle, Double[][] sequence) {
+    public Float calculateSimilarity(String musicTitle, Float[][] sequence) {
         // 곡명으로 음악 찾기
         Music music = musicRepository.findByTitle(musicTitle);
 

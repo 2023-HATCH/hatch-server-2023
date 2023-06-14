@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
 @Entity
@@ -17,11 +18,11 @@ import java.util.UUID;
 public class Music {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name="uuid2", strategy = "uuid2")
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     // 음악 제목
+    @NotBlank
     @Column(length = 50)
     private String title;
 
@@ -34,8 +35,9 @@ public class Music {
 
     // 정답 안무 스켈레톤
     @Lob
-    @Column(columnDefinition="BINARY(200000)")
-    private Double[][] answer;
+//    @Column(columnDefinition="BINARY(200000)")
+    // ALTER TABLE music MODIFY answer mediumblob;
+    private Float[][] answer;
 
     // 음악 길이 (초 단위)
     private int length;

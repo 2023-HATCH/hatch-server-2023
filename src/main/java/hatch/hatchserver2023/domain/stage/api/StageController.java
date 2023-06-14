@@ -28,7 +28,7 @@ public class StageController {
     @PostMapping("/similarity")
     public ResponseEntity<Object> calculateSimilarity(@RequestBody SimilarityRequestDto request) {
 
-        Double similarity = stageService.calculateSimilarity(request.getTitle(), request.getKeypoints());
+        Float similarity = stageService.calculateSimilarity(request.getTitle(), request.getKeypoints());
 
         return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, StageResponseDto.GetSimilarity.toDto(similarity)));
     }

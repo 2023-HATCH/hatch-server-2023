@@ -14,10 +14,10 @@ public class MusicRequestDto {
     private String singer;
 
     // 음악 URL
-    private String music_url;
+    private String musicUrl;
 
     // 정답 안무 스켈레톤
-    private Double[][] answer;
+    private Float[][] answer;
 
     // 음악 길이 (초 단위)
     private int length;
@@ -29,7 +29,7 @@ public class MusicRequestDto {
         return Music.builder()
                 .title(title)
                 .singer(singer)
-                .music_url(music_url)
+                .music_url(musicUrl)
                 .answer(answer)
                 .length(length)
                 .concept(concept)

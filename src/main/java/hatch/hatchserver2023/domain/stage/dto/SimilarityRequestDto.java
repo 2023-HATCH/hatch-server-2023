@@ -10,5 +10,5 @@ public class SimilarityRequestDto {
     private String title;
 
     // 안무 관절 데이터
-    private Double[][] keypoints;
+    private Float[][] keypoints;
 }

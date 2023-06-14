@@ -8,6 +8,6 @@ import lombok.Data;
 @Builder
 public class AISimilarityRequestDto {
 
-    Double[][] seq1;
-    Double[][] seq2;
+    Float[][] seq1;
+    Float[][] seq2;
 }
