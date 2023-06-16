@@ -29,7 +29,7 @@ public class MusicRequestDto {
         return Music.builder()
                 .title(title)
                 .singer(singer)
-                .music_url(musicUrl)
+                .musicUrl(musicUrl)
                 .answer(answer)
                 .length(length)
                 .concept(concept)

@@ -5,18 +5,20 @@ import hatch.hatchserver2023.domain.stage.dto.MusicRequestDto;
 import hatch.hatchserver2023.domain.stage.repository.MusicRepository;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.CommonCode;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("api/v1/musics")
+@RequiredArgsConstructor
 public class MusicController {
 
-    @Autowired
-    MusicRepository musicRepository;
+    private final MusicRepository musicRepository;
 
     /**
      * 음악 저장을 위한 API
@@ -34,5 +36,17 @@ public class MusicController {
 
         return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, music.getTitle() + " 음악 저장 성공"));
 
+    }
+
+    /**
+     * 음악 목록 조회 API
+     * 테스트용으로 제작
+     * 실제 서비스에서 사용되지는 않을 예정
+     *
+     * @return musicList
+     */
+    @GetMapping("/list")
+    public List<Music> getList() {
+        return musicRepository.findAll();
     }
 }
