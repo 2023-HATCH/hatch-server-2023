@@ -12,6 +12,7 @@ spring:
 
 ### JPA ###
   jpa:
+    database: mysql
     hibernate:
       ddl-auto: none #create, create-drop, none, update
       naming:
