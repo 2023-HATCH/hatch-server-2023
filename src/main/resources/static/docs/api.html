@@ -460,6 +460,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_status_code">Status Code</a>
 <ul class="sectlevel2">
 <li><a href="#_common">COMMON</a></li>
+<li><a href="#_user_2">USER</a></li>
 </ul>
 </li>
 </ul>
@@ -538,7 +539,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 159
 
-{"timeStamp":"2023/06/13 00:15:16","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
+{"timeStamp":"2023/06/17 23:48:25","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
 </div>
 </div>
 </div>
@@ -618,11 +619,47 @@ Content-Length: 159
 </tbody>
 </table>
 </div>
+<div class="sect2">
+<h3 id="_user_2"><a class="link" href="#_user_2">USER</a></h3>
+<div class="paragraph">
+<p>사용자 상태 코드</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">코드</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2000</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 로그인 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2001</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 회원가입 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4004</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 로그인 아이디 존재하지 않음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-5001</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 해당 카카오 계정으로 회원가입된 사용자 이미 존재함</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-06-13 00:13:17 +0900
+Last updated 2023-06-17 23:09:54 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

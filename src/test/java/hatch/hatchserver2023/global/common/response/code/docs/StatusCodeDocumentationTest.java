@@ -1,5 +1,6 @@
 package hatch.hatchserver2023.global.common.response.code.docs;
 
+import hatch.hatchserver2023.domain.HealthCheckController;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.StatusCodeDoc;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@WebMvcTest(controllers = {StatusCodeController.class})
 @WithMockUser //401 에러 방지
 @AutoConfigureRestDocs // rest docs 자동 설정
 public class StatusCodeDocumentationTest {
