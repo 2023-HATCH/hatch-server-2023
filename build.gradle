@@ -2,6 +2,9 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.10'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+
+	// Asciidoctor 플러그인
+	id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
 group = 'hatch'
@@ -9,6 +12,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
+	asciidoctorExt // dependencies 에 적용한 것 여기도 추가
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
@@ -23,16 +27,88 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'	// WebClient
-
+  
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok' // 추가
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.projectlombok:lombok:1.18.22' //status code 명세로 추가
+
+
+	////-- rest docs --////
+	// build/generated-snippets 에 생긴 .adoc 조각들을 프로젝트 내의 .adoc 파일에서 읽어들일 수 있도록 연동
+	// 그리고 최종적으로 .adoc 파일을 HTML로 만들어 export 해줌
+	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
+	// restdocs-mockmvc의 testCompile 구성 -> mockMvc를 사용해서 snippets 조각들을 뽑아낼 수 있게 됨
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	// MockMvc 대신 WebTestClient을 사용하려면 spring-restdocs-webtestclient 추가
+	// MockMvc 대신 REST Assured를 사용하려면 spring-restdocs-restassured 를 추가
 }
 
+// 아래서 사용할 변수 선언
+ext {
+	snippetsDir = file('build/generated-snippets')
+}
+
+
 tasks.named('test') {
+	// 위에서 작성한 snippetsDir 디렉토리를 test의 output으로 구성하는 설정 -> 스니펫 조각들이 build/generated-snippets로 출력
+	outputs.dir snippetsDir
+
 	useJUnitPlatform()
+}
+
+// asciidoctor 작업 구성
+asciidoctor {
+	inputs.dir snippetsDir // snippetsDir 를 입력으로 구성
+	configurations 'asciidoctorExt' // 위에서 작성한 configuration 적용
+	dependsOn test // test 작업 이후에 작동하도록 하는 설정
+
+	// source 에 지정된 adoc만 HTML로 만듦 (source가 없으면 .adoc파일을 전부 html로 만들어버림)
+	sources {
+		include("**/api.adoc","**/common/*.adoc", "**/code.adoc")
+	}
+
+	// 특정 .adoc에 다른 adoc 파일을 가져와서(include) 사용하고 싶을 경우 경로를 baseDir로 맞춰주는 설정
+	// 개별 adoc으로 운영한다면 필요 없는 옵션
+	baseDirFollowsSourceFile()
+}
+
+bootJar {
+	dependsOn asciidoctor
+	from ("${asciidoctor.outputDir}") {
+		into 'src/main/resources/static/docs' // 내맘대로 변경
+	}
+}
+
+
+// 참고사항 //
+// 공식 문서에서는 여기까지의 내용만 있음
+// 이렇게 하면 jar로 만들어 질때 옮겨지는 것으로 IDE로 돌릴 때는 build 폴더에서만 확인이 가능
+
+// 이 다음 내용인 ascidoctor.doFirst 부터의 내용을 추가하면
+// IDE에서도 static으로 옮겨진 것을 확인할 수 있고, 이를 url 에 연결해서 보여줄 때 쓸 수 있음
+
+// 위에 방법을 사용하든 아래 방법을 사용하든 편한 선택지를 사용
+
+
+// static/docs 폴더 비우기
+asciidoctor.doFirst {
+	delete file('src/main/resources/static/docs')
+}
+
+// asciidoctor 작업 이후 생성된 HTML 파일을 static/docs 로 copy
+task copyDocument(type: Copy) {
+	dependsOn asciidoctor
+	from file("build/docs/asciidoc")
+	into file("src/main/resources/static/docs")
+}
+
+// build 의 의존작업 명시 : 위에서 작성한 copyDocument
+build {
+	dependsOn copyDocument
 }
