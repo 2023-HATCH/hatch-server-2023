@@ -1,6 +1,7 @@
 package hatch.hatchserver2023.global.common.response.code.docs;
 
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
+import hatch.hatchserver2023.global.common.response.code.StatusCodeDoc;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -41,7 +42,7 @@ public class StatusCodeDocumentationTest {
 
     @Test
     public void statusCodeDoc() throws Exception {
-        for(StatusCodeTestCases doc:StatusCodeTestCases.values()){
+        for(StatusCodeDoc doc:StatusCodeDoc.values()){ // StatusCodeDoc 내용을 가져와서 반복
 
             //given
             //when
@@ -57,7 +58,7 @@ public class StatusCodeDocumentationTest {
                     codeResponseFields(
                             "code-response", //스니펫 이름, 커스텀 템플릿 이름 인식과 연결됨
                             // statusCodes는 이 api의 응답 Body에서 코드들을 담은 항목이름. StatusCodeView 의 필드명이 그대로 들어감. 생성되는 adoc 파일 명에도 쓰임
-                            beneathPath("statusCodes").withSubsectionId(doc.getSub()),
+                            beneathPath("statusCodes").withSubsectionId(doc.getInitial()),
                             attributes(key("title").value(doc.getTitle())),
                             enumConvertFieldDescriptor(doc.getStatusCodes())
                     )
@@ -65,36 +66,7 @@ public class StatusCodeDocumentationTest {
 
             result.andDo(print());
         }
-//        doStatusCodeTest(StatusCodeTestCases.values());
     }
-/*
-    private void doStatusCodeTest(StatusCodeTestCases[] docs) throws Exception {
-        for(StatusCodeTestCases doc:docs){
-
-            //given
-            //when
-            ResultActions result = mockMvc.perform(get(doc.getUrl())
-                    .accept(MediaType.APPLICATION_JSON));
-
-            //then
-            result.andExpect(status().isOk());
-
-            //docs
-            result.andDo(document("status-code", // 문서 이름
-                    // 커스텀 snippet 을 만들어서 반환해주는 함수, 그에 필요한 값들 4개
-                    codeResponseFields(
-                            "code-response", //스니펫 이름, 커스텀 템플릿 이름 인식과 연결됨
-                            // statusCodes는 이 api의 응답 Body에서 코드들을 담은 항목이름. StatusCodeView 의 필드명이 그대로 들어감. 생성되는 adoc 파일 명에도 쓰임
-                            beneathPath("statusCodes").withSubsectionId(doc.getSub()),
-                            attributes(key("title").value(doc.getTitle())),
-                            enumConvertFieldDescriptor(doc.getStatusCodes())
-                    )
-            ));
-
-            result.andDo(print());
-        }
-
-    }*/
 
     // 이해 필요
     /**

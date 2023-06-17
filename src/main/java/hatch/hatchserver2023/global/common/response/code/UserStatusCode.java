@@ -30,11 +30,11 @@ public enum UserStatusCode implements StatusCode {
 
     @Override
     public String getCode() {
-        return DomainLabel.USER.getInitial() + code;
+        return StatusCodeDoc.USER.getInitialWithConnector() + code;
     }
 
     @Override
     public String getMessage() {
-        return DomainLabel.USER.getLabel() + message;
+        return StatusCodeDoc.USER.getLabelWithBrackets() + message;
     }
 }
