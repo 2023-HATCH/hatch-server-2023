@@ -46,7 +46,7 @@ public class StatusCodeDocumentationTest {
 
             //given
             //when
-            ResultActions result = mockMvc.perform(get(doc.getUrl())
+            ResultActions result = mockMvc.perform(get(doc.getFullUrl())
                     .accept(MediaType.APPLICATION_JSON));
 
             //then
@@ -59,7 +59,7 @@ public class StatusCodeDocumentationTest {
                             "code-response", //스니펫 이름, 커스텀 템플릿 이름 인식과 연결됨
                             // statusCodes는 이 api의 응답 Body에서 코드들을 담은 항목이름. StatusCodeView 의 필드명이 그대로 들어감. 생성되는 adoc 파일 명에도 쓰임
                             beneathPath("statusCodes").withSubsectionId(doc.getInitial()),
-                            attributes(key("title").value(doc.getTitle())),
+                            attributes(key("title").value(doc.getInitial()), key("subtitle").value(doc.getSubtitle())),
                             enumConvertFieldDescriptor(doc.getStatusCodes())
                     )
             ));

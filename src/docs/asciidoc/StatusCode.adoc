@@ -1,12 +1,8 @@
 
-// api 명 : h3
-=== COMMON
 // include::{snippets}/status-code/code-response-fields-beneath-statusCodes.adoc[]
-include::{snippets}/status-code/code-response-fields-common.adoc[]
+include::{snippets}/status-code/code-response-fields-COMMON.adoc[]
 
-// api 명 : h3
-=== USER
-include::{snippets}/status-code/code-response-fields-user.adoc[]
+include::{snippets}/status-code/code-response-fields-USER.adoc[]
 
 //opertation 쓰면 스니펫 여러개 한번에 넣어줄 수 있지만, 같이 들어가는 자동 헤더를 못지우겠음
 // operation::status-code[snippets='code-response-fields-beneath-status_codes']
