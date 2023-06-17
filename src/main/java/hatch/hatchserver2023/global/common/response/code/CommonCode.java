@@ -1,6 +1,5 @@
 package hatch.hatchserver2023.global.common.response.code;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 //@Getter
@@ -13,9 +12,9 @@ public enum CommonCode implements StatusCode {
     NOT_FOUND(HttpStatus.NOT_FOUND, "404", "요청 리소스를 찾을 수 없음"), //404
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "500", "서버 내부 오류"); //500
 
-    private HttpStatus status;
-    private String code;
-    private String message;
+    private final HttpStatus status;
+    private final String code;
+    private final String message;
 
     CommonCode(HttpStatus status, String code, String message){
         this.status = status;
@@ -30,11 +29,11 @@ public enum CommonCode implements StatusCode {
 
     @Override
     public String getCode() {
-        return DomainLabel.COMMON.getInitial() + code;
+        return StatusCodeDoc.COMMON.getInitialWithConnector() + code;
     }
 
     @Override
     public String getMessage() {
-        return DomainLabel.COMMON.getLabel() + message;
+        return StatusCodeDoc.COMMON.getLabelWithBrackets() + message;
     }
 }

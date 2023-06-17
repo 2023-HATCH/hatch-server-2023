@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest //(controllers = {TestController.class})
-@MockBean(JpaMetamodelMappingContext.class)
+//@MockBean(JpaMetamodelMappingContext.class) //jpa 관련 bean 필요할 때만
 @AutoConfigureRestDocs // rest docs 자동 설정
 class HealthCheckControllerTest {
 

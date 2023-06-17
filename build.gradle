@@ -27,6 +27,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.projectlombok:lombok:1.18.22' //status code 명세로 추가
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -67,7 +68,7 @@ asciidoctor {
 
 	// source 에 지정된 adoc만 HTML로 만듦 (source가 없으면 .adoc파일을 전부 html로 만들어버림)
 	sources {
-		include("**/api.adoc","**/common/*.adoc")
+		include("**/api.adoc","**/common/*.adoc", "**/code.adoc")
 	}
 
 	// 특정 .adoc에 다른 adoc 파일을 가져와서(include) 사용하고 싶을 경우 경로를 baseDir로 맞춰주는 설정
@@ -88,7 +89,7 @@ bootJar {
 // 이렇게 하면 jar로 만들어 질때 옮겨지는 것으로 IDE로 돌릴 때는 build 폴더에서만 확인이 가능
 
 // 이 다음 내용인 ascidoctor.doFirst 부터의 내용을 추가하면
-// IDE에서도 static으로 옮겨진 것을 확인할 수 있음
+// IDE에서도 static으로 옮겨진 것을 확인할 수 있고, 이를 url 에 연결해서 보여줄 때 쓸 수 있음
 
 // 위에 방법을 사용하든 아래 방법을 사용하든 편한 선택지를 사용
 
