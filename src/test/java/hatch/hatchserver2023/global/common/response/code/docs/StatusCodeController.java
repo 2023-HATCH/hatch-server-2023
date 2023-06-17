@@ -1,6 +1,8 @@
 package hatch.hatchserver2023.global.common.response.code.docs;
 
+import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
+import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,13 +16,21 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/status-codes")
 public class StatusCodeController {
-    @GetMapping
-    public ResponseEntity<StatusCodeView> getStatusCodes() {
-//        Map<String, String> statusCodes = Arrays.stream(StatusCode.values()) //모든 StatusCode 들을 모아서 리스트로 주는 메서드..?
-        Map<String, String> statusCodes = Arrays.stream(StatusCodeView.getStatusCodeArray())
-                .collect(Collectors.toMap(StatusCode::getCode, StatusCode::getMessage));
+    @GetMapping("/common")
+    public ResponseEntity<StatusCodeView> getCommonCodes() {
+        return getResponse(CommonCode.values());
+    }
 
-        return new ResponseEntity<>(new StatusCodeView(statusCodes), HttpStatus.OK);
+    @GetMapping("/user")
+    public ResponseEntity<StatusCodeView> getUserStatusCodes() {
+        return getResponse(UserStatusCode.values());
+    }
+
+    private ResponseEntity<StatusCodeView> getResponse(StatusCode[] statusCodes) {
+//        Map<String, String> statusCodes = Arrays.stream(StatusCode.values()) //모든 StatusCode 들을 모아서 리스트로 주는 메서드..?
+        Map<String, String> statusCodeMap = Arrays.stream(statusCodes)
+                .collect(Collectors.toMap(StatusCode::getCode, StatusCode::getMessage));
+        return new ResponseEntity<>(new StatusCodeView(statusCodeMap), HttpStatus.OK);
     }
 
 

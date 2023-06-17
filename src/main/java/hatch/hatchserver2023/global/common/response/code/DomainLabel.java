@@ -5,6 +5,7 @@ import lombok.Getter;
 //@Getter
 public enum DomainLabel {
     COMMON("COMMON", "공통"),
+    USER("USER", "사용자"),
     ;
     private final String initial;
     private final String label;
