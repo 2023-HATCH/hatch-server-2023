@@ -3,10 +3,12 @@ package hatch.hatchserver2023.global.common.response.exception;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
+import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -31,12 +33,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    //IllegalArgumentException : cookie 속 uuid 값 잘못되었을 떄 (jwt로 변경 예정)
+    //IllegalArgumentException : cookie 속 jwt 값 잘못되었을 떄
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e){
         String message = e.getMessage();
         CommonCode code = CommonCode.BAD_REQUEST;
         return handleExceptionInternal(code, message);
+    }
+
+    // 메서드 수준 보안(@PreAuthorize)에서 발생하는 에러
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDeniedException() { //AccessDeniedException e, WebRequest request
+        return handleExceptionInternal(UserStatusCode.USER_PRE_FORBIDDEN);
     }
 
     //@Validated 로 발생하는 에러
@@ -74,6 +82,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(code, message);
     }
+
 
     private ResponseEntity<Object> handleExceptionInternal(StatusCode code){
         CommonResponse errorResponse = CommonResponse.toErrorResponse(code);

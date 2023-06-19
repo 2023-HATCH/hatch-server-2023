@@ -14,7 +14,7 @@ spring:
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: none #create, create-drop, none, update
+      ddl-auto: update #create, create-drop, none, update
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy # set DB column name by snake case
     show-sql: true
@@ -41,3 +41,7 @@ spring:
 #      auto: false
 #    stack:
 #      auto: false
+
+jwt:
+  token:
+    secretKey: ${JWT_TOKEN_SECRET_KEY}

@@ -9,7 +9,7 @@ plugins {
 
 group = 'hatch'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = "13"
 
 configurations {
 	asciidoctorExt // dependencies 에 적용한 것 여기도 추가
@@ -28,6 +28,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'	// WebClient
+//	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' 	//s3
+	implementation 'io.jsonwebtoken:jjwt:0.9.1' //jwt
+	implementation 'com.google.code.gson:gson:2.10.1' //gson
   
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -112,3 +115,5 @@ task copyDocument(type: Copy) {
 build {
 	dependsOn copyDocument
 }
+//targetCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_13
