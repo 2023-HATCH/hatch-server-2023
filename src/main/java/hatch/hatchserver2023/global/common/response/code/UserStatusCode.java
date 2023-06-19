@@ -5,17 +5,32 @@ import org.springframework.http.HttpStatus;
 //@Getter
 public enum UserStatusCode implements StatusCode {
 
-    LOGIN_SUCCESS(HttpStatus.OK, "2000", "로그인 성공"), //201
-    SIGN_UP_SUCCESS(HttpStatus.CREATED, "2001", "회원가입 성공"), //201
-    LOGIN_ID_NOT_EXIST(HttpStatus.BAD_REQUEST, "4004", "로그인 아이디 존재하지 않음"), //400
-//    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "401", "인증되지 않음"), //401
-//    FORBIDDEN(HttpStatus.FORBIDDEN, "403", "권한 부족"), //403
-//    NOT_FOUND(HttpStatus.NOT_FOUND, "404", "요청 리소스를 찾을 수 없음"), //404
-    KAKAO_USER_ALREADY_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "5001", "해당 카카오 계정으로 회원가입된 사용자 이미 존재함"); //500
+    // 2xx
+    KAKAO_LOGIN_SUCCESS(HttpStatus.OK, "2000", "카카오 회원가입 및 로그인 성공"), //200
 
-    private HttpStatus status;
-    private String code;
-    private String message;
+
+    // 4xx
+    LOGIN_ID_NOT_EXIST(HttpStatus.UNAUTHORIZED, "4101", "로그인 아이디 존재하지 않음"), //401
+
+    TOKEN_CANNOT_RESOLVE(HttpStatus.UNAUTHORIZED, "4102", "토큰에서 사용자 정보를 가져올 수 없음"), //401
+    UUID_NOT_FOUND(HttpStatus.UNAUTHORIZED, "4103", "이 UUID 에 해당하는 사용자 없음"), //401
+    UUID_IS_NULL(HttpStatus.UNAUTHORIZED, "4104", "UUID 값이 비었음"), //401
+    COOKIE_LIST_IS_EMPTY(HttpStatus.UNAUTHORIZED, "4105", "쿠키 목록이 비었음"), //401
+
+    USER_PRE_FORBIDDEN(HttpStatus.FORBIDDEN, "4306", "사용자 권한 부족 (메서드 단위)"), //403
+//    NOT_FOUND(HttpStatus.NOT_FOUND, "404", "요청 리소스를 찾을 수 없음"), //404
+
+
+    // 5xx
+    LOGIN_TYPE_NOT_KAKAO(HttpStatus.INTERNAL_SERVER_ERROR, "5001", "type 값이 kakao가 아님. 카카오로그인 방식만 사용 가능함"), //500
+    KAKAO_USER_ALREADY_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "5002", "해당 카카오 계정으로 회원가입된 사용자 이미 존재함"), //500
+    KAKAO_CONNECTION_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "5003", "카카오 사용자 정보 가져오기 실패"), //500
+    KAKAO_NICKNAME_EMPTY(HttpStatus.INTERNAL_SERVER_ERROR, "5004", "카카오 사용자 정보에 닉네임 값이 없음"), //500
+    ;
+
+    private final HttpStatus status;
+    private final String code;
+    private final String message;
 
     UserStatusCode(HttpStatus status, String code, String message){
         this.status = status;
