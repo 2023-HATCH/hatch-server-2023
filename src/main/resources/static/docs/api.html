@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>REST Docs 문서 만들기</title>
+<title>Pocket Pose API 명세서</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -439,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>REST Docs 문서 만들기</h1>
+<h1>Pocket Pose API 명세서</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
@@ -453,8 +453,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_user">USER</a>
 <ul class="sectlevel2">
-<li><a href="#_login"><strong>Login</strong></a></li>
-<li><a href="#_sign_up"><strong>Sign up</strong></a></li>
+<li><a href="#_kakao_login"><strong>Kakao Login</strong></a></li>
 </ul>
 </li>
 <li><a href="#_status_code">Status Code</a>
@@ -539,7 +538,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 159
 
-{"timeStamp":"2023/06/17 23:48:25","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
+{"timeStamp":"2023/06/21 01:20:57","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
 </div>
 </div>
 </div>
@@ -547,21 +546,130 @@ Content-Length: 159
 </div>
 <h1 id="_user" class="sect0"><a class="link" href="#_user">USER</a></h1>
 <div class="sect2">
-<h3 id="_login"><a class="link" href="#_login"><strong>Login</strong></a></h3>
+<h3 id="_kakao_login"><a class="link" href="#_kakao_login"><strong>Kakao Login</strong></a></h3>
 <div class="paragraph">
-<p>로그인 api</p>
+<p>카카오 회원가입 &amp; 로그인 api</p>
 </div>
-<div class="paragraph">
-<p>내용..</p>
+<div class="sect3">
+<h4 id="_kakao_login_http_request"><a class="link" href="#_kakao_login_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/auth/login?type=kakao HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 33
+X-CSRF-TOKEN: d381b323-d15a-4328-9ebe-77435acf09cd
+Host: localhost:8080
+
+{"kakaoAccessToken":"dummyToken"}</code></pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_sign_up"><a class="link" href="#_sign_up"><strong>Sign up</strong></a></h3>
-<div class="paragraph">
-<p>회원가입 api</p>
 </div>
-<div class="paragraph">
-<p>내용..</p>
+<div class="sect3">
+<h4 id="_kakao_login_request_parameters"><a class="link" href="#_kakao_login_request_parameters">Request parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">파라미터</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인 유형. 고정값(kakao)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_kakao_login_request_fields"><a class="link" href="#_kakao_login_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">필드명</th>
+<th class="tableblock halign-left valign-top">타입</th>
+<th class="tableblock halign-left valign-top">필수여부</th>
+<th class="tableblock halign-left valign-top">제약조건</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>kakaoAccessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카카오로부터 받은 액세스 토큰</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_kakao_login_response_fields-beneath-data"><a class="link" href="#_kakao_login_response_fields-beneath-data">Response fields-beneath-data</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uuid</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 닉네임(카카오에서 가져온 데이터)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 이메일(카카오에서 가져온 데이터)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_kakao_login_http_response"><a class="link" href="#_kakao_login_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 228
+
+{"timeStamp":"2023/06/21 01:21:02","code":"USER-2000","message":"[사용자] 카카오 회원가입 및 로그인 성공","data":{"uuid":"c8aabc29-7b84-4c1f-8d88-5b561c0f62d4","nickname":"nicknameTest","email":"test@email.com"}}</code></pre>
+</div>
+</div>
 </div>
 <hr>
 </div>
@@ -638,19 +746,47 @@ Content-Length: 159
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2000</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 로그인 성공</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 카카오 회원가입 및 로그인 성공</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2001</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 회원가입 성공</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4004</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4101</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 로그인 아이디 존재하지 않음</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4102</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 토큰에서 사용자 정보를 가져올 수 없음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4103</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 이 UUID 에 해당하는 사용자 없음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4104</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] UUID 값이 비었음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4105</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 쿠키 목록이 비었음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4306</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 사용자 권한 부족 (메서드 단위)</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-5001</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] type 값이 kakao가 아님. 카카오로그인 방식만 사용 가능함</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-5002</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 해당 카카오 계정으로 회원가입된 사용자 이미 존재함</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-5003</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 카카오 사용자 정보 가져오기 실패</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-5004</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 카카오 사용자 정보에 닉네임 값이 없음</p></td>
 </tr>
 </tbody>
 </table>
@@ -659,7 +795,7 @@ Content-Length: 159
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-06-17 23:09:54 +0900
+Last updated 2023-06-20 20:44:08 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
