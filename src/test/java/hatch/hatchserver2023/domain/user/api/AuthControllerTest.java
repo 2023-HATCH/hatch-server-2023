@@ -78,7 +78,7 @@ class AuthControllerTest {
 
     @Test
     @WithMockUser
-    void kakaoSignUpAndLogin() throws Exception { //TODO : 쿠키 토큰 로직은 service 코드에서 검증 ?
+    void kakaoSignUpAndLogin() throws Exception { //TODO : 쿠키 토큰 로직은 service 코드에서 검증
         //given
         UserRequestDto.KakaoLogin requestDto = UserRequestDto.KakaoLogin.builder()
                 .kakaoAccessToken("dummyToken")
