@@ -1,5 +1,5 @@
 # JDK11 이미지 사용
-FROM openjdk:11-jdk
+FROM openjdk:13-jdk
 
 #볼륨 마운트. spring boot의 Tomcat의 default 저장소가 /tmp임. 이렇게 하면 호스트의 /var/lib/docker에 임시파일을 만들고 컨테이너 안의 /tmp 와 연결할 수 있다고 함
 VOLUME /tmp
