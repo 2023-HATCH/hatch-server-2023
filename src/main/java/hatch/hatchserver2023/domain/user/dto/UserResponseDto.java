@@ -3,14 +3,17 @@ package hatch.hatchserver2023.domain.user.dto;
 import hatch.hatchserver2023.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.util.UUID;
 
 public class UserResponseDto {
 
+    @ToString
+    @Getter
     @Builder
-    @Data
-    public static class KakaoLogin {
+    public static class KakaoLogin { //응답dto 에도 생성자?
         private UUID uuid;
         private String nickname;
         private String email;

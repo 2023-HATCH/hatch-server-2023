@@ -18,7 +18,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 //@WebFilter(urlPatterns = {"/api/v1/test/*"})
-@WebFilter(urlPatterns = {"/api/v1/users/*", "/api/v1/stage/*", "/api/v1/talks/*"}) //ws pub?
+@WebFilter(urlPatterns = {"/api/v1/users/*", "/api/v1/stage/*", "/api/v1/talks/*", "/api/v1/test/auth/*"}) //ws pub?
 public class JwtAuthenticationFilter implements Filter { //OncePerRequestFilter ?
     private final JwtProvider jwtProvider;
 
@@ -76,7 +76,11 @@ public class JwtAuthenticationFilter implements Filter { //OncePerRequestFilter 
     private void setSecurityAuthentication(String token) {
         try{
             Authentication authentication = jwtProvider.getAuthentication(token); // 인증정보 가져와서
+            log.info("[FILTER] jwtAuthenticationFilter setSecurityAuthentication :   " + authentication);
+
             SecurityContextHolder.getContext().setAuthentication(authentication); // 시큐리티에 저장
+
+            log.info("[FILTER] jwtAuthenticationFilter setSecurityAuthentication :  SecurityContextHolder Authentication " + SecurityContextHolder.getContext().getAuthentication());
         } catch (AuthException authException) {
             if (authException.getCode() == UserStatusCode.UUID_NOT_FOUND){
                 log.info("[FILTER] jwtAuthenticationFilter :  User of this token doesn't exist now. Guest user");
