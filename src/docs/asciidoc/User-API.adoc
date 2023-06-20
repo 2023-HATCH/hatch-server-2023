@@ -2,14 +2,7 @@
 = USER
 
 // api 명 : h3
-=== *Login*
-로그인 api
+=== *Kakao Login*
+카카오 회원가입 & 로그인 api
 
-내용..
-
-// api 명 : h3
-=== *Sign up*
-회원가입 api
-
-내용..
-
+operation::login[snippets='http-request,request-parameters,request-fields,response-fields-beneath-data,http-response']

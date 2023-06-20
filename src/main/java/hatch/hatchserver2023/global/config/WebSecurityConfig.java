@@ -1,5 +1,6 @@
 package hatch.hatchserver2023.global.config;
 
+import hatch.hatchserver2023.global.common.response.exception.FilterExceptionHandlerFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -25,6 +26,7 @@ public class WebSecurityConfig {
 //                .antMatchers("/api/v1/test/auth/user").hasRole("USER")
 //                .antMatchers("/admin/**").hasRole("ADMIN")
 //                .antMatchers("api/users/**").hasRole("USER")
+//                .antMatchers("/api/v1/auth/login").permitAll()
                 .antMatchers("/**").permitAll() //그 외 요청들은 누구나 접근 허용
         //자세한 경로를 먼저 적을 것!
         ;
@@ -34,8 +36,8 @@ public class WebSecurityConfig {
         ;
 
         // Filter 단에서 발생하는 에러를 잡을 Filter 추가
-//        http.addFilterBefore(
-//                new FilterExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(
+                new FilterExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

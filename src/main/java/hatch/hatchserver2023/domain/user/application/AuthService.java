@@ -4,7 +4,6 @@ import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.KakaoDto;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.global.config.security.jwt.JwtProvider;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +15,17 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
+
+    public AuthService(UserRepository userRepository, JwtProvider jwtProvider) {
+        this.userRepository = userRepository;
+        this.jwtProvider = jwtProvider;
+    }
 
     public User signUpAndLogin(@Valid KakaoDto.GetUserInfo userInfo, HttpServletResponse servletResponse) {
         log.info("[SERVICE] signUpAndLogin");
