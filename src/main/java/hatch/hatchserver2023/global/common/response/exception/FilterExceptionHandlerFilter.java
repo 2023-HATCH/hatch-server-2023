@@ -1,8 +1,8 @@
-/*
 package hatch.hatchserver2023.global.common.response.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
+import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -20,6 +20,8 @@ public class FilterExceptionHandlerFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         }catch (AuthException authException){
             setErrorResponse(response, authException.getCode());
+        }catch (Exception e) {
+            setErrorResponse(response, e.getMessage());
         }
     }
 
@@ -38,5 +40,20 @@ public class FilterExceptionHandlerFilter extends OncePerRequestFilter {
             e.printStackTrace();
         }
     }
+    private void setErrorResponse(HttpServletResponse servletResponse, String message){
+        CommonCode code = CommonCode.INTERNAL_SERVER_ERROR;
+        CommonResponse errorResponse = CommonResponse.toErrorResponse(code, message);
+        servletResponse.setStatus(code.getStatus().value());
+        servletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE); //"application/json"
+
+        //생성한 errorResponse 를 servletResponse 에 write
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+            String jsonResponse = objectMapper.writeValueAsString(errorResponse);
+            servletResponse.setCharacterEncoding("UTF-8");
+            servletResponse.getWriter().write(jsonResponse);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
-*/

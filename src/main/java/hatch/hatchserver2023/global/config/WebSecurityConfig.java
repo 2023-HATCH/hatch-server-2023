@@ -1,11 +1,14 @@
 package hatch.hatchserver2023.global.config;
 
+import hatch.hatchserver2023.global.common.response.exception.FilterExceptionHandlerFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -25,6 +28,7 @@ public class WebSecurityConfig {
 //                .antMatchers("/api/v1/test/auth/user").hasRole("USER")
 //                .antMatchers("/admin/**").hasRole("ADMIN")
 //                .antMatchers("api/users/**").hasRole("USER")
+//                .antMatchers("/api/v1/auth/login").permitAll()
                 .antMatchers("/**").permitAll() //그 외 요청들은 누구나 접근 허용
         //자세한 경로를 먼저 적을 것!
         ;
@@ -34,10 +38,17 @@ public class WebSecurityConfig {
         ;
 
         // Filter 단에서 발생하는 에러를 잡을 Filter 추가
-//        http.addFilterBefore(
-//                new FilterExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(
+                new FilterExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    //에러로 추가
+    //비밀번호 암호화
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }

@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.Arrays;
 
 @Slf4j
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Service
 public class KakaoService {
     private final String USER_INFO_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
