@@ -76,7 +76,7 @@ public class JwtProvider {
     }
 
     private Cookie createTokenCookie(String userPK, List<String> roles, long validTime, String tokenType) {
-        log.info("jwtTokenProvider createTokenCookie");
+        log.info("jwtProvider createTokenCookie");
         String token = createToken(userPK, roles, validTime);
         Cookie cookie = new Cookie(tokenType, token);
         cookie.setPath("/");
@@ -86,7 +86,7 @@ public class JwtProvider {
     }
 
     private String createToken(String userPK, List<String> roles, long validTime) {
-        log.info("jwtTokenProvider createToken");
+        log.info("jwtProvider createToken");
 
         Claims claims = Jwts.claims().setSubject(userPK);
         claims.put(CLAIMS_NAME_ROLES, roles);
@@ -110,12 +110,12 @@ public class JwtProvider {
         }
 
         if(token == null){
-            log.info("jwtTokenProvider getToken : token is empty");
+            log.info("jwtProvider getToken : token is empty");
             return ""; //어차피 isTokenValid 에서 잡힐거고 그게 더 코드가 깔끔함
 //            throw new AuthException(AuthErrorCode.TOKEN_IS_EMPTY); //비회원?
         }
         else{
-            log.info("jwtTokenProvider getToken {} : {}", tokenType, token);
+            log.info("jwtProvider getToken {} : {}", tokenType, token);
             return token;
         }
     }
@@ -132,7 +132,9 @@ public class JwtProvider {
     public Authentication getAuthentication(String token) throws AuthException {
         String uuid = getUserPK(token);
         User user = getUser(uuid);
-        return new UsernamePasswordAuthenticationToken(user, ""); //principal에 user 담음
+        log.info("jwtProvider getAuthentication :  user " + user);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUuid(), "", user.getAuthorities());  //principal에 uuid, authorities 설정
+        return authentication;
     }
 
     private String getUserPK(String token){
@@ -142,11 +144,11 @@ public class JwtProvider {
             Claims claims = getClaims(token);
             userPK = claims.getSubject(); //setSubject했던 값 가져오기
         } catch (Exception e) {
-            log.info("jwtTokenProvider getUserPKByToken : {}", e.getMessage());
+            log.info("jwtProvider getUserPKByToken : {}", e.getMessage());
             e.printStackTrace();
             throw new AuthException(UserStatusCode.TOKEN_CANNOT_RESOLVE); //토큰에서 회원 정보를 확인할 수 없을 때 throw
         }
-        log.info("jwtTokenProvider getUserPKByToken userPK : {}", userPK);
+        log.info("jwtProvider getUserPKByToken userPK : {}", userPK);
         return userPK;
     }
 
@@ -157,11 +159,11 @@ public class JwtProvider {
             Claims claims = getClaims(token);
             roles = (List<String>) claims.get(CLAIMS_NAME_ROLES); //put 했던 값 가져오기
         } catch (Exception e) {
-            log.info("jwtTokenProvider getRoles : {}", e.getMessage());
+            log.info("jwtProvider getRoles : {}", e.getMessage());
             e.printStackTrace();
             throw new AuthException(UserStatusCode.TOKEN_CANNOT_RESOLVE); //토큰에서 회원 정보를 확인할 수 없을 때 throw
         }
-        log.info("jwtTokenProvider getRoles roles : {}", roles);
+        log.info("jwtProvider getRoles roles : {}", roles);
         return roles;
     }
 
@@ -174,7 +176,7 @@ public class JwtProvider {
             return (User) customUserDetailsService.loadUserByUsername(uuid);
         } catch (AuthException authException) {
             if (authException.getCode() == UserStatusCode.UUID_NOT_FOUND){
-                log.info("[FILTER] jwtAuthenticationFilter :  User of this token doesn't exist now");
+                log.info("jwtProvider :  User of this token doesn't exist now");
             }
             throw authException;
         }

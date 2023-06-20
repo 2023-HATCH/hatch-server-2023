@@ -33,7 +33,9 @@ public class AuthService {
 
         User user;
         if(userOp.isEmpty()) {
-            user = signUp(userInfo.toUser());
+            user = userInfo.toUser();
+            user.updateLoginDefaultValues();
+            user = signUp(user);
         }
         else{
             user = userOp.get();
