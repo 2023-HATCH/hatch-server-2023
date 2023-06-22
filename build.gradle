@@ -9,7 +9,7 @@ plugins {
 
 group = 'hatch'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = "13"
+sourceCompatibility = "11"
 
 configurations {
 	asciidoctorExt // dependencies 에 적용한 것 여기도 추가
@@ -118,4 +118,4 @@ build {
 	dependsOn copyDocument
 }
 //targetCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_13
+targetCompatibility = JavaVersion.VERSION_11
