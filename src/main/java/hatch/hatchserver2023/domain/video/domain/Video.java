@@ -17,14 +17,12 @@ public class Video extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, insertable = false, updatable = false, length = 36, unique = true)
-    @ColumnDefault("(uuid())")
+    @Column(nullable = false, updatable = false, length = 36, unique = true)
     private UUID uuid;
 
     //작성자
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")    //다대일 관계에서 FK는 다 쪽에 있는 것. 연관 관계의 주인
-    @Column(name="user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)    //다대일 관계에서 FK는 다 쪽에 있는 것. 연관 관계의 주인
     private User userId;
 
     //제목
@@ -61,9 +59,15 @@ public class Video extends BaseTimeEntity {
     @ColumnDefault("0")
     private int viewCount;
 
+    @PrePersist
+    public void prePersist() {
+        this.uuid = UUID.randomUUID();
+        super.prePersist(); //BaseTimeEntity
+    }
 
 
-    // builder 생성자 (동작하겠지?)
+    //== 생성자 ==//
+    // builder 생성자
     @Builder
     private Video(User userId, String title, String tag, String videoUrl, String thumbnailUrl, int length, int viewCount, int likeCount, int commentCount) {
         this.userId = userId;
@@ -76,6 +80,9 @@ public class Video extends BaseTimeEntity {
         this.commentCount = commentCount;
         this.viewCount = viewCount;
     }
+
+    // 기본 생성자
+    public Video() { }
 
 
     //==비즈니스 메서드==//
@@ -91,7 +98,7 @@ public class Video extends BaseTimeEntity {
     public void addCommentCount() { this.commentCount += 1; }
 
     /**
-     * 조회수 증가 (Todo: 여기있어서 사용할 수 있을지는 미지수)
+     * 조회수 증가 (Todo: 여기있어도 사용할 수 있을지는 미지수)
      * @param views
      */
     public void addViewCount(int views) { this.viewCount += views; }

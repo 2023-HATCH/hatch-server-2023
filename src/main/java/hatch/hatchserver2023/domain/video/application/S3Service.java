@@ -64,13 +64,14 @@ public class S3Service {
         // TODO: user를 다루는 방법은 이게 맞을까? controller에서 uuid만 받아올까?
         String fileName = multipartFile.getOriginalFilename() + UUID.randomUUID(); //원래 파일명 + 랜덤값 추가해서 이름 설정(안겹치도록)
 //        String path = "/video/" + user.getUuid() + "/"+fileName;
+        String path = "video/"+fileName;
         try {
             //file로 변환해 임시로 로컬에 저장
             File file = convertMultipartFileToSavedFile(multipartFile)
                     .orElseThrow(() -> new S3Exception(S3StatusCode.FILE_CONVERT_FAIL));
 
             //S3 업로드
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, fileName, file)
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, path, file)
                     .withCannedAcl(CannedAccessControlList.PublicRead);
             amazonS3.putObject(putObjectRequest);
 
@@ -78,12 +79,12 @@ public class S3Service {
             removeTempFile(file);
 
         } catch (IOException e) {
-            log.info("[FAIL] file upload fail");
+            log.error("[FAIL] file upload fail");
             e.printStackTrace();
             throw new S3Exception(S3StatusCode.S3_FILE_UPLOAD_FAIL);
         }
 
-        return amazonS3.getUrl(bucket, fileName).toString(); //업로드된 url 가져오기
+        return amazonS3.getUrl(bucket, path).toString(); //업로드된 url 가져오기
     }
 
     /**
@@ -99,16 +100,19 @@ public class S3Service {
             if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
                 try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
                     fos.write(multipartFile.getBytes());
+                    // flush가 틀렸을 수도 있음
+                    // 해당 에러로 추가 -> java.lang.IllegalStateException: getOutputStream() has already been called for this response
+                    fos.flush();
                 }
 
                 return Optional.of(convertFile);
             }
         } catch (IOException e) {
-            log.info("convertMultipartFileToSavedFile : fail");
+            log.error("convertMultipartFileToSavedFile : fail");
             throw e;
         }
 
-        log.info("convertMultipartFileToSavedFile : fail. return empty optional");
+        log.error("convertMultipartFileToSavedFile : fail. return empty optional");
         return Optional.empty();
     }
 
@@ -120,7 +124,7 @@ public class S3Service {
         if (targetFile.delete()) {
             return;
         }
-        log.info("[FAIL] Fail to delete temp file");
+        log.warn("[FAIL] Fail to delete temp file");
 //        throw new S3Exception(S3StatusCode.TEMP_FILE_DELETE_FAIL);
     }
 }

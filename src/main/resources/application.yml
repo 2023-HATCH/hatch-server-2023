@@ -9,6 +9,11 @@ spring:
     url: ${MYSQL_URL} #?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
+  ### 영상 크기 제한 ###
+  servlet:
+    multipart:
+      maxFileSize: 30MB
+      maxRequestSize: 30MB
 
 ### JPA ###
   jpa:
