@@ -6,6 +6,8 @@ public enum VideoStatusCode implements StatusCode {
 
     //2xx
     VIDEO_UPLOAD_SUCCESS(HttpStatus.OK, "2001", "동영상 업로드 성공"), //200
+    GET_VIDEO_DETAIL_SUCCESS(HttpStatus.OK, "2002", "동영상 상세 정보 조회 성공"), //200
+    GET_VIDEO_LIST_SUCCESS(HttpStatus.OK, "2003", "동영상 목록 정보 조회 성공"), //200
 
     //4xx
     VIDEO_NOT_FOUND(HttpStatus.NOT_FOUND, "4401", "해당 동영상을 찾을 수 없음"), //404

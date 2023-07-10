@@ -5,6 +5,7 @@ import hatch.hatchserver2023.global.common.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -18,6 +19,7 @@ public class Video extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false, updatable = false, length = 36, unique = true)
+    @Type(type = "org.hibernate.type.UUIDCharType")     //PathVariable로 UUID를 받기 위해 필요
     private UUID uuid;
 
     //작성자

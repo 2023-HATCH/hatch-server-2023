@@ -2,11 +2,29 @@ package hatch.hatchserver2023.domain.video.repository;
 
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.video.domain.Video;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface VideoRepository extends JpaRepository<Video, Long> {
 
-    public Video[] findByUserId(User userId);
+    public Optional<Video> findByUuid(UUID uuid);
+
+    public Slice<Video> findByUserIdOrderByCreatedTimeDesc(User userId, Pageable pageable);
+
+    // TODO: 제대로 되는지 테스트
+    @Query(value = "SELECT * FROM video order by RAND()", nativeQuery = true)
+    public Slice<Video> findAllOrderByRandom(Pageable pageable);
+
+    public Slice<Video> findAllByOrderByCreatedTimeDesc(Pageable pageable);
+
+    public Slice<Video> findAllByOrderByLikeCountDesc(Pageable pageable);
+
+    public Slice<Video> findAllByOrderByViewCountDesc(Pageable pageable);
 }

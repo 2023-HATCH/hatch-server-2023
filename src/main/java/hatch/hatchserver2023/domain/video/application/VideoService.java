@@ -14,6 +14,8 @@ import org.jcodec.common.io.SeekableByteChannel;
 import org.jcodec.common.model.Picture;
 import org.jcodec.scale.AWTUtil;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -23,6 +25,8 @@ import org.apache.commons.fileupload.FileItem;
 import javax.imageio.ImageIO;
 import java.io.*;
 import java.nio.file.Files;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -40,10 +44,80 @@ public class VideoService {
     private String DEFAULT_THUMBNAIL_URL;
 
 
-    // TODO: uuid로 변경
-    public Video findOne(Long videoId){
-        return videoRepository.findById(videoId)
+    /**
+     * 영상 하나 상세 조회
+     *
+     * @param uuid
+     * @return single video
+     */
+    public Video findOne(UUID uuid){
+
+        return videoRepository.findByUuid(uuid)
                 .orElseThrow(() -> (new VideoException(VideoStatusCode.VIDEO_NOT_FOUND)));
+    }
+
+    /**
+     * 영상 삭제
+     *
+     * @param uuid
+     * @return isSuccess
+     */
+    public Boolean deleteOne(UUID uuid){
+        Video video = videoRepository.findByUuid(uuid)
+                        .orElseThrow(() -> (new VideoException(VideoStatusCode.VIDEO_NOT_FOUND)));
+
+        videoRepository.delete(video);
+        return true;
+    }
+
+
+    /**
+     * 영상 목록 조회 - 랜덤
+     * - pagination 적용
+     *
+     * @param pageable
+     * @return Slice<Video>
+     */
+    public Slice<Video> findByRandom(Pageable pageable) {
+        Slice<Video> slice = videoRepository.findAllOrderByRandom(pageable);
+
+        return slice;
+    }
+
+    /**
+     * 영상 목록 조회 - 최신순
+     * - pagination 적용
+     *
+     * @param pageable
+     * @return Slice<Video>
+     */
+    public Slice<Video> findByCreatedTime(Pageable pageable) {
+        Slice<Video> slice = videoRepository.findAllByOrderByCreatedTimeDesc(pageable);
+        return slice;
+    }
+
+    /**
+     * 영상 목록 조회 - 좋아요 순
+     * - pagination 적용
+     *
+     * @param pageable
+     * @return Slice<Video>
+     */
+    public Slice<Video> findByLikeCount(Pageable pageable) {
+        Slice<Video> slice = videoRepository.findAllByOrderByLikeCountDesc(pageable);
+        return slice;
+    }
+
+    /**
+     * 영상 목록 조회 - 조회수 순
+     * - pagination 적용
+     *
+     * @param pageable
+     * @return Slice<Video>
+     */
+    public Slice<Video> findByViewCount(Pageable pageable) {
+        Slice<Video> slice = videoRepository.findAllByOrderByViewCountDesc(pageable);
+        return slice;
     }
 
 

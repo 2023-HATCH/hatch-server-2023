@@ -3,15 +3,18 @@ package hatch.hatchserver2023.domain.video.api;
 import hatch.hatchserver2023.domain.video.application.VideoService;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.dto.VideoResponseDto;
+import hatch.hatchserver2023.domain.video.repository.VideoRepository;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.UUID;
+
 
 @Slf4j
 @RestController
@@ -25,13 +28,69 @@ public class VideoController {
     }
 
 
-    //TODO: 원래는 uuid를 넣어줘야하지만 지금은 테스트용으로 id 사용
-    @GetMapping("/{id}")
-    public Video getOneVideo(@PathVariable Long id) {
-        Video video = videoService.findOne(id);
+    /**
+     * 영상 상세 조회
+     * - uuid로 조회함
+     *
+     * @param uuid
+     * @return video response dto
+     */
+    @GetMapping("/{uuid}")
+    public ResponseEntity<?> getOneVideo(@PathVariable UUID uuid) {
+        Video video = videoService.findOne(uuid);
 
-        return video;
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                VideoStatusCode.GET_VIDEO_DETAIL_SUCCESS,
+                VideoResponseDto.GetVideo.toDto(video)
+        ));
     }
+
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<?> deleteVideo(@PathVariable UUID uuid){
+        Boolean isSuccess = videoService.deleteOne(uuid);
+
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                VideoStatusCode.GET_VIDEO_DETAIL_SUCCESS,
+                isSuccess
+        ));
+    }
+
+    /**
+     * 영상 목록 조회
+     * - 홈에서 사용할 api
+     * - 최신순 조회 (변경 가능)(좋아요 순이 나을지.. 고민고민)
+     *
+     * @param pageable
+     * @return
+     */
+    @GetMapping
+    public ResponseEntity<?> getVideoList(Pageable pageable){
+        Slice<Video> slice = videoService.findByCreatedTime(pageable);
+
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                VideoStatusCode.GET_VIDEO_LIST_SUCCESS,
+                VideoResponseDto.GetVideoList.toDto(slice)
+        ));
+    }
+
+    /**
+     * 영상 목록 조회
+     * - 검색 화면에서 사용할 api
+     *
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/random")
+    public ResponseEntity<?> getRandomVideoList(Pageable pageable) {
+        Slice<Video> slice = videoService.findByRandom(pageable);
+
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                VideoStatusCode.GET_VIDEO_LIST_SUCCESS,
+                VideoResponseDto.GetVideoList.toDto(slice)
+        ));
+    }
+
+
 
 
     @PostMapping("/upload1")
@@ -46,7 +105,8 @@ public class VideoController {
         // TODO: 작성자를 Video에 추가하는 것
 
         return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.VIDEO_UPLOAD_SUCCESS, VideoResponseDto.CreateVideo.toDto(createdVideo)));
+                VideoStatusCode.VIDEO_UPLOAD_SUCCESS,
+                VideoResponseDto.CreateVideo.toDto(createdVideo)));
     }
 
     @PostMapping("/upload2")
@@ -61,6 +121,7 @@ public class VideoController {
         // TODO: 작성자를 Video에 추가하는 것
 
         return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.VIDEO_UPLOAD_SUCCESS, VideoResponseDto.CreateVideo.toDto(createdVideo)));
+                VideoStatusCode.VIDEO_UPLOAD_SUCCESS,
+                VideoResponseDto.CreateVideo.toDto(createdVideo)));
     }
 }
