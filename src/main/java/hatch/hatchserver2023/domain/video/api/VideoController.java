@@ -1,9 +1,10 @@
 package hatch.hatchserver2023.domain.video.api;
 
+import hatch.hatchserver2023.domain.video.application.HashtagService;
 import hatch.hatchserver2023.domain.video.application.VideoService;
+import hatch.hatchserver2023.domain.video.domain.Hashtag;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.dto.VideoResponseDto;
-import hatch.hatchserver2023.domain.video.repository.VideoRepository;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -22,9 +24,11 @@ import java.util.UUID;
 public class VideoController {
 
     private final VideoService videoService;
+    private final HashtagService hashtagService;
 
-    public VideoController(VideoService videoService){
+    public VideoController(VideoService videoService, HashtagService hashtagService){
         this.videoService = videoService;
+        this.hashtagService = hashtagService;
     }
 
 
@@ -101,7 +105,9 @@ public class VideoController {
 
         Video createdVideo = videoService.createVideo(video, title, tag);
 
-        // TODO: 해시태그 파싱해서 따로 저장하는 것 추가
+        // 해시태그 파싱 후 저장
+        hashtagService.saveHashtag(tag, createdVideo);
+
         // TODO: 작성자를 Video에 추가하는 것
 
         return ResponseEntity.ok(CommonResponse.toResponse(
@@ -117,11 +123,31 @@ public class VideoController {
 
         Video createdVideo = videoService.createVideo(video, title, tag);
 
-        // TODO: 해시태그 파싱해서 따로 저장하는 것 추가
+        // 해시태그 파싱 후 저장
+        hashtagService.saveHashtag(tag, createdVideo);
         // TODO: 작성자를 Video에 추가하는 것
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.VIDEO_UPLOAD_SUCCESS,
                 VideoResponseDto.CreateVideo.toDto(createdVideo)));
+    }
+
+
+    //TODO: Pageable은 어떻게 적용할까나.. 아님 프론트에서 적용?
+    @GetMapping("/search")
+    public ResponseEntity<?> searchByHashtag(@RequestParam String tag, Pageable pageable) {
+        List<Video> videoList = hashtagService.searchHashtag(tag);
+
+        //videoList 출력
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                VideoStatusCode.GET_VIDEO_LIST_SUCCESS,
+                VideoResponseDto.GetVideoList.toDto(videoList)
+        ));
+    }
+
+    // 간이 해시태그 목록 조회 - 삭제 예정
+    @GetMapping("/tags")
+    public List<Hashtag> getHashtagList() {
+        return hashtagService.getHashtagList();
     }
 }

@@ -75,5 +75,18 @@ public class VideoResponseDto {
                     .isLast(slice.isLast())
                     .build();
         }
+
+        //인자로 List<Video>를 받고 isLast가 없는 버전
+        public static GetVideoList toDto(List<Video> videoList){
+
+            List<GetVideo> getVideos = new ArrayList<>();
+
+            for(Video video : videoList) {
+                getVideos.add(GetVideo.toDto(video));
+            }
+            return GetVideoList.builder()
+                    .videoList(getVideos)
+                    .build();
+        }
     }
 }

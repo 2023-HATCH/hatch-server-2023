@@ -60,9 +60,9 @@ public class S3Service {
     public String upload(MultipartFile multipartFile) {
         log.info("[S3SERVICE] S3 upload - single file");
 
-        // TODO: 파일 경로가 /video/{user uuid}/(원래 파일명+랜덤값) 되도록 만들기
+        // TODO: 파일 경로가 /video/{user uuid}/(원래 랜덤값 + 파일명) 되도록 만들기
         // TODO: user를 다루는 방법은 이게 맞을까? controller에서 uuid만 받아올까?
-        String fileName = multipartFile.getOriginalFilename() + UUID.randomUUID(); //원래 파일명 + 랜덤값 추가해서 이름 설정(안겹치도록)
+        String fileName = UUID.randomUUID() + "_" + multipartFile.getOriginalFilename(); //랜덤값 + 원래 파일명추가해서 이름 설정(안겹치도록)
 //        String path = "/video/" + user.getUuid() + "/"+fileName;
         String path = "video/"+fileName;
         try {
