@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -61,9 +62,10 @@ public class TestController {
 
     @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS')")
     @GetMapping("/auth/anonymous")
-    public ResponseEntity<CommonResponse> authAnonymous(@AuthenticationPrincipal Object principal) {
+    public ResponseEntity<CommonResponse> authAnonymous(@AuthenticationPrincipal User principal) { //principal == null
         log.info("[API] GET /api/v1/test/auth/anonymous");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        checkPrincipal(principal);
         return ResponseEntity.ok()
                 .body(CommonResponse.toResponse(CommonCode.OK, "authAnonymous : "+authentication.toString()));
     }
@@ -71,10 +73,22 @@ public class TestController {
     //    @Secured("ROLE_USER")
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GetMapping("/auth/user")
-    public ResponseEntity<CommonResponse> authUser(@AuthenticationPrincipal Object principal) {
+    public ResponseEntity<CommonResponse> authUser(@AuthenticationPrincipal User principal) { //@AuthenticationPrincipal 어노테이션으로 로그인된 User 객체 받아올 수 있음
         log.info("[API] GET /api/v1/test/auth/user");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); //인증정보만 필요하면 이렇게도 가져올 수 있음
+        log.info("principal.getNickName: "+principal.getNickname()); //user 객체라서 바로 user 정보에 접근 가능
+        checkPrincipal(principal);
         return ResponseEntity.ok()
                 .body(CommonResponse.toResponse(CommonCode.OK, "authUser : "+authentication.toString()));
+    }
+
+    private void checkPrincipal(Object principal) {
+        log.info("principal: "+principal);
+        if(principal instanceof User) {
+            User user = (User) principal;
+            log.info("type is user : "+user.getUuid());
+        } else{
+            log.info("type is not user");
+        }
     }
 }
