@@ -133,7 +133,8 @@ public class JwtProvider {
         String uuid = getUserPK(token);
         User user = getUser(uuid);
         log.info("jwtProvider getAuthentication :  user " + user);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUuid(), "", user.getAuthorities());  //principal에 uuid, authorities 설정
+//        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUuid(), "", user.getAuthorities());  //principal에 uuid, authorities 설정
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());  //principal에 User 객체, authorities 설정
         return authentication;
     }
 
