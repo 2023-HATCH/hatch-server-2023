@@ -95,8 +95,15 @@ public class VideoController {
     }
 
 
-
-
+    /**
+     * 영상 업로드
+     * - 영상 업로드, 썸네일 추출&업로드, 해시태그 파싱
+     *
+     * @param video
+     * @param title
+     * @param tag
+     * @return video_uuid
+     */
     @PostMapping("/upload1")
     public ResponseEntity<?> uploadVideo1(@RequestParam MultipartFile video,
                                          @RequestParam String title,
@@ -134,6 +141,14 @@ public class VideoController {
 
 
     //TODO: Pageable은 어떻게 적용할까나.. 아님 프론트에서 적용?
+
+    /**
+     * 해시태그로 영상 검색
+     *
+     * @param tag
+     * @param pageable
+     * @return videoList
+     */
     @GetMapping("/search")
     public ResponseEntity<?> searchByHashtag(@RequestParam String tag, Pageable pageable) {
         List<Video> videoList = hashtagService.searchHashtag(tag);

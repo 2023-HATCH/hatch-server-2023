@@ -25,6 +25,7 @@ public class Video extends BaseTimeEntity {
     //작성자
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = true)    //다대일 관계에서 FK는 다 쪽에 있는 것. 연관 관계의 주인
+    //TODO: nullable false로 변경
     private User userId;
 
     //제목

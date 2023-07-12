@@ -1,6 +1,7 @@
 package hatch.hatchserver2023.domain.video.dto;
 
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.video.domain.Comment;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import lombok.Builder;
 import lombok.Getter;
@@ -76,7 +77,7 @@ public class VideoResponseDto {
                     .build();
         }
 
-        //인자로 List<Video>를 받고 isLast가 없는 버전
+        //인자로 List<Video>를 받고 isLast가 null인 버전
         public static GetVideoList toDto(List<Video> videoList){
 
             List<GetVideo> getVideos = new ArrayList<>();
@@ -86,6 +87,69 @@ public class VideoResponseDto {
             }
             return GetVideoList.builder()
                     .videoList(getVideos)
+                    .build();
+        }
+    }
+
+    @Builder
+    @Getter
+    public static class CreateComment {
+
+        private UUID uuid;
+        private String content;
+        // TODO: 반환용 UserDto 적용
+//        private User userId;
+
+
+        public static CreateComment toDto(Comment comment){
+            return CreateComment.builder()
+                    .uuid(comment.getUuid())
+                    .content(comment.getContent())
+//                    .userId(comment.getUserId())
+                    .build();
+        }
+    }
+
+    @Builder
+    @Getter
+    public static class GetComment {
+
+        private UUID uuid;
+        private String content;
+        // TODO: 반환용 UserDto 적용
+//        private User userId;
+
+
+        public static GetComment toDto(Comment comment){
+            return GetComment.builder()
+                    .uuid(comment.getUuid())
+                    .content(comment.getContent())
+//                    .userId(comment.getUserId())
+                    .build();
+        }
+    }
+
+    @Builder
+    @Getter
+    public static class GetCommentList {
+
+        private List<GetComment> commentList;
+
+        // TODO: 반환용 UserDto 적용
+//        private User userId;
+
+        public static GetCommentList toDto(List<Comment> comments){
+
+            List<GetComment> getComments = new ArrayList<>();
+
+            for (Comment comment : comments) {
+                //dto로 만들어 add
+                getComments.add(GetComment.toDto(comment));
+            }
+
+            return GetCommentList.builder()
+                    .commentList(getComments)
+//                    .userId(comment.getUserId())
                     .build();
         }
     }
