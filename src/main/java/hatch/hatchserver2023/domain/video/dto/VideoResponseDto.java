@@ -153,4 +153,17 @@ public class VideoResponseDto {
                     .build();
         }
     }
+
+    @Builder
+    @Getter
+    public static class AddAndDeleteLike {
+
+        private Boolean isSuccess;
+
+        public static AddAndDeleteLike toDto(Boolean isSuccess){
+            return AddAndDeleteLike.builder()
+                    .isSuccess(isSuccess)
+                    .build();
+        }
+    }
 }
