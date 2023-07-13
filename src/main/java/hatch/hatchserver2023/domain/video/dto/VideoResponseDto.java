@@ -36,6 +36,7 @@ public class VideoResponseDto {
 
         private UserResponseDto.CommunityUserInfo user;
         private String url;
+        private String thumbnailUrl;
         private Integer likeCount;
         private Integer length;
         private ZonedDateTime createdTime;
@@ -49,6 +50,7 @@ public class VideoResponseDto {
                     .tag(video.getTag())
                     .user(userInfo)
                     .url(video.getVideoUrl())
+                    .thumbnailUrl(video.getThumbnailUrl())
                     .likeCount(video.getLikeCount())
                     .length(video.getLength())
                     .createdTime(video.getCreatedTime())

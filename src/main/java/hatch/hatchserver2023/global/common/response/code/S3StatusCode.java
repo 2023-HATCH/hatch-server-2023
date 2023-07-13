@@ -17,6 +17,7 @@ public enum S3StatusCode implements StatusCode {
     S3_FILE_UPLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "5001", "파일 업로드 실패"), //500,
     FILE_CONVERT_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "5002", "임시 파일로 전환 실패"), //500
     TEMP_FILE_DELETE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "5003", "임시 파일 삭제 실패"), //500
+    S3_FILE_DELETE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "5004", "S3 파일 삭제 실패")    //500
 
     ;
 

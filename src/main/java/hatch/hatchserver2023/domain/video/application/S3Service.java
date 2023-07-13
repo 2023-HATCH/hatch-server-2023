@@ -123,4 +123,20 @@ public class S3Service {
         log.warn("[FAIL] Fail to delete temp file");
 //        throw new S3Exception(S3StatusCode.TEMP_FILE_DELETE_FAIL);
     }
+
+
+    /**
+     * S3에 업로드된 파일 삭제
+     *
+     * @param path
+     */
+    public void delete(String path) {
+        String fileName = path.substring(49);
+
+        try {
+            amazonS3.deleteObject(bucket, fileName);
+        } catch (Exception e) {
+            new S3Exception(S3StatusCode.S3_FILE_DELETE_FAIL);
+        }
+    }
 }

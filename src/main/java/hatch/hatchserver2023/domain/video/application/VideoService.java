@@ -63,6 +63,10 @@ public class VideoService {
     public void deleteOne(UUID uuid){
         Video video = getVideo(uuid);
 
+        // S3에 올라가 있는 동영상과 썸네일 또한 삭제
+        s3Service.delete(video.getVideoUrl());
+        s3Service.delete(video.getThumbnailUrl());
+
         videoRepository.delete(video);
     }
 
