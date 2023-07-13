@@ -1,6 +1,7 @@
 package hatch.hatchserver2023.domain.video.application;
 
 
+import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
@@ -25,7 +26,6 @@ import org.apache.commons.fileupload.FileItem;
 import javax.imageio.ImageIO;
 import java.io.*;
 import java.nio.file.Files;
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -51,9 +51,7 @@ public class VideoService {
      * @return single video
      */
     public Video findOne(UUID uuid){
-
-        return videoRepository.findByUuid(uuid)
-                .orElseThrow(() -> (new VideoException(VideoStatusCode.VIDEO_NOT_FOUND)));
+        return getVideo(uuid);
     }
 
     /**
@@ -62,12 +60,16 @@ public class VideoService {
      * @param uuid
      * @return isSuccess
      */
-    public Boolean deleteOne(UUID uuid){
-        Video video = videoRepository.findByUuid(uuid)
-                        .orElseThrow(() -> (new VideoException(VideoStatusCode.VIDEO_NOT_FOUND)));
+    public void deleteOne(UUID uuid){
+        Video video = getVideo(uuid);
 
         videoRepository.delete(video);
-        return true;
+    }
+
+    // Video 하나 가져오는 메서드
+    private Video getVideo(UUID uuid) {
+        return videoRepository.findByUuid(uuid)
+                .orElseThrow(() -> (new VideoException(VideoStatusCode.VIDEO_NOT_FOUND)));
     }
 
 
@@ -128,25 +130,26 @@ public class VideoService {
      * @param image
      * @return thumbnail_url
      */
-    public String uploadImg(MultipartFile image) {
+    public String uploadImg(MultipartFile image, User user) {
 //        log.info("[VideoService] Single Img Upload");
-        return s3Service.upload(image);
+        return s3Service.uploadToVideo(image, user);
     }
 
     /**
      * 동영상 생성 & 업로드
      * - 썸네일 추출 포함
      *
-      * @param video
+     * @param user
+     * @param video
      * @param title
      * @param tag
-     * @return video_uuid
+     * @return video
      */
-    public Video createVideo(MultipartFile video, String title, String tag) {
+    public Video createVideo(MultipartFile video, User user, String title, String tag) {
         log.info("[VideoService] Single video Upload");
 
         // 영상 업로드하고
-        String videoUrl = s3Service.upload(video);
+        String videoUrl = s3Service.uploadToVideo(video, user);
 
         // 영상을 File로 바꾸고
         File diskVideo = multipartfileToFile(video);
@@ -155,13 +158,14 @@ public class VideoService {
         int length = getVideoLength(diskVideo);
 
         // 썸네일 추출하고
-        String thumbnailUrl = extractThumbnail(diskVideo, length);
+        String thumbnailUrl = extractThumbnail(diskVideo, user, length);
 
         // 임시 디스크 동영상 삭제
         removeTempFile(diskVideo);
 
         // 영상 builder로 만들고
         Video uploadedVideo = Video.builder()
+                .userId(user)
                 .title(title)
                 .tag(tag)
                 .videoUrl(videoUrl)
@@ -200,10 +204,10 @@ public class VideoService {
     /**
      * 썸네일 추출 & 업로드
      *
-      * @param source, length
+      * @param source, length, user
      * @return thumbnailUrl
      */
-    private String extractThumbnail(File source, int length) {
+    private String extractThumbnail(File source, User user, int length) {
         log.info("[VideoService] Start Extract Thumbnail");
 
         final String EXTENSION = "png";
@@ -218,7 +222,6 @@ public class VideoService {
 
             // 영상 중간 프레임의 데이터
             // length는 milliseconds 단위이므로 1000으로 나눔
-            // TODO: 영상의 중간을 썸네일로 할 건지, 첫 프레임을 썸네일로 할건지?
             frameGrab.seekToSecondPrecise(length/1000/2);
 
             Picture picture = frameGrab.getNativeFrame();
@@ -232,7 +235,7 @@ public class VideoService {
             MultipartFile multipartFileThumbnail = fileToMultipartFile(thumbnail);
 
             // 썸네일 S3에 업로드
-            thumbnailUrl = uploadImg(multipartFileThumbnail);
+            thumbnailUrl = uploadImg(multipartFileThumbnail, user);
 
             //임시 파일 지우기(다른 메서드)
             removeTempFile(thumbnail);

@@ -1,6 +1,5 @@
 package hatch.hatchserver2023.domain.video.dto;
 
-import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.domain.video.domain.Comment;
 import hatch.hatchserver2023.domain.video.domain.Video;
@@ -17,12 +16,12 @@ public class VideoResponseDto {
 
     @Builder
     @Getter
-    public static class CreateVideo {
+    public static class VideoUuid {
 
         private UUID uuid;
 
-        public static VideoResponseDto.CreateVideo toDto(Video video) {
-            return CreateVideo.builder()
+        public static VideoUuid toDto(Video video) {
+            return VideoUuid.builder()
                     .uuid(video.getUuid())
                     .build();
         }
@@ -95,6 +94,21 @@ public class VideoResponseDto {
 
     @Builder
     @Getter
+    public static class IsSuccess {
+
+        private boolean isSuccess;
+
+        public static IsSuccess toDto(boolean isSuccess) {
+            return VideoResponseDto.IsSuccess.builder()
+                    .isSuccess(isSuccess)
+                    .build();
+        }
+
+    }
+
+
+    @Builder
+    @Getter
     public static class CreateComment {
 
         private UUID uuid;
@@ -121,6 +135,8 @@ public class VideoResponseDto {
         private String content;
         private UserResponseDto.CommunityUserInfo user;
 
+        private ZonedDateTime createdTime;
+
 
         public static GetComment toDto(Comment comment){
             UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(comment.getUserId());
@@ -129,6 +145,7 @@ public class VideoResponseDto {
                     .uuid(comment.getUuid())
                     .content(comment.getContent())
                     .user(userInfo)
+                    .createdTime(comment.getCreatedTime())
                     .build();
         }
     }
@@ -155,30 +172,4 @@ public class VideoResponseDto {
         }
     }
 
-
-    @Builder
-    @Getter
-    public static class DeleteComment {
-
-        private boolean isSuccess;
-
-        public static DeleteComment toDto(boolean isSuccess){
-            return DeleteComment.builder()
-                    .isSuccess(isSuccess)
-                    .build();
-        }
-    }
-
-    @Builder
-    @Getter
-    public static class AddAndDeleteLike {
-
-        private Boolean isSuccess;
-
-        public static AddAndDeleteLike toDto(Boolean isSuccess){
-            return AddAndDeleteLike.builder()
-                    .isSuccess(isSuccess)
-                    .build();
-        }
-    }
 }

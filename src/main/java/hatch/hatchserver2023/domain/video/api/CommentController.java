@@ -68,7 +68,7 @@ public class CommentController {
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.COMMENT_DELETE_SUCCESS,
-                VideoResponseDto.DeleteComment.toDto(true)
+                VideoResponseDto.IsSuccess.toDto(true)
         ));
     }
 

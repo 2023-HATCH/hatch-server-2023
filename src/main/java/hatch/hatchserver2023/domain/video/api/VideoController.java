@@ -1,5 +1,6 @@
 package hatch.hatchserver2023.domain.video.api;
 
+import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.video.application.HashtagService;
 import hatch.hatchserver2023.domain.video.application.VideoService;
 import hatch.hatchserver2023.domain.video.domain.Hashtag;
@@ -11,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +40,7 @@ public class VideoController {
      * - uuid로 조회함
      *
      * @param uuid
-     * @return video response dto
+     * @return video
      */
     @GetMapping("/{uuid}")
     public ResponseEntity<?> getOneVideo(@PathVariable UUID uuid) {
@@ -49,13 +52,19 @@ public class VideoController {
         ));
     }
 
+    /**
+     * 영상 삭제
+     *
+     * @param uuid
+     * @return isSuccess
+     */
     @DeleteMapping("/{uuid}")
     public ResponseEntity<?> deleteVideo(@PathVariable UUID uuid){
-        Boolean isSuccess = videoService.deleteOne(uuid);
+        videoService.deleteOne(uuid);
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.GET_VIDEO_DETAIL_SUCCESS,
-                isSuccess
+                VideoResponseDto.IsSuccess.toDto(true)
         ));
     }
 
@@ -96,47 +105,90 @@ public class VideoController {
 
 
     /**
-     * 영상 업로드
+     * 영상 업로드 - 정식
+     * - MultipartFile에 @RequestPart 적용
      * - 영상 업로드, 썸네일 추출&업로드, 해시태그 파싱
      *
+     * @param user
+     * @param video
+     * @param title
+     * @param tag
+     * @return
+     */
+    @PreAuthorize("hasAnyRole('ROLE_USER')")    //로그인한 사용자만 사용 가능
+    @PostMapping
+    public ResponseEntity<?> uploadVideo(@AuthenticationPrincipal User user,
+                                          @RequestPart MultipartFile video,
+                                          @RequestParam String title,
+                                          @RequestParam String tag) {
+        log.info("[VideoController][upload video] Request multiPartFile's ContentType >> " + video.getContentType());
+
+        Video createdVideo = videoService.createVideo(video, user, title, tag);
+
+        // 해시태그 파싱 후 저장
+        hashtagService.saveHashtag(tag, createdVideo);
+
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                VideoStatusCode.VIDEO_UPLOAD_SUCCESS,
+                VideoResponseDto.VideoUuid.toDto(createdVideo)));
+    }
+
+    /**
+     * 영상 업로드 - 임시 방법 1
+     * - parameter(url) 사용
+     * - 영상 업로드, 썸네일 추출&업로드, 해시태그 파싱
+     *
+     * @param user
      * @param video
      * @param title
      * @param tag
      * @return video_uuid
      */
+    @PreAuthorize("hasAnyRole('ROLE_USER')")    //로그인한 사용자만 사용 가능
     @PostMapping("/upload1")
-    public ResponseEntity<?> uploadVideo1(@RequestParam MultipartFile video,
-                                         @RequestParam String title,
-                                         @RequestParam String tag) {
+    public ResponseEntity<?> uploadVideo1(@AuthenticationPrincipal User user,
+                                          @RequestParam MultipartFile video,
+                                          @RequestParam String title,
+                                          @RequestParam String tag) {
         log.info("[VideoController][upload video] Request multiPartFile's ContentType >> " + video.getContentType());
 
-        Video createdVideo = videoService.createVideo(video, title, tag);
+        Video createdVideo = videoService.createVideo(video, user, title, tag);
 
         // 해시태그 파싱 후 저장
         hashtagService.saveHashtag(tag, createdVideo);
 
-        // TODO: 작성자를 Video에 추가하는 것
-
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.VIDEO_UPLOAD_SUCCESS,
-                VideoResponseDto.CreateVideo.toDto(createdVideo)));
+                VideoResponseDto.VideoUuid.toDto(createdVideo)));
     }
 
+    /**
+     * 영상 업로드 - 임시 방법 2
+     * - 아무런 매핑 없이 사용
+     * - 영상 업로드, 썸네일 추출&업로드, 해시태그 파싱
+     *
+     * @param user
+     * @param video
+     * @param title
+     * @param tag
+     * @return video_uuid
+     */
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     @PostMapping("/upload2")
-    public ResponseEntity<?> uploadVideo2(MultipartFile video,
-                                         String title,
-                                         String tag) {
+    public ResponseEntity<?> uploadVideo2(@AuthenticationPrincipal User user,
+                                          MultipartFile video,
+                                          String title,
+                                          String tag) {
         log.info("[VideoController][upload video] Request multiPartFiles ContentType >> " + video.getContentType());
 
-        Video createdVideo = videoService.createVideo(video, title, tag);
+        Video createdVideo = videoService.createVideo(video, user, title, tag);
 
         // 해시태그 파싱 후 저장
         hashtagService.saveHashtag(tag, createdVideo);
-        // TODO: 작성자를 Video에 추가하는 것
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.VIDEO_UPLOAD_SUCCESS,
-                VideoResponseDto.CreateVideo.toDto(createdVideo)));
+                VideoResponseDto.VideoUuid.toDto(createdVideo)));
     }
 
 

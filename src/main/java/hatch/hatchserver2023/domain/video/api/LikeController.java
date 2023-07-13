@@ -43,7 +43,7 @@ public class LikeController {
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.LIKE_ADD_SUCCESS,
-                VideoResponseDto.AddAndDeleteLike.toDto(true)
+                VideoResponseDto.IsSuccess.toDto(true)
         ));
     }
 
@@ -65,7 +65,7 @@ public class LikeController {
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.LIKE_DELETE_SUCCESS,
-                VideoResponseDto.AddAndDeleteLike.toDto(true)
+                VideoResponseDto.IsSuccess.toDto(true)
         ));
     }
 

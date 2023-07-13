@@ -15,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,35 +34,33 @@ public class S3Service {
     }
 
 
-    // TODO: 로그인한 user 추가
 
-    /**
-     * 다수의 파일 업로드
-     * @param multipartFileList
-     * @return urlList
-     */
-    public List<String> upload(List<MultipartFile> multipartFileList) {
-        log.info("[S3SERVICE] S3 upload - multi files");
-        List<String> urlList = new ArrayList<>();
-        for(MultipartFile multipartFile : multipartFileList) {
-            urlList.add(upload(multipartFile));
-        }
-        return urlList;
-    }
+//    /**
+//     * 다수의 파일 업로드
+//     * @param multipartFileList
+//     * @return urlList
+//     */
+//    public List<String> upload(List<MultipartFile> multipartFileList) {
+//        log.info("[S3SERVICE] S3 upload - multi files");
+//        List<String> urlList = new ArrayList<>();
+//        for(MultipartFile multipartFile : multipartFileList) {
+//            urlList.add(upload(multipartFile));
+//        }
+//        return urlList;
+//    }
 
     /**
      * 하나의 파일 업로드
      * @param multipartFile
      * @return url
      */
-    public String upload(MultipartFile multipartFile) {
+    public String uploadToVideo(MultipartFile multipartFile, User user) {
         log.info("[S3SERVICE] S3 upload - single file");
 
-        // TODO: 파일 경로가 /video/{user uuid}/(원래 랜덤값 + 파일명) 되도록 만들기
-        // TODO: user를 다루는 방법은 이게 맞을까? controller에서 uuid만 받아올까?
+        // 동영상의 s3 경로명: video/{user_uuid}/[random_uuid]_[filename]
         String fileName = UUID.randomUUID() + "_" + multipartFile.getOriginalFilename(); //랜덤값 + 원래 파일명추가해서 이름 설정(안겹치도록)
-//        String path = "/video/" + user.getUuid() + "/"+fileName;
-        String path = "video/"+fileName;
+        String path = "video/" + user.getUuid() + "/" + fileName;
+
         try {
             //file로 변환해 임시로 로컬에 저장
             File file = convertMultipartFileToSavedFile(multipartFile)
