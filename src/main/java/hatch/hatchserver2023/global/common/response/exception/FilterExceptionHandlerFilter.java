@@ -21,6 +21,7 @@ public class FilterExceptionHandlerFilter extends OncePerRequestFilter {
         }catch (AuthException authException){
             setErrorResponse(response, authException.getCode());
         }catch (Exception e) {
+            e.printStackTrace();
             setErrorResponse(response, e.getMessage());
         }
     }

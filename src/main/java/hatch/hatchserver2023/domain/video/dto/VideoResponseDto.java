@@ -1,6 +1,7 @@
 package hatch.hatchserver2023.domain.video.dto;
 
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.domain.video.domain.Comment;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import lombok.Builder;
@@ -34,19 +35,20 @@ public class VideoResponseDto {
         private String title;
         private String tag;
 
-        // TODO: 반환용 UserDTO 만들기(userId랑 nickname, 프로필 사진)
-        private User userId;
+        private UserResponseDto.CommunityUserInfo user;
         private String url;
         private Integer likeCount;
         private Integer length;
         private ZonedDateTime createdTime;
 
         public static GetVideo toDto(Video video){
+            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(video.getUserId());
+
             return GetVideo.builder()
                     .uuid(video.getUuid())
                     .title(video.getTitle())
                     .tag(video.getTag())
-                    .userId(video.getUserId())
+                    .user(userInfo)
                     .url(video.getVideoUrl())
                     .likeCount(video.getLikeCount())
                     .length(video.getLength())
@@ -97,15 +99,16 @@ public class VideoResponseDto {
 
         private UUID uuid;
         private String content;
-        // TODO: 반환용 UserDto 적용
-//        private User userId;
+        private UserResponseDto.CommunityUserInfo user;
 
 
         public static CreateComment toDto(Comment comment){
+            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(comment.getUserId());
+
             return CreateComment.builder()
                     .uuid(comment.getUuid())
                     .content(comment.getContent())
-//                    .userId(comment.getUserId())
+                    .user(userInfo)
                     .build();
         }
     }
@@ -116,15 +119,16 @@ public class VideoResponseDto {
 
         private UUID uuid;
         private String content;
-        // TODO: 반환용 UserDto 적용
-//        private User userId;
+        private UserResponseDto.CommunityUserInfo user;
 
 
         public static GetComment toDto(Comment comment){
+            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(comment.getUserId());
+
             return GetComment.builder()
                     .uuid(comment.getUuid())
                     .content(comment.getContent())
-//                    .userId(comment.getUserId())
+                    .user(userInfo)
                     .build();
         }
     }
@@ -135,8 +139,6 @@ public class VideoResponseDto {
 
         private List<GetComment> commentList;
 
-        // TODO: 반환용 UserDto 적용
-//        private User userId;
 
         public static GetCommentList toDto(List<Comment> comments){
 
@@ -149,7 +151,20 @@ public class VideoResponseDto {
 
             return GetCommentList.builder()
                     .commentList(getComments)
-//                    .userId(comment.getUserId())
+                    .build();
+        }
+    }
+
+
+    @Builder
+    @Getter
+    public static class DeleteComment {
+
+        private boolean isSuccess;
+
+        public static DeleteComment toDto(boolean isSuccess){
+            return DeleteComment.builder()
+                    .isSuccess(isSuccess)
                     .build();
         }
     }
