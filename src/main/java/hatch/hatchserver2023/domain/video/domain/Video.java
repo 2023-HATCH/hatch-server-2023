@@ -8,6 +8,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
@@ -73,7 +74,9 @@ public class Video extends BaseTimeEntity {
     //== 생성자 ==//
     // builder 생성자
     @Builder
-    private Video(User userId, String title, String tag, String videoUrl, String thumbnailUrl, int length, int viewCount, int likeCount, int commentCount) {
+    private Video(Long id, UUID uuid, User userId, String title, String tag, String videoUrl, String thumbnailUrl, int length, int viewCount, int likeCount, int commentCount) {
+        this.id = id;
+        this.uuid = uuid;
         this.userId = userId;
         this.title = title;
         this.tag = tag;

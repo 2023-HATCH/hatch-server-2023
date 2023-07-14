@@ -36,9 +36,10 @@ public class VideoResponseDto {
 
         private UserResponseDto.CommunityUserInfo user;
         private boolean isLiked;
-        private String url;
+        private String videoUrl;
         private String thumbnailUrl;
         private Integer likeCount;
+        private Integer commentCount;
         private Integer length;
         private ZonedDateTime createdTime;
 
@@ -51,9 +52,10 @@ public class VideoResponseDto {
                     .title(video.getTitle())
                     .tag(video.getTag())
                     .user(userInfo)
-                    .url(video.getVideoUrl())
+                    .videoUrl(video.getVideoUrl())
                     .thumbnailUrl(video.getThumbnailUrl())
                     .likeCount(video.getLikeCount())
+                    .commentCount(video.getCommentCount())
                     .length(video.getLength())
                     .createdTime(video.getCreatedTime())
                     .build();
@@ -69,9 +71,10 @@ public class VideoResponseDto {
                     .tag(video.getTag())
                     .user(userInfo)
                     .isLiked(isLiked)
-                    .url(video.getVideoUrl())
+                    .videoUrl(video.getVideoUrl())
                     .thumbnailUrl(video.getThumbnailUrl())
                     .likeCount(video.getLikeCount())
+                    .commentCount(video.getCommentCount())
                     .length(video.getLength())
                     .createdTime(video.getCreatedTime())
                     .build();

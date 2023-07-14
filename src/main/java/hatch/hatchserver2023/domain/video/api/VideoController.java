@@ -100,7 +100,7 @@ public class VideoController {
     /**
      * 영상 목록 조회
      * - 홈에서 사용할 api
-     * - 최신순 조회 (변경 가능)(좋아요 순이 나을지.. 고민고민)
+     * - 최신순 조회
      *
      * @param pageable
      * @return
