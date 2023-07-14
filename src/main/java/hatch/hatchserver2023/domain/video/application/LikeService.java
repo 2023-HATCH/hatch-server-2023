@@ -2,7 +2,6 @@ package hatch.hatchserver2023.domain.video.application;
 
 
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.domain.video.domain.Like;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.repository.LikeRepository;
@@ -22,12 +21,10 @@ public class LikeService {
 
     private final LikeRepository likeRepository;
     private final VideoRepository videoRepository;
-    private final UserRepository userRepository;
 
-    public LikeService(LikeRepository likeRepository, VideoRepository videoRepository, UserRepository userRepository){
+    public LikeService(LikeRepository likeRepository, VideoRepository videoRepository){
         this.likeRepository = likeRepository;
         this.videoRepository = videoRepository;
-        this.userRepository = userRepository;
     }
 
 
@@ -62,7 +59,6 @@ public class LikeService {
         }
     }
 
-    //좋아요 삭제
 
     /**
      * 좋아요 삭제

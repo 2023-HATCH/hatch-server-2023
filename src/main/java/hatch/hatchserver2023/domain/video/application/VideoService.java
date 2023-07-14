@@ -2,7 +2,13 @@ package hatch.hatchserver2023.domain.video.application;
 
 
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.video.domain.Comment;
+import hatch.hatchserver2023.domain.video.domain.Like;
 import hatch.hatchserver2023.domain.video.domain.Video;
+import hatch.hatchserver2023.domain.video.domain.VideoHashtag;
+import hatch.hatchserver2023.domain.video.repository.CommentRepository;
+import hatch.hatchserver2023.domain.video.repository.LikeRepository;
+import hatch.hatchserver2023.domain.video.repository.VideoHashtagRepository;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.VideoException;
@@ -26,6 +32,7 @@ import org.apache.commons.fileupload.FileItem;
 import javax.imageio.ImageIO;
 import java.io.*;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -34,10 +41,16 @@ public class VideoService {
 
     private final VideoRepository videoRepository;
     private final S3Service s3Service;
+    private final VideoHashtagRepository videoHashtagRepository;
+    private final LikeRepository likeRepository;
+    private final CommentRepository commentRepository;
 
-    public VideoService(VideoRepository videoRepository, S3Service s3Service) {
+    public VideoService(VideoRepository videoRepository, S3Service s3Service, VideoHashtagRepository videoHashtagRepository, LikeRepository likeRepository, CommentRepository commentRepository) {
         this.videoRepository = videoRepository;
         this.s3Service = s3Service;
+        this.videoHashtagRepository = videoHashtagRepository;
+        this.likeRepository = likeRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Value("${DEFAULT_THUMBNAIL_URL}")
@@ -54,6 +67,7 @@ public class VideoService {
         return getVideo(uuid);
     }
 
+
     /**
      * 영상 삭제
      *
@@ -67,6 +81,25 @@ public class VideoService {
         s3Service.delete(video.getVideoUrl());
         s3Service.delete(video.getThumbnailUrl());
 
+        //해시태그 매핑 테이블의 정보 삭제
+        List<VideoHashtag> mapList = videoHashtagRepository.findAllByVideoId(video);
+        for(VideoHashtag map : mapList) {
+            videoHashtagRepository.delete(map);
+        }
+
+        //좋아요 데이터 삭제
+        List<Like> likeList = likeRepository.findAllByVideoId(video);
+        for(Like like : likeList){
+            likeRepository.delete(like);
+        }
+
+        //댓글 데이터 삭제
+        List<Comment> commentList = commentRepository.findAllByVideoId(video);
+        for(Comment comment : commentList){
+            commentRepository.delete(comment);
+        }
+
+        //Video 데이터 DB에서 삭제
         videoRepository.delete(video);
     }
 

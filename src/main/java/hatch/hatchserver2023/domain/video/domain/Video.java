@@ -44,6 +44,8 @@ public class Video extends BaseTimeEntity {
     private String thumbnailUrl;
 
     //영상 길이 (milliseconds 단위)
+    //길이 추출이 제대로 되지 않았을 때 -1을 반환하므로
+    @ColumnDefault("-1")
     private int length;
 
     //좋아요 수

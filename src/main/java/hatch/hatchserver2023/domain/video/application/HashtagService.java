@@ -2,20 +2,26 @@ package hatch.hatchserver2023.domain.video.application;
 
 import hatch.hatchserver2023.domain.video.domain.Hashtag;
 import hatch.hatchserver2023.domain.video.domain.Video;
+import hatch.hatchserver2023.domain.video.domain.VideoHashtag;
 import hatch.hatchserver2023.domain.video.repository.HashtagRepository;
+import hatch.hatchserver2023.domain.video.repository.VideoHashtagRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 public class HashtagService {
 
     private final HashtagRepository hashtagRepository;
+    private final VideoHashtagRepository videoHashtagRepository;
 
-    public HashtagService(HashtagRepository hashtagRepository){
+    public HashtagService(HashtagRepository hashtagRepository, VideoHashtagRepository videoHashtagRepository){
         this.hashtagRepository = hashtagRepository;
+        this.videoHashtagRepository = videoHashtagRepository;
     }
 
     //해시태그 목록 조회
@@ -32,15 +38,24 @@ public class HashtagService {
      */
     public List<Video> searchHashtag(String tag){
 
-        Hashtag hashtag =  hashtagRepository.findByTitle(tag)
-                // 검색한 해시태그가 없다면 videoList를 null로 반환
-                .orElse(Hashtag
-                        .builder()
-                        .videoList(null)
-                        .build()
-                );
+        List<Video> videoList = new ArrayList<>();
 
-        return hashtag.getVideoList();
+        Optional<Hashtag> hashtag =  hashtagRepository.findByTitle(tag);
+
+        if(hashtag.isPresent()){
+            // 검색한 해시태그가 존재한다면, videoList 제작
+            List<VideoHashtag> mapList = videoHashtagRepository.findAllByHashtagId(hashtag.get());
+
+            for (VideoHashtag map : mapList){
+                videoList.add(map.getVideoId());
+            }
+
+        } else {
+            // 검색한 해시태그가 없다면 videoList는 null
+            videoList = null;
+        }
+
+        return videoList;
     }
 
 
@@ -68,12 +83,32 @@ public class HashtagService {
             //기존에 있는 해시태그면, 기존 videoList에 새로운 video 추가
             Hashtag hashtag = hashtagRepository.findByTitle(tagTitle)
                     .orElse(Hashtag.createHashtag(tagTitle));
-
-            hashtag.getVideoList().add(video);
             hashtagRepository.save(hashtag);
+
+            //매핑 테이블에도 추가
+            VideoHashtag map = VideoHashtag.builder()
+                                .videoId(video)
+                                .hashtagId(hashtag)
+                                .build();
+
+            videoHashtagRepository.save(map);
         }
 
     }
 
+    //해시태그 삭제 - 테스트용
+    public void delete(String title){
+        Hashtag hashtag = hashtagRepository.findByTitle(title).get();
+
+        //매핑 테이블 데이터도 함께 db에서 삭제
+        List<VideoHashtag> mapList = videoHashtagRepository.findAllByHashtagId(hashtag);
+
+        for(VideoHashtag map : mapList) {
+            videoHashtagRepository.delete(map);
+        }
+
+        //해시태그 db에서 삭제
+        hashtagRepository.delete(hashtag);
+    }
 
 }

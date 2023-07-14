@@ -63,7 +63,7 @@ public class VideoController {
         videoService.deleteOne(uuid);
 
         return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.GET_VIDEO_DETAIL_SUCCESS,
+                VideoStatusCode.VIDEO_DELETE_SUCCESS,
                 VideoResponseDto.IsSuccess.toDto(true)
         ));
     }
@@ -192,7 +192,7 @@ public class VideoController {
     }
 
 
-    //TODO: Pageable은 어떻게 적용할까나.. 아님 프론트에서 적용?
+    //TODO: Pageable은 어떻게 적용할까나.. 아님 프론트에서 적용? Slice 적용?
 
     /**
      * 해시태그로 영상 검색
@@ -216,5 +216,13 @@ public class VideoController {
     @GetMapping("/tags")
     public List<Hashtag> getHashtagList() {
         return hashtagService.getHashtagList();
+    }
+
+
+    //해시태그 삭제 - 테스트용
+    @DeleteMapping("/tags/{title}")
+    public boolean deleteHashtag(@PathVariable String title){
+        hashtagService.delete(title);
+        return true;
     }
 }
