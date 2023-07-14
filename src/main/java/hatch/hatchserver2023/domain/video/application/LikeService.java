@@ -119,8 +119,14 @@ public class LikeService {
     }
 
 
-    // 이미 좋아요를 눌렀는지 확인
-    private boolean isAlreadyLiked(Video video, User user){
+    /**
+     * 이미 좋아요를 눌렀는지 확인
+     *
+     * @param video
+     * @param user
+     * @return isLiked
+     */
+    public boolean isAlreadyLiked(Video video, User user){
         return likeRepository.findByVideoIdAndUserId(video, user).isPresent();
     }
 

@@ -35,12 +35,14 @@ public class VideoResponseDto {
         private String tag;
 
         private UserResponseDto.CommunityUserInfo user;
+        private boolean isLiked;
         private String url;
         private String thumbnailUrl;
         private Integer likeCount;
         private Integer length;
         private ZonedDateTime createdTime;
 
+        //isLike가 없는 버전
         public static GetVideo toDto(Video video){
             UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(video.getUserId());
 
@@ -49,6 +51,24 @@ public class VideoResponseDto {
                     .title(video.getTitle())
                     .tag(video.getTag())
                     .user(userInfo)
+                    .url(video.getVideoUrl())
+                    .thumbnailUrl(video.getThumbnailUrl())
+                    .likeCount(video.getLikeCount())
+                    .length(video.getLength())
+                    .createdTime(video.getCreatedTime())
+                    .build();
+        }
+
+        //isLike가 있는 버전
+        public static GetVideo toDto(Video video, boolean isLiked){
+            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(video.getUserId());
+
+            return GetVideo.builder()
+                    .uuid(video.getUuid())
+                    .title(video.getTitle())
+                    .tag(video.getTag())
+                    .user(userInfo)
+                    .isLiked(isLiked)
                     .url(video.getVideoUrl())
                     .thumbnailUrl(video.getThumbnailUrl())
                     .likeCount(video.getLikeCount())

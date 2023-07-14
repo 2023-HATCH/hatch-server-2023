@@ -2,6 +2,7 @@ package hatch.hatchserver2023.domain.video.api;
 
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.video.application.HashtagService;
+import hatch.hatchserver2023.domain.video.application.LikeService;
 import hatch.hatchserver2023.domain.video.application.VideoService;
 import hatch.hatchserver2023.domain.video.domain.Hashtag;
 import hatch.hatchserver2023.domain.video.domain.Video;
@@ -28,29 +29,57 @@ public class VideoController {
 
     private final VideoService videoService;
     private final HashtagService hashtagService;
+    private final LikeService likeService;
 
-    public VideoController(VideoService videoService, HashtagService hashtagService){
+    public VideoController(VideoService videoService, HashtagService hashtagService, LikeService likeService){
         this.videoService = videoService;
         this.hashtagService = hashtagService;
+        this.likeService = likeService;
     }
 
 
     /**
      * 영상 상세 조회
-     * - uuid로 조회함
+     * - 회원용
+     * - uuid로 조회
      *
      * @param uuid
      * @return video
      */
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GetMapping("/{uuid}")
-    public ResponseEntity<?> getOneVideo(@PathVariable UUID uuid) {
+    public ResponseEntity<?> getOneVideoForUser(@AuthenticationPrincipal User user,
+                                                @PathVariable UUID uuid) {
         Video video = videoService.findOne(uuid);
+        boolean isLiked = likeService.isAlreadyLiked(video, user);
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.GET_VIDEO_DETAIL_SUCCESS,
-                VideoResponseDto.GetVideo.toDto(video)
+                VideoResponseDto.GetVideo.toDto(video, isLiked)
         ));
     }
+
+    /**
+     * 영상 상세 조회
+     * - 비회원용
+     * - uuid로 조회
+     *
+     * @param uuid
+     * @return video
+     */
+    @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS')")
+    @GetMapping("/anonymous/{uuid}")
+    public ResponseEntity<?> getOneVideoForAnonymous(@AuthenticationPrincipal User user,
+                                                     @PathVariable UUID uuid) {
+        Video video = videoService.findOne(uuid);
+        boolean isLiked = false;
+
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                VideoStatusCode.GET_VIDEO_DETAIL_SUCCESS,
+                VideoResponseDto.GetVideo.toDto(video, isLiked)
+        ));
+    }
+
 
     /**
      * 영상 삭제
