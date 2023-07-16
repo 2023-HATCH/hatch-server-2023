@@ -236,7 +236,7 @@ public class VideoController {
 
         //videoList 출력
         return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.GET_VIDEO_LIST_SUCCESS,
+                VideoStatusCode.HASHTAG_SEARCH_SUCCESS,
                 VideoResponseDto.GetVideoList.toDto(videoList)
         ));
     }

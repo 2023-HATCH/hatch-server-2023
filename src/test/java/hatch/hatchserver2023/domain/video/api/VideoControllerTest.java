@@ -511,7 +511,78 @@ public class VideoControllerTest {
     }
 
 
-    //TODO: 삭제, 해시태그 영상 검색 추가 -> 커밋
+    @Nested
+    @DisplayName("Video Search By Hashtag")
+    class Search {
+
+        String tag = "태그";
+
+        @Nested
+        @DisplayName("Success")
+        class SuccessCase {
+
+            @Test
+            @DisplayName("Search Success")
+            void getVideoListBySearchUsingHashtagSuccess() throws Exception {
+                //given
+                List<Video> videoList = Arrays.asList(video1, video2);
+
+                given(hashtagService.searchHashtag(tag))
+                        .willReturn(videoList);
+
+                //when
+                StatusCode code = VideoStatusCode.HASHTAG_SEARCH_SUCCESS;
+
+                MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
+                                                            .get("/api/v1/videos/search")
+                                                            .param("tag", tag);
+
+                //then
+                ResultActions resultActions = mockMvc.perform(requestGet);
+
+                resultActions
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.code").value(code.getCode()))
+                        .andExpect(jsonPath("$.message").value(code.getMessage()))
+                        .andExpect(jsonPath("$.data.videoList[0].uuid").value(video1.getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[1].uuid").value(video2.getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[0].title").value(video1.getTitle()))
+                        .andExpect(jsonPath("$.data.videoList[1].title").value(video2.getTitle()))
+                        .andExpect(jsonPath("$.data.videoList[0].user.uuid").value(video1.getUserId().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[1].user.uuid").value(video2.getUserId().getUuid().toString()))
+                ;
+
+                resultActions
+                        .andDo( //rest docs 문서 작성 시작
+                                document("search-video-list-by-hasthag",
+                                        requestParameters(
+                                                parameterWithName("tag").description("검색하고자 하는 해시태그")
+//                                                parameterWithName("page").description("페이지 번호(0부터 시작)").optional(),
+//                                                parameterWithName("size").description("페이지 크기").optional()
+                                        ),
+                                        //TODO: responseFields 두 개를 쓰면 바로 에러가 나는데... 이 출력이 최선이냐?
+                                        responseFields(
+                                                beneathPath("data.videoList"),
+                                                fieldWithPath("uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID"),
+                                                fieldWithPath("title").type(JsonFieldType.STRING).description("영상 제목"),
+                                                fieldWithPath("tag").type(JsonFieldType.STRING).description("해시태그"),
+                                                fieldWithPath("user.uuid").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
+                                                fieldWithPath("user.email").type(JsonFieldType.STRING).description("사용자 이메일"),
+                                                fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
+                                                fieldWithPath("user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 S3 경로"),
+                                                fieldWithPath("videoUrl").type(JsonFieldType.STRING).description("동영상 S3 경로"),
+                                                fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 이미지 S3 경로"),
+                                                fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
+                                                fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 개수"),
+                                                fieldWithPath("length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이"),
+                                                fieldWithPath("createdTime").type("DateTime").description("생성 시각"),
+                                                fieldWithPath("liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부").ignored()
+                                        )
+                                )
+                        );
+            }
+        }
+    }
 
 
 
