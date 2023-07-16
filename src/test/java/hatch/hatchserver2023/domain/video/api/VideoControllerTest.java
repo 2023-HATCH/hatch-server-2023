@@ -132,7 +132,7 @@ public class VideoControllerTest {
                         .willReturn(isLiked);
 
 
-                //when & then
+                //when
                 StatusCode code = VideoStatusCode.GET_VIDEO_DETAIL_SUCCESS;
 
                 MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
@@ -140,6 +140,7 @@ public class VideoControllerTest {
                                                             .header("x-access-token", "x-access-token")
                                                             .header("x-refresh-token", "x-refresh-token");
 
+                //then
                 ResultActions resultActions = mockMvc.perform(requestGet);
 
                 resultActions
@@ -244,6 +245,57 @@ public class VideoControllerTest {
                                 )
                         );
 
+            }
+        }
+    }
+
+
+    @Nested
+    @DisplayName("Delete")
+    class DeleteVideo {
+
+        @Nested
+        @DisplayName("Success")
+        class SuccessCase {
+
+            @Test
+            @DisplayName("Delete Success")
+            void deleteVideoSuccess() throws Exception {
+                //given
+//                given(videoService.deleteOne(video1.getUuid()));
+
+                //when
+                StatusCode code = VideoStatusCode.VIDEO_DELETE_SUCCESS;
+
+                MockHttpServletRequestBuilder requestDelete = RestDocumentationRequestBuilders
+                        .delete("/api/v1/videos/{videoId}", video1.getUuid())
+                        .with(csrf());
+
+                ResultActions resultActions = mockMvc.perform(requestDelete);
+
+                //then
+                resultActions
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.code").value(code.getCode()))
+                        .andExpect(jsonPath("$.message").value(code.getMessage()))
+                        .andExpect(jsonPath("$.data.success").value(true))
+                        ;
+
+                resultActions
+                        .andDo( //rest docs 문서 작성 시작
+                                document("delete-video",
+                                        pathParameters(
+                                                parameterWithName("videoId").description("동영상 UUID")
+                                        ),
+                                        requestParameters(
+                                                parameterWithName("_csrf").description("테스트할 때 넣은 csrf 이므로 무시").ignored()
+                                        ),
+                                        responseFields(
+                                                beneathPath("data"),
+                                                fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부 (default: true)")
+                                        )
+                                )
+                        );
             }
         }
     }
@@ -457,6 +509,15 @@ public class VideoControllerTest {
         }
 
     }
+
+
+    //TODO: 삭제, 해시태그 영상 검색 추가 -> 커밋
+
+
+
+    //TODO: 그거 하면 좋아요 Controller 랑 댓글 Controller도 추가하고
+
+
 
 
 }
