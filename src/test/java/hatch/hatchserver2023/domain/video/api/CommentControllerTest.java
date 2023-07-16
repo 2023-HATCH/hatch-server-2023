@@ -126,8 +126,8 @@ public class CommentControllerTest {
         MockHttpServletRequestBuilder requestPost = RestDocumentationRequestBuilders
                 .post("/api/v1/comments/{videoId}", video.getUuid())
                 .content(objectMapper.writeValueAsString(requestDto))
-                .header("x-access-token", "x-access-token")
-                .header("x-refresh-token", "x-refresh-token")
+                .header("headerXAccessToken", "headerXAccessToken")
+                .header("headerXRefreshToken", "headerXRefreshToken")
                 .contentType(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .with(csrf());
@@ -153,10 +153,9 @@ public class CommentControllerTest {
                                 requestParameters(
                                         parameterWithName("_csrf").description("테스트할 때 넣은 csrf 이므로 무시").ignored()
                                 ),
-                                //TODO: 토큰 이름이 맞는가?
                                 requestHeaders(
-                                        headerWithName("x-access-token").description("x-access-token"),
-                                        headerWithName("x-refresh-token").description("x-refresh-token")
+                                        headerWithName("headerXAccessToken").description("headerXAccessToken"),
+                                        headerWithName("headerXRefreshToken").description("headerXRefreshToken")
                                 ),
                                 responseFields(
                                         beneathPath("data"),
@@ -184,8 +183,8 @@ public class CommentControllerTest {
 
         MockHttpServletRequestBuilder requestDelete = RestDocumentationRequestBuilders
                 .delete("/api/v1/comments/{commentId}", comment1.getUuid())
-                .header("x-access-token", "x-access-token")
-                .header("x-refresh-token", "x-refresh-token")
+                .header("headerXAccessToken", "headerXAccessToken")
+                .header("headerXRefreshToken", "headerXRefreshToken")
                 .with(csrf());
 
         //then
@@ -207,10 +206,9 @@ public class CommentControllerTest {
                                 requestParameters(
                                         parameterWithName("_csrf").description("테스트할 때 넣은 csrf 이므로 무시").ignored()
                                 ),
-                                //TODO: 토큰 이름이 맞는가?
                                 requestHeaders(
-                                        headerWithName("x-access-token").description("x-access-token"),
-                                        headerWithName("x-refresh-token").description("x-refresh-token")
+                                        headerWithName("headerXAccessToken").description("headerXAccessToken"),
+                                        headerWithName("headerXRefreshToken").description("headerXRefreshToken")
                                 ),
                                 responseFields(
                                         beneathPath("data"),

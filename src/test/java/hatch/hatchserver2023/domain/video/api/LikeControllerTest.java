@@ -112,8 +112,8 @@ public class LikeControllerTest {
 
         MockHttpServletRequestBuilder requestPost = RestDocumentationRequestBuilders
                 .post("/api/v1/likes/{videoId}", video1.getUuid())
-                .header("x-access-token", "x-access-token")
-                .header("x-refresh-token", "x-refresh-token")
+                .header("headerXAccessToken", "headerXAccessToken")
+                .header("headerXRefreshToken", "headerXRefreshToken")
                 .with(csrf());
 
         //then
@@ -135,10 +135,9 @@ public class LikeControllerTest {
                                 requestParameters(
                                         parameterWithName("_csrf").description("테스트할 때 넣은 csrf 이므로 무시").ignored()
                                 ),
-                                //TODO: 토큰 이름이 맞는가?
                                 requestHeaders(
-                                        headerWithName("x-access-token").description("x-access-token"),
-                                        headerWithName("x-refresh-token").description("x-refresh-token")
+                                        headerWithName("headerXAccessToken").description("headerXAccessToken"),
+                                        headerWithName("headerXRefreshToken").description("headerXRefreshToken")
                                 ),
                                 responseFields( // response 필드 정보 입력
                                         beneathPath("data"),
@@ -164,8 +163,8 @@ public class LikeControllerTest {
 
         MockHttpServletRequestBuilder requestDelete = RestDocumentationRequestBuilders
                 .delete("/api/v1/likes/{videoId}", video1.getUuid())
-                .header("x-access-token", "x-access-token")
-                .header("x-refresh-token", "x-refresh-token")
+                .header("headerXAccessToken", "headerXAccessToken")
+                .header("headerXRefreshToken", "headerXRefreshToken")
                 .with(csrf());
 
         //then
@@ -187,10 +186,9 @@ public class LikeControllerTest {
                                 requestParameters(
                                         parameterWithName("_csrf").description("테스트할 때 넣은 csrf 이므로 무시").ignored()
                                 ),
-                                //TODO: 토큰 이름이 맞는가?
                                 requestHeaders(
-                                        headerWithName("x-access-token").description("x-access-token"),
-                                        headerWithName("x-refresh-token").description("x-refresh-token")
+                                        headerWithName("headerXAccessToken").description("headerXAccessToken"),
+                                        headerWithName("headerXRefreshToken").description("headerXRefreshToken")
                                 ),
                                 responseFields( // response 필드 정보 입력
                                         beneathPath("data"),
@@ -218,8 +216,8 @@ public class LikeControllerTest {
 
         MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
                 .get("/api/v1/likes")
-                .header("x-access-token", "x-access-token")
-                .header("x-refresh-token", "x-refresh-token");
+                .header("headerXAccessToken", "headerXAccessToken")
+                .header("headerXRefreshToken", "headerXRefreshToken");
 
         //then
         ResultActions resultActions = mockMvc.perform(requestGet);
@@ -239,10 +237,9 @@ public class LikeControllerTest {
         resultActions
                 .andDo(
                         document("get-liked-video-list",
-                                //TODO: 토큰 이름이 맞는가?
                                 requestHeaders(
-                                        headerWithName("x-access-token").description("x-access-token"),
-                                        headerWithName("x-refresh-token").description("x-refresh-token")
+                                        headerWithName("headerXAccessToken").description("headerXAccessToken"),
+                                        headerWithName("headerXRefreshToken").description("headerXRefreshToken")
                                 ),
                                 responseFields(
                                         beneathPath("data.videoList"),

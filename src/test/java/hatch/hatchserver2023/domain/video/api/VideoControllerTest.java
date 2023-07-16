@@ -138,8 +138,8 @@ public class VideoControllerTest {
 
                 MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
                                                             .get("/api/v1/videos/{videoId}", video1.getUuid())
-                                                            .header("x-access-token", "x-access-token")
-                                                            .header("x-refresh-token", "x-refresh-token");
+                                                            .header("headerXAccessToken", "headerXAccessToken")
+                                                            .header("headerXRefreshToken", "headerXRefreshToken");
 
                 //then
                 ResultActions resultActions = mockMvc.perform(requestGet);
@@ -161,10 +161,9 @@ public class VideoControllerTest {
                                         pathParameters(
                                                 parameterWithName("videoId").description("동영상 UUID")
                                         ),
-                                        //TODO: 토큰 이름이 맞는가?
                                         requestHeaders(
-                                                headerWithName("x-access-token").description("x-access-token"),
-                                                headerWithName("x-refresh-token").description("x-refresh-token")
+                                                headerWithName("headerXAccessToken").description("headerXAccessToken"),
+                                                headerWithName("headerXRefreshToken").description("headerXRefreshToken")
                                         ),
                                         responseFields( // response 필드 정보 입력
                                                 beneathPath("data"),
@@ -467,9 +466,8 @@ public class VideoControllerTest {
                                                         .file(mockMultipartFile)
                                                         .param("title", video1.getTitle())
                                                         .param("tag", video1.getTag())
-                                                        //TODO: 로그인 헤더가 이거 맞나?
-                                                        .header("x-access-token", "x-access-token")
-                                                        .header("x-refresh-token", "x-refresh-token")
+                                                        .header("headerXAccessToken", "headerXAccessToken")
+                                                        .header("headerXRefreshToken", "headerXRefreshToken")
                                                         .contentType(APPLICATION_JSON)
                                                         .accept(APPLICATION_JSON)
                                                         .with(csrf());
@@ -497,8 +495,8 @@ public class VideoControllerTest {
                                         ),
                                         //TODO: 토큰 이름이 맞는가?
                                         requestHeaders(
-                                                headerWithName("x-access-token").description("x-access-token"),
-                                                headerWithName("x-refresh-token").description("x-refresh-token")
+                                                headerWithName("headerXAccessToken").description("headerXAccessToken"),
+                                                headerWithName("headerXRefreshToken").description("headerXAccessToken")
                                         ),
 
                                         responseFields(
