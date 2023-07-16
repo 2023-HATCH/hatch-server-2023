@@ -36,6 +36,7 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -469,6 +470,8 @@ public class VideoControllerTest {
                                                         //TODO: 로그인 헤더가 이거 맞나?
                                                         .header("x-access-token", "x-access-token")
                                                         .header("x-refresh-token", "x-refresh-token")
+                                                        .contentType(APPLICATION_JSON)
+                                                        .accept(APPLICATION_JSON)
                                                         .with(csrf());
 
 

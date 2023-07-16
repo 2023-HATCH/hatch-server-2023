@@ -44,7 +44,8 @@ public class Comment extends BaseTimeEntity {
 
     //== 생성자 ==//
     @Builder
-    private Comment(Video videoId, User userId, String content) {
+    private Comment(UUID uuid, Video videoId, User userId, String content) {
+        this.uuid = uuid;
         this.videoId = videoId;
         this.userId = userId;
         this.content = content;
