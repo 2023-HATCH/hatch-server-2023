@@ -9,24 +9,35 @@ import hatch.hatchserver2023.domain.user.dto.KakaoDto;
 import hatch.hatchserver2023.domain.user.dto.UserRequestDto;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
+import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.UUID;
 
@@ -47,11 +58,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 @WebMvcTest(controllers = {AuthController.class})
 @MockBean(JpaMetamodelMappingContext.class)
+@Import(RestDocsConfig.class)
+@ExtendWith(RestDocumentationExtension.class)
 @AutoConfigureRestDocs
 class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    RestDocumentationResultHandler docs;
 
     @MockBean
     private KakaoService kakaoService;
@@ -67,7 +83,16 @@ class AuthControllerTest {
     private String profileImg;
 
     @BeforeEach
-    void setup() {
+    void setup(final WebApplicationContext context,
+               final RestDocumentationContextProvider provider) {
+
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(MockMvcRestDocumentation.documentationConfiguration(provider))  // rest docs 설정 주입
+                .alwaysDo(MockMvcResultHandlers.print()) // andDo(print()) 코드 포함
+                .alwaysDo(docs) // pretty 패턴과 문서 디렉토리 명 정해준것 적용
+                .addFilters(new CharacterEncodingFilter("UTF-8", true)) // 한글 깨짐 방지
+                .build();
+
         log.info("set up");
         uuid = UUID.randomUUID();
         kakaoAccountNumber = 99999L;
@@ -78,7 +103,7 @@ class AuthControllerTest {
 
     @Test
     @WithMockUser
-    void kakaoSignUpAndLogin() throws Exception { //TODO : 쿠키 토큰 로직은 service 코드에서 검증
+    void login() throws Exception { //TODO : 쿠키 토큰 로직은 service 코드에서 검증
         //given
         UserRequestDto.KakaoLogin requestDto = UserRequestDto.KakaoLogin.builder()
                 .kakaoAccessToken("dummyToken")
@@ -120,7 +145,8 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.data.email").value(resultUser.getEmail()))
         ;
         resultActions
-                .andDo(document("login",
+                .andDo(
+                    docs.document(
                         requestParameters(
                                 parameterWithName("type").description("로그인 유형. 고정값(kakao)")
                         ),
@@ -135,7 +161,6 @@ class AuthControllerTest {
                                 )
                         )
                 )
-                .andDo(print())
         ;
     }
 }

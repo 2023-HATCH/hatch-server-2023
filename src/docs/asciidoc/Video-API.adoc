@@ -21,7 +21,7 @@ operation::get-video-detail-for-user[snippets='http-request,path-parameters,resp
 
 === 홈 영상 목록 조회 - 최신순
 
-operation::get-video-list-by-createdTime[snippets='http-request,request-parameters,response-fields-beneath-data,http-response']
+operation::get-video-list-by-created-time[snippets='http-request,request-parameters,response-fields-beneath-data,http-response']
 
 
 

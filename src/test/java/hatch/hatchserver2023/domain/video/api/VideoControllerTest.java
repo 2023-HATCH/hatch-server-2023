@@ -7,25 +7,36 @@ import hatch.hatchserver2023.domain.video.application.VideoService;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
+import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
@@ -50,11 +61,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class) // jpaAuditingHandler 에러 해결
 @WithMockUser //401 에러 해결
 @AutoConfigureRestDocs // rest docs 자동 설정
+@Import(RestDocsConfig.class)
+@ExtendWith(RestDocumentationExtension.class)
 @DisplayName("Video Controller Unit Test")
 public class VideoControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    RestDocumentationResultHandler docs;
 
     @MockBean
     VideoService videoService;
@@ -70,7 +86,16 @@ public class VideoControllerTest {
     private User user;
 
     @BeforeEach
-    void setup() {
+    void setup(final WebApplicationContext context,
+               final RestDocumentationContextProvider provider) {
+
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(MockMvcRestDocumentation.documentationConfiguration(provider))  // rest docs 설정 주입
+                .alwaysDo(MockMvcResultHandlers.print()) // andDo(print()) 코드 포함
+                .alwaysDo(docs) // pretty 패턴과 문서 디렉토리 명 정해준것 적용
+                .addFilters(new CharacterEncodingFilter("UTF-8", true)) // 한글 깨짐 방지
+                .build();
+
         user = User.builder()
                 .id(998L)
                 .uuid(UUID.randomUUID())
@@ -123,7 +148,7 @@ public class VideoControllerTest {
 
             @Test
             @DisplayName("For User")
-            void getVideoDetailForUserSuccess() throws Exception {
+            void getVideoDetailForUser() throws Exception {
                 //given
                 boolean isLiked = false;
                 given(videoService.findOne(video1.getUuid()))
@@ -157,7 +182,7 @@ public class VideoControllerTest {
 
                 resultActions
                         .andDo( //rest docs 문서 작성 시작
-                                document("get-video-detail-for-user",    //문서 조각 디렉토리 명
+                                docs.document(
                                         pathParameters(
                                                 parameterWithName("videoId").description("동영상 UUID")
                                         ),
@@ -189,7 +214,7 @@ public class VideoControllerTest {
 
             @Test
             @DisplayName("For Anonymous")
-            void getVideoDetailForAnonymousSuccess() throws Exception {
+            void getVideoDetailForAnonymous() throws Exception {
                 //given
                 boolean isLiked = false;
                 given(videoService.findOne(video2.getUuid()))
@@ -220,7 +245,7 @@ public class VideoControllerTest {
 
                 resultActions
                         .andDo( //rest docs 문서 작성 시작
-                                document("get-video-detail-for-anonymous",    //문서 조각 디렉토리 명
+                                docs.document(   //문서 조각 디렉토리 명
                                         pathParameters(
                                                 parameterWithName("videoId").description("동영상 UUID")
                                         ),
@@ -260,7 +285,7 @@ public class VideoControllerTest {
 
             @Test
             @DisplayName("Delete Success")
-            void deleteVideoSuccess() throws Exception {
+            void deleteVideo() throws Exception {
                 //given
 //                given(videoService.deleteOne(video1.getUuid()));
 
@@ -283,7 +308,7 @@ public class VideoControllerTest {
 
                 resultActions
                         .andDo( //rest docs 문서 작성 시작
-                                document("delete-video",
+                                docs.document(
                                         pathParameters(
                                                 parameterWithName("videoId").description("동영상 UUID")
                                         ),
@@ -310,7 +335,7 @@ public class VideoControllerTest {
 
             @Test
             @DisplayName("By createdTime desc")
-            void getVideoListByNewestSuccess() throws Exception {
+            void getVideoListByCreatedTime() throws Exception {
                 //given
                 List<Video> videoList = Arrays.asList(video1, video2);
                 Slice<Video> slice = new SliceImpl<>(videoList, PageRequest.of(0, 2), false);
@@ -339,7 +364,7 @@ public class VideoControllerTest {
 
                 resultActions
                         .andDo( //rest docs 문서 작성 시작
-                                document("get-video-list-by-createdTime",    //문서 조각 디렉토리 명
+                                docs.document(    //문서 조각 디렉토리 명
                                         requestParameters(
                                                 parameterWithName("page").description("페이지 번호(0부터 시작)").optional(),
                                                 parameterWithName("size").description("페이지 크기").optional()
@@ -371,7 +396,7 @@ public class VideoControllerTest {
 
             @Test
             @DisplayName("By Random")
-            void getVideoListByRandomSuccess() throws Exception {
+            void getVideoListByRandom() throws Exception {
                 //given
                 List<Video> videoList = Arrays.asList(video1, video2);
                 Slice<Video> slice = new SliceImpl<>(videoList, PageRequest.of(0, 2), false);
@@ -401,7 +426,7 @@ public class VideoControllerTest {
 
                 resultActions
                         .andDo( //rest docs 문서 작성 시작
-                                document("get-video-list-by-random",    //문서 조각 디렉토리 명
+                                docs.document(    //문서 조각 디렉토리 명
                                         requestParameters(
                                                 parameterWithName("page").description("페이지 번호(0부터 시작)").optional(),
                                                 parameterWithName("size").description("페이지 크기").optional()
@@ -452,7 +477,7 @@ public class VideoControllerTest {
 
             @Test
             @DisplayName("Video Upload")
-            void videoUploadSuccess() throws Exception {
+            void postVideoUpload() throws Exception {
                 //given
                 String insteadOfActualFile = "videoFile";
                 MockMultipartFile mockMultipartFile = new MockMultipartFile(jsonFileName, jsonFileName, "application/json", insteadOfActualFile.getBytes(StandardCharsets.UTF_8));
@@ -472,7 +497,6 @@ public class VideoControllerTest {
                                                         .accept(APPLICATION_JSON)
                                                         .with(csrf());
 
-
                 //then
                 StatusCode code = VideoStatusCode.VIDEO_UPLOAD_SUCCESS;
 
@@ -487,7 +511,7 @@ public class VideoControllerTest {
 
                 resultActions
                         .andDo( //rest docs 문서 작성 시작
-                                document("post-video-upload",
+                                docs.document(
                                         requestParameters(
                                                 parameterWithName("title").description("영상 제목"),
                                                 parameterWithName("tag").description("영상 해시태그").optional(),
@@ -524,7 +548,7 @@ public class VideoControllerTest {
 
             @Test
             @DisplayName("Search Success")
-            void getVideoListBySearchUsingHashtagSuccess() throws Exception {
+            void searchVideoListByHashtag() throws Exception {
                 //given
                 List<Video> videoList = Arrays.asList(video1, video2);
 
@@ -555,7 +579,7 @@ public class VideoControllerTest {
 
                 resultActions
                         .andDo( //rest docs 문서 작성 시작
-                                document("search-video-list-by-hasthag",
+                                docs.document(
                                         requestParameters(
                                                 parameterWithName("tag").description("검색하고자 하는 해시태그")
 //                                                parameterWithName("page").description("페이지 번호(0부터 시작)").optional(),

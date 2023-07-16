@@ -21,4 +21,4 @@ operation::delete-like[snippets='http-request,request-headers,path-parameters,re
 
 === 사용자 좋아요 영상 목록 조회
 
-operation::get-liked-video-list[snippets='http-request,request-headers, response-fields-beneath-data-video-list, http-response']
+operation::get-liked-video-list[snippets='http-request,request-headers,response-fields-beneath-data-video-list,http-response']
