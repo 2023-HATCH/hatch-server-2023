@@ -12,11 +12,14 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.security.Principal;
 import java.time.LocalDateTime;
 
@@ -35,14 +38,15 @@ public class TalkController {
     }
 
     /**
-     * 스테이지 라이브톡 메세지 전송 메서드
+     * 스테이지 라이브톡 메세지 전송 api (ws)
      * @param requestDto
      * @param sender : 메세지 전송자
      */
     @MessageMapping("/talks/messages")
-    public void sendTalkMessage(TalkRequestDto.SendMessage requestDto, @AuthenticationPrincipal User sender) { //Message message,
+//    @PreAuthorize("hasAnyRole('ROLE_USER')") //어차피 securityConfig 단에서부터 막혀서 여기다 설정할 필요 없음
+    public void sendTalkMessage(@Valid TalkRequestDto.SendMessage requestDto, @AuthenticationPrincipal @NotNull User sender) { //Message message,
         log.info("[WS] /app/talks/messages");
-        //주석 로그
+        //확인용 로그들 주석
 /*        log.info("[WS] message : {}", message);
         log.info("requestDto : {}", requestDto);
 
@@ -53,7 +57,7 @@ public class TalkController {
         User simpUser = (User) userToken.getPrincipal();
         log.info("simpUser nickname : {}", simpUser.getNickname());
         log.info("SecurityContextHolder principal : {}", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        */
+*/
         log.info("@AuthenticationPrincipal user : {}", sender.getNickname());
 
         // DB 저장
@@ -70,10 +74,12 @@ public class TalkController {
     }
 
     /**
-     * 스테이지 라이브반응 전송 메서드
+     * 스테이지 라이브반응 전송 api (ws)
      */
     @MessageMapping("/talks/reactions")
     public void sendTalkReaction() {
+        log.info("[WS] /app/talks/reactions");
+
         TalkResponseDto.SendReaction responseDto = TalkResponseDto.SendReaction.builder()
                 .type(TYPE_TALK_REACTION)
                 .createdAt(LocalDateTime.now().toString())

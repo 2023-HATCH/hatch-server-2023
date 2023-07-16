@@ -5,26 +5,28 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+
 public class TalkRequestDto {
 
     @ToString
     @Getter
     @Builder
     public static class SendMessage{
+        @NotBlank
         private String content;
-//        private String tempSender; //TODO : 이건 필요없음. 인증은 토큰으로 할거니까
+
+        public TalkMessage toEntity() {
+            return TalkMessage.builder()
+                    .content(this.content)
+                    .build();
+        }
 
         public SendMessage() {
         }
 
         public SendMessage(String content) {
             this.content = content;
-        }
-
-        public TalkMessage toEntity() {
-            return TalkMessage.builder()
-                    .content(this.content)
-                    .build();
         }
     }
 }
