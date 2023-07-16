@@ -19,23 +19,28 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -66,7 +71,7 @@ public class VideoControllerTest {
     @BeforeEach
     void setup() {
         user = User.builder()
-                .id(998l)
+                .id(998L)
                 .uuid(UUID.randomUUID())
                 .email("이메일")
                 .nickname("닉네임")
@@ -74,13 +79,13 @@ public class VideoControllerTest {
                 .followingCount(0)
                 .instagramAccount("인스타 계정")
                 .twitterAccount("트위터 계정")
-                .kakaoAccountNumber(997l)
+                .kakaoAccountNumber(997L)
                 .introduce("자기 소개 글")
                 .profileImg("프로필 이미지 s3 경로")
                 .build();
 
         video1 = Video.builder()
-                .id(990l)
+                .id(990L)
                 .uuid(UUID.randomUUID())
                 .title("타이틀")
                 .tag("#해시 #태그")
@@ -93,7 +98,7 @@ public class VideoControllerTest {
                 .build();
 
         video2 = Video.builder()
-                .id(991l)
+                .id(991L)
                 .uuid(UUID.randomUUID())
                 .title("타이틀 1")
                 .tag("#해시 #태그 #1")
@@ -161,7 +166,7 @@ public class VideoControllerTest {
                                         ),
                                         responseFields( // response 필드 정보 입력
                                                 beneathPath("data"),
-                                                fieldWithPath("uuid").type(JsonFieldType.STRING).description("생성된 동영상 식별자 UUID"),
+                                                fieldWithPath("uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID"),
                                                 fieldWithPath("title").type(JsonFieldType.STRING).description("영상 제목"),
                                                 fieldWithPath("tag").type(JsonFieldType.STRING).description("해시태그"),
                                                 fieldWithPath("user.uuid").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
@@ -221,7 +226,7 @@ public class VideoControllerTest {
 
                                         responseFields( // response 필드 정보 입력
                                                 beneathPath("data"),
-                                                fieldWithPath("uuid").type(JsonFieldType.STRING).description("생성된 동영상 식별자 UUID"),
+                                                fieldWithPath("uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID"),
                                                 fieldWithPath("title").type(JsonFieldType.STRING).description("영상 제목"),
                                                 fieldWithPath("tag").type(JsonFieldType.STRING).description("해시태그"),
                                                 fieldWithPath("user.uuid").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
@@ -322,11 +327,12 @@ public class VideoControllerTest {
                 given(videoService.findByRandom(any()))
                         .willReturn(slice);
 
-                //when & then
+                //when
                 StatusCode code = VideoStatusCode.GET_VIDEO_LIST_SUCCESS;
 
                 MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders.get("/api/v1/videos/random");
 
+                //then
                 ResultActions resultActions = mockMvc.perform(requestGet);
 
                 resultActions
@@ -352,7 +358,7 @@ public class VideoControllerTest {
                                         responseFields(
                                                 beneathPath("data"),
                                                 fieldWithPath("isLast").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"),
-                                                fieldWithPath("videoList.[].uuid").type(JsonFieldType.STRING).description("생성된 동영상 식별자 UUID"),
+                                                fieldWithPath("videoList.[].uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID"),
                                                 fieldWithPath("videoList.[].title").type(JsonFieldType.STRING).description("영상 제목"),
                                                 fieldWithPath("videoList.[].tag").type(JsonFieldType.STRING).description("해시태그"),
                                                 fieldWithPath("videoList.[].user.uuid").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
@@ -375,6 +381,81 @@ public class VideoControllerTest {
 
 
         }
+    }
+
+    @Nested
+    @DisplayName("Upload")
+    class VideoUpload {
+
+        private String jsonFileName;
+
+        @BeforeEach
+        void setup() {
+            jsonFileName = "video";
+        }
+
+        @Nested
+        @DisplayName("Success")
+        class SuccessCase {
+
+            @Test
+            @DisplayName("Video Upload")
+            void videoUploadSuccess() throws Exception {
+                //given
+                String insteadOfActualFile = "videoFile";
+                MockMultipartFile mockMultipartFile = new MockMultipartFile(jsonFileName, jsonFileName, "application/json", insteadOfActualFile.getBytes(StandardCharsets.UTF_8));
+
+                given(videoService.createVideo(any(MultipartFile.class), any(), eq(video1.getTitle()), eq(video1.getTag())))
+                        .willReturn(video1);
+
+                //when
+                MockHttpServletRequestBuilder requestPost = RestDocumentationRequestBuilders
+                                                        .multipart("/api/v1/videos")
+                                                        .file(mockMultipartFile)
+                                                        .param("title", video1.getTitle())
+                                                        .param("tag", video1.getTag())
+                                                        //TODO: 로그인 헤더가 이거 맞나?
+                                                        .header("x-access-token", "x-access-token")
+                                                        .header("x-refresh-token", "x-refresh-token")
+                                                        .with(csrf());
+
+
+                //then
+                StatusCode code = VideoStatusCode.VIDEO_UPLOAD_SUCCESS;
+
+                ResultActions resultActions = mockMvc.perform(requestPost);
+
+                resultActions
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.code").value(code.getCode()))
+                        .andExpect(jsonPath("$.message").value(code.getMessage()))
+                        .andExpect(jsonPath("$.data.uuid").value(video1.getUuid().toString()))
+                    ;
+
+                resultActions
+                        .andDo( //rest docs 문서 작성 시작
+                                document("post-video-upload",
+                                        requestParameters(
+                                                parameterWithName("title").description("영상 제목"),
+                                                parameterWithName("tag").description("영상 해시태그").optional(),
+                                                parameterWithName("_csrf").description("테스트할 때 넣은 csrf 이므로 무시").ignored()
+                                        ),
+                                        //TODO: 토큰 이름이 맞는가?
+                                        requestHeaders(
+                                                headerWithName("x-access-token").description("x-access-token"),
+                                                headerWithName("x-refresh-token").description("x-refresh-token")
+                                        ),
+
+                                        responseFields(
+                                                beneathPath("data"),
+                                                fieldWithPath("uuid").type(JsonFieldType.STRING).description("생성된 동영상 식별자 UUID")
+                                        )
+
+                                )
+                        );
+            }
+        }
+
     }
 
 
