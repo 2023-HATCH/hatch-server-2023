@@ -562,7 +562,7 @@ public class VideoControllerTest {
 //                                                parameterWithName("size").description("페이지 크기").optional()
                                         ),
                                         responseFields(
-                                                beneathPath("data.videoList"),
+                                                beneathPath("data.videoList").withSubsectionId("beneath-data-video-list"),
                                                 fieldWithPath("uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID"),
                                                 fieldWithPath("title").type(JsonFieldType.STRING).description("영상 제목"),
                                                 fieldWithPath("tag").type(JsonFieldType.STRING).description("해시태그"),

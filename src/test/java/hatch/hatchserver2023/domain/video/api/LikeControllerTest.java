@@ -242,7 +242,7 @@ public class LikeControllerTest {
                                         headerWithName("headerXRefreshToken").description("headerXRefreshToken")
                                 ),
                                 responseFields(
-                                        beneathPath("data.videoList"),
+                                        beneathPath("data.videoList").withSubsectionId("beneath-data-video-list"),
                                         fieldWithPath("uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID"),
                                         fieldWithPath("title").type(JsonFieldType.STRING).description("영상 제목"),
                                         fieldWithPath("tag").type(JsonFieldType.STRING).description("해시태그"),

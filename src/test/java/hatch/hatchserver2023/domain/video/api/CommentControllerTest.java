@@ -257,7 +257,7 @@ public class CommentControllerTest {
                                         parameterWithName("videoId").description("동영상 UUID")
                                 ),
                                 responseFields(
-                                        beneathPath("data.commentList"),
+                                        beneathPath("data.commentList").withSubsectionId("beneath-data-comment-list"),
                                         fieldWithPath("uuid").type(JsonFieldType.STRING).description("생성된 댓글 UUID 식별자"),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용"),
                                         fieldWithPath("user.uuid").type(JsonFieldType.STRING).description("댓글 작성자 UUID 식별자"),
