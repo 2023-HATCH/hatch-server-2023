@@ -560,7 +560,6 @@ public class VideoControllerTest {
 //                                                parameterWithName("page").description("페이지 번호(0부터 시작)").optional(),
 //                                                parameterWithName("size").description("페이지 크기").optional()
                                         ),
-                                        //TODO: responseFields 두 개를 쓰면 바로 에러가 나는데... 이 출력이 최선이냐?
                                         responseFields(
                                                 beneathPath("data.videoList"),
                                                 fieldWithPath("uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID"),
@@ -583,12 +582,5 @@ public class VideoControllerTest {
             }
         }
     }
-
-
-
-    //TODO: 그거 하면 좋아요 Controller 랑 댓글 Controller도 추가하고
-
-
-
 
 }
