@@ -18,6 +18,7 @@ import java.time.ZonedDateTime;
 @EntityListeners(AuditingEntityListener.class) //Auditing 기능
 public abstract class BaseTimeEntity {
 
+    //TODO : NOT NULL 설정?
     private ZonedDateTime createdTime;
 
     private ZonedDateTime modifiedTime;

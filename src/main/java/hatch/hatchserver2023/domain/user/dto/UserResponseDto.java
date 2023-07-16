@@ -26,4 +26,21 @@ public class UserResponseDto {
                     .build();
         }
     }
+
+    @ToString
+    @Getter
+    @Builder
+    public static class SimpleUserProfile {
+        private UUID userId;
+        private String nickname;
+        private String profileImg;
+
+        public static SimpleUserProfile toDto(User user) {
+            return SimpleUserProfile.builder()
+                    .userId(user.getUuid())
+                    .nickname(user.getNickname())
+                    .profileImg(user.getProfileImg())
+                    .build();
+        }
+    }
 }
