@@ -7,15 +7,10 @@
 
 
 
-=== 영상 상세 조회 - 비회원
 
-operation::get-video-detail-for-anonymous[snippets='http-request,path-parameters,response-fields-beneath-data,http-response']
+=== 영상 상세 조회
 
-
-
-=== 영상 상세 조회 - 회원
-
-operation::get-video-detail-for-user[snippets='http-request,path-parameters,response-fields-beneath-data,http-response']
+operation::get-video-detail[snippets='http-request,request-headers,path-parameters,response-fields-beneath-data,http-response']
 
 
 

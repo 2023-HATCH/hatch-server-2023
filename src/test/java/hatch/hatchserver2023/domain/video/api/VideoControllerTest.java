@@ -147,8 +147,8 @@ public class VideoControllerTest {
         class SuccessCase {
 
             @Test
-            @DisplayName("For User")
-            void getVideoDetailForUser() throws Exception {
+            @DisplayName("For User and Anonymous")
+            void getVideoDetail() throws Exception {
                 //given
                 boolean isLiked = false;
                 given(videoService.findOne(video1.getUuid()))
@@ -187,8 +187,8 @@ public class VideoControllerTest {
                                                 parameterWithName("videoId").description("동영상 UUID")
                                         ),
                                         requestHeaders(
-                                                headerWithName("headerXAccessToken").description("headerXAccessToken"),
-                                                headerWithName("headerXRefreshToken").description("headerXRefreshToken")
+                                                headerWithName("headerXAccessToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.").optional(),
+                                                headerWithName("headerXRefreshToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.").optional()
                                         ),
                                         responseFields( // response 필드 정보 입력
                                                 beneathPath("data"),
@@ -208,68 +208,8 @@ public class VideoControllerTest {
                                                 fieldWithPath("liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부")
                                         )
                                 )
-                        );
-
-            }
-
-            @Test
-            @DisplayName("For Anonymous")
-            void getVideoDetailForAnonymous() throws Exception {
-                //given
-                boolean isLiked = false;
-                given(videoService.findOne(video2.getUuid()))
-                        .willReturn(video2);
-
-                given(likeService.isAlreadyLiked(video2, user))
-                        .willReturn(isLiked);
-
-
-                //when & then
-                StatusCode code = VideoStatusCode.GET_VIDEO_DETAIL_SUCCESS;
-
-                MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
-                        .get("/api/v1/videos/anonymous/{videoId}", video2.getUuid());
-
-                ResultActions resultActions = mockMvc.perform(requestGet);
-
-                resultActions
-                        .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.code").value(code.getCode()))
-                        .andExpect(jsonPath("$.message").value(code.getMessage()))
-                        .andExpect(jsonPath("$.data.uuid").value(video2.getUuid().toString()))
-                        .andExpect(jsonPath("$.data.title").value(video2.getTitle()))
-                        .andExpect(jsonPath("$.data.user.uuid").value(video2.getUserId().getUuid().toString()))
-                        .andExpect(jsonPath("$.data.videoUrl").value(video2.getVideoUrl()))
-                        .andExpect(jsonPath("$.data.liked").value(isLiked))
+                        )
                 ;
-
-                resultActions
-                        .andDo( //rest docs 문서 작성 시작
-                                docs.document(   //문서 조각 디렉토리 명
-                                        pathParameters(
-                                                parameterWithName("videoId").description("동영상 UUID")
-                                        ),
-
-                                        responseFields( // response 필드 정보 입력
-                                                beneathPath("data"),
-                                                fieldWithPath("uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID"),
-                                                fieldWithPath("title").type(JsonFieldType.STRING).description("영상 제목"),
-                                                fieldWithPath("tag").type(JsonFieldType.STRING).description("해시태그"),
-                                                fieldWithPath("user.uuid").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
-                                                fieldWithPath("user.email").type(JsonFieldType.STRING).description("사용자 이메일"),
-                                                fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
-                                                fieldWithPath("user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 S3 경로"),
-                                                fieldWithPath("videoUrl").type(JsonFieldType.STRING).description("동영상 S3 경로"),
-                                                fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 이미지 S3 경로"),
-                                                fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
-                                                fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 개수"),
-                                                fieldWithPath("length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이"),
-                                                fieldWithPath("createdTime").type("DateTime").description("생성 시각"),
-                                                fieldWithPath("liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부 - 무조건 false")
-                                        )
-                                )
-                        );
-
             }
         }
     }
