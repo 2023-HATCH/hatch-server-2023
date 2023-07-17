@@ -226,17 +226,4 @@ public class VideoController {
         ));
     }
 
-    // 간이 해시태그 목록 조회 - 삭제 예정
-    @GetMapping("/tags")
-    public List<Hashtag> getHashtagList() {
-        return hashtagService.getHashtagList();
-    }
-
-
-    //해시태그 삭제 - 테스트용
-    @DeleteMapping("/tags/{title}")
-    public boolean deleteHashtag(@PathVariable String title){
-        hashtagService.delete(title);
-        return true;
-    }
 }
