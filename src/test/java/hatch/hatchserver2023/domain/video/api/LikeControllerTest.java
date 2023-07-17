@@ -5,20 +5,31 @@ import hatch.hatchserver2023.domain.video.application.LikeService;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
+import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +40,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -40,11 +50,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class) // jpaAuditingHandler 에러 해결
 @WithMockUser //401 에러 해결
 @AutoConfigureRestDocs // rest docs 자동 설정
+@Import(RestDocsConfig.class)
+@ExtendWith(RestDocumentationExtension.class)
 @DisplayName("Like Controller Unit Test")
 public class LikeControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    RestDocumentationResultHandler docs;
 
     @MockBean
     LikeService likeService;
@@ -55,7 +70,16 @@ public class LikeControllerTest {
 
 
     @BeforeEach
-    void setup() {
+    void setup(final WebApplicationContext context,
+               final RestDocumentationContextProvider provider) {
+
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(MockMvcRestDocumentation.documentationConfiguration(provider))  // rest docs 설정 주입
+                .alwaysDo(MockMvcResultHandlers.print()) // andDo(print()) 코드 포함
+                .alwaysDo(docs) // pretty 패턴과 문서 디렉토리 명 정해준것 적용
+                .addFilters(new CharacterEncodingFilter("UTF-8", true)) // 한글 깨짐 방지
+                .build();
+
         user = User.builder()
                 .id(998L)
                 .uuid(UUID.randomUUID())
@@ -101,7 +125,7 @@ public class LikeControllerTest {
     // 좋아요 등록
     @Test
     @DisplayName("Add Like")
-    void postAddLike() throws Exception {
+    void addLike() throws Exception {
 
         //given
         given(likeService.addLike(eq(video1.getUuid()), any()))
@@ -128,7 +152,7 @@ public class LikeControllerTest {
 
         resultActions
                 .andDo( //rest docs 문서 작성 시작
-                        document("add-like",    //문서 조각 디렉토리 명
+                        docs.document(
                                 pathParameters(
                                         parameterWithName("videoId").description("동영상 UUID")
                                 ),
@@ -179,7 +203,7 @@ public class LikeControllerTest {
 
         resultActions
                 .andDo(
-                        document("delete-like",
+                        docs.document(
                                 pathParameters(
                                         parameterWithName("videoId").description("동영상 UUID")
                                 ),
@@ -236,7 +260,7 @@ public class LikeControllerTest {
 
         resultActions
                 .andDo(
-                        document("get-liked-video-list",
+                        docs.document(
                                 requestHeaders(
                                         headerWithName("headerXAccessToken").description("headerXAccessToken"),
                                         headerWithName("headerXRefreshToken").description("headerXRefreshToken")
