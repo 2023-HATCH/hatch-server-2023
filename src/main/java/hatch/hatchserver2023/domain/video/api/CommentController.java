@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,7 +43,7 @@ public class CommentController {
     @PostMapping("/{videoId}")
     public ResponseEntity<?> registerComment(@AuthenticationPrincipal User user,
                                              @PathVariable UUID videoId,
-                                             @RequestBody CommentRequestDto request){
+                                             @RequestBody @Valid CommentRequestDto request){
 
         Comment comment = commentService.createComment(request.getContent(), videoId, user);
 
