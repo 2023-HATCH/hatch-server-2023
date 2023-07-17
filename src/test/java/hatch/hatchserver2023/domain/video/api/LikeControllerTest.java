@@ -239,9 +239,7 @@ public class LikeControllerTest {
         StatusCode code = VideoStatusCode.GET_LIKE_VIDEO_LIST_SUCCESS;
 
         MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
-                .get("/api/v1/likes")
-                .header("headerXAccessToken", "headerXAccessToken")
-                .header("headerXRefreshToken", "headerXRefreshToken");
+                .get("/api/v1/likes/{userId}", user.getUuid());
 
         //then
         ResultActions resultActions = mockMvc.perform(requestGet);
@@ -261,9 +259,8 @@ public class LikeControllerTest {
         resultActions
                 .andDo(
                         docs.document(
-                                requestHeaders(
-                                        headerWithName("headerXAccessToken").description("headerXAccessToken"),
-                                        headerWithName("headerXRefreshToken").description("headerXRefreshToken")
+                                pathParameters(
+                                        parameterWithName("userId").description("사용자 UUID")
                                 ),
                                 responseFields(
                                         beneathPath("data.videoList").withSubsectionId("beneath-data-video-list"),
