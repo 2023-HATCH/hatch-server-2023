@@ -4,6 +4,8 @@ import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -24,11 +26,13 @@ public class Comment extends BaseTimeEntity {
     //영상 식별자
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "video_id", nullable = false) //다대일 관계에서 FK는 다 쪽에 있는 것. 연관 관계의 주인
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Video videoId;
 
     //작성자
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false) //다대일 관계에서 FK는 다 쪽에 있는 것. 연관 관계의 주인
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User userId;
 
     //내용

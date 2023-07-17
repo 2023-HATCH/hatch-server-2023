@@ -2,10 +2,7 @@ package hatch.hatchserver2023.domain.video.application;
 
 
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.domain.video.domain.Comment;
-import hatch.hatchserver2023.domain.video.domain.Like;
 import hatch.hatchserver2023.domain.video.domain.Video;
-import hatch.hatchserver2023.domain.video.domain.VideoHashtag;
 import hatch.hatchserver2023.domain.video.repository.CommentRepository;
 import hatch.hatchserver2023.domain.video.repository.LikeRepository;
 import hatch.hatchserver2023.domain.video.repository.VideoHashtagRepository;
@@ -80,24 +77,6 @@ public class VideoService {
         // S3에 올라가 있는 동영상과 썸네일 또한 삭제
         s3Service.delete(video.getVideoUrl());
         s3Service.delete(video.getThumbnailUrl());
-
-        //해시태그 매핑 테이블의 정보 삭제
-        List<VideoHashtag> mapList = videoHashtagRepository.findAllByVideoId(video);
-        for(VideoHashtag map : mapList) {
-            videoHashtagRepository.delete(map);
-        }
-
-        //좋아요 데이터 삭제
-        List<Like> likeList = likeRepository.findAllByVideoId(video);
-        for(Like like : likeList){
-            likeRepository.delete(like);
-        }
-
-        //댓글 데이터 삭제
-        List<Comment> commentList = commentRepository.findAllByVideoId(video);
-        for(Comment comment : commentList){
-            commentRepository.delete(comment);
-        }
 
         //Video 데이터 DB에서 삭제
         videoRepository.delete(video);

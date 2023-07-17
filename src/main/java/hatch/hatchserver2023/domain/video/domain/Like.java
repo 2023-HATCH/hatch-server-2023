@@ -4,6 +4,8 @@ import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -25,11 +27,13 @@ public class Like extends BaseTimeEntity {
     //좋아요 눌린 영상
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "video_id", nullable = false) //다대일 관계에서 FK는 다 쪽에 있는 것. 연관 관계의 주인
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Video videoId;
 
     //좋아요 누른 사용자
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false) //다대일 관계에서 FK는 다 쪽에 있는 것. 연관 관계의 주인
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User userId;
 
     @PrePersist

@@ -100,13 +100,6 @@ public class HashtagService {
     public void delete(String title){
         Hashtag hashtag = hashtagRepository.findByTitle(title).get();
 
-        //매핑 테이블 데이터도 함께 db에서 삭제
-        List<VideoHashtag> mapList = videoHashtagRepository.findAllByHashtagId(hashtag);
-
-        for(VideoHashtag map : mapList) {
-            videoHashtagRepository.delete(map);
-        }
-
         //해시태그 db에서 삭제
         hashtagRepository.delete(hashtag);
     }
