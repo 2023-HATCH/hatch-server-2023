@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -73,14 +74,13 @@ public class LikeController {
     /**
      * 사용자가 좋아요 누른 영상 목록 조회
      *
-     * @param user
+     * @param userId
      * @return videoList
      */
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
-    @GetMapping
-    public ResponseEntity<?> getLikedVideoList(@AuthenticationPrincipal User user){
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getLikedVideoList(@PathVariable UUID userId){
 
-        List<Video> videoList = likeService.getLikedVideoList(user);
+        List<Video> videoList = likeService.getLikedVideoList(userId);
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.GET_LIKE_VIDEO_LIST_SUCCESS,

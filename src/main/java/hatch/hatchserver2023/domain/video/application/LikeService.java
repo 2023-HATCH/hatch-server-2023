@@ -2,11 +2,14 @@ package hatch.hatchserver2023.domain.video.application;
 
 
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.domain.video.domain.Like;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.repository.LikeRepository;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
+import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
+import hatch.hatchserver2023.global.common.response.exception.AuthException;
 import hatch.hatchserver2023.global.common.response.exception.VideoException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,10 +24,12 @@ public class LikeService {
 
     private final LikeRepository likeRepository;
     private final VideoRepository videoRepository;
+    private final UserRepository userRepository;
 
-    public LikeService(LikeRepository likeRepository, VideoRepository videoRepository){
+    public LikeService(LikeRepository likeRepository, VideoRepository videoRepository, UserRepository userRepository){
         this.likeRepository = likeRepository;
         this.videoRepository = videoRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -79,12 +84,15 @@ public class LikeService {
 
 
     /**
-     * 사용자의 좋아요 누른 영상 목록 조회
+     * 어느 사용자의 좋아요 누른 영상 목록 조회
      *
-     * @param user
+     * @param userId
      * @return videoList
      */
-    public List<Video> getLikedVideoList(User user){
+    public List<Video> getLikedVideoList(UUID userId){
+
+        User user = userRepository.findByUuid(userId)
+                .orElseThrow(() -> new AuthException(UserStatusCode.UUID_NOT_FOUND));
 
         List<Like> likeList = likeRepository.findAllByUserId(user);
 
@@ -96,7 +104,6 @@ public class LikeService {
         }
 
         return videoList;
-
     }
 
 
