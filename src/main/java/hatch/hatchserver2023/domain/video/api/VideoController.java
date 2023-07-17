@@ -40,39 +40,24 @@ public class VideoController {
 
     /**
      * 영상 상세 조회
-     * - 회원용
      * - uuid로 조회
      *
-     * @param uuid
+     * @param videoId
      * @return video
      */
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
-    @GetMapping("/{uuid}")
+    @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
+    @GetMapping("/{videoId}")
     public ResponseEntity<?> getOneVideoForUser(@AuthenticationPrincipal User user,
-                                                @PathVariable UUID uuid) {
-        Video video = videoService.findOne(uuid);
-        boolean isLiked = likeService.isAlreadyLiked(video, user);
-
-        return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.GET_VIDEO_DETAIL_SUCCESS,
-                VideoResponseDto.GetVideo.toDto(video, isLiked)
-        ));
-    }
-
-    /**
-     * 영상 상세 조회
-     * - 비회원용
-     * - uuid로 조회
-     *
-     * @param uuid
-     * @return video
-     */
-    @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS')")
-    @GetMapping("/anonymous/{uuid}")
-    public ResponseEntity<?> getOneVideoForAnonymous(@AuthenticationPrincipal User user,
-                                                     @PathVariable UUID uuid) {
-        Video video = videoService.findOne(uuid);
+                                                @PathVariable UUID videoId) {
+        Video video = videoService.findOne(videoId);
         boolean isLiked = false;
+
+        // 로그인한 유저이면, 영상에 좋아요를 눌렀는지 확인
+        // 비회원이면, isLike는 언제나 false
+        if(user != null) {
+            isLiked = likeService.isAlreadyLiked(video, user);
+
+        }
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.GET_VIDEO_DETAIL_SUCCESS,
