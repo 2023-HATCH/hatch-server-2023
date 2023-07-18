@@ -55,6 +55,7 @@ public class JwtWebSocketInterceptor implements ChannelInterceptor {
 
             //토큰 유효기간 확인 // TODO : 이거 예외 핸들러로 잡아주기!!!!!!! 예외응답!! -> 어떻게 하는 거지..? 공부하기
             if(!jwtProvider.isTokenValid(token)){
+//                log.info("[INTERCEPTOR] WebSocketInterceptor : this token is invalid");
                 throw new AuthException(UserStatusCode.TOKEN_CANNOT_RESOLVE);
             }
 

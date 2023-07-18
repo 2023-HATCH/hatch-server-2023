@@ -4,7 +4,11 @@ import hatch.hatchserver2023.domain.talk.domain.TalkMessage;
 import hatch.hatchserver2023.domain.talk.repository.TalkRepository;
 import hatch.hatchserver2023.domain.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+
+//import java.awt.print.Pageable;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -25,5 +29,10 @@ public class TalkService {
         log.info("[SERVICE] saveTalkMessage");
         talkMessage.updateUser(sender);
         return talkRepository.save(talkMessage);
+    }
+
+
+    public Slice<TalkMessage> getTalkMessages(Pageable pageable) {
+        return talkRepository.findAll(pageable);
     }
 }

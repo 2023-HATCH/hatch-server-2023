@@ -11,6 +11,9 @@ include::HealthCheck-API.adoc[]
 include::User-API.adoc[]
 '''
 
+include::Talk-SOCKET.adoc[]
+'''
+
 // 도메인 명 : h1
 = Status Code
 

@@ -2,6 +2,7 @@ package hatch.hatchserver2023.global.common.response.code.docs;
 
 import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
+import hatch.hatchserver2023.global.common.response.code.TalkStatusCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,11 @@ public class StatusCodeController {
     @GetMapping("/user")
     public ResponseEntity<StatusCodeView> getUserStatusCodes() {
         return getResponse(UserStatusCode.values());
+    }
+
+    @GetMapping("/talk")
+    public ResponseEntity<StatusCodeView> getTalkStatusCodes() {
+        return getResponse(TalkStatusCode.values());
     }
 
     private ResponseEntity<StatusCodeView> getResponse(StatusCode[] statusCodes) {

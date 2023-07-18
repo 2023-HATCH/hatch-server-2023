@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum StatusCodeDoc {
     COMMON("COMMON", "공통", "/common", "공통 상태 코드", CommonCode.values()),
     USER("USER", "사용자", "/user", "사용자 상태 코드", UserStatusCode.values()),
+    TALK("TALK", "라이브톡", "/talk", "라이브톡 상태 코드", TalkStatusCode.values()),
     ;
 
     private final String initial;
