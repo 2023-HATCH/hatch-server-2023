@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
@@ -286,7 +287,9 @@ public class VideoControllerTest {
                 //when & then
                 StatusCode code = VideoStatusCode.GET_VIDEO_LIST_SUCCESS;
 
-                MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders.get("/api/v1/videos");
+                MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders.get("/api/v1/videos")
+                                                                                            .param("page", "0")
+                                                                                            .param("size", "2");
 
                 ResultActions resultActions = mockMvc.perform(requestGet);
 
@@ -306,8 +309,8 @@ public class VideoControllerTest {
                         .andDo( //rest docs 문서 작성 시작
                                 docs.document(    //문서 조각 디렉토리 명
                                         requestParameters(
-                                                parameterWithName("page").description("페이지 번호(0부터 시작)").optional(),
-                                                parameterWithName("size").description("페이지 크기").optional()
+                                                parameterWithName("page").description("페이지 번호(0부터 시작)"),
+                                                parameterWithName("size").description("페이지 크기")
                                         ),
                                         //TODO: responseFields 두 개를 쓰면 바로 에러가 나는데... 이 출력이 최선이냐?
                                         responseFields(
@@ -347,7 +350,9 @@ public class VideoControllerTest {
                 //when
                 StatusCode code = VideoStatusCode.GET_VIDEO_LIST_SUCCESS;
 
-                MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders.get("/api/v1/videos/random");
+                MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders.get("/api/v1/videos/random")
+                                                                                            .param("page", "0")
+                                                                                            .param("size", "2");
 
                 //then
                 ResultActions resultActions = mockMvc.perform(requestGet);
@@ -368,8 +373,8 @@ public class VideoControllerTest {
                         .andDo( //rest docs 문서 작성 시작
                                 docs.document(    //문서 조각 디렉토리 명
                                         requestParameters(
-                                                parameterWithName("page").description("페이지 번호(0부터 시작)").optional(),
-                                                parameterWithName("size").description("페이지 크기").optional()
+                                                parameterWithName("page").description("페이지 번호(0부터 시작)"),
+                                                parameterWithName("size").description("페이지 크기")
                                         ),
                                         //TODO: responseFields 두 개를 쓰면 바로 에러가 나는데... 이 출력이 최선이냐?
                                         responseFields(
@@ -491,16 +496,19 @@ public class VideoControllerTest {
             void searchVideoListByHashtag() throws Exception {
                 //given
                 List<Video> videoList = Arrays.asList(video1, video2);
+                Slice<Video> slice = new SliceImpl<>(videoList, PageRequest.of(0, 2), false);
 
-                given(hashtagService.searchHashtag(tag))
-                        .willReturn(videoList);
+                given(hashtagService.searchHashtag(eq(tag), any(Pageable.class)))
+                        .willReturn(slice);
 
                 //when
                 StatusCode code = VideoStatusCode.HASHTAG_SEARCH_SUCCESS;
 
                 MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
                                                             .get("/api/v1/videos/search")
-                                                            .param("tag", tag);
+                                                            .param("tag", tag)
+                                                            .param("page", "0")
+                                                            .param("size", "2");
 
                 //then
                 ResultActions resultActions = mockMvc.perform(requestGet);
@@ -521,9 +529,9 @@ public class VideoControllerTest {
                         .andDo( //rest docs 문서 작성 시작
                                 docs.document(
                                         requestParameters(
-                                                parameterWithName("tag").description("검색하고자 하는 해시태그")
-//                                                parameterWithName("page").description("페이지 번호(0부터 시작)").optional(),
-//                                                parameterWithName("size").description("페이지 크기").optional()
+                                                parameterWithName("tag").description("검색하고자 하는 해시태그"),
+                                                parameterWithName("page").description("페이지 번호(0부터 시작)"),
+                                                parameterWithName("size").description("페이지 크기")
                                         ),
                                         responseFields(
                                                 beneathPath("data.videoList").withSubsectionId("beneath-data-video-list"),

@@ -205,18 +205,18 @@ public class VideoController {
     }
 
 
-    //TODO: Pageable은 어떻게 적용할까나.. 아님 프론트에서 적용? Slice 적용?
 
     /**
      * 해시태그로 영상 검색
      *
      * @param tag
      * @param pageable
+     * @param pageable
      * @return videoList
      */
     @GetMapping("/search")
     public ResponseEntity<?> searchByHashtag(@RequestParam String tag, Pageable pageable) {
-        List<Video> videoList = hashtagService.searchHashtag(tag);
+        Slice<Video> videoList = hashtagService.searchHashtag(tag, pageable);
 
         //videoList 출력
         return ResponseEntity.ok(CommonResponse.toResponse(

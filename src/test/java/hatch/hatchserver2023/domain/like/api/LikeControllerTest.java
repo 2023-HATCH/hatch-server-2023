@@ -1,4 +1,4 @@
-package hatch.hatchserver2023.domain.video.api;
+package hatch.hatchserver2023.domain.like.api;
 
 import hatch.hatchserver2023.domain.like.api.LikeController;
 import hatch.hatchserver2023.domain.user.domain.User;
@@ -16,6 +16,10 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -232,15 +236,19 @@ public class LikeControllerTest {
     void getLikedVideoList() throws Exception {
         //given
         List<Video> videoList = Arrays.asList(video1, video2);
+        Slice<Video> slice = new SliceImpl<>(videoList, PageRequest.of(0, 2), false);
 
-        given(likeService.getLikedVideoList(any()))
-                .willReturn(videoList);
+
+        given(likeService.getLikedVideoList(any(), any(Pageable.class)))
+                .willReturn(slice);
 
         //when
         StatusCode code = VideoStatusCode.GET_LIKE_VIDEO_LIST_SUCCESS;
 
         MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
-                .get("/api/v1/likes/{userId}", user.getUuid());
+                .get("/api/v1/likes/{userId}", user.getUuid())
+                .param("page", "0")
+                .param("size", "2");
 
         //then
         ResultActions resultActions = mockMvc.perform(requestGet);
@@ -262,6 +270,10 @@ public class LikeControllerTest {
                         docs.document(
                                 pathParameters(
                                         parameterWithName("userId").description("사용자 UUID")
+                                ),
+                                requestParameters(
+                                        parameterWithName("page").description("페이지 번호(0부터 시작)"),
+                                        parameterWithName("size").description("페이지 크기")
                                 ),
                                 responseFields(
                                         beneathPath("data.videoList").withSubsectionId("beneath-data-video-list"),

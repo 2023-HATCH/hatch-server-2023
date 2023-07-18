@@ -12,6 +12,9 @@ import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.AuthException;
 import hatch.hatchserver2023.global.common.response.exception.VideoException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -87,9 +90,10 @@ public class LikeService {
      * 어느 사용자의 좋아요 누른 영상 목록 조회
      *
      * @param userId
+     * @param pageable
      * @return videoList
      */
-    public List<Video> getLikedVideoList(UUID userId){
+    public Slice<Video> getLikedVideoList(UUID userId, Pageable pageable){
 
         User user = userRepository.findByUuid(userId)
                 .orElseThrow(() -> new AuthException(UserStatusCode.UUID_NOT_FOUND));
@@ -103,7 +107,39 @@ public class LikeService {
             videoList.add(like.getVideoId());
         }
 
-        return videoList;
+        //paginaton 적용
+        //no-offset
+        Slice<Video> slice = pagination(videoList, pageable);
+
+        return slice;
+    }
+
+    private Slice<Video> pagination(List<Video> videoList, Pageable pageable) {
+        int page = pageable.getPageNumber();        // 페이지 번호 (0부터)
+        int size = pageable.getPageSize();          // 페이지 크기
+
+        List<Video> content = new ArrayList<>();
+
+        int start = page * size;
+        int limit = start + size + 1;       //+1을 하므로써 hasNext 여부 판단
+
+        //subList()를 쓰면 out-of-index Exception이 발생하므로 직접 반복문 처리
+        for (int idx = start; idx < limit; idx++){
+            if(videoList.size() <= idx) {
+                break;
+            }
+            content.add(videoList.get(idx));
+        }
+
+        //다음 원소가 있는지 판단
+        boolean hasNext = false;
+        if (content.size() > size) {
+            content.remove(size);
+            hasNext = true;
+        }
+
+        Slice<Video> slice = new SliceImpl<>(content, pageable, hasNext);
+        return slice;
     }
 
 

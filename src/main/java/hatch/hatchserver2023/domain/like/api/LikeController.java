@@ -7,6 +7,8 @@ import hatch.hatchserver2023.domain.video.dto.VideoResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -74,16 +76,17 @@ public class LikeController {
      * 사용자가 좋아요 누른 영상 목록 조회
      *
      * @param userId
+     * @param pageable
      * @return videoList
      */
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getLikedVideoList(@PathVariable UUID userId){
+    public ResponseEntity<?> getLikedVideoList(@PathVariable UUID userId, Pageable pageable){
 
-        List<Video> videoList = likeService.getLikedVideoList(userId);
+        Slice<Video> slice = likeService.getLikedVideoList(userId ,pageable);
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.GET_LIKE_VIDEO_LIST_SUCCESS,
-                VideoResponseDto.GetVideoList.toDto(videoList)
+                VideoResponseDto.GetVideoList.toDto(slice)
         ));
 
     }

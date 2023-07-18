@@ -1,4 +1,4 @@
-package hatch.hatchserver2023.domain.video.api;
+package hatch.hatchserver2023.domain.comment.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hatch.hatchserver2023.domain.comment.api.CommentController;

@@ -6,6 +6,9 @@ import hatch.hatchserver2023.domain.video.domain.VideoHashtag;
 import hatch.hatchserver2023.domain.video.repository.HashtagRepository;
 import hatch.hatchserver2023.domain.video.repository.VideoHashtagRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,9 +37,10 @@ public class HashtagService {
      * 해시태그 검색
      *
      * @param tag
+     * @param pageable
      * @return videoList
      */
-    public List<Video> searchHashtag(String tag){
+    public Slice<Video> searchHashtag(String tag, Pageable pageable){
 
         List<Video> videoList = new ArrayList<>();
 
@@ -51,11 +55,43 @@ public class HashtagService {
             }
 
         } else {
-            // 검색한 해시태그가 없다면 videoList는 null
-            videoList = null;
+            // 검색한 해시태그가 없다면 videoList는 빈 배열
+            videoList = new ArrayList<>();
         }
 
-        return videoList;
+        //paginaton 적용
+        //no-offset
+        Slice<Video> slice = pagination(videoList, pageable);
+
+        return slice;
+    }
+
+    private Slice<Video> pagination(List<Video> videoList, Pageable pageable) {
+        int page = pageable.getPageNumber();        // 페이지 번호 (0부터)
+        int size = pageable.getPageSize();          // 페이지 크기
+
+        List<Video> content = new ArrayList<>();
+
+        int start = page * size;
+        int limit = start + size + 1;       //+1을 하므로써 hasNext 여부 판단
+
+        //subList()를 쓰면 out-of-index Exception이 발생하므로 직접 반복문 처리
+        for (int idx = start; idx < limit; idx++){
+            if(videoList.size() <= idx) {
+                break;
+            }
+            content.add(videoList.get(idx));
+        }
+
+        //다음 원소가 있는지 판단
+        boolean hasNext = false;
+        if (content.size() > size) {
+            content.remove(size);
+            hasNext = true;
+        }
+
+        Slice<Video> slice = new SliceImpl<>(content, pageable, hasNext);
+        return slice;
     }
 
 
