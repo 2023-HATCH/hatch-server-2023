@@ -51,7 +51,7 @@ public class JwtWebSocketInterceptor implements ChannelInterceptor {
 
         //첫 연결 시, 메세지 발행 시에 로직 실행하도록 함 //TODO : 구독 시에는 어떻게 헤더 다는지 난 잘 모르겠음. 프론트와 논의
         if(StompCommand.CONNECT == command || StompCommand.SEND == command) { //|| StompCommand.SUBSCRIBE == command // || StompCommand.MESSAGE == command
-            String token = headerAccessor.getFirstNativeHeader("Authorization");
+            String token = headerAccessor.getFirstNativeHeader(jwtProvider.ACCESS_TOKEN_NAME);
 
             //토큰 유효기간 확인 // TODO : 이거 예외 핸들러로 잡아주기!!!!!!! 예외응답!! -> 어떻게 하는 거지..? 공부하기
             if(!jwtProvider.isTokenValid(token)){
