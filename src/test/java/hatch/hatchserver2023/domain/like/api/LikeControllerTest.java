@@ -289,7 +289,7 @@ public class LikeControllerTest {
                                         fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
                                         fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 개수"),
                                         fieldWithPath("length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이"),
-                                        fieldWithPath("createdTime").type("DateTime").description("생성 시각"),
+                                        fieldWithPath("createdAt").type("DateTime").description("생성 시각"),
                                         fieldWithPath("liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부").ignored()
                                 )
                         )

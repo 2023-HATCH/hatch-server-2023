@@ -16,13 +16,13 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 
     public Optional<Video> findByUuid(UUID uuid);
 
-    public Slice<Video> findByUserIdOrderByCreatedTimeDesc(User userId, Pageable pageable);
+    public Slice<Video> findByUserIdOrderByCreatedAtDesc(User userId, Pageable pageable);
 
     // TODO: 제대로 되는지 테스트
     @Query(value = "SELECT * FROM video order by RAND()", nativeQuery = true)
     public Slice<Video> findAllOrderByRandom(Pageable pageable);
 
-    public Slice<Video> findAllByOrderByCreatedTimeDesc(Pageable pageable);
+    public Slice<Video> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     public Slice<Video> findAllByOrderByLikeCountDesc(Pageable pageable);
 

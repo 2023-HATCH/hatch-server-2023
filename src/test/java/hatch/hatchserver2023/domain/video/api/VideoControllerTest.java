@@ -205,7 +205,7 @@ public class VideoControllerTest {
                                                 fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
                                                 fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 개수"),
                                                 fieldWithPath("length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이"),
-                                                fieldWithPath("createdTime").type("DateTime").description("생성 시각"),
+                                                fieldWithPath("createdAt").type("DateTime").description("생성 시각"),
                                                 fieldWithPath("liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부")
                                         )
                                 )
@@ -275,13 +275,13 @@ public class VideoControllerTest {
         class SuccessCase {
 
             @Test
-            @DisplayName("By createdTime desc")
-            void getVideoListByCreatedTime() throws Exception {
+            @DisplayName("By createdAt desc")
+            void getVideoListByCreatedAt() throws Exception {
                 //given
                 List<Video> videoList = Arrays.asList(video1, video2);
                 Slice<Video> slice = new SliceImpl<>(videoList, PageRequest.of(0, 2), false);
 
-                given(videoService.findByCreatedTime(any()))
+                given(videoService.findByCreatedAt(any()))
                         .willReturn(slice);
 
                 //when & then
@@ -328,7 +328,7 @@ public class VideoControllerTest {
                                                 fieldWithPath("videoList.[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
                                                 fieldWithPath("videoList.[].commentCount").type(JsonFieldType.NUMBER).description("댓글 개수"),
                                                 fieldWithPath("videoList.[].length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이"),
-                                                fieldWithPath("videoList.[].createdTime").type("DateTime").description("생성 시각"),
+                                                fieldWithPath("videoList.[].createdAt").type("DateTime").description("생성 시각"),
                                                 fieldWithPath("videoList.[].liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부").ignored()
                                         )
 
@@ -392,7 +392,7 @@ public class VideoControllerTest {
                                                 fieldWithPath("videoList.[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
                                                 fieldWithPath("videoList.[].commentCount").type(JsonFieldType.NUMBER).description("댓글 개수"),
                                                 fieldWithPath("videoList.[].length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이"),
-                                                fieldWithPath("videoList.[].createdTime").type("DateTime").description("생성 시각"),
+                                                fieldWithPath("videoList.[].createdAt").type("DateTime").description("생성 시각"),
                                                 fieldWithPath("videoList.[].liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부").ignored()
                                         )
 
@@ -547,7 +547,7 @@ public class VideoControllerTest {
                                                 fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
                                                 fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 개수"),
                                                 fieldWithPath("length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이"),
-                                                fieldWithPath("createdTime").type("DateTime").description("생성 시각"),
+                                                fieldWithPath("createdAt").type("DateTime").description("생성 시각"),
                                                 fieldWithPath("liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부").ignored()
                                         )
                                 )

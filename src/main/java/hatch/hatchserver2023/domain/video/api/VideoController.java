@@ -17,7 +17,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.UUID;
 
 
@@ -91,7 +90,7 @@ public class VideoController {
      */
     @GetMapping
     public ResponseEntity<?> getVideoList(Pageable pageable){
-        Slice<Video> slice = videoService.findByCreatedTime(pageable);
+        Slice<Video> slice = videoService.findByCreatedAt(pageable);
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.GET_VIDEO_LIST_SUCCESS,

@@ -40,7 +40,7 @@ public class CommentResponseDto {
         private String content;
         private UserResponseDto.CommunityUserInfo user;
 
-        private ZonedDateTime createdTime;
+        private ZonedDateTime createdAt;
 
 
         public static CommentResponseDto.GetComment toDto(Comment comment){
@@ -50,7 +50,7 @@ public class CommentResponseDto {
                     .uuid(comment.getUuid())
                     .content(comment.getContent())
                     .user(userInfo)
-                    .createdTime(comment.getCreatedTime())
+                    .createdAt(comment.getCreatedAt())
                     .build();
         }
     }

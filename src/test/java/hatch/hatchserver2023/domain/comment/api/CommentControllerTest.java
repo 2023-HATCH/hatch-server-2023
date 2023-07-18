@@ -289,7 +289,7 @@ public class CommentControllerTest {
                                         fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("댓글 작성자 닉네임"),
                                         fieldWithPath("user.email").type(JsonFieldType.STRING).description("댓글 작성자 이메일"),
                                         fieldWithPath("user.profileImg").type(JsonFieldType.STRING).description("댓글 작성자 프로필 사진 S3 경로"),
-                                        fieldWithPath("createdTime").type("DateTime").description("댓글 생성 시각")
+                                        fieldWithPath("createdAt").type("DateTime").description("댓글 생성 시각")
                                 )
                         )
                 );

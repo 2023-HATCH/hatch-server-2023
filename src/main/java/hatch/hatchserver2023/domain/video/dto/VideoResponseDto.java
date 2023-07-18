@@ -40,7 +40,7 @@ public class VideoResponseDto {
         private Integer likeCount;
         private Integer commentCount;
         private Integer length;
-        private ZonedDateTime createdTime;
+        private ZonedDateTime createdAt;
 
         //isLike가 없는 버전
         public static GetVideo toDto(Video video){
@@ -56,7 +56,7 @@ public class VideoResponseDto {
                     .likeCount(video.getLikeCount())
                     .commentCount(video.getCommentCount())
                     .length(video.getLength())
-                    .createdTime(video.getCreatedTime())
+                    .createdAt(video.getCreatedAt())
                     .build();
         }
 
@@ -75,7 +75,7 @@ public class VideoResponseDto {
                     .likeCount(video.getLikeCount())
                     .commentCount(video.getCommentCount())
                     .length(video.getLength())
-                    .createdTime(video.getCreatedTime())
+                    .createdAt(video.getCreatedAt())
                     .build();
         }
     }

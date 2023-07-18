@@ -108,8 +108,8 @@ public class VideoService {
      * @param pageable
      * @return Slice<Video>
      */
-    public Slice<Video> findByCreatedTime(Pageable pageable) {
-        Slice<Video> slice = videoRepository.findAllByOrderByCreatedTimeDesc(pageable);
+    public Slice<Video> findByCreatedAt(Pageable pageable) {
+        Slice<Video> slice = videoRepository.findAllByOrderByCreatedAtDesc(pageable);
         return slice;
     }
 
