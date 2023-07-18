@@ -4,6 +4,8 @@ import hatch.hatchserver2023.domain.user.application.AuthService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.KakaoDto;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
+import hatch.hatchserver2023.domain.video.application.HashtagService;
+import hatch.hatchserver2023.domain.video.domain.Hashtag;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.config.security.jwt.JwtProvider;
@@ -17,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -26,10 +29,12 @@ public class TestController {
     private final JwtProvider jwtProvider;
 
     private final AuthService authService;
+    private final HashtagService hashtagService;
 
-    public TestController(JwtProvider jwtProvider, AuthService authService) {
+    public TestController(JwtProvider jwtProvider, AuthService authService, HashtagService hashtagService) {
         this.jwtProvider = jwtProvider;
         this.authService = authService;
+        this.hashtagService = hashtagService;
     }
 
 
@@ -91,4 +96,20 @@ public class TestController {
             log.info("type is not user");
         }
     }
+
+    //--커뮤니티 간이 api--//
+    // 해시태그 목록 조회 - 테스트용
+    @GetMapping("/tags")
+    public List<Hashtag> getHashtagList() {
+        return hashtagService.getHashtagList();
+    }
+
+
+    //해시태그 삭제 - 테스트용
+    @DeleteMapping("/tags/{title}")
+    public boolean deleteHashtag(@PathVariable String title){
+        hashtagService.delete(title);
+        return true;
+    }
+
 }

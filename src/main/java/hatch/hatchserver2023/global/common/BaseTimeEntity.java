@@ -1,7 +1,6 @@
 package hatch.hatchserver2023.global.common;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -18,19 +17,19 @@ import java.time.ZonedDateTime;
 @EntityListeners(AuditingEntityListener.class) //Auditing 기능
 public abstract class BaseTimeEntity {
 
-    private ZonedDateTime createdTime;
+    private ZonedDateTime createdAt;
 
-    private ZonedDateTime modifiedTime;
+    private ZonedDateTime modifiedAt;
 
     @PrePersist
     public void prePersist() {
-        this.createdTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
-        this.modifiedTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        this.createdAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        this.modifiedAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.modifiedTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        this.modifiedAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
 }
