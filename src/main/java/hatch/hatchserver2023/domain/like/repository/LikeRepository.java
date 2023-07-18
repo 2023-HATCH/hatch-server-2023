@@ -1,7 +1,7 @@
-package hatch.hatchserver2023.domain.video.repository;
+package hatch.hatchserver2023.domain.like.repository;
 
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.domain.video.domain.Like;
+import hatch.hatchserver2023.domain.like.domain.Like;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

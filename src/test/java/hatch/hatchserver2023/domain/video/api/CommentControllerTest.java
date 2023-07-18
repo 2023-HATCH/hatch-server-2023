@@ -1,11 +1,12 @@
 package hatch.hatchserver2023.domain.video.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hatch.hatchserver2023.domain.comment.api.CommentController;
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.domain.video.application.CommentService;
-import hatch.hatchserver2023.domain.video.domain.Comment;
+import hatch.hatchserver2023.domain.comment.application.CommentService;
+import hatch.hatchserver2023.domain.comment.domain.Comment;
 import hatch.hatchserver2023.domain.video.domain.Video;
-import hatch.hatchserver2023.domain.video.dto.CommentRequestDto;
+import hatch.hatchserver2023.domain.comment.dto.CommentRequestDto;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;

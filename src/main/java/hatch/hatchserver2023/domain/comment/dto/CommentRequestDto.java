@@ -1,4 +1,4 @@
-package hatch.hatchserver2023.domain.video.dto;
+package hatch.hatchserver2023.domain.comment.dto;
 
 import lombok.Getter;
 

@@ -1,6 +1,7 @@
-package hatch.hatchserver2023.domain.video.domain;
+package hatch.hatchserver2023.domain.comment.domain;
 
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.global.common.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;

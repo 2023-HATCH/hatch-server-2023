@@ -1,7 +1,6 @@
 package hatch.hatchserver2023.domain.video.dto;
 
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
-import hatch.hatchserver2023.domain.video.domain.Comment;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import lombok.Builder;
 import lombok.Getter;
@@ -129,72 +128,6 @@ public class VideoResponseDto {
                     .build();
         }
 
-    }
-
-
-    @Builder
-    @Getter
-    public static class CreateComment {
-
-        private UUID uuid;
-        private String content;
-        private UserResponseDto.CommunityUserInfo user;
-
-
-        public static CreateComment toDto(Comment comment){
-            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(comment.getUserId());
-
-            return CreateComment.builder()
-                    .uuid(comment.getUuid())
-                    .content(comment.getContent())
-                    .user(userInfo)
-                    .build();
-        }
-    }
-
-    @Builder
-    @Getter
-    public static class GetComment {
-
-        private UUID uuid;
-        private String content;
-        private UserResponseDto.CommunityUserInfo user;
-
-        private ZonedDateTime createdTime;
-
-
-        public static GetComment toDto(Comment comment){
-            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(comment.getUserId());
-
-            return GetComment.builder()
-                    .uuid(comment.getUuid())
-                    .content(comment.getContent())
-                    .user(userInfo)
-                    .createdTime(comment.getCreatedTime())
-                    .build();
-        }
-    }
-
-    @Builder
-    @Getter
-    public static class GetCommentList {
-
-        private List<GetComment> commentList;
-
-
-        public static GetCommentList toDto(List<Comment> comments){
-
-            List<GetComment> getComments = new ArrayList<>();
-
-            for (Comment comment : comments) {
-                //dto로 만들어 add
-                getComments.add(GetComment.toDto(comment));
-            }
-
-            return GetCommentList.builder()
-                    .commentList(getComments)
-                    .build();
-        }
     }
 
 }

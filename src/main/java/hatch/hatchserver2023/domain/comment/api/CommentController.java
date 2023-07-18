@@ -1,10 +1,11 @@
-package hatch.hatchserver2023.domain.video.api;
+package hatch.hatchserver2023.domain.comment.api;
 
 
+import hatch.hatchserver2023.domain.comment.dto.CommentResponseDto;
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.domain.video.application.CommentService;
-import hatch.hatchserver2023.domain.video.domain.Comment;
-import hatch.hatchserver2023.domain.video.dto.CommentRequestDto;
+import hatch.hatchserver2023.domain.comment.application.CommentService;
+import hatch.hatchserver2023.domain.comment.domain.Comment;
+import hatch.hatchserver2023.domain.comment.dto.CommentRequestDto;
 import hatch.hatchserver2023.domain.video.dto.VideoResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
@@ -49,7 +50,7 @@ public class CommentController {
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.COMMENT_REGISTER_SUCCESS,
-                VideoResponseDto.CreateComment.toDto(comment)
+                CommentResponseDto.CreateComment.toDto(comment)
         ));
     }
 
@@ -88,7 +89,7 @@ public class CommentController {
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.GET_COMMENT_LIST_SUCCESS,
-                VideoResponseDto.GetCommentList.toDto(commentList)
+                CommentResponseDto.GetCommentList.toDto(commentList)
         ));
     }
 }

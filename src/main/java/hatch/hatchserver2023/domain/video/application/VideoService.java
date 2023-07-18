@@ -3,8 +3,8 @@ package hatch.hatchserver2023.domain.video.application;
 
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.video.domain.Video;
-import hatch.hatchserver2023.domain.video.repository.CommentRepository;
-import hatch.hatchserver2023.domain.video.repository.LikeRepository;
+import hatch.hatchserver2023.domain.comment.repository.CommentRepository;
+import hatch.hatchserver2023.domain.like.repository.LikeRepository;
 import hatch.hatchserver2023.domain.video.repository.VideoHashtagRepository;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
@@ -29,7 +29,6 @@ import org.apache.commons.fileupload.FileItem;
 import javax.imageio.ImageIO;
 import java.io.*;
 import java.nio.file.Files;
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j

@@ -2,7 +2,7 @@ package hatch.hatchserver2023.domain.video.api;
 
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.video.application.HashtagService;
-import hatch.hatchserver2023.domain.video.application.LikeService;
+import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.video.application.VideoService;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
