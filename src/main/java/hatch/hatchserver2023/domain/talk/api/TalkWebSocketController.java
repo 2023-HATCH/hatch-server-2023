@@ -7,32 +7,25 @@ import hatch.hatchserver2023.domain.talk.dto.TalkResponseDto;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.messaging.support.MessageHeaderAccessor;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.security.Principal;
 import java.time.LocalDateTime;
 
 @Slf4j
 @Controller
-public class TalkController {
+public class TalkWebSocketController {
     private final String TYPE_TALK_MESSAGE = "message";
     private final String TYPE_TALK_REACTION = "reaction";
 
     private final TalkService talkService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public TalkController(TalkService talkService, SimpMessagingTemplate simpMessagingTemplate) {
+    public TalkWebSocketController(TalkService talkService, SimpMessagingTemplate simpMessagingTemplate) {
         this.talkService = talkService;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
