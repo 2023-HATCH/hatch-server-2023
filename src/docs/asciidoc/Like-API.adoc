@@ -1,0 +1,24 @@
+// 도메인 명 : h1
+== *LIKE*
+
+// // api 명 : h3
+// === *Like - Video Community*
+좋아요 api
+
+
+
+=== 좋아요 등록
+
+operation::add-like[snippets='http-request,request-headers,path-parameters,response-fields-beneath-data,http-response']
+
+
+
+=== 좋아요 삭제
+
+operation::delete-like[snippets='http-request,request-headers,path-parameters,response-fields-beneath-data,http-response']
+
+
+
+=== 사용자 좋아요 영상 목록 조회
+
+operation::get-liked-video-list[snippets='http-request,path-parameters,response-fields-beneath-data-video-list,http-response']
