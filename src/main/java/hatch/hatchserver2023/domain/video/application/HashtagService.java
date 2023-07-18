@@ -46,52 +46,24 @@ public class HashtagService {
 
         Optional<Hashtag> hashtag =  hashtagRepository.findByTitle(tag);
 
+        boolean hasNext = false;
+
         if(hashtag.isPresent()){
             // 검색한 해시태그가 존재한다면, videoList 제작
-            List<VideoHashtag> mapList = videoHashtagRepository.findAllByHashtagId(hashtag.get());
+            Slice<VideoHashtag> mapSlice = videoHashtagRepository.findAllByHashtagId(hashtag.get(), pageable);
+            hasNext = mapSlice.hasNext();
+            List<VideoHashtag> mapList = mapSlice.getContent();
 
             for (VideoHashtag map : mapList){
                 videoList.add(map.getVideoId());
             }
-
-        } else {
-            // 검색한 해시태그가 없다면 videoList는 빈 배열
-            videoList = new ArrayList<>();
-        }
+        }  // 검색한 해시태그가 없다면 videoList는 빈 배열
 
         //paginaton 적용
         //no-offset
-        Slice<Video> slice = pagination(videoList, pageable);
+        Slice<Video> videoSlice = new SliceImpl<>(videoList, pageable, hasNext);
 
-        return slice;
-    }
-
-    private Slice<Video> pagination(List<Video> videoList, Pageable pageable) {
-        int page = pageable.getPageNumber();        // 페이지 번호 (0부터)
-        int size = pageable.getPageSize();          // 페이지 크기
-
-        List<Video> content = new ArrayList<>();
-
-        int start = page * size;
-        int limit = start + size + 1;       //+1을 하므로써 hasNext 여부 판단
-
-        //subList()를 쓰면 out-of-index Exception이 발생하므로 직접 반복문 처리
-        for (int idx = start; idx < limit; idx++){
-            if(videoList.size() <= idx) {
-                break;
-            }
-            content.add(videoList.get(idx));
-        }
-
-        //다음 원소가 있는지 판단
-        boolean hasNext = false;
-        if (content.size() > size) {
-            content.remove(size);
-            hasNext = true;
-        }
-
-        Slice<Video> slice = new SliceImpl<>(content, pageable, hasNext);
-        return slice;
+        return videoSlice;
     }
 
 
