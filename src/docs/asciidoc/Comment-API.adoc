@@ -1,0 +1,26 @@
+// 도메인 명 : h1
+== *COMMENT*
+//
+// // api 명 : h3
+// === *Comment - Video Community*
+댓글 api
+
+
+
+=== 댓글 등록
+
+operation::post-add-comment[snippets='http-request,request-headers,request-body,response-fields-beneath-data,http-response']
+
+
+
+=== 댓글 삭제
+
+operation::delete-comment[snippets='http-request,request-headers,path-parameters,response-fields-beneath-data,http-response']
+
+
+
+=== 동영상의 댓글 목록 조회
+
+operation::get-comment-list-from-video[snippets='http-request,path-parameters,response-fields-beneath-data-comment-list,http-response']
+
+

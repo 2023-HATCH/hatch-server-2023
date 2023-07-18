@@ -10,6 +10,9 @@ include::HealthCheck-API.adoc[]
 '''
 include::User-API.adoc[]
 '''
+include::Video-API.adoc[]
+'''
+
 
 include::Talk-SOCKET.adoc[]
 '''

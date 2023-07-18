@@ -39,7 +39,7 @@ public class TalkController {
     @GetMapping("/messages")
     public ResponseEntity<CommonResponse> getTalkMessages(@RequestParam @NotNull @Min(0) Integer page,
                                                              @RequestParam @NotNull Integer size) {
-        Pageable pageRequest = PageRequest.of(page, size, Sort.by("createdTime").descending());
+        Pageable pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending()); //service 로?
         Slice<TalkMessage> talkMessages = talkService.getTalkMessages(pageRequest);
         return ResponseEntity.ok().body(CommonResponse.toResponse(
                 TalkStatusCode.GET_TALK_MESSAGES_SUCCESS, TalkResponseDto.GetMessagesContainer.toDto(talkMessages)));

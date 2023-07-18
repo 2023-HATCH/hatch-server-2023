@@ -43,4 +43,25 @@ public class UserResponseDto {
                     .build();
         }
     }
+
+    @ToString
+    @Getter
+    @Builder
+    // 영상 커뮤니티에서 사용자를 화면에 보이기 위해 필요한 정보
+    public static class CommunityUserInfo {
+        private UUID uuid;
+        private String nickname;
+        private String email;
+        private String profileImg;
+
+        public static CommunityUserInfo toDto(User user){
+            return CommunityUserInfo.builder()
+                    .uuid(user.getUuid())
+                    .nickname(user.getNickname())
+                    .email(user.getEmail())
+                    .profileImg(user.getProfileImg())
+                    .build();
+        }
+
+    }
 }

@@ -6,6 +6,10 @@ include::{snippets}/status-code/code-response-fields-USER.adoc[]
 
 include::{snippets}/status-code/code-response-fields-TALK.adoc[]
 
+include::{snippets}/status-code/code-response-fields-VIDEO.adoc[]
+
+include::{snippets}/status-code/code-response-fields-S3.adoc[]
+
 //opertation 쓰면 스니펫 여러개 한번에 넣어줄 수 있지만, 같이 들어가는 자동 헤더를 못지우겠음
 // operation::status-code[snippets='code-response-fields-beneath-status_codes']
 // :operation-code-response-fields-beneath-status_codes-title: hihi

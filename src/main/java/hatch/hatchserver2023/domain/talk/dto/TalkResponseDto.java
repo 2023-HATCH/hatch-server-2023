@@ -59,13 +59,13 @@ public class TalkResponseDto {
         private UserResponseDto.SimpleUserProfile sender;
 
         public static BasicMessage toDto(TalkMessage talkMessage) {
-            if(talkMessage.getCreatedTime() == null) {
+            if(talkMessage.getCreatedAt() == null) {
                 throw new TalkException(TalkStatusCode.CREATED_TIME_NULL);
             }
 
             return BasicMessage.builder()
                     .content(talkMessage.getContent())
-                    .createdAt(talkMessage.getCreatedTime().toString())
+                    .createdAt(talkMessage.getCreatedAt().toString())
                     .sender(UserResponseDto.SimpleUserProfile.toDto(talkMessage.getUser()))
                     .build();
         }

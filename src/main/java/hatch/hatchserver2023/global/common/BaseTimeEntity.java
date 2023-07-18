@@ -18,19 +18,19 @@ import java.time.ZonedDateTime;
 public abstract class BaseTimeEntity {
 
     //TODO : NOT NULL 설정?
-    private ZonedDateTime createdTime;
+    private ZonedDateTime createdAt;
 
-    private ZonedDateTime modifiedTime;
+    private ZonedDateTime modifiedAt;
 
     @PrePersist
     public void prePersist() {
-        this.createdTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
-        this.modifiedTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        this.createdAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        this.modifiedAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.modifiedTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        this.modifiedAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
 }

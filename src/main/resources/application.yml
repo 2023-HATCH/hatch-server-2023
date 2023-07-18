@@ -9,6 +9,11 @@ spring:
     url: ${MYSQL_URL} #?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
+  ### 영상 크기 제한 ###
+  servlet:
+    multipart:
+      maxFileSize: 30MB
+      maxRequestSize: 30MB
 
 ### JPA ###
   jpa:
@@ -29,18 +34,18 @@ spring:
 
 
 ### S3 ###
-#cloud:
-#  aws:
-#    s3:
-#      bucket: bucket-name
-#    credentials:
-#      access-key: ${AWS_S3_ACCESS_KEY}
-#      secret-key: ${AWS_S3_SECRET_KEY}
-#    region:
-#      static: ap-northeast-2
-#      auto: false
-#    stack:
-#      auto: false
+cloud:
+  aws:
+    s3:
+      bucket: ${AWS_S3_BUCKET_NAME}
+    credentials:
+      access-key: ${AWS_S3_ACCESS_KEY}
+      secret-key: ${AWS_S3_SECRET_KEY}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
 
 jwt:
   token:

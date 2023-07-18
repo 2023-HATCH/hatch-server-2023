@@ -59,7 +59,7 @@ public class TalkWebSocketController {
         TalkResponseDto.SendMessage responseDto = TalkResponseDto.SendMessage.builder()
                 .type(TYPE_TALK_MESSAGE)
                 .content(savedTalkMessage.getContent())
-                .createdAt(savedTalkMessage.getCreatedTime().toString())
+                .createdAt(savedTalkMessage.getCreatedAt().toString())
                 .sender(UserResponseDto.SimpleUserProfile.toDto(sender))
                 .build();
 

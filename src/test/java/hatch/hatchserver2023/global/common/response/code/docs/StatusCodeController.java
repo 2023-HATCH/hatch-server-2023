@@ -1,9 +1,6 @@
 package hatch.hatchserver2023.global.common.response.code.docs;
 
-import hatch.hatchserver2023.global.common.response.code.CommonCode;
-import hatch.hatchserver2023.global.common.response.code.StatusCode;
-import hatch.hatchserver2023.global.common.response.code.TalkStatusCode;
-import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
+import hatch.hatchserver2023.global.common.response.code.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +27,16 @@ public class StatusCodeController {
     @GetMapping("/talk")
     public ResponseEntity<StatusCodeView> getTalkStatusCodes() {
         return getResponse(TalkStatusCode.values());
+    }
+
+    @GetMapping("/video")
+    public ResponseEntity<StatusCodeView> getVideoStatusCodes() {
+        return getResponse(VideoStatusCode.values());
+    }
+
+    @GetMapping("/s3")
+    public ResponseEntity<StatusCodeView> getS3StatusCodes() {
+        return getResponse(S3StatusCode.values());
     }
 
     private ResponseEntity<StatusCodeView> getResponse(StatusCode[] statusCodes) {
