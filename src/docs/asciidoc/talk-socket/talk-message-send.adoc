@@ -1,6 +1,6 @@
 
 // api 명 : h3
-=== *Talk Message Send*
+=== *Send Talk Message*
 라이브톡 메세지 전송
 
 ==== Request header

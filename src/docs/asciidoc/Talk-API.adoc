@@ -1,0 +1,9 @@
+// 도메인 명 : h1
+= Talk
+
+// api 명 : h3
+=== *Get Talk Messages*
+라이브톡 메세지 목록 조회(최신순) api
+
+operation::get-talk-messages[snippets='http-request,request-parameters,response-fields-beneath-data,http-response']
+

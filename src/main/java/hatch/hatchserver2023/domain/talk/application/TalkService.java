@@ -32,7 +32,8 @@ public class TalkService {
     }
 
 
-    public Slice<TalkMessage> getTalkMessages(Pageable pageable) {
-        return talkRepository.findAll(pageable);
+    public Slice<TalkMessage> getTalkMessages(int page, int size) {
+        Pageable pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending()); //service 로?
+        return talkRepository.findAll(pageRequest);
     }
 }

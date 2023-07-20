@@ -49,6 +49,7 @@ public class JwtWebSocketInterceptor implements ChannelInterceptor {
         //stomp 형식에서 요청 타입인 COMMAND 부분 값을 가져옴
         StompCommand command = headerAccessor.getCommand();
 
+        //TODO : 만약 메세지 발행 시에는 토큰 확인 안하게 될 경우 이 부분 수정
         //첫 연결 시, 메세지 발행 시에 로직 실행하도록 함 //TODO : 구독 시에는 어떻게 헤더 다는지 난 잘 모르겠음. 프론트와 논의
         if(StompCommand.CONNECT == command || StompCommand.SEND == command) { //|| StompCommand.SUBSCRIBE == command // || StompCommand.MESSAGE == command
             String token = headerAccessor.getFirstNativeHeader(jwtProvider.ACCESS_TOKEN_NAME);

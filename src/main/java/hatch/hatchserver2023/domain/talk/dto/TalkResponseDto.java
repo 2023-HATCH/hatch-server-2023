@@ -10,6 +10,7 @@ import lombok.ToString;
 import org.springframework.data.domain.Slice;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -54,6 +55,7 @@ public class TalkResponseDto {
     @Getter
     @Builder
     public static class BasicMessage{
+        private UUID messageId;
         private String content;
         private String createdAt;
         private UserResponseDto.SimpleUserProfile sender;
@@ -64,6 +66,7 @@ public class TalkResponseDto {
             }
 
             return BasicMessage.builder()
+                    .messageId(talkMessage.getUuid())
                     .content(talkMessage.getContent())
                     .createdAt(talkMessage.getCreatedAt().toString())
                     .sender(UserResponseDto.SimpleUserProfile.toDto(talkMessage.getUser()))

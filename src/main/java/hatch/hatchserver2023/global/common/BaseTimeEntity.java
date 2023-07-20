@@ -8,6 +8,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -33,4 +34,12 @@ public abstract class BaseTimeEntity {
         this.modifiedAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
+
+    /**
+     * 테스트 시 필요한 메서드, 다른 기능에는 사용하지 말 것
+     * @param createdAt
+     */
+    public void updateForTestCode(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
