@@ -1,0 +1,32 @@
+// api 명 : h3
+=== *Send Talk Reaction*
+라이브톡 반응 전송
+
+==== Request header
+|===
+|필드명|타입|필수여부|제약조건|설명
+|`+x-access-token+`
+|`+String+`
+|true
+|JWT 형식
+|액세스 토큰
+|===
+
+
+==== Response body
+|===
+|필드명|타입|필수여부|설명
+|`+createdAt+`
+|`+LocalDateTime(String)+`
+|true
+|보낸 시각
+|`+content+`
+|`+String+`
+|true
+|메세지 내용
+|`+type+`
+|`+String+`
+|true
+|응답 타입(고정값 : reaction). 이 응답이 다른 사람의 반응 전송을 전달하는 응답이라는 뜻
+|===
+

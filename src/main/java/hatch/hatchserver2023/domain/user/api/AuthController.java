@@ -36,14 +36,19 @@ public class AuthController {
         this.authService = authService;
     }
 
-
-    //TODO : 실행 못해봤음 - 프론트 연결하면서 해보기
+    /**
+     * 카카오 회원가입 & 로그인 한번에 진행되는 api
+     * @param type : "kakao" 고정값
+     * @param requestDto
+     * @param servletResponse
+     * @return
+     */
     @PostMapping("/login")
 //    @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS')")
     public ResponseEntity<CommonResponse> kakaoSignUpAndLogin(@RequestParam @NotBlank String type,
                                                               @RequestBody @Valid UserRequestDto.KakaoLogin requestDto,
                                                               HttpServletResponse servletResponse) {
-        log.info("[API] POST auth/login");
+        log.info("[API] POST /auth/login");
 
         validLoginType(type);
 
