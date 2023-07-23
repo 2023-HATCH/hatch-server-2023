@@ -80,7 +80,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     // uuid prepersist (auto generate) + BaseTimeEntity prePersist
     @Override
     public void prePersist() {
-        this.uuid = UUID.randomUUID();
+        this.uuid = UUID.randomUUID();  //TODO : UUID2 전략 적용하기
         super.prePersist(); //BaseTimeEntity
     }
 

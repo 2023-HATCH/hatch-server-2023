@@ -1,0 +1,63 @@
+
+// api 명 : h3
+=== *Send Talk Message*
+라이브톡 메세지 전송
+
+==== Request header
+|===
+|필드명|타입|필수여부|제약조건|설명
+|`+x-access-token+`
+|`+String+`
+|true
+|JWT 형식
+|액세스 토큰
+|===
+
+==== Request fields
+[source,options="nowrap"]
+----
+{"content":"안녕하세요~"}
+----
+// === Request fields
+|===
+|필드명|타입|필수여부|제약조건|설명
+|`+content+`
+|`+String+`
+|true
+|공백 불가
+|전송 메세지 내용
+|===
+
+
+==== Response body
+|===
+|필드명|타입|필수여부|설명
+|`+createdAt+`
+|`+LocalDateTime(String)+`
+|true
+|보낸 시각
+|`+content+`
+|`+String+`
+|true
+|메세지 내용
+|`+type+`
+|`+String+`
+|true
+|응답 타입(고정값 : message). 이 응답이 다른 사람의 메세지 전송을 전달하는 응답이라는 뜻
+|`+sender+`
+|`+String+`
+|true
+|보낸 사용자 정보
+|`+userId+`
+|`+String+`
+|true
+|보낸 사용자 고유값
+|`+nickname+`
+|`+String+`
+|true
+|보낸 사용자 닉네임
+|`+profileImg+`
+|`+String+`
+|true
+|보낸 사용자 프로필 사진
+|===

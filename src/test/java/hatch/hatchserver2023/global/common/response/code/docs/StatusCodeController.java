@@ -24,6 +24,11 @@ public class StatusCodeController {
         return getResponse(UserStatusCode.values());
     }
 
+    @GetMapping("/talk")
+    public ResponseEntity<StatusCodeView> getTalkStatusCodes() {
+        return getResponse(TalkStatusCode.values());
+    }
+
     @GetMapping("/video")
     public ResponseEntity<StatusCodeView> getVideoStatusCodes() {
         return getResponse(VideoStatusCode.values());

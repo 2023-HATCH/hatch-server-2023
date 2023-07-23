@@ -4,6 +4,8 @@ include::{snippets}/status-code/code-response-fields-COMMON.adoc[]
 
 include::{snippets}/status-code/code-response-fields-USER.adoc[]
 
+include::{snippets}/status-code/code-response-fields-TALK.adoc[]
+
 include::{snippets}/status-code/code-response-fields-VIDEO.adoc[]
 
 include::{snippets}/status-code/code-response-fields-S3.adoc[]
