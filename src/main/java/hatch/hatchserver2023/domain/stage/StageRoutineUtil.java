@@ -89,6 +89,6 @@ public class StageRoutineUtil {
     public int getStageUserCount() {
         String countString = redisDao.getValues(StageRoutineUtil.STAGE_ENTER_USER_COUNT);
         log.info("StageRoutineUtil countString : {}", countString);
-        return (countString==null) ? 1 : Integer.parseInt(countString);
+        return (countString==null) ? 0 : Integer.parseInt(countString);
     }
 }
