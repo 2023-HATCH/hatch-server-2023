@@ -1,9 +1,9 @@
 package hatch.hatchserver2023.domain.stage.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import hatch.hatchserver2023.domain.talk.domain.TalkMessage;
+import hatch.hatchserver2023.domain.talk.dto.TalkResponseDto;
+import lombok.*;
+import org.springframework.data.domain.Slice;
 
 public class StageResponseDto {
 
@@ -18,6 +18,24 @@ public class StageResponseDto {
         public static StageResponseDto.GetSimilarity toDto(Float similarity) {
             return GetSimilarity.builder()
                     .similarity(similarity)
+                    .build();
+        }
+    }
+
+
+    @ToString
+    @Getter
+    @Builder
+    public static class Enter {
+        private String stageStatus;
+        private Integer userCount;
+        private TalkResponseDto.GetMessagesContainer messages;
+
+        public static StageResponseDto.Enter toDto(String stageStatus, Integer userCount, Slice<TalkMessage> talkMessages) {
+            return Enter.builder()
+                    .stageStatus(stageStatus)
+                    .userCount(userCount)
+                    .messages(TalkResponseDto.GetMessagesContainer.toDto(talkMessages))
                     .build();
         }
     }

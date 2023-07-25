@@ -1,11 +1,10 @@
 package hatch.hatchserver2023.global.config.redis;
 
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -37,6 +36,26 @@ public class RedisDao {
         values.set(key, data, duration);
     }
 
+//    /**
+//     * List 에 데이터를 저장하는 메서드
+//     * @param key
+//     * @param data
+//     */
+//    public void pushValuesList(String key, String data) {
+//        ListOperations<String, String> values = redisTemplate.opsForList();
+//        values.rightPush(key, data);
+//    }
+
+    /**
+     * Set 에 데이터를 저장하는 메서드
+     * @param key
+     * @param data
+     */
+    public void setValuesSet(String key, String data) {
+        SetOperations<String, String> values = redisTemplate.opsForSet();
+        values.add(key, data);
+    }
+
     /**
      * Sorted Set 에 데이터를 저장하는 메서드
      * @param key
@@ -46,6 +65,37 @@ public class RedisDao {
     public void setValuesZSet(String key, String data, Double score) {
         ZSetOperations<String, String> values = redisTemplate.opsForZSet();
         values.add(key, data, score);
+    }
+
+
+    /**
+     * 키값에 해당하는 String 데이터를 가져오는 메서드
+     * @param key
+     * @return
+     */
+    public String getValues(String key) {
+        ValueOperations<String, String> values = redisTemplate.opsForValue();
+        return values.get(key);
+    }
+
+//    /**
+//     * List 에 데이터를 저장하는 메서드
+//     * @param key
+//     * @param start
+//     * @param end
+//     */
+//    public List<String> getValuesList(String key, Long start, Long end) {
+//        ListOperations<String, String> values = redisTemplate.opsForList();
+//        return values.range(key, start, end);
+//    }
+
+    /**
+     * Set 에서 특정 범위의 데이터들을 가져오는 메서드
+     * @param key
+     */
+    public Set<String> getValuesSet(String key) {
+        SetOperations<String, String> values = redisTemplate.opsForSet();
+        return values.members(key);
     }
 
     /**
@@ -60,15 +110,6 @@ public class RedisDao {
         return values.range(key, start, end);
     }
 
-    /**
-     * 키값에 해당하는 String 데이터를 가져오는 메서드
-     * @param key
-     * @return
-     */
-    public String getValues(String key) {
-        ValueOperations<String, String> values = redisTemplate.opsForValue();
-        return values.get(key);
-    }
 
     /**
      * 키값에 해당하는 데이터를 삭제하는 메서드
