@@ -14,11 +14,6 @@
 |===
 
 ==== Request fields
-[source,options="nowrap"]
-----
-{"content":"안녕하세요~"}
-----
-// === Request fields
 |===
 |필드명|타입|필수여부|제약조건|설명
 |`+content+`
@@ -28,36 +23,64 @@
 |전송 메세지 내용
 |===
 
+==== Request body
+[source,options="wrap"]
+----
+$ _INFO_:send STOMP message, destination = /app/talks/messages, content = {"content":"메세지내용~~"}, header = {"x-access-token" : "액세스 토큰 값"}
+----
 
 ==== Response fields
 |===
 |필드명|타입|필수여부|설명
-|`+createdAt+`
-|`+LocalDateTime(String)+`
+|`+timeStamp+`
+|`+LocalDateTime+`
 |true
-|보낸 시각
-|`+content+`
-|`+String+`
-|true
-|메세지 내용
+|응답 시각
 |`+type+`
 |`+String+`
 |true
-|응답 타입(고정값 : message). 이 응답이 다른 사람의 메세지 전송을 전달하는 응답이라는 뜻
-|`+sender+`
+|소켓 통신 유형. 고정값(TALK_MESSAGE)
+|`+data.content+`
 |`+String+`
 |true
-|보낸 사용자 정보
-|`+userId+`
+|메세지 내용
+|`+data.sender.userId+`
 |`+String+`
 |true
 |보낸 사용자 고유값
-|`+nickname+`
+|`+data.sender.nickname+`
 |`+String+`
 |true
 |보낸 사용자 닉네임
-|`+profileImg+`
+|`+data.sender.profileImg+`
 |`+String+`
 |true
 |보낸 사용자 프로필 사진
 |===
+
+==== Response body
+[source,http,options="nowrap"]
+----
+$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
+content-length:231
+message-id:716dc9e4-1749-66cd-e0ac-932e4d656238-1
+subscription:sub-0
+content-type:application/json
+destination:/topic/stage
+content-length:231
+
+{
+    "timeStamp":"2023/07/26 23:45:11",
+    "type":"TALK_MESSAGE",
+    "message":"라이브톡 메세지 전송",
+    "data":{
+        "content":"메세지내용~~",
+        "sender":{
+            "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+            "nickname":"user_1",
+            "profileImg":"http://이미지url"
+        }
+    }
+}
+
+----
