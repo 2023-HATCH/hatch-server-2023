@@ -6,7 +6,7 @@
 ==== Connect Request URL
 [source,http,options="nowrap"]
 ----
-ws://(서버주소):8080/ws-popo
+ws://(api서버주소):8080/ws-popo
 ----
 
 ==== Connect Response body
