@@ -40,6 +40,7 @@ public class StageSocketResponser {
         sendToStage(SocketResponseType.MVP_START, tempData);
     }
 
+
     private void sendToStage(SocketResponseType type) {
         sendToStage(type, null);
     }

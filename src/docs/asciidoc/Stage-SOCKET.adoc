@@ -1,0 +1,10 @@
+// 도메인 명 : h1
+= Stage (Web Socket)
+
+// 수동으로 작성
+include::stage-socket/user-count.adoc[]
+include::stage-socket/catch-start.adoc[]
+include::stage-socket/play-start.adoc[]
+include::stage-socket/mvp-start.adoc[]
+include::stage-socket/stage-routine-stop.adoc[]
+
