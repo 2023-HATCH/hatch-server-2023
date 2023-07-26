@@ -138,6 +138,29 @@ public class StageService {
     }
 
 
+    /**
+     * 스테이지 퇴장 로직 (임시)
+     * @param user
+     */
+    public void deleteStageUser(User user) {
+        log.info("[SERVICE] deleteStageUser");
 
+        // 인원수 decrease
+        String count = redisDao.getValues(StageRoutineService.STAGE_ENTER_USER_COUNT);
+        log.info("[SERVICE] count : {}", count);
 
+        if(count == null){
+            log.info("ERROR 입장한 사람이 없습니다. 퇴장이 불가합니다.");
+            return;
+        }
+
+        int decreasedCount = Integer.parseInt(count)-1;
+        redisDao.setValues(StageRoutineService.STAGE_ENTER_USER_COUNT, String.valueOf(decreasedCount));
+        log.info("[SERVICE] decreasedCount : {}", decreasedCount);
+
+        // redis 입장 목록에서 입장한 사용자 PK 제거
+        redisDao.removeValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
+
+        stageSocketResponser.userCount(decreasedCount);
+    }
 }

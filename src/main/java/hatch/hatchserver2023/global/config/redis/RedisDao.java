@@ -110,7 +110,10 @@ public class RedisDao {
         return values.range(key, start, end);
     }
 
-
+    public void removeValuesSet(String key, String data) {
+        SetOperations<String, String> values = redisTemplate.opsForSet();
+        values.remove(key, data);
+    }
     /**
      * 키값에 해당하는 데이터를 삭제하는 메서드
      * @param key
