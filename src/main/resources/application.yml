@@ -32,6 +32,9 @@ spring:
 #      encoding: utf-8
 #      # data-locations: "classpath: data.sql" #use different file for initializing data. default file is import.sql
 
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
 
 ### S3 ###
 cloud:

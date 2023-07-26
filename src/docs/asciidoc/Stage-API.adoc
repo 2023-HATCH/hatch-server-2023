@@ -1,0 +1,15 @@
+// 도메인 명 : h1
+= Stage
+
+// api 명 : h3
+=== *Enter Stage*
+스테이지 입장 api
+
+operation::enter-stage[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data,http-response']
+
+// api 명 : h3
+=== *Get Stage Enter Users*
+스테이지 내 사용자 목록 조회 api
+
+operation::get-stage-users[snippets='http-request,response-fields-beneath-data,http-response']
+

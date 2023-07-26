@@ -41,6 +41,8 @@ public class TalkController {
     @GetMapping("/messages")
     public ResponseEntity<CommonResponse> getTalkMessages(@RequestParam @NotNull @Min(0) Integer page,
                                                              @RequestParam @NotNull Integer size) {
+        log.info("[API] GET /talks/messages");
+
         Slice<TalkMessage> talkMessages = talkService.getTalkMessages(page, size);
         return ResponseEntity.ok().body(CommonResponse.toResponse(
                 TalkStatusCode.GET_TALK_MESSAGES_SUCCESS, TalkResponseDto.GetMessagesContainer.toDto(talkMessages)));
