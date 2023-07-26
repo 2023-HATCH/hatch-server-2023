@@ -1,6 +1,5 @@
 package hatch.hatchserver2023.domain.stage.application;
 
-import hatch.hatchserver2023.domain.stage.StageRoutineUtil;
 import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.stage.dto.AISimilarityRequestDto;
 import hatch.hatchserver2023.domain.stage.dto.StageResponseDto;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 public class StageService {
 
-    private final StageRoutineUtil stageRoutineUtil;
+    private final StageRoutineUtilService stageRoutineUtilService;
 
     @Autowired
     MusicRepository musicRepository;
@@ -37,9 +36,9 @@ public class StageService {
     @Value("${AI_SERVER_URL}")
     private String AI_SERVER_URL;
 
-    public StageService(RedisDao redisDao, StageRoutineUtil stageRoutineUtil, SimpMessagingTemplate simpMessagingTemplate) {
+    public StageService(RedisDao redisDao, StageRoutineUtilService stageRoutineUtilService, SimpMessagingTemplate simpMessagingTemplate) {
         this.redisDao = redisDao;
-        this.stageRoutineUtil = stageRoutineUtil;
+        this.stageRoutineUtilService = stageRoutineUtilService;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
@@ -82,36 +81,36 @@ public class StageService {
         log.info("[SERVICE] addAndGetStageUserCount");
 
         // 인원수 increase
-        String count = redisDao.getValues(StageRoutineUtil.STAGE_ENTER_USER_COUNT);
+        String count = redisDao.getValues(StageRoutineUtilService.STAGE_ENTER_USER_COUNT);
         log.info("[SERVICE] count : {}", count);
 
         int increasedCount = (count==null) ? 1 : Integer.parseInt(count)+1;
-        redisDao.setValues(StageRoutineUtil.STAGE_ENTER_USER_COUNT, String.valueOf(increasedCount));
+        redisDao.setValues(StageRoutineUtilService.STAGE_ENTER_USER_COUNT, String.valueOf(increasedCount));
         log.info("[SERVICE] increasedCount : {}", increasedCount);
         
         // redis 입장 목록에 입장한 사용자 정보 추가
-        redisDao.setValuesSet(StageRoutineUtil.STAGE_ENTER_USER_LIST, user.getId().toString());
+        redisDao.setValuesSet(StageRoutineUtilService.STAGE_ENTER_USER_LIST, user.getId().toString());
 
         String stageStatus = getStageStatus();
 
         switch (stageStatus) {
-            case StageRoutineUtil.STAGE_STATUS_WAIT:
+            case StageRoutineUtilService.STAGE_STATUS_WAIT:
                 log.info("stage status : wait ");
                 if (increasedCount >= 3) {
                     log.info("stage user count >= 3");
-                    stageRoutineUtil.startRoutine();
+                    stageRoutineUtilService.startRoutine();
                 }
                 else{
                     //TODO : DTO
-                    simpMessagingTemplate.convertAndSend(StageRoutineUtil.STAGE_SEND_WS_URL, "userCount : "+increasedCount);
+                    simpMessagingTemplate.convertAndSend(StageRoutineUtilService.STAGE_SEND_WS_URL, "userCount : "+increasedCount);
                 }
                 break;
 
-            case StageRoutineUtil.STAGE_STATUS_CATCH:
+            case StageRoutineUtilService.STAGE_STATUS_CATCH:
                 log.info("stage status : catch ");
                 break;
 
-            case StageRoutineUtil.STAGE_STATUS_MVP:
+            case StageRoutineUtilService.STAGE_STATUS_MVP:
                 log.info("stage status : mvp ");
                 break;
         }
@@ -125,8 +124,8 @@ public class StageService {
      */
     public String getStageStatus() {
         log.info("[SERVICE] getStageStatus");
-        String stageStatus = redisDao.getValues(StageRoutineUtil.STAGE_STATUS);
-        return (stageStatus==null) ? StageRoutineUtil.STAGE_STATUS_WAIT : stageStatus;
+        String stageStatus = redisDao.getValues(StageRoutineUtilService.STAGE_STATUS);
+        return (stageStatus==null) ? StageRoutineUtilService.STAGE_STATUS_WAIT : stageStatus;
         //TODO : 상태에 따라 진행중인 정보 같이 보내줘야 함
     }
 
@@ -136,7 +135,7 @@ public class StageService {
      */
     public List<Long> getStageEnterUserIds() {
         log.info("[SERVICE] getStageEnterUserProfiles");
-        Set<String> userIdSet = redisDao.getValuesSet(StageRoutineUtil.STAGE_ENTER_USER_LIST);
+        Set<String> userIdSet = redisDao.getValuesSet(StageRoutineUtilService.STAGE_ENTER_USER_LIST);
         List<String> userIds = new ArrayList<>(userIdSet);
         return userIds.stream().map(Long::parseLong).collect(Collectors.toList());
     }

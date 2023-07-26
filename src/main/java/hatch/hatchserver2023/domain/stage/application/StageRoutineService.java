@@ -1,4 +1,4 @@
-package hatch.hatchserver2023.domain.stage;
+package hatch.hatchserver2023.domain.stage.application;
 
 import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service //TODO ?
-public class StageRoutineUtil {
+public class StageRoutineUtilService {
 
     private final RedisDao redisDao;
 
@@ -30,7 +30,7 @@ public class StageRoutineUtil {
     public static final int STAGE_CATCH_TIME = 5;
     public static final int STAGE_MVP_TIME = 5;
 
-    public StageRoutineUtil(RedisDao redisDao, SimpMessagingTemplate simpMessagingTemplate) {
+    public StageRoutineUtilService(RedisDao redisDao, SimpMessagingTemplate simpMessagingTemplate) {
         this.redisDao = redisDao;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
@@ -101,7 +101,7 @@ public class StageRoutineUtil {
 
 
     public int getStageUserCount() {
-        String countString = redisDao.getValues(StageRoutineUtil.STAGE_ENTER_USER_COUNT);
+        String countString = redisDao.getValues(StageRoutineUtilService.STAGE_ENTER_USER_COUNT);
         log.info("StageRoutineUtil countString : {}", countString);
         return (countString==null) ? 0 : Integer.parseInt(countString);
     }

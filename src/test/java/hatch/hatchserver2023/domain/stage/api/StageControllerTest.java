@@ -1,15 +1,13 @@
 package hatch.hatchserver2023.domain.stage.api;
 
-import hatch.hatchserver2023.domain.stage.StageRoutineUtil;
+import hatch.hatchserver2023.domain.stage.application.StageRoutineUtilService;
 import hatch.hatchserver2023.domain.stage.application.StageService;
-import hatch.hatchserver2023.domain.talk.api.TalkController;
 import hatch.hatchserver2023.domain.talk.application.TalkService;
 import hatch.hatchserver2023.domain.talk.domain.TalkMessage;
 import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
-import hatch.hatchserver2023.global.common.response.code.TalkStatusCode;
 import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;
 import hatch.hatchserver2023.global.config.security.WithCustomAuth;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +30,6 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -42,11 +39,9 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -117,7 +112,7 @@ class StageControllerTest {
     void enterStage() throws Exception {
         //given
         int userCount = 1;
-        String stageStatus = StageRoutineUtil.STAGE_STATUS_WAIT;
+        String stageStatus = StageRoutineUtilService.STAGE_STATUS_WAIT;
 
         int page = 0;
         int size = 3;
