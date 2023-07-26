@@ -1,5 +1,6 @@
 package hatch.hatchserver2023.domain.stage.application;
 
+import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.socket.SocketResponseType;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
@@ -13,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Service //TODO ?
 public class StageRoutineService {
-    public static final String STAGE_SEND_WS_URL = "/topic/stage";
 
     public static final String STAGE_ENTER_USER_COUNT = "STAGE_ENTER_USER_COUNT";
     public static final String STAGE_ENTER_USER_LIST = "STAGE_ENTER_USER_LIST";
@@ -29,11 +29,11 @@ public class StageRoutineService {
 
     private final RedisDao redisDao;
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final StageSocketResponser stageSocketResponser;
 
-    public StageRoutineService(RedisDao redisDao, SimpMessagingTemplate simpMessagingTemplate) {
+    public StageRoutineService(RedisDao redisDao, StageSocketResponser stageSocketResponser) {
         this.redisDao = redisDao;
-        this.simpMessagingTemplate = simpMessagingTemplate;
+        this.stageSocketResponser = stageSocketResponser;
     }
 
     /**
@@ -64,16 +64,15 @@ public class StageRoutineService {
         }
         log.info("StageRoutineUtil : userCount < 3, end Stage routine");
         redisDao.deleteValues(STAGE_STATUS);
-        simpMessagingTemplate.convertAndSend(STAGE_SEND_WS_URL, CommonResponse.toSocketResponse(
-                SocketResponseType.STAGE_ROUTINE_STOP));
+
+        stageSocketResponser.stageRoutineStop();
     }
 
 
     private void startCatch() {
         log.info("StageRoutineUtil startCatch");
         redisDao.setValues(STAGE_STATUS, STAGE_STATUS_CATCH);
-        simpMessagingTemplate.convertAndSend(STAGE_SEND_WS_URL, CommonResponse.toSocketResponse(
-                SocketResponseType.CATCH_START, "개발중"));
+        stageSocketResponser.startCatch("개발중");
     }
 
     private void endCatch() {
@@ -83,8 +82,7 @@ public class StageRoutineService {
     private int startPlay() {
         log.info("StageRoutineUtil startPlay");
         redisDao.setValues(STAGE_STATUS, STAGE_STATUS_PLAY);
-        simpMessagingTemplate.convertAndSend(STAGE_SEND_WS_URL, CommonResponse.toSocketResponse(
-                SocketResponseType.PLAY_START, "개발중"));
+        stageSocketResponser.startPlay("개발중");
         int musicTime = 1;
         return musicTime;
     }
@@ -96,8 +94,7 @@ public class StageRoutineService {
     private void startMVP() {
         log.info("StageRoutineUtil startMVP");
         redisDao.setValues(STAGE_STATUS, STAGE_STATUS_MVP);
-        simpMessagingTemplate.convertAndSend(STAGE_SEND_WS_URL, CommonResponse.toSocketResponse(
-                SocketResponseType.MVP_START, "개발중"));
+        stageSocketResponser.startMVP("개발중");
     }
 
     private void endMVP() {

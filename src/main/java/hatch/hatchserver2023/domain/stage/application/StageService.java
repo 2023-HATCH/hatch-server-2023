@@ -1,19 +1,16 @@
 package hatch.hatchserver2023.domain.stage.application;
 
+import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
 import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.stage.dto.AISimilarityRequestDto;
 import hatch.hatchserver2023.domain.stage.dto.StageResponseDto;
-import hatch.hatchserver2023.domain.stage.dto.StageSocketResponseDto;
 import hatch.hatchserver2023.domain.stage.repository.MusicRepository;
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.global.common.response.CommonResponse;
-import hatch.hatchserver2023.global.common.response.socket.SocketResponseType;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -33,16 +30,16 @@ public class StageService {
 
     private final RedisDao redisDao;
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final StageSocketResponser stageSocketResponser;
 
     // 환경변수 주입
     @Value("${AI_SERVER_URL}")
     private String AI_SERVER_URL;
 
-    public StageService(RedisDao redisDao, StageRoutineService stageRoutineService, SimpMessagingTemplate simpMessagingTemplate) {
+    public StageService(RedisDao redisDao, StageRoutineService stageRoutineService, StageSocketResponser stageSocketResponser) {
         this.redisDao = redisDao;
         this.stageRoutineService = stageRoutineService;
-        this.simpMessagingTemplate = simpMessagingTemplate;
+        this.stageSocketResponser = stageSocketResponser;
     }
 
     /**
@@ -94,8 +91,7 @@ public class StageService {
         // redis 입장 목록에 입장한 사용자 PK 추가
         redisDao.setValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
 
-        simpMessagingTemplate.convertAndSend(StageRoutineService.STAGE_SEND_WS_URL, CommonResponse.toSocketResponse(
-                SocketResponseType.USER_COUNT, StageSocketResponseDto.UserCount.builder().userCount(increasedCount).build()));
+        stageSocketResponser.userCount(increasedCount);
 
         String stageStatus = getStageStatus();
         switch (stageStatus) {
