@@ -185,7 +185,7 @@ class StageControllerTest {
                                         fieldWithPath("talkMessageData.messages[].content").type(JsonFieldType.STRING).description("메세지 내용"),
                                         fieldWithPath("talkMessageData.messages[].sender.userId").type("UUID").description("메세지 전송자 식별자"),
                                         fieldWithPath("talkMessageData.messages[].sender.nickname").type(JsonFieldType.STRING).description("메세지 전송자 닉네임"),
-                                        fieldWithPath("talkMessageData.messages[].sender.profileImg").type(JsonFieldType.STRING).description("메세지 전송자 프로필사진")
+                                        fieldWithPath("talkMessageData.messages[].sender.profileImg").type(JsonFieldType.STRING).description("메세지 전송자 프로필사진").optional()
                                 )
                         )
                 )
@@ -261,7 +261,7 @@ class StageControllerTest {
                                         beneathPath("data"), // []
                                         fieldWithPath("userId").type("UUID").description("사용자 식별자"),
                                         fieldWithPath("nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
-                                        fieldWithPath("profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 url")
+                                        fieldWithPath("profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 url").optional()
                                 )
                         )
                 )
