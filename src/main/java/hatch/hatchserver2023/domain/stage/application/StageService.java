@@ -11,30 +11,36 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class StageService {
 
+    private final StageRoutineUtil stageRoutineUtil;
+
     @Autowired
     MusicRepository musicRepository;
 
     private final RedisDao redisDao;
-    private final StageRoutineUtil stageRoutineUtil; //?
+
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     // 환경변수 주입
     @Value("${AI_SERVER_URL}")
     private String AI_SERVER_URL;
 
-    public StageService(RedisDao redisDao, StageRoutineUtil stageRoutineUtil) {
+    public StageService(RedisDao redisDao, StageRoutineUtil stageRoutineUtil, SimpMessagingTemplate simpMessagingTemplate) {
         this.redisDao = redisDao;
         this.stageRoutineUtil = stageRoutineUtil;
+        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     /**
@@ -72,7 +78,7 @@ public class StageService {
      * @param user
      * @return
      */
-    public int addStageUser(User user) {
+    public int addStageUser(User user) { // TODO : 로직 깔끔하게 정리하기
         log.info("[SERVICE] addAndGetStageUserCount");
 
         // 인원수 increase
@@ -83,14 +89,33 @@ public class StageService {
         redisDao.setValues(StageRoutineUtil.STAGE_ENTER_USER_COUNT, String.valueOf(increasedCount));
         log.info("[SERVICE] increasedCount : {}", increasedCount);
         
-        // redis 입장 목록에 사용자 정보 추가
-        redisDao.setValuesSet(StageRoutineUtil.STAGE_ENTER_USER_LIST, user.getUuid().toString());
-        
-        if(getStageStatus().equals(StageRoutineUtil.STAGE_STATUS_WAIT) && increasedCount >= 3) {
-            log.info("stage user count >= 3");
-            // stage 상태 관리 클래스의 catch start 기능 호출
-            stageRoutineUtil.startRoutine();
+        // redis 입장 목록에 입장한 사용자 정보 추가
+        redisDao.setValuesSet(StageRoutineUtil.STAGE_ENTER_USER_LIST, user.getId().toString());
+
+        String stageStatus = getStageStatus();
+
+        switch (stageStatus) {
+            case StageRoutineUtil.STAGE_STATUS_WAIT:
+                log.info("stage status : wait ");
+                if (increasedCount >= 3) {
+                    log.info("stage user count >= 3");
+                    stageRoutineUtil.startRoutine();
+                }
+                else{
+                    //TODO : DTO
+                    simpMessagingTemplate.convertAndSend(StageRoutineUtil.STAGE_SEND_WS_URL, "userCount : "+increasedCount);
+                }
+                break;
+
+            case StageRoutineUtil.STAGE_STATUS_CATCH:
+                log.info("stage status : catch ");
+                break;
+
+            case StageRoutineUtil.STAGE_STATUS_MVP:
+                log.info("stage status : mvp ");
+                break;
         }
+
         return increasedCount;
     }
 
@@ -102,16 +127,18 @@ public class StageService {
         log.info("[SERVICE] getStageStatus");
         String stageStatus = redisDao.getValues(StageRoutineUtil.STAGE_STATUS);
         return (stageStatus==null) ? StageRoutineUtil.STAGE_STATUS_WAIT : stageStatus;
+        //TODO : 상태에 따라 진행중인 정보 같이 보내줘야 함
     }
 
     /**
-     * 스테이지 참여자 목록 확인 로직
+     * 스테이지 참여자 고유값 목록 확인 로직
      * @return
      */
-    public List<String> getStageEnterUsers() {
+    public List<Long> getStageEnterUserIds() {
         log.info("[SERVICE] getStageEnterUserProfiles");
-        Set<String> users = redisDao.getValuesSet(StageRoutineUtil.STAGE_ENTER_USER_LIST);
-        return new ArrayList<>(users);
+        Set<String> userIdSet = redisDao.getValuesSet(StageRoutineUtil.STAGE_ENTER_USER_LIST);
+        List<String> userIds = new ArrayList<>(userIdSet);
+        return userIds.stream().map(Long::parseLong).collect(Collectors.toList());
     }
 
 
