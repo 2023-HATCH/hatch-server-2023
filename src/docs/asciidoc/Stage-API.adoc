@@ -1,0 +1,9 @@
+// 도메인 명 : h1
+= Stage
+
+// api 명 : h3
+=== *Enter Stage*
+스테이지 입장 api
+
+operation::enter-stage[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data,http-response']
+

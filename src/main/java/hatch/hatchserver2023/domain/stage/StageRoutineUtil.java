@@ -22,10 +22,10 @@ public class StageRoutineUtil {
     public static final String STAGE_ENTER_USER_LIST = "STAGE_ENTER_USER_LIST";
 
     public static final String STAGE_STATUS = "STAGE_STATUS";
-    public static final String STAGE_STATUS_WAIT = "STAGE_STATUS_WAIT";
-    public static final String STAGE_STATUS_CATCH = "STAGE_STATUS_CATCH";
-    public static final String STAGE_STATUS_PLAY = "STAGE_STATUS_PLAY";
-    public static final String STAGE_STATUS_MVP = "STAGE_STATUS_MVP";
+    public static final String STAGE_STATUS_WAIT = "WAIT";
+    public static final String STAGE_STATUS_CATCH = "CATCH";
+    public static final String STAGE_STATUS_PLAY = "PLAY";
+    public static final String STAGE_STATUS_MVP = "MVP";
 
     public static final int STAGE_CATCH_TIME = 5;
     public static final int STAGE_MVP_TIME = 5;

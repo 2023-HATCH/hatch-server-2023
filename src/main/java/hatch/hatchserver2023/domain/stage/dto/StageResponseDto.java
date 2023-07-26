@@ -29,13 +29,13 @@ public class StageResponseDto {
     public static class Enter {
         private String stageStatus;
         private Integer userCount;
-        private TalkResponseDto.GetMessagesContainer messages;
+        private TalkResponseDto.GetMessagesContainer talkMessageData;
 
         public static StageResponseDto.Enter toDto(String stageStatus, Integer userCount, Slice<TalkMessage> talkMessages) {
             return Enter.builder()
                     .stageStatus(stageStatus)
                     .userCount(userCount)
-                    .messages(TalkResponseDto.GetMessagesContainer.toDto(talkMessages))
+                    .talkMessageData(TalkResponseDto.GetMessagesContainer.toDto(talkMessages))
                     .build();
         }
     }
