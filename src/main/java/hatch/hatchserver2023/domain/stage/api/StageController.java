@@ -75,6 +75,22 @@ public class StageController {
     }
 
     /**
+     * 스테이지 사용자 퇴장 api (임시)
+     * @param user
+     * @return
+     */
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @GetMapping("/exit")
+    public ResponseEntity<CommonResponse> exitStage(@AuthenticationPrincipal User user) {
+        log.info("[API] GET /stage/exit");
+        stageService.deleteStageUser(user);
+
+        return ResponseEntity.ok().body(CommonResponse.toResponse(
+                CommonCode.OK));
+    }
+
+
+    /**
      * 안무 정확도 계산 API
      * 음악 제목과 안무 스켈레톤 배열을 입력하면 AI 서버와 통신하여 해당 곡 안무 정답과의 유사도 계산
      *

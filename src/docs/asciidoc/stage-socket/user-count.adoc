@@ -1,7 +1,7 @@
 
 // api 명 : h3
 === *User Count*
-스테이지 내 사용자 수 변경 시 응답
+(응답) 스테이지 내 사용자 수 변경 시 응답
 
 
 ==== Response fields

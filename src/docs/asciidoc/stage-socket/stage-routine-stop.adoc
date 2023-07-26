@@ -1,7 +1,7 @@
 
 // api 명 : h3
 === *Stage Routine Stop*
-스테이지 진행 멈춤
+(응답) 스테이지 진행 멈춤
 
 
 ==== Response fields
