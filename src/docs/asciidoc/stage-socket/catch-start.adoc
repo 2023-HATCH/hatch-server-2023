@@ -1,7 +1,7 @@
 
 // api 명 : h3
 === *Catch Start*
-스테이지 캐치 시작
+(응답) 스테이지 캐치 시작
 
 
 ==== Response fields
