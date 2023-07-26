@@ -1,6 +1,6 @@
 package hatch.hatchserver2023.domain.stage.api;
 
-import hatch.hatchserver2023.domain.stage.application.StageRoutineUtilService;
+import hatch.hatchserver2023.domain.stage.application.StageRoutineService;
 import hatch.hatchserver2023.domain.stage.application.StageService;
 import hatch.hatchserver2023.domain.talk.application.TalkService;
 import hatch.hatchserver2023.domain.talk.domain.TalkMessage;
@@ -112,7 +112,7 @@ class StageControllerTest {
     void enterStage() throws Exception {
         //given
         int userCount = 1;
-        String stageStatus = StageRoutineUtilService.STAGE_STATUS_WAIT;
+        String stageStatus = StageRoutineService.STAGE_STATUS_WAIT;
 
         int page = 0;
         int size = 3;

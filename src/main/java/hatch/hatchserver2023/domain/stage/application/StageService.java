@@ -3,8 +3,11 @@ package hatch.hatchserver2023.domain.stage.application;
 import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.stage.dto.AISimilarityRequestDto;
 import hatch.hatchserver2023.domain.stage.dto.StageResponseDto;
+import hatch.hatchserver2023.domain.stage.dto.StageSocketResponseDto;
 import hatch.hatchserver2023.domain.stage.repository.MusicRepository;
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.global.common.response.CommonResponse;
+import hatch.hatchserver2023.global.common.response.socket.SocketResponseType;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 public class StageService {
 
-    private final StageRoutineUtilService stageRoutineUtilService;
+    private final StageRoutineService stageRoutineService;
 
     @Autowired
     MusicRepository musicRepository;
@@ -36,9 +39,9 @@ public class StageService {
     @Value("${AI_SERVER_URL}")
     private String AI_SERVER_URL;
 
-    public StageService(RedisDao redisDao, StageRoutineUtilService stageRoutineUtilService, SimpMessagingTemplate simpMessagingTemplate) {
+    public StageService(RedisDao redisDao, StageRoutineService stageRoutineService, SimpMessagingTemplate simpMessagingTemplate) {
         this.redisDao = redisDao;
-        this.stageRoutineUtilService = stageRoutineUtilService;
+        this.stageRoutineService = stageRoutineService;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
@@ -77,40 +80,38 @@ public class StageService {
      * @param user
      * @return
      */
-    public int addStageUser(User user) { // TODO : 로직 깔끔하게 정리하기
+    public int addStageUser(User user) { // TODO : 로직 깔끔하게 정리하기, 응답 로직 다른 파일로 빼서 모으기
         log.info("[SERVICE] addAndGetStageUserCount");
 
         // 인원수 increase
-        String count = redisDao.getValues(StageRoutineUtilService.STAGE_ENTER_USER_COUNT);
+        String count = redisDao.getValues(StageRoutineService.STAGE_ENTER_USER_COUNT);
         log.info("[SERVICE] count : {}", count);
 
         int increasedCount = (count==null) ? 1 : Integer.parseInt(count)+1;
-        redisDao.setValues(StageRoutineUtilService.STAGE_ENTER_USER_COUNT, String.valueOf(increasedCount));
+        redisDao.setValues(StageRoutineService.STAGE_ENTER_USER_COUNT, String.valueOf(increasedCount));
         log.info("[SERVICE] increasedCount : {}", increasedCount);
         
-        // redis 입장 목록에 입장한 사용자 정보 추가
-        redisDao.setValuesSet(StageRoutineUtilService.STAGE_ENTER_USER_LIST, user.getId().toString());
+        // redis 입장 목록에 입장한 사용자 PK 추가
+        redisDao.setValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
+
+        simpMessagingTemplate.convertAndSend(StageRoutineService.STAGE_SEND_WS_URL, CommonResponse.toSocketResponse(
+                SocketResponseType.USER_COUNT, StageSocketResponseDto.UserCount.builder().userCount(increasedCount).build()));
 
         String stageStatus = getStageStatus();
-
         switch (stageStatus) {
-            case StageRoutineUtilService.STAGE_STATUS_WAIT:
+            case StageRoutineService.STAGE_STATUS_WAIT:
                 log.info("stage status : wait ");
                 if (increasedCount >= 3) {
                     log.info("stage user count >= 3");
-                    stageRoutineUtilService.startRoutine();
-                }
-                else{
-                    //TODO : DTO
-                    simpMessagingTemplate.convertAndSend(StageRoutineUtilService.STAGE_SEND_WS_URL, "userCount : "+increasedCount);
+                    stageRoutineService.startRoutine();
                 }
                 break;
 
-            case StageRoutineUtilService.STAGE_STATUS_CATCH:
+            case StageRoutineService.STAGE_STATUS_CATCH:
                 log.info("stage status : catch ");
                 break;
 
-            case StageRoutineUtilService.STAGE_STATUS_MVP:
+            case StageRoutineService.STAGE_STATUS_MVP:
                 log.info("stage status : mvp ");
                 break;
         }
@@ -124,8 +125,8 @@ public class StageService {
      */
     public String getStageStatus() {
         log.info("[SERVICE] getStageStatus");
-        String stageStatus = redisDao.getValues(StageRoutineUtilService.STAGE_STATUS);
-        return (stageStatus==null) ? StageRoutineUtilService.STAGE_STATUS_WAIT : stageStatus;
+        String stageStatus = redisDao.getValues(StageRoutineService.STAGE_STATUS);
+        return (stageStatus==null) ? StageRoutineService.STAGE_STATUS_WAIT : stageStatus;
         //TODO : 상태에 따라 진행중인 정보 같이 보내줘야 함
     }
 
@@ -135,7 +136,7 @@ public class StageService {
      */
     public List<Long> getStageEnterUserIds() {
         log.info("[SERVICE] getStageEnterUserProfiles");
-        Set<String> userIdSet = redisDao.getValuesSet(StageRoutineUtilService.STAGE_ENTER_USER_LIST);
+        Set<String> userIdSet = redisDao.getValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST);
         List<String> userIds = new ArrayList<>(userIdSet);
         return userIds.stream().map(Long::parseLong).collect(Collectors.toList());
     }
