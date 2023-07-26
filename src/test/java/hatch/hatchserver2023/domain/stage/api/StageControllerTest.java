@@ -42,6 +42,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -82,6 +83,10 @@ class StageControllerTest {
 
     private User user;
 
+    private UUID uuid;
+    private String nickname;
+    private String profileImg;
+
     @BeforeEach
     void setUp(final WebApplicationContext context,
                final RestDocumentationContextProvider provider) {
@@ -95,9 +100,9 @@ class StageControllerTest {
                 .build();
 
         log.info("set up");
-        UUID uuid = UUID.randomUUID();
-        String nickname = "nicknameTest";
-        String profileImg = "http://testurl";
+        uuid = UUID.randomUUID();
+        nickname = "nicknameTest";
+        profileImg = "http://testurl";
 
         user = User.builder()
                 .uuid(uuid)
@@ -123,7 +128,7 @@ class StageControllerTest {
         //when
         when(stageService.addStageUser(any(User.class))).thenReturn(userCount);
         when(stageService.getStageStatus()).thenReturn(stageStatus);
-        when(talkService.getTalkMessages(page,size)).thenReturn(talkMessages);
+        when(talkService.getTalkMessages(page, size)).thenReturn(talkMessages);
 
         //then
         MockHttpServletRequestBuilder requestGet = get("/api/v1/stage/enter")
@@ -157,6 +162,7 @@ class StageControllerTest {
                 .andExpect(jsonPath("$.data.talkMessageData.messages[1].sender.profileImg").value(user.getProfileImg()))
         ;
 
+        //docs
         resultActions
                 .andDo(
                         docs.document(
@@ -205,7 +211,70 @@ class StageControllerTest {
     }
 
 
-//    @Test
-//    void getStageUsers() {
-//    }
+    @Test
+    void getStageUsers() throws Exception {
+        //given
+        List<Long> userIds = List.of(1L, 2L, 3L);
+        User user1 = makeDummyUser(userIds.get(0).intValue());
+        User user2 = makeDummyUser(userIds.get(1).intValue());
+        User user3 = makeDummyUser(userIds.get(2).intValue());
+        List<User> users = List.of(user1, user2, user3);
+
+        //when
+        when(stageService.getStageEnterUserIds()).thenReturn(userIds);
+        when(userUtilService.getUsersById(userIds)).thenReturn(users);
+
+        //then
+        MockHttpServletRequestBuilder requestGet = get("/api/v1/stage/users")
+                .header("x-access-token", "액세스 토큰 값")
+                .header("x-refresh-token", "리프레시 토큰 값")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf().asHeader());
+
+        ResultActions resultActions = mockMvc.perform(requestGet);
+
+        StatusCode code = CommonCode.OK;
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(code.getCode()))
+                .andExpect(jsonPath("$.message").value(code.getMessage()))
+                .andExpect(jsonPath("$.data.[0].userId").value(uuid.toString()))
+                .andExpect(jsonPath("$.data.[0].nickname").value(nickname+1))
+                .andExpect(jsonPath("$.data.[0].profileImg").value(profileImg+1))
+                .andExpect(jsonPath("$.data.[1].userId").value(uuid.toString()))
+                .andExpect(jsonPath("$.data.[1].nickname").value(nickname+2))
+                .andExpect(jsonPath("$.data.[1].profileImg").value(profileImg+2))
+                .andExpect(jsonPath("$.data.[2].userId").value(uuid.toString()))
+                .andExpect(jsonPath("$.data.[2].nickname").value(nickname+3))
+                .andExpect(jsonPath("$.data.[2].profileImg").value(profileImg+3))
+        ;
+
+        //docs
+        resultActions
+                .andDo(
+                        docs.document(
+                                requestHeaders(
+                                        headerWithName("x-access-token").description("액세스 토큰 값"),
+                                        headerWithName("x-refresh-token").description("리프레시 토큰 값").optional()
+                                ),
+                                responseFields(
+                                        beneathPath("data"), // []
+                                        fieldWithPath("userId").type("UUID").description("사용자 식별자"),
+                                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
+                                        fieldWithPath("profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 url")
+                                )
+                        )
+                )
+        ;
+
+
+    }
+
+    private User makeDummyUser(int num) {
+        return User.builder()
+                .uuid(uuid)
+                .nickname(nickname+num)
+                .profileImg(profileImg+num)
+                .build();
+    }
 }
