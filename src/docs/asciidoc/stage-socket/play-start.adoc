@@ -1,0 +1,42 @@
+
+// api 명 : h3
+=== *Play Start*
+(응답) 스테이지 플레이 시작
+
+
+==== Response fields
+|===
+|필드명|타입|필수여부|설명
+|`+timeStamp+`
+|`+LocalDateTime+`
+|true
+|응답 시각
+|`+type+`
+|`+String+`
+|true
+|소켓 통신 유형. 고정값(PLAY_START)
+|`+data.+`
+|`+-+`
+|true
+|개발중
+|===
+
+
+==== Response body
+[source,http,options="nowrap"]
+----
+$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
+content-length:116
+message-id:c7b84486-b761-c839-8f41-998629713a8b-3
+subscription:sub-0
+content-type:application/json
+destination:/topic/stage
+content-length:116
+
+{
+    "timeStamp":"2023/07/26 23:29:43",
+    "type":"PLAY_START",
+    "message":"스테이지 플레이 시작",
+    "data":"개발중"
+}
+----

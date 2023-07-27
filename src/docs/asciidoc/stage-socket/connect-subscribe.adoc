@@ -1,0 +1,33 @@
+
+// api 명 : h3
+=== Connect
+웹소켓 통신 연결 요청
+
+==== Connect Request URL
+[source,http,options="nowrap"]
+----
+ws://(api서버주소):8080/ws-popo
+----
+
+==== Connect Response body
+[source,http,options="wrap"]
+----
+$ _INFO_:Connect STOMP server success, url = ws://localhost:8080/ws-popo, connectHeader = {"x-access-token" : "액세스 토큰 값"}
+----
+
+
+=== Subscribe Stage
+스테이지 구독 요청 (스테이지 진행상황과 라이브톡 수신)
+
+==== Subscribe Stage Request URL Path
+[source,http,options="nowrap"]
+----
+/topic/stage
+----
+
+==== Subscribe Response body
+[source,http,options="nowrap"]
+----
+$ _INFO_:subscribe destination /topic/stage success
+----
+

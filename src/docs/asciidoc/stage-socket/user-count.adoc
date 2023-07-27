@@ -1,0 +1,44 @@
+
+// api 명 : h3
+=== *User Count*
+(응답) 스테이지 내 사용자 수 변경 시 응답
+
+
+==== Response fields
+|===
+|필드명|타입|필수여부|설명
+|`+timeStamp+`
+|`+LocalDateTime+`
+|true
+|응답 시각
+|`+type+`
+|`+String+`
+|true
+|소켓 통신 유형. 고정값(USER_COUNT)
+|`+data.userCount+`
+|`+Integer+`
+|true
+|사용자수
+|===
+
+
+==== Response body
+[source,http,options="nowrap"]
+----
+$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
+content-length:113
+message-id:c7b84486-b761-c839-8f41-998629713a8b-0
+subscription:sub-0
+content-type:application/json
+destination:/topic/stage
+content-length:113
+
+{
+    "timeStamp":"2023/07/26 23:29:38",
+    "type":"USER_COUNT",
+    "message":"스테이지 인원수",
+    "data":{
+        "userCount":2
+    }
+}
+----

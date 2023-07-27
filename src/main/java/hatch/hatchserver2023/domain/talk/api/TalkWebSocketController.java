@@ -6,6 +6,8 @@ import hatch.hatchserver2023.domain.talk.dto.TalkRequestDto;
 import hatch.hatchserver2023.domain.talk.dto.TalkResponseDto;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
+import hatch.hatchserver2023.global.common.response.CommonResponse;
+import hatch.hatchserver2023.global.common.response.socket.SocketResponseType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -14,13 +16,11 @@ import org.springframework.stereotype.Controller;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 @Slf4j
 @Controller
 public class TalkWebSocketController {
-    private final String TYPE_TALK_MESSAGE = "message";
-    private final String TYPE_TALK_REACTION = "reaction";
+    private final String TALK_WS_SEND_URL = "/topic/stage";
 
     private final TalkService talkService;
     private final SimpMessagingTemplate simpMessagingTemplate;
@@ -57,13 +57,11 @@ public class TalkWebSocketController {
         TalkMessage savedTalkMessage = talkService.saveTalkMessage(requestDto.toEntity(), sender);
 
         TalkResponseDto.SendMessage responseDto = TalkResponseDto.SendMessage.builder()
-                .type(TYPE_TALK_MESSAGE)
                 .content(savedTalkMessage.getContent())
-                .createdAt(savedTalkMessage.getCreatedAt().toString())
                 .sender(UserResponseDto.SimpleUserProfile.toDto(sender))
                 .build();
 
-        simpMessagingTemplate.convertAndSend("/topic/stage", responseDto);
+        simpMessagingTemplate.convertAndSend(TALK_WS_SEND_URL, CommonResponse.toSocketResponse(SocketResponseType.TALK_MESSAGE, responseDto));
     }
 
     /**
@@ -72,13 +70,7 @@ public class TalkWebSocketController {
     @MessageMapping("/talks/reactions")
     public void sendTalkReaction() {
         log.info("[WS] /app/talks/reactions");
-
-        TalkResponseDto.SendReaction responseDto = TalkResponseDto.SendReaction.builder()
-                .type(TYPE_TALK_REACTION)
-                .createdAt(LocalDateTime.now().toString())
-                .build();
-
-        simpMessagingTemplate.convertAndSend("/topic/stage", responseDto);
+        simpMessagingTemplate.convertAndSend(TALK_WS_SEND_URL, CommonResponse.toSocketResponse(SocketResponseType.TALK_REACTION));
     }
 
 }

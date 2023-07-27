@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class UserResponseDto {
 
@@ -34,6 +36,10 @@ public class UserResponseDto {
         private UUID userId;
         private String nickname;
         private String profileImg;
+
+        public static List<SimpleUserProfile> toDtos(List<User> users) {
+            return users.stream().map(SimpleUserProfile::toDto).collect(Collectors.toList());
+        }
 
         public static SimpleUserProfile toDto(User user) {
             return SimpleUserProfile.builder()
