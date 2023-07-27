@@ -32,7 +32,14 @@ public class TalkService {
     }
 
 
+    /**
+     * 스테이지 라이브톡 메세지 목록 조회 로직
+     * @param page
+     * @param size
+     * @return
+     */
     public Slice<TalkMessage> getTalkMessages(int page, int size) {
+        log.info("[SERVICE] getTalkMessages");
         Pageable pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending()); //service 로?
         return talkRepository.findAll(pageRequest);
     }

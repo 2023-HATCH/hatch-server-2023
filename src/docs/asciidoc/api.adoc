@@ -12,6 +12,10 @@ include::User-API.adoc[]
 '''
 include::Video-API.adoc[]
 '''
+include::Stage-API.adoc[]
+'''
+include::Stage-SOCKET.adoc[]
+'''
 include::Talk-API.adoc[]
 '''
 include::Talk-SOCKET.adoc[]

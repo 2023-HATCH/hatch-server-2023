@@ -40,6 +40,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -131,6 +133,8 @@ class TalkControllerTest {
         MockHttpServletRequestBuilder requestGet = get("/api/v1/talks/messages")
                 .param("page", String.valueOf(page))
                 .param("size", String.valueOf(size))
+                .header("x-access-token", "액세스 토큰 값")
+                .header("x-refresh-token", "리프레시 토큰 값")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf().asHeader()); // csrf가 request parameter 로 들어갈 경우 문서화 필수 오류 해결
 
@@ -159,6 +163,10 @@ class TalkControllerTest {
         resultActions
                 .andDo(
                         docs.document(
+                                requestHeaders(
+                                        headerWithName("x-access-token").description("액세스 토큰 값"),
+                                        headerWithName("x-refresh-token").description("리프레시 토큰 값")
+                                ),
                                 requestParameters(
                                         parameterWithName("page").description("조회할 페이지 번호"),
                                         parameterWithName("size").description("조회할 한 페이지 크기")
