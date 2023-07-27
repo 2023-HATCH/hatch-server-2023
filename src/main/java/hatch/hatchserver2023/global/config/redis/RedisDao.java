@@ -4,7 +4,6 @@ import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Set;
 
 @Component
@@ -96,6 +95,10 @@ public class RedisDao {
     public Set<String> getValuesSet(String key) {
         SetOperations<String, String> values = redisTemplate.opsForSet();
         return values.members(key);
+    }
+    public Long getSetSize(String key) {
+        SetOperations<String, String> values = redisTemplate.opsForSet();
+        return values.size(key);
     }
 
     /**
