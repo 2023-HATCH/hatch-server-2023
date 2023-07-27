@@ -161,6 +161,21 @@ public class StageService {
         // redis 입장 목록에서 입장한 사용자 PK 제거
         redisDao.removeValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
 
+        tempCheckStageEmpty();
+
         stageSocketResponser.userCount(decreasedCount);
+    }
+
+    /**
+     * 개발편의상 개발한 임시 로직 (한 사용자 여러번 count+1 가능한 환경 유지)
+     * 스테이지 exit 시 사용자 목록이 비어있으면 사용자수 0으로 변경
+     */
+    private void tempCheckStageEmpty() {
+        Long size = redisDao.getSetSize(StageRoutineService.STAGE_ENTER_USER_LIST);
+        log.info("tempCheckStageEmpty STAGE_ENTER_USER_LIST set size : {}", size);
+        if(size==0) {
+            log.info("tempCheckStageEmpty set STAGE_ENTER_USER_COUNT = 0");
+            redisDao.setValues(StageRoutineService.STAGE_ENTER_USER_COUNT, "0");
+        }
     }
 }
