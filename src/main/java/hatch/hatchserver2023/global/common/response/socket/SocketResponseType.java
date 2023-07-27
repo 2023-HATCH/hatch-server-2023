@@ -2,7 +2,7 @@ package hatch.hatchserver2023.global.common.response.socket;
 
 public enum SocketResponseType {
     TALK_MESSAGE( "TALK_MESSAGE", "라이브톡 메세지 전송"),
-    REACTION( "REACTION", "라이브톡 반응 전송"),
+    TALK_REACTION( "TALK_REACTION", "라이브톡 반응 전송"),
 
     USER_COUNT( "USER_COUNT", "스테이지 인원수"),
 

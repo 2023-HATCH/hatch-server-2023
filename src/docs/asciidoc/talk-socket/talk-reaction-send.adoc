@@ -12,21 +12,45 @@
 |액세스 토큰
 |===
 
+==== Request body
+[source,http,options="wrap"]
+----
+$ _INFO_:send STOMP message, destination = /app/talks/reactions, content = , header = {"x-access-token" : "액세스 토큰 값"}
+----
+
 
 ==== Response fields
 |===
 |필드명|타입|필수여부|설명
-|`+createdAt+`
-|`+LocalDateTime(String)+`
+|`+timeStamp+`
+|`+LocalDateTime+`
 |true
-|보낸 시각
-|`+content+`
-|`+String+`
-|true
-|메세지 내용
+|응답 시각
 |`+type+`
 |`+String+`
 |true
-|응답 타입(고정값 : reaction). 이 응답이 다른 사람의 반응 전송을 전달하는 응답이라는 뜻
+|소켓 통신 유형. 고정값(TALK_REACTION)
+|`+data.content+`
+|`+String+`
+|true
+|메세지 내용
 |===
 
+
+==== Response body
+[source,http,options="nowrap"]
+----
+$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
+content-length:97
+message-id:716dc9e4-1749-66cd-e0ac-932e4d656238-0
+subscription:sub-0
+content-type:application/json
+destination:/topic/stage
+content-length:97
+
+{
+    "timeStamp":"2023/07/26 23:44:27",
+    "type":"TALK_REACTION",
+    "message":"라이브톡 반응 전송"
+}
+----

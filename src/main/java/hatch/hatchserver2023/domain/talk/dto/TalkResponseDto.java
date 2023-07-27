@@ -20,19 +20,19 @@ public class TalkResponseDto {
     @Getter
     @Builder
     public static class SendMessage{
-        private String type;
-        private String createdAt;
+//        private String type;
+//        private String createdAt;
         private String content;
         private UserResponseDto.SimpleUserProfile sender;
     }
 
-    @ToString
-    @Getter
-    @Builder
-    public static class SendReaction{
-        private String type;
-        private String createdAt;
-    }
+//    @ToString
+//    @Getter
+//    @Builder
+//    public static class SendReaction{
+//        private String type;
+//        private String createdAt;
+//    }
 
     @ToString
     @Getter

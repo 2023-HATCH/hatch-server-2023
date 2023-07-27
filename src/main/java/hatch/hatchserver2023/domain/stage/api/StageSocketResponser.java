@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 //@Slf4j
 @Component
 public class StageSocketResponser {
-    private static final String STAGE_SEND_WS_URL = "/topic/stage";
+    private final String STAGE_WS_SEND_URL = "/topic/stage";
 
     private final SimpMessagingTemplate simpMessagingTemplate;
 
@@ -46,7 +46,7 @@ public class StageSocketResponser {
     }
 
     private void sendToStage(SocketResponseType type, Object data) {
-        simpMessagingTemplate.convertAndSend(STAGE_SEND_WS_URL, CommonResponse.toSocketResponse(type, data));
+        simpMessagingTemplate.convertAndSend(STAGE_WS_SEND_URL, CommonResponse.toSocketResponse(type, data));
     }
 
 }
