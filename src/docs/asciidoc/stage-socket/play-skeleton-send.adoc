@@ -3,6 +3,8 @@
 === *Send Play Skeleton*
 스테이지 플레이 스켈레톤 전송
 
+- URL : `/app/stage/play/skeleton`
+
 ==== Request header
 |===
 |필드명|타입|필수여부|제약조건|설명
