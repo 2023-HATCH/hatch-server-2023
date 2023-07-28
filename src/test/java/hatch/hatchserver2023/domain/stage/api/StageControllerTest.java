@@ -7,6 +7,7 @@ import hatch.hatchserver2023.domain.talk.domain.TalkMessage;
 import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.response.code.CommonCode;
+import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;
 import hatch.hatchserver2023.global.config.security.WithCustomAuth;
@@ -136,7 +137,7 @@ class StageControllerTest {
 
         ResultActions resultActions = mockMvc.perform(requestGet);
 
-        StatusCode code = CommonCode.OK;
+        StatusCode code = StageStatusCode.GET_STAGE_ENTER_SUCCESS;
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(code.getCode()))
@@ -228,7 +229,7 @@ class StageControllerTest {
 
         ResultActions resultActions = mockMvc.perform(requestGet);
 
-        StatusCode code = CommonCode.OK;
+        StatusCode code = StageStatusCode.GET_STAGE_ENTER_USER_LIST_SUCCESS;
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(code.getCode()))
