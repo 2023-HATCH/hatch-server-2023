@@ -26,6 +26,13 @@ public class StageSocketResponseDto {
     public static class CatchEnd {
         private List<Player> players;
         private Object music; // TODO
+
+        public static CatchEnd toDto(List<Player> players, Object music) {
+            return CatchEnd.builder()
+                    .players(players)
+                    .music(music)
+                    .build();
+        }
     }
 
     @ToString
