@@ -137,6 +137,7 @@ public class StageService {
      */
     public String getStageStatus() {
         log.info("[SERVICE] getStageStatus");
+        //TODO : 상태 확인 로직 StageRoutineService로 뺄까?
         String stageStatus = redisDao.getValues(StageRoutineService.STAGE_STATUS);
         return (stageStatus==null) ? StageRoutineService.STAGE_STATUS_WAIT : stageStatus;
         //TODO : 상태에 따라 진행중인 정보 같이 보내줘야 함
@@ -153,6 +154,23 @@ public class StageService {
         return userIds.stream().map(Long::parseLong).collect(Collectors.toList());
     }
 
+
+    /**
+     * 스테이지 캐치 등록 로직
+     * @param user
+     */
+    public void registerCatch(User user) {
+        log.info("[SERVICE] registerCatch");
+
+        if(!getStageStatus().equals(StageRoutineService.STAGE_STATUS_CATCH)) {
+            throw new StageException(StageStatusCode.STAGE_STATUS_NOT_CATCH);
+        }
+
+        final long now = System.currentTimeMillis();
+        log.info("registerCatch user id : {}, nickname : {}, time : {}", user.getId(), user.getNickname(), now);
+        redisDao.setValuesZSet(StageRoutineService.STAGE_CATCH_USER_LIST, user.getId().toString(), (int) now);
+//        redisDao.setValuesHash(StageRoutineService.STAGE_CATCH_USER_LIST, (int) now, user);
+    }
 
     /**
      * 스테이지 퇴장 로직 (임시)
@@ -198,4 +216,5 @@ public class StageService {
             redisDao.setValues(StageRoutineService.STAGE_ENTER_USER_COUNT, "0");
         }
     }
+
 }

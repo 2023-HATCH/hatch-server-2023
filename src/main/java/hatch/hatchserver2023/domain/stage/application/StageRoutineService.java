@@ -1,15 +1,17 @@
 package hatch.hatchserver2023.domain.stage.application;
 
 import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
-import hatch.hatchserver2023.global.common.response.CommonResponse;
-import hatch.hatchserver2023.global.common.response.socket.SocketResponseType;
+import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service //TODO ?
@@ -17,6 +19,7 @@ public class StageRoutineService {
 
     public static final String STAGE_ENTER_USER_COUNT = "STAGE_ENTER_USER_COUNT";
     public static final String STAGE_ENTER_USER_LIST = "STAGE_ENTER_USER_LIST";
+    public static final String STAGE_CATCH_USER_LIST = "STAGE_CATCH_USER_LIST";
 
     public static final String STAGE_STATUS = "STAGE_STATUS";
     public static final String STAGE_STATUS_WAIT = "WAIT";
@@ -24,14 +27,17 @@ public class StageRoutineService {
     public static final String STAGE_STATUS_PLAY = "PLAY";
     public static final String STAGE_STATUS_MVP = "MVP";
 
-    public static final int STAGE_CATCH_TIME = 3;
+    public static final int STAGE_CATCH_TIME = 5;
     public static final int STAGE_MVP_TIME = 7;
 
+
+    private final UserRepository userRepository;
     private final RedisDao redisDao;
 
     private final StageSocketResponser stageSocketResponser;
 
-    public StageRoutineService(RedisDao redisDao, StageSocketResponser stageSocketResponser) {
+    public StageRoutineService(UserRepository userRepository, RedisDao redisDao, StageSocketResponser stageSocketResponser) {
+        this.userRepository = userRepository;
         this.redisDao = redisDao;
         this.stageSocketResponser = stageSocketResponser;
     }
@@ -76,7 +82,13 @@ public class StageRoutineService {
     }
 
     private void endCatch() {
-        log.info("StageRoutineUtil finishCatch");
+        log.info("StageRoutineUtil endCatch");
+        Set<String> userIds = redisDao.getValuesZSet(STAGE_CATCH_USER_LIST, 0, 2);
+        log.info("endCatch userIds : {}", userIds);
+        List<User> users = userRepository.findAllById(userIds.stream().map(Long::parseLong).collect(Collectors.toList()));
+        log.info("endCatch users nickname : {}", users.stream().map(User::getNickname).collect(Collectors.toList()));
+        stageSocketResponser.endCatch(users);
+        redisDao.deleteValues(STAGE_CATCH_USER_LIST);
     }
 
     private int startPlay() {
@@ -88,7 +100,7 @@ public class StageRoutineService {
     }
 
     private void endPlay() {
-        log.info("StageRoutineUtil finishPlay");
+        log.info("StageRoutineUtil endPlay");
     }
 
     private void startMVP() {
@@ -98,7 +110,15 @@ public class StageRoutineService {
     }
 
     private void endMVP() {
-        log.info("StageRoutineUtil finishMVP");
+        log.info("StageRoutineUtil endMVP");
+
+        // 사용자 목록이 3명 미만이면 스테이지 대기상태로 변경
+        Long size = redisDao.getSetSize(StageRoutineService.STAGE_ENTER_USER_LIST);
+//        log.info("tempCheckStageEmpty STAGE_ENTER_USER_LIST set size : {}", size);
+        if(size < 3) {
+//            log.info("endMVP set STAGE_ENTER_USER_COUNT = 0");
+            redisDao.setValues(STAGE_STATUS, STAGE_STATUS_WAIT);
+        }
     }
 
 
