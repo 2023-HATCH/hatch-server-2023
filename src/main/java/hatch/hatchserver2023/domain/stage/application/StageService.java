@@ -165,8 +165,7 @@ public class StageService {
         log.info("[SERVICE] count : {}", count);
 
         if(count == 0){
-            log.info("ERROR 입장한 사람이 없습니다. 퇴장이 불가합니다.");
-            return;
+            throw new StageException(StageStatusCode.STAGE_ALREADY_EMPTY);
         }
 
         int decreasedCount = deleteStageData(user, count);
