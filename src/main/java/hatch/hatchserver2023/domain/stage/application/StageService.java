@@ -6,6 +6,8 @@ import hatch.hatchserver2023.domain.stage.dto.AISimilarityRequestDto;
 import hatch.hatchserver2023.domain.stage.dto.StageResponseDto;
 import hatch.hatchserver2023.domain.stage.repository.MusicRepository;
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
+import hatch.hatchserver2023.global.common.response.exception.StageException;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,22 +79,34 @@ public class StageService {
      * @param user
      * @return
      */
-    public int addStageUser(User user) { // TODO : 로직 깔끔하게 정리하기, 응답 로직 다른 파일로 빼서 모으기
+    public int addStageUser(User user) {
         log.info("[SERVICE] addAndGetStageUserCount");
 
-        // 인원수 increase
-        String count = redisDao.getValues(StageRoutineService.STAGE_ENTER_USER_COUNT);
-        log.info("[SERVICE] count : {}", count);
+//        if(isExistUser(user)){
+//            throw new StageException(StageStatusCode.ALREADY_ENTERED_USER);
+//        }
 
-        int increasedCount = (count==null) ? 1 : Integer.parseInt(count)+1;
-        redisDao.setValues(StageRoutineService.STAGE_ENTER_USER_COUNT, String.valueOf(increasedCount));
-        log.info("[SERVICE] increasedCount : {}", increasedCount);
-        
-        // redis 입장 목록에 입장한 사용자 PK 추가
-        redisDao.setValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
+        int increasedCount = addStageData(user);
 
         stageSocketResponser.userCount(increasedCount);
 
+        runStageRoutine(increasedCount);
+
+        return increasedCount;
+    }
+
+    private int addStageData(User user) {
+        // 인원수 increase
+        int increasedCount = stageRoutineService.getStageUserCount() + 1;
+        redisDao.setValues(StageRoutineService.STAGE_ENTER_USER_COUNT, String.valueOf(increasedCount));
+        log.info("[SERVICE] increasedCount : {}", increasedCount);
+
+        // redis 입장 목록에 입장한 사용자 PK 추가
+        redisDao.setValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
+        return increasedCount;
+    }
+
+    private void runStageRoutine(int increasedCount) {
         String stageStatus = getStageStatus();
         switch (stageStatus) {
             case StageRoutineService.STAGE_STATUS_WAIT:
@@ -111,8 +125,10 @@ public class StageService {
                 log.info("stage status : mvp ");
                 break;
         }
+    }
 
-        return increasedCount;
+    private boolean isExistUser(User user) {
+        return redisDao.isSetDataExist(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
     }
 
     /**
@@ -145,25 +161,29 @@ public class StageService {
     public void deleteStageUser(User user) {
         log.info("[SERVICE] deleteStageUser");
 
-        // 인원수 decrease
-        String count = redisDao.getValues(StageRoutineService.STAGE_ENTER_USER_COUNT);
+        int count = stageRoutineService.getStageUserCount();
         log.info("[SERVICE] count : {}", count);
 
-        if(count == null){
-            log.info("ERROR 입장한 사람이 없습니다. 퇴장이 불가합니다.");
-            return;
+        if(count == 0){
+            throw new StageException(StageStatusCode.STAGE_ALREADY_EMPTY);
         }
 
-        int decreasedCount = Integer.parseInt(count)-1;
+        int decreasedCount = deleteStageData(user, count);
+
+        tempCheckStageEmpty();
+
+        stageSocketResponser.userCount(decreasedCount);
+    }
+
+    private int deleteStageData(User user, int count) {
+        // 인원수 decrease
+        int decreasedCount = count -1;
         redisDao.setValues(StageRoutineService.STAGE_ENTER_USER_COUNT, String.valueOf(decreasedCount));
         log.info("[SERVICE] decreasedCount : {}", decreasedCount);
 
         // redis 입장 목록에서 입장한 사용자 PK 제거
         redisDao.removeValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
-
-        tempCheckStageEmpty();
-
-        stageSocketResponser.userCount(decreasedCount);
+        return decreasedCount;
     }
 
     /**

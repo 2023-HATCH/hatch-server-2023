@@ -10,6 +10,7 @@ import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.CommonCode;
+import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +58,7 @@ public class StageController {
         // ws upgrade -> x 그냥 다른 요청으로 분리 사용
 
         return ResponseEntity.ok().body(CommonResponse.toResponse(
-                CommonCode.OK, StageResponseDto.Enter.toDto(stageStatus, stageUserCount, talkMessages)));
+                StageStatusCode.GET_STAGE_ENTER_SUCCESS, StageResponseDto.Enter.toDto(stageStatus, stageUserCount, talkMessages)));
     }
 
     /**
@@ -71,7 +72,7 @@ public class StageController {
         List<Long> userIds = stageService.getStageEnterUserIds();
         List<User> users = userUtilService.getUsersById(userIds);
         return ResponseEntity.ok().body(CommonResponse.toResponse(
-                CommonCode.OK, UserResponseDto.SimpleUserProfile.toDtos(users)));
+                StageStatusCode.GET_STAGE_ENTER_USER_LIST_SUCCESS, UserResponseDto.SimpleUserProfile.toDtos(users)));
     }
 
     /**
@@ -86,7 +87,7 @@ public class StageController {
         stageService.deleteStageUser(user);
 
         return ResponseEntity.ok().body(CommonResponse.toResponse(
-                CommonCode.OK));
+                StageStatusCode.GET_STAGE_EXIT_SUCCESS));
     }
 
 
