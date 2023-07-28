@@ -3,6 +3,7 @@
 === *Catch End*
 (응답) 스테이지 캐치 끝
 
+- 스테이지가 아직 개발중이고 편의상 인원수 확인을 느슨하게 하고 있기 때문에, 캐치 요청자가 0명이어도 플레이가 진행됩니다
 
 ==== Response fields
 |===
@@ -21,7 +22,7 @@
 |캐치 성공자(플레이어) 목록
 |`+data.players.playerNum+`
 |`+Integer+`
-|true
+|false
 |플레이어 식별 번호
 |`+data.players.userId+`
 |`+String+`
