@@ -96,9 +96,26 @@ public class RedisDao {
         SetOperations<String, String> values = redisTemplate.opsForSet();
         return values.members(key);
     }
+
+    /**
+     * Set 의 원소 개수를 반환하는 메서드
+     * @param key
+     * @return
+     */
     public Long getSetSize(String key) {
         SetOperations<String, String> values = redisTemplate.opsForSet();
         return values.size(key);
+    }
+
+    /**
+     * Set 에 특정 데이터가 존재하는지 확인하는 메서드
+     * @param key
+     * @return
+     */
+    public boolean isSetDataExist(String key, String data) {
+        SetOperations<String, String> values = redisTemplate.opsForSet();
+        Boolean isExist = values.isMember(key, data);
+        return Boolean.TRUE.equals(isExist); //null 일 경우 false로 반환하도록 함
     }
 
     /**
@@ -113,10 +130,16 @@ public class RedisDao {
         return values.range(key, start, end);
     }
 
+    /**
+     * Set 에서 해당 데이터를 삭제하는 메서드
+     * @param key
+     * @param data
+     */
     public void removeValuesSet(String key, String data) {
         SetOperations<String, String> values = redisTemplate.opsForSet();
         values.remove(key, data);
     }
+
     /**
      * 키값에 해당하는 데이터를 삭제하는 메서드
      * @param key
