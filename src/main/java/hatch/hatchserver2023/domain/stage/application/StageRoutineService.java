@@ -139,4 +139,7 @@ public class StageRoutineService {
     public void setStageStatus(String status) {
         redisDao.setValues(STAGE_STATUS, status);
     }
+    public String getStageStatus() {
+        return redisDao.getValues(STAGE_STATUS);
+    }
 }
