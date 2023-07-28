@@ -16,23 +16,23 @@
 |`+String+`
 |true
 |소켓 통신 유형. 고정값(CATCH_END)
-|`+data.players+`
+|`+data.players[]+`
 |`+-+`
 |true
 |캐치 성공자(플레이어) 목록
-|`+data.players.playerNum+`
+|`+data.players[].playerNum+`
 |`+Integer+`
 |false
 |플레이어 식별 번호
-|`+data.players.userId+`
+|`+data.players[].userId+`
 |`+String+`
 |true
 |플레이어 사용자 식별자
-|`+data.players.nickname+`
+|`+data.players[].nickname+`
 |`+String+`
 |true
 |플레이어 닉네임
-|`+data.players.profileImg+`
+|`+data.players[].profileImg+`
 |`+String+`
 |false
 |플레이어 프로필 사진 url
