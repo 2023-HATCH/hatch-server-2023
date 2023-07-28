@@ -27,7 +27,7 @@ public class StageRoutineService {
     public static final String STAGE_STATUS_PLAY = "PLAY";
     public static final String STAGE_STATUS_MVP = "MVP";
 
-    public static final int STAGE_CATCH_TIME = 5;
+    public static final int STAGE_CATCH_TIME = 3;
     public static final int STAGE_MVP_TIME = 7;
 
 

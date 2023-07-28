@@ -170,4 +170,13 @@ public class RedisDao {
         redisTemplate.delete(key);
     }
 
+
+
+
+    /**
+     * 개발용으로만 쓰는 redis db 전체 삭제 메서드
+     */
+    public void deleteAll() {
+        redisTemplate.getConnectionFactory().getConnection().flushAll();
+    }
 }
