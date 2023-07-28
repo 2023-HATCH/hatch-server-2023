@@ -5,6 +5,7 @@
 include::stage-socket/connect-subscribe.adoc[]
 include::stage-socket/user-count.adoc[]
 include::stage-socket/catch-start.adoc[]
+include::stage-socket/catch-end.adoc[]
 include::stage-socket/play-start.adoc[]
 include::stage-socket/mvp-start.adoc[]
 include::stage-socket/stage-routine-stop.adoc[]

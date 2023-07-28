@@ -1,0 +1,58 @@
+
+// api 명 : h3
+=== *Catch End*
+(응답) 스테이지 캐치 끝
+
+
+==== Response fields
+|===
+|필드명|타입|필수여부|설명
+|`+timeStamp+`
+|`+LocalDateTime+`
+|true
+|응답 시각
+|`+type+`
+|`+String+`
+|true
+|소켓 통신 유형. 고정값(CATCH_END)
+|`+data.+`
+|`+-+`
+|true
+|개발중
+|===
+
+
+==== Response body
+[source,http,options="nowrap"]
+----
+$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
+content-length:201
+message-id:e60ac4c8-36b3-6d99-2553-f5542d9a68f2-25
+subscription:sub-0
+content-type:application/json
+destination:/topic/stage
+content-length:201
+
+{
+    "timeStamp":"2023/07/28 19:40:24",
+    "type":"CATCH_END",
+    "message":"스테이지 캐치 끝",
+    "data":[
+        {
+            "playerNum":0,
+            "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+            "nickname":"user_1","profileImg":null
+        },
+        {
+            "playerNum":1,
+            "userId":"또다른 uuid 값",
+            "nickname":"user_2","profileImg":null
+        },
+        {
+            "playerNum":2,
+            "userId":"또다른 uuid 값2",
+            "nickname":"user_3","profileImg":null
+        }
+    ]
+}
+----
