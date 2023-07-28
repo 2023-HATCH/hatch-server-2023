@@ -82,9 +82,9 @@ public class StageService {
     public int addStageUser(User user) {
         log.info("[SERVICE] addAndGetStageUserCount");
 
-        if(isExistUser(user)){
-            throw new StageException(StageStatusCode.ALREADY_ENTERED_USER);
-        }
+//        if(isExistUser(user)){
+//            throw new StageException(StageStatusCode.ALREADY_ENTERED_USER);
+//        }
 
         int increasedCount = addStageData(user);
 
