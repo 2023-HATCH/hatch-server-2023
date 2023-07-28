@@ -32,11 +32,11 @@ public enum StageStatusCode implements StatusCode {
 
     @Override
     public String getCode() {
-        return StatusCodeDoc.TALK.getInitialWithConnector() + code;
+        return StatusCodeDoc.STAGE.getInitialWithConnector() + code;
     }
 
     @Override
     public String getMessage() {
-        return StatusCodeDoc.TALK.getLabelWithBrackets() + message;
+        return StatusCodeDoc.STAGE.getLabelWithBrackets() + message;
     }
 }
