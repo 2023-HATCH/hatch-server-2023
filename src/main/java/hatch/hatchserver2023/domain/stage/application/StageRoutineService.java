@@ -103,7 +103,7 @@ public class StageRoutineService {
         log.info("StageRoutineUtil startPlay");
         redisDao.setValues(STAGE_STATUS, STAGE_STATUS_PLAY);
         stageSocketResponser.startPlay("개발중");
-        int musicTime = 1;
+        int musicTime = 5; //TODO
         return musicTime;
     }
 

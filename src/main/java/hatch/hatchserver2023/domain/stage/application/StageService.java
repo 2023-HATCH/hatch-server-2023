@@ -137,8 +137,7 @@ public class StageService {
      */
     public String getStageStatus() {
         log.info("[SERVICE] getStageStatus");
-        //TODO : 상태 확인 로직 StageRoutineService로 뺄까?
-        String stageStatus = redisDao.getValues(StageRoutineService.STAGE_STATUS);
+        String stageStatus = stageRoutineService.getStageStatus();
         return (stageStatus==null) ? StageRoutineService.STAGE_STATUS_WAIT : stageStatus;
         //TODO : 상태에 따라 진행중인 정보 같이 보내줘야 함
     }
@@ -162,7 +161,7 @@ public class StageService {
     public void registerCatch(User user) {
         log.info("[SERVICE] registerCatch");
 
-        if(!getStageStatus().equals(StageRoutineService.STAGE_STATUS_CATCH)) {
+        if(!stageRoutineService.getStageStatus().equals(StageRoutineService.STAGE_STATUS_CATCH)) {
             throw new StageException(StageStatusCode.STAGE_STATUS_NOT_CATCH);
         }
 
