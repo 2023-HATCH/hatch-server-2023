@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Service //TODO ?
+@Service
 public class StageRoutineService {
 
     public static final String STAGE_ENTER_USER_COUNT = "STAGE_ENTER_USER_COUNT";
@@ -27,9 +27,9 @@ public class StageRoutineService {
     public static final String STAGE_STATUS_PLAY = "PLAY";
     public static final String STAGE_STATUS_MVP = "MVP";
 
-    public static final int STAGE_CATCH_TIME = 3;
-    public static final int STAGE_MVP_TIME = 7;
-
+    private static final int STAGE_CATCH_TIME = 3;
+    private static final int STAGE_MVP_TIME = 7;
+    private static final int STAGE_CATCH_SUCCESS_LAST_INDEX = 2;
 
     private final UserRepository userRepository;
     private final RedisDao redisDao;
@@ -77,13 +77,21 @@ public class StageRoutineService {
 
     private void startCatch() {
         log.info("StageRoutineUtil startCatch");
-        redisDao.setValues(STAGE_STATUS, STAGE_STATUS_CATCH);
+        setStageStatus(STAGE_STATUS_CATCH);
         stageSocketResponser.startCatch("개발중");
     }
 
     private void endCatch() {
         log.info("StageRoutineUtil endCatch");
-        Set<String> userIds = redisDao.getValuesZSet(STAGE_CATCH_USER_LIST, 0, 2);
+
+        // TODO : 개발 편의를 위해 인원 검사 안함
+//        if(Integer.parseInt(redisDao.getValues(STAGE_ENTER_USER_COUNT))<3 || redisDao.getSetSize(STAGE_CATCH_USER_LIST)<3) {
+//            setStageStatus(STAGE_STATUS_WAIT);
+//            log.info("endCatch : change stage status to WAIT. enter or catch user count is less then 3");
+//            return;
+//        }
+
+        Set<String> userIds = redisDao.getValuesZSet(STAGE_CATCH_USER_LIST, 0, STAGE_CATCH_SUCCESS_LAST_INDEX);
         log.info("endCatch userIds : {}", userIds);
         List<User> users = userRepository.findAllById(userIds.stream().map(Long::parseLong).collect(Collectors.toList()));
         log.info("endCatch users nickname : {}", users.stream().map(User::getNickname).collect(Collectors.toList()));
@@ -126,5 +134,9 @@ public class StageRoutineService {
         String countString = redisDao.getValues(StageRoutineService.STAGE_ENTER_USER_COUNT);
         log.info("StageRoutineUtil countString : {}", countString);
         return (countString==null) ? 0 : Integer.parseInt(countString);
+    }
+
+    public void setStageStatus(String status) {
+        redisDao.setValues(STAGE_STATUS, status);
     }
 }
