@@ -98,13 +98,6 @@ public class TestController {
     }
 
     //--커뮤니티 간이 api--//
-    // 해시태그 목록 조회 - 테스트용
-    @GetMapping("/tags")
-    public List<Hashtag> getHashtagList() {
-        return hashtagService.getHashtagList();
-    }
-
-
     //해시태그 삭제 - 테스트용
     @DeleteMapping("/tags/{title}")
     public boolean deleteHashtag(@PathVariable String title){

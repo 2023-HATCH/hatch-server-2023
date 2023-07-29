@@ -558,4 +558,54 @@ public class VideoControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("Get Hashtag List")
+    class HashtagList {
+
+        @Nested
+        @DisplayName("Success")
+        class SuccessCase {
+
+            @Test
+            @DisplayName("Hashtag List")
+            void GetHashtagList() throws Exception {
+                //given
+                List<String> tagList = Arrays.asList("해시태그", "목록을", "이렇게", "준답니다", ";)");
+
+                given(hashtagService.getHashtagList())
+                        .willReturn(tagList);
+
+                //when
+                StatusCode code = VideoStatusCode.GET_HASHTAG_LIST_SUCCESS;
+
+                MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
+                    .get("/api/v1/videos/tags");
+
+                //then
+                ResultActions resultActions = mockMvc.perform(requestGet);
+
+                resultActions
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.code").value(code.getCode()))
+                        .andExpect(jsonPath("$.message").value(code.getMessage()))
+                        .andExpect(jsonPath("$.data.tagList[0]").value(tagList.get(0)))
+                        .andExpect(jsonPath("$.data.tagList[1]").value(tagList.get(1)))
+                        .andExpect(jsonPath("$.data.tagList[2]").value(tagList.get(2)))
+                        .andExpect(jsonPath("$.data.tagList[3]").value(tagList.get(3)))
+                        .andExpect(jsonPath("$.data.tagList[4]").value(tagList.get(4)))
+                ;
+
+                resultActions
+                        .andDo( //rest docs 문서 작성 시작
+                                docs.document(
+                                        responseFields(
+                                                beneathPath("data").withSubsectionId("beneath-data"),
+                                                fieldWithPath("tagList").type(JsonFieldType.ARRAY).description("해시태그 전체 목록")
+                                        )
+                                )
+                        );
+            }
+        }
+    }
+
 }

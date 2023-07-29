@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -221,6 +222,23 @@ public class VideoController {
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.HASHTAG_SEARCH_SUCCESS,
                 VideoResponseDto.GetVideoList.toDto(videoList)
+        ));
+    }
+
+
+    /**
+     * 모든 해시태그 목록 전달
+     * -해시태그 검색하기 전에 사용
+     *
+     * @return tagList
+     */
+    @GetMapping("/tags")
+    public ResponseEntity<CommonResponse> getHashtagList() {
+        List<String> tagList = hashtagService.getHashtagList();
+
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                VideoStatusCode.GET_HASHTAG_LIST_SUCCESS,
+                VideoResponseDto.GetHashtagList.toDto(tagList)
         ));
     }
 
