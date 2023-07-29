@@ -462,7 +462,9 @@ public class VideoControllerTest {
                                                 parameterWithName("tag").description("영상 해시태그").optional(),
                                                 parameterWithName("_csrf").description("테스트할 때 넣은 csrf 이므로 무시").ignored()
                                         ),
-                                        //TODO: 토큰 이름이 맞는가?
+                                        requestParts(
+                                                partWithName("video").description("Multipartfile의 동영상")
+                                        ),
                                         requestHeaders(
                                                 headerWithName("headerXAccessToken").description("headerXAccessToken"),
                                                 headerWithName("headerXRefreshToken").description("headerXAccessToken")

@@ -33,8 +33,7 @@ operation::delete-video[snippets='http-request,path-parameters,response-fields-b
 
 
 === 영상 업로드
-
-operation::post-video-upload[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data,http-response']
+operation::post-video-upload[snippets='http-request,request-headers,request-parts,request-parameters,response-fields-beneath-data,http-response']
 
 
 
