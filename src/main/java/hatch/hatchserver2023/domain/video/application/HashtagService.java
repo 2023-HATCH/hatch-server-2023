@@ -27,9 +27,20 @@ public class HashtagService {
         this.videoHashtagRepository = videoHashtagRepository;
     }
 
-    //해시태그 목록 조회
-    public List<Hashtag> getHashtagList() {
-        return hashtagRepository.findAll();
+
+    /**
+     * 해시태그 목록 조회
+     * @return tagList
+     */
+    public List<String> getHashtagList() {
+        List<Hashtag> hashtagList = hashtagRepository.findAll();
+        List<String> tagList = new ArrayList<>();
+
+        for(Hashtag hashtag : hashtagList) {
+            tagList.add(hashtag.getTitle());
+        }
+
+        return tagList;
     }
 
 
