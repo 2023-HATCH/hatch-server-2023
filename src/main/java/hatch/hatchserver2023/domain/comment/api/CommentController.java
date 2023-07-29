@@ -42,7 +42,7 @@ public class CommentController {
      */
     @PreAuthorize("hasAnyRole('ROLE_USER')")    //로그인한 사용자만 사용 가능
     @PostMapping("/{videoId}")
-    public ResponseEntity<?> registerComment(@AuthenticationPrincipal User user,
+    public ResponseEntity<CommonResponse> registerComment(@AuthenticationPrincipal User user,
                                              @PathVariable UUID videoId,
                                              @RequestBody @Valid CommentRequestDto request){
 
@@ -63,7 +63,7 @@ public class CommentController {
      */
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<?> deleteComment(@AuthenticationPrincipal User user,
+    public ResponseEntity<CommonResponse> deleteComment(@AuthenticationPrincipal User user,
                                            @PathVariable UUID commentId){
 
         commentService.deleteComment(commentId, user);
@@ -83,7 +83,7 @@ public class CommentController {
      */
 //    @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS')")
     @GetMapping("/{videoId}")
-    public ResponseEntity<?> getCommentList(@PathVariable UUID videoId){
+    public ResponseEntity<CommonResponse> getCommentList(@PathVariable UUID videoId){
 
         List<Comment> commentList = commentService.getCommentList(videoId);
 
