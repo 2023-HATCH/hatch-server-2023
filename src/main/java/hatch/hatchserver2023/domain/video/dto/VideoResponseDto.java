@@ -116,6 +116,19 @@ public class VideoResponseDto {
         }
     }
 
+    @Getter
+    @Builder
+    public static class GetHashtagList {
+
+        private List<String> tagList;
+
+        public static GetHashtagList toDto(List<String> tagList) {
+            return GetHashtagList.builder()
+                    .tagList(tagList)
+                    .build();
+        }
+    }
+
     @Builder
     @Getter
     public static class IsSuccess {

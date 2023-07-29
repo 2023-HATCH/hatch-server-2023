@@ -10,6 +10,7 @@ public enum VideoStatusCode implements StatusCode {
     GET_VIDEO_DETAIL_SUCCESS(HttpStatus.OK, "2003", "동영상 상세 정보 조회 성공"), //200
     GET_VIDEO_LIST_SUCCESS(HttpStatus.OK, "2004", "동영상 목록 정보 조회 성공"), //200
     HASHTAG_SEARCH_SUCCESS(HttpStatus.OK, "2010", "해시태그 검색 성공"),    //200
+    GET_HASHTAG_LIST_SUCCESS(HttpStatus.OK, "2011", "해시태그 목록 조회 성공"),   //200
     COMMENT_REGISTER_SUCCESS(HttpStatus.OK, "2020", "댓글 등록 성공"),    //200
     COMMENT_DELETE_SUCCESS(HttpStatus.OK, "2021", "댓글 삭제 성공"),      //200
     GET_COMMENT_LIST_SUCCESS(HttpStatus.OK, "2022", "댓글 목록 조회 성공"), //200

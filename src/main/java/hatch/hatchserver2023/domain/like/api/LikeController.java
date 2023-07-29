@@ -38,7 +38,7 @@ public class LikeController {
      */
     @PreAuthorize("hasAnyRole('ROLE_USER')")    //로그인한 사용자만 사용 가능
     @PostMapping("/{videoId}")
-    public ResponseEntity<?> addLike(@AuthenticationPrincipal User user,
+    public ResponseEntity<CommonResponse> addLike(@AuthenticationPrincipal User user,
                                      @PathVariable UUID videoId){
 
         likeService.addLike(videoId, user);
@@ -59,7 +59,7 @@ public class LikeController {
      */
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @DeleteMapping("/{videoId}")
-    public ResponseEntity<?> deleteLike(@AuthenticationPrincipal User user,
+    public ResponseEntity<CommonResponse> deleteLike(@AuthenticationPrincipal User user,
                                         @PathVariable UUID videoId){
 
 
@@ -80,7 +80,7 @@ public class LikeController {
      * @return videoList
      */
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getLikedVideoList(@PathVariable UUID userId, Pageable pageable){
+    public ResponseEntity<CommonResponse> getLikedVideoList(@PathVariable UUID userId, Pageable pageable){
 
         Slice<Video> slice = likeService.getLikedVideoList(userId ,pageable);
 
