@@ -45,8 +45,8 @@ public class StageSocketResponser {
     }
 
     public void endCatch(List<User> users) {
-        List<StageSocketResponseDto.Player> dtos = StageSocketResponseDto.Player.toDtos(users);
-        sendToStage(SocketResponseType.CATCH_END, dtos);
+        List<StageSocketResponseDto.Player> players = StageSocketResponseDto.Player.toDtos(users);
+        sendToStage(SocketResponseType.CATCH_END, StageSocketResponseDto.CatchEnd.toDto(players, "개발중"));
     }
 
     private void sendToStage(SocketResponseType type) {

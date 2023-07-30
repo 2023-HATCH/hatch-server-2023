@@ -26,6 +26,13 @@ public class StageSocketResponseDto {
     public static class CatchEnd {
         private List<Player> players;
         private Object music; // TODO
+
+        public static CatchEnd toDto(List<Player> players, Object music) {
+            return CatchEnd.builder()
+                    .players(players)
+                    .music(music)
+                    .build();
+        }
     }
 
     @ToString
@@ -55,5 +62,23 @@ public class StageSocketResponseDto {
                     .build();
         }
     }
+
+    @ToString
+    @Getter
+    @Builder
+    public static class SendPlaySkeleton {
+        private UUID userId;
+        private Integer playerNum;
+        private StageRequestDto.Skeleton skeleton;
+
+        public static SendPlaySkeleton toDto(StageRequestDto.SendPlaySkeleton dto, User user) {
+            return SendPlaySkeleton.builder()
+                    .userId(user.getUuid())
+                    .playerNum(dto.getPlayerNum())
+                    .skeleton(dto.getSkeleton())
+                    .build();
+        }
+    }
+
 
 }
