@@ -180,7 +180,7 @@ class TalkControllerTest {
                                         fieldWithPath("messages[].content").type(JsonFieldType.STRING).description("메세지 내용"),
                                         fieldWithPath("messages[].sender.userId").type("UUID").description("메세지 전송자 식별자"),
                                         fieldWithPath("messages[].sender.nickname").type(JsonFieldType.STRING).description("메세지 전송자 닉네임"),
-                                        fieldWithPath("messages[].sender.profileImg").type(JsonFieldType.STRING).description("메세지 전송자 프로필사진")
+                                        fieldWithPath("messages[].sender.profileImg").type(JsonFieldType.STRING).description("메세지 전송자 프로필사진").optional()
                                 )
                         )
                 )

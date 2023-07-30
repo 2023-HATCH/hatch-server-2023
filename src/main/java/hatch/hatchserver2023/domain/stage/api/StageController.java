@@ -76,6 +76,19 @@ public class StageController {
     }
 
     /**
+     * 스테이지 캐치 등록 api
+     * @return
+     */
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @GetMapping("/catch")
+    public ResponseEntity<CommonResponse> registerCatch(@AuthenticationPrincipal User user) {
+        log.info("[API] GET /stage/catch");
+        stageService.registerCatch(user);
+        return ResponseEntity.ok().body(CommonResponse.toResponse(
+                StageStatusCode.GET_CATCH_SUCCESS));
+    }
+
+    /**
      * 스테이지 사용자 퇴장 api (임시)
      * @param user
      * @return
