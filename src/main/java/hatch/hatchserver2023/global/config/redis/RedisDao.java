@@ -61,21 +61,11 @@ public class RedisDao {
      * @param data
      * @param score : 정렬 기준
      */
-    public void setValuesZSet(String key, String data, Double score) {
+    public void setValuesZSet(String key, String data, int score) {
         ZSetOperations<String, String> values = redisTemplate.opsForZSet();
         values.add(key, data, score);
     }
 
-
-    /**
-     * 키값에 해당하는 String 데이터를 가져오는 메서드
-     * @param key
-     * @return
-     */
-    public String getValues(String key) {
-        ValueOperations<String, String> values = redisTemplate.opsForValue();
-        return values.get(key);
-    }
 
 //    /**
 //     * List 에 데이터를 저장하는 메서드
@@ -87,6 +77,29 @@ public class RedisDao {
 //        ListOperations<String, String> values = redisTemplate.opsForList();
 //        return values.range(key, start, end);
 //    }
+
+//    /**
+//     * Hash 에 데이터를 저장하는 메서드
+//     * @param key : 해시 키값. 해시의 이름같은 것
+//     * @param hashKey : 이 해시 내에서의 찾으려는 키값. RDB의 필드명과 비슷함
+//     * @param data : 데이터
+//     */
+//    public void setValuesHash(String key, Object hashKey, Object data) {
+//        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
+//        values.put(key, hashKey, data);
+//    }
+
+
+    ///////// == get method == /////////
+    /**
+     * 키값에 해당하는 String 데이터를 가져오는 메서드
+     * @param key
+     * @return
+     */
+    public String getValues(String key) {
+        ValueOperations<String, String> values = redisTemplate.opsForValue();
+        return values.get(key);
+    }
 
     /**
      * Set 에서 특정 범위의 데이터들을 가져오는 메서드
@@ -121,11 +134,10 @@ public class RedisDao {
     /**
      * Sorted Set 에서 특정 범위의 데이터들을 가져오는 메서드
      * @param key
-     * @param data
      * @param start
      * @param end
      */
-    public Set<String> getValuesZSet(String key, String data, Long start, Long end) {
+    public Set<String> getValuesZSet(String key, int start, int end) {
         ZSetOperations<String, String> values = redisTemplate.opsForZSet();
         return values.range(key, start, end);
     }
@@ -140,6 +152,16 @@ public class RedisDao {
         values.remove(key, data);
     }
 
+//    /**
+//     * Hash 에서 데이터를 가져오는 메서드
+//     * @param key : 해시 키값. 해시의 이름같은 것
+//     * @param hashKey : 이 해시 내에서의 찾으려는 키값. RDB의 필드명과 비슷함
+//     */
+//    public Object getValuesHash(String key, Object hashKey) {
+//        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
+//        return values.get(key, hashKey);
+//    }
+
     /**
      * 키값에 해당하는 데이터를 삭제하는 메서드
      * @param key
@@ -148,4 +170,13 @@ public class RedisDao {
         redisTemplate.delete(key);
     }
 
+
+
+
+    /**
+     * 개발용으로만 쓰는 redis db 전체 삭제 메서드
+     */
+    public void deleteAll() {
+        redisTemplate.getConnectionFactory().getConnection().flushAll();
+    }
 }

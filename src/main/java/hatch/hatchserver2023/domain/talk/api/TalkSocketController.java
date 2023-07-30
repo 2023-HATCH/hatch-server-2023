@@ -19,13 +19,13 @@ import javax.validation.constraints.NotNull;
 
 @Slf4j
 @Controller
-public class TalkWebSocketController {
+public class TalkSocketController {
     private final String TALK_WS_SEND_URL = "/topic/stage";
 
     private final TalkService talkService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public TalkWebSocketController(TalkService talkService, SimpMessagingTemplate simpMessagingTemplate) {
+    public TalkSocketController(TalkService talkService, SimpMessagingTemplate simpMessagingTemplate) {
         this.talkService = talkService;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
