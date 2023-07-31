@@ -1,0 +1,85 @@
+
+// api 명 : h3
+=== *Catch End*
+(응답) 스테이지 캐치 끝
+
+- 스테이지가 아직 개발중이고 편의상 인원수 확인을 느슨하게 하고 있기 때문에, 캐치 요청자가 0명이어도 플레이가 진행됩니다
+
+==== Response fields
+|===
+|필드명|타입|필수여부|설명
+|`+timeStamp+`
+|`+LocalDateTime+`
+|true
+|응답 시각
+|`+type+`
+|`+String+`
+|true
+|소켓 통신 유형. 고정값(CATCH_END)
+|`+data.players[]+`
+|`+-+`
+|true
+|캐치 성공자(플레이어) 목록
+|`+data.players[].playerNum+`
+|`+Integer+`
+|false
+|플레이어 식별 번호
+|`+data.players[].userId+`
+|`+String+`
+|true
+|플레이어 사용자 식별자
+|`+data.players[].nickname+`
+|`+String+`
+|true
+|플레이어 닉네임
+|`+data.players[].profileImg+`
+|`+String+`
+|false
+|플레이어 프로필 사진 url
+|`+data.music+`
+|`+-+`
+|true
+|개발중
+|===
+
+
+==== Response body
+[source,http,options="nowrap"]
+----
+$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
+content-length:233
+message-id:7094c524-6e96-cb1c-a560-4c4647938ad6-4
+subscription:sub-0
+content-type:application/json
+destination:/topic/stage
+content-length:233
+
+{
+    "timeStamp":"2023/07/28 22:55:19",
+    "type":"CATCH_END",
+    "message":"스테이지 캐치 끝",
+    "data":{
+        "players":[
+            {
+                "playerNum":0,
+                "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+                "nickname":"user_1",
+                "profileImg":null
+            },
+            {
+                "playerNum":1,
+                "userId":"또다른 uuid 값2",
+                "nickname":"user_2",
+                "profileImg":null
+            },
+            {
+                "playerNum":2,
+                "userId":"또다른 uuid 값3",
+                "nickname":"user_3",
+                "profileImg":null
+            }
+        ],
+        "music":"개발중"
+    }
+}
+----

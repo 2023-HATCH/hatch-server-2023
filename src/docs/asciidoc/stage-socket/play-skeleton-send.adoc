@@ -1,0 +1,205 @@
+
+// api 명 : h3
+=== *Send Play Skeleton*
+스테이지 플레이 스켈레톤 전송
+
+- URL : `/app/stage/play/skeleton`
+
+==== Request header
+|===
+|필드명|타입|필수여부|제약조건|설명
+|`+x-access-token+`
+|`+String+`
+|true
+|JWT 형식
+|액세스 토큰
+|===
+
+==== Request fields
+|===
+|필드명|타입|필수여부|제약조건|설명
+|`+playerNum+`
+|`+Integer+`
+|true
+|공백 불가
+|보낼 사용자의 플레이어 번호(CATCH_END 응답에서 받은 번호)
+|`+skeleton+`
+|`+-+`
+|false
+|
+|보낼 스켈레톤 좌표값 한세트(Double)
+|===
+
+==== Request body
+(예시 데이터에 좌표값 입력이 정수로 되어있긴 한데 실수(Double)도 가능합니다.)
+[source,options="wrap"]
+----
+$ _INFO_:send STOMP message, destination = /app/stage/play/skeleton, content =
+{   "playerNum" : 0,
+    "skeleton" : {
+        "nose" : {
+            "x" : 1,
+            "y" : 2
+        },
+        "right" : {
+            "shoulder" : {
+                "x" : 3,
+                "y" : 4
+            },
+            "elbow" : {
+                "x" : 3,
+                "y" : 4
+            },
+            "wrist" : {
+                "x" : 3,
+                "y" : 4
+            },
+            "hip" : {
+                "x" : 3,
+                "y" : 4
+            },
+            "knee" : {
+                "x" : 3,
+                "y" : 4
+            },
+            "ankle" : {
+                "x" : 3,
+                "y" : 4
+            }
+        },
+        "left" : {
+            "shoulder" : {
+                "x" : 3,
+                "y" : 4
+            },
+            "elbow" : {
+                "x" : 3,
+                "y" : 4
+            },
+            "wrist" : {
+                "x" : 3,
+                "y" : 4
+            },
+            "hip" : {
+                "x" : 3,
+                "y" : 4
+            },
+            "knee" : {
+                "x" : 3,
+                "y" : 4
+            },
+            "ankle" : {
+                "x" : 3,
+                "y" : 4
+            }
+        }
+    }
+},
+header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkwNTM5ODUxLCJleHAiOjE2OTA1NDM0NTF9.pdUPf9j9jk_DTSyHypUzSo-23is5RtfogoIxQ2tjSv8"}
+----
+
+==== Response fields
+|===
+|필드명|타입|필수여부|설명
+|`+timeStamp+`
+|`+LocalDateTime+`
+|true
+|응답 시각
+|`+type+`
+|`+String+`
+|true
+|소켓 통신 유형. 고정값(PLAY_SKELETON)
+|`+data.userId+`
+|`+String+`
+|true
+|보낸 사용자 고유값
+|`+data.playerNum+`
+|`+Integer+`
+|true
+|보낸 사용자의 플레이어 번호(CATCH_END 응답에서 받은 번호)
+|`+data.skeleton+`
+|`+-+`
+|false
+|보낸 스켈레톤 좌표값 한세트(Double)
+|===
+
+==== Response body
+[source,http,options="nowrap"]
+----
+$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
+content-length:553
+message-id:0c9d0494-bc1d-1ade-2361-fef0de4e427e-79
+subscription:sub-0
+content-type:application/json
+destination:/topic/stage
+content-length:553
+
+{
+    "timeStamp":"2023/07/28 19:55:25",
+    "type":"PLAY_SKELETON",
+    "message":"스테이지 플레이 스켈레톤 전달",
+    "data":{
+        "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+        "playerNum":0,
+        "skeleton":{
+            "nose":{
+                "x":1.0,
+                "y":2.0
+            },
+            "right":{
+                "shoulder":{
+                    "x":3.0,
+                    "y":4.0
+                },
+                "elbow":{
+                    "x":3.0,
+                    "y":4.0
+                },
+                "wrist":{
+                    "x":3.0,
+                    "y":4.0
+                },
+                "hip":{
+                    "x":3.0,
+                    "y":4.0
+                },
+                "knee":{
+                    "x":3.0,
+                    "y":4.0
+                },
+                "ankle":{
+                    "x":3.0,
+                    "y":4.0
+                }
+            },
+            "left":{
+                "shoulder":{
+                    "x":3.0,
+                    "y":4.0
+                },
+                "elbow":{
+                    "x":3.0,
+                    "y":4.0
+                },
+                "wrist":{
+                    "x":3.0,
+                    "y":4.0
+                },
+                "hip":{
+                    "x":3.0,
+                    "y":4.0
+                },
+                "knee":{
+                    "x":3.0,
+                    "y":4.0
+                },
+                "ankle":{
+                    "x":3.0,
+                    "y":4.0
+                }
+            }
+        }
+    }
+}
+
+----

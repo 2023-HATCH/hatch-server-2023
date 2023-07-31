@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -45,7 +46,7 @@ public class VideoController {
      */
     @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
     @GetMapping("/{videoId}")
-    public ResponseEntity<?> getOneVideoForUser(@AuthenticationPrincipal User user,
+    public ResponseEntity<CommonResponse> getOneVideoForUser(@AuthenticationPrincipal User user,
                                                 @PathVariable UUID videoId) {
         Video video = videoService.findOne(videoId);
         boolean isLiked = false;
@@ -71,7 +72,7 @@ public class VideoController {
      * @return isSuccess
      */
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<?> deleteVideo(@PathVariable UUID uuid){
+    public ResponseEntity<CommonResponse> deleteVideo(@PathVariable UUID uuid){
         videoService.deleteOne(uuid);
 
         return ResponseEntity.ok(CommonResponse.toResponse(
@@ -89,7 +90,7 @@ public class VideoController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<?> getVideoList(Pageable pageable){
+    public ResponseEntity<CommonResponse> getVideoList(Pageable pageable){
         Slice<Video> slice = videoService.findByCreatedAt(pageable);
 
         return ResponseEntity.ok(CommonResponse.toResponse(
@@ -106,7 +107,7 @@ public class VideoController {
      * @return
      */
     @GetMapping("/random")
-    public ResponseEntity<?> getRandomVideoList(Pageable pageable) {
+    public ResponseEntity<CommonResponse> getRandomVideoList(Pageable pageable) {
         Slice<Video> slice = videoService.findByRandom(pageable);
 
         return ResponseEntity.ok(CommonResponse.toResponse(
@@ -129,7 +130,7 @@ public class VideoController {
      */
     @PreAuthorize("hasAnyRole('ROLE_USER')")    //로그인한 사용자만 사용 가능
     @PostMapping
-    public ResponseEntity<?> uploadVideo(@AuthenticationPrincipal User user,
+    public ResponseEntity<CommonResponse> uploadVideo(@AuthenticationPrincipal User user,
                                           @RequestPart MultipartFile video,
                                           @RequestParam String title,
                                           @RequestParam String tag) {
@@ -158,7 +159,7 @@ public class VideoController {
      */
     @PreAuthorize("hasAnyRole('ROLE_USER')")    //로그인한 사용자만 사용 가능
     @PostMapping("/upload1")
-    public ResponseEntity<?> uploadVideo1(@AuthenticationPrincipal User user,
+    public ResponseEntity<CommonResponse> uploadVideo1(@AuthenticationPrincipal User user,
                                           @RequestParam MultipartFile video,
                                           @RequestParam String title,
                                           @RequestParam String tag) {
@@ -187,7 +188,7 @@ public class VideoController {
      */
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @PostMapping("/upload2")
-    public ResponseEntity<?> uploadVideo2(@AuthenticationPrincipal User user,
+    public ResponseEntity<CommonResponse> uploadVideo2(@AuthenticationPrincipal User user,
                                           MultipartFile video,
                                           String title,
                                           String tag) {
@@ -214,13 +215,30 @@ public class VideoController {
      * @return videoList
      */
     @GetMapping("/search")
-    public ResponseEntity<?> searchByHashtag(@RequestParam String tag, Pageable pageable) {
+    public ResponseEntity<CommonResponse> searchByHashtag(@RequestParam String tag, Pageable pageable) {
         Slice<Video> videoList = hashtagService.searchHashtag(tag, pageable);
 
         //videoList 출력
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.HASHTAG_SEARCH_SUCCESS,
                 VideoResponseDto.GetVideoList.toDto(videoList)
+        ));
+    }
+
+
+    /**
+     * 모든 해시태그 목록 전달
+     * -해시태그 검색하기 전에 사용
+     *
+     * @return tagList
+     */
+    @GetMapping("/tags")
+    public ResponseEntity<CommonResponse> getHashtagList() {
+        List<String> tagList = hashtagService.getHashtagList();
+
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                VideoStatusCode.GET_HASHTAG_LIST_SUCCESS,
+                VideoResponseDto.GetHashtagList.toDto(tagList)
         ));
     }
 

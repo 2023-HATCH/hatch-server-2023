@@ -8,6 +8,7 @@ import hatch.hatchserver2023.domain.video.application.HashtagService;
 import hatch.hatchserver2023.domain.video.domain.Hashtag;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.CommonCode;
+import hatch.hatchserver2023.global.config.redis.RedisDao;
 import hatch.hatchserver2023.global.config.security.jwt.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,10 +31,13 @@ public class TestController {
     private final AuthService authService;
     private final HashtagService hashtagService;
 
-    public TestController(JwtProvider jwtProvider, AuthService authService, HashtagService hashtagService) {
+    private final RedisDao redisDao;
+
+    public TestController(JwtProvider jwtProvider, AuthService authService, HashtagService hashtagService, RedisDao redisDao) {
         this.jwtProvider = jwtProvider;
         this.authService = authService;
         this.hashtagService = hashtagService;
+        this.redisDao = redisDao;
     }
 
 
@@ -52,13 +55,19 @@ public class TestController {
     }
 
 
-
-
     @GetMapping
     public ResponseEntity<CommonResponse> test() {
         log.info("[API] GET /api/v1/test");
         return ResponseEntity.ok()
                 .body(CommonResponse.toResponse(CommonCode.OK, "test"));
+    }
+
+    @GetMapping("/bd/redis-init")
+    public ResponseEntity<CommonResponse> redisDataInit() {
+        log.info("[API] GET /api/v1/bd/redis-init");
+        redisDao.deleteAll();
+        return ResponseEntity.ok()
+                .body(CommonResponse.toResponse(CommonCode.OK, "redis DB 초기화 완료. 데이터 전체 삭제"));
     }
 
 
@@ -98,13 +107,6 @@ public class TestController {
     }
 
     //--커뮤니티 간이 api--//
-    // 해시태그 목록 조회 - 테스트용
-    @GetMapping("/tags")
-    public List<Hashtag> getHashtagList() {
-        return hashtagService.getHashtagList();
-    }
-
-
     //해시태그 삭제 - 테스트용
     @DeleteMapping("/tags/{title}")
     public boolean deleteHashtag(@PathVariable String title){

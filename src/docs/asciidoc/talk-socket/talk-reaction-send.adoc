@@ -2,6 +2,8 @@
 === *Send Talk Reaction*
 라이브톡 반응 전송
 
+- URL : `/app/talks/reactions`
+
 ==== Request header
 |===
 |필드명|타입|필수여부|제약조건|설명
