@@ -1,6 +1,9 @@
 package hatch.hatchserver2023.global.common.response.socket;
 
-public enum SocketResponseType {
+import hatch.hatchserver2023.global.common.response.code.StatusCode;
+import org.springframework.http.HttpStatus;
+
+public enum SocketResponseType implements StatusCode {
     TALK_MESSAGE( "TALK_MESSAGE", "라이브톡 메세지 전송"),
     TALK_REACTION( "TALK_REACTION", "라이브톡 반응 전송"),
 
@@ -28,7 +31,22 @@ public enum SocketResponseType {
         return type;
     }
 
+    @Override
     public String getMessage() {
         return message;
     }
+
+
+    // 명세만을 위한 getter
+    @Override
+    public HttpStatus getStatus() {
+        return null;
+    }
+
+    @Override
+    public String getCode() {
+        return getType();
+    }
+
+
 }
