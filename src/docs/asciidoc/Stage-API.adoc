@@ -15,3 +15,10 @@ operation::enter-stage[snippets='http-request,request-headers,request-parameters
 
 operation::get-stage-users[snippets='http-request,response-fields-beneath-data,http-response']
 
+=== *Exit Stage*
+스테이지 퇴장 api (임시. 개발용)
+
+- 인원수-1 처리, 입장목록에서 삭제됨
+- 입장목록이 비어있을 경우, 인원수를 0으로 초기화시킴
+
+operation::exit-stage[snippets='http-request,request-headers,http-response']
