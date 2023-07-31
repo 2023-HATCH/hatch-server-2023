@@ -25,7 +25,7 @@ $ _INFO_:Connect STOMP server success, url = ws://localhost:8080/ws-popo, connec
 /topic/stage
 ----
 
-==== Subscribe Response body
+==== Subscribe log
 [source,http,options="nowrap"]
 ----
 $ _INFO_:subscribe destination /topic/stage success
