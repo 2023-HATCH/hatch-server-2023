@@ -3,6 +3,7 @@ package hatch.hatchserver2023.domain.stage.application;
 import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
 import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.stage.dto.AISimilarityRequestDto;
+import hatch.hatchserver2023.domain.stage.dto.StageRequestDto;
 import hatch.hatchserver2023.domain.stage.dto.StageResponseDto;
 import hatch.hatchserver2023.domain.stage.repository.MusicRepository;
 import hatch.hatchserver2023.domain.user.domain.User;
@@ -51,14 +52,20 @@ public class StageService {
      * @return similarity
      */
     // TODO: 어떤 사용자인지도 필요한가?
-    public Float calculateSimilarity(String musicTitle, Float[][] sequence) {
+//    public Float calculateSimilarity(String musicTitle, Float[][] sequence) {
+    public Float calculateSimilarity(String musicTitle, List<StageRequestDto.Skeleton> skeletons) {
+        //TODO : 주석지우기
+//        log.info("skeletons : {}", skeletons);
+//        Float[][] temp = StageRequestDto.Skeleton.toFloatArrays(skeletons);
+//        log.info("skeletons toFloatArrays : {}", temp[0][0]);
+//        log.info("skeletons toFloatArrays : {}", temp[temp.length-1][0]);
         // 곡명으로 음악 찾기
         Music music = musicRepository.findByTitle(musicTitle);
 
         // ai 서버로 요청할 안무 두 개
         AISimilarityRequestDto requestDto = AISimilarityRequestDto.builder()
                 .seq1(music.getAnswer())
-                .seq2(sequence)
+                .seq2(StageRequestDto.Skeleton.toFloatArrays(skeletons))
                 .build();
 
         // ai 서버로 계산 요청
