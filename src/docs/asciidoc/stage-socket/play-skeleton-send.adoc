@@ -31,71 +31,41 @@
 |===
 
 ==== Request body
-(예시 데이터에 좌표값 입력이 정수로 되어있긴 한데 실수(Double)도 가능합니다.)
 [source,options="wrap"]
 ----
 $ _INFO_:send STOMP message, destination = /app/stage/play/skeleton, content =
-{   "playerNum" : 0,
+{
+    "playerNum" : 0,
     "skeleton" : {
-        "nose" : {
-            "x" : 1,
-            "y" : 2
-        },
-        "right" : {
-            "shoulder" : {
-                "x" : 3,
-                "y" : 4
-            },
-            "elbow" : {
-                "x" : 3,
-                "y" : 4
-            },
-            "wrist" : {
-                "x" : 3,
-                "y" : 4
-            },
-            "hip" : {
-                "x" : 3,
-                "y" : 4
-            },
-            "knee" : {
-                "x" : 3,
-                "y" : 4
-            },
-            "ankle" : {
-                "x" : 3,
-                "y" : 4
-            }
-        },
-        "left" : {
-            "shoulder" : {
-                "x" : 3,
-                "y" : 4
-            },
-            "elbow" : {
-                "x" : 3,
-                "y" : 4
-            },
-            "wrist" : {
-                "x" : 3,
-                "y" : 4
-            },
-            "hip" : {
-                "x" : 3,
-                "y" : 4
-            },
-            "knee" : {
-                "x" : 3,
-                "y" : 4
-            },
-            "ankle" : {
-                "x" : 3,
-                "y" : 4
-            }
-        }
+        "noseX" : 1.1,
+        "noseY" : 2.6,
+        "rightShoulderX" : 1.0,
+        "rightShoulderY" : 2.0,
+        "rightElbowX" : 1.0,
+        "rightElbowY" : 2.0,
+        "rightWristX" : 1.0,
+        "rightWristY" : 2.0,
+        "rightHipX" : 1.0,
+        "rightHipY" : 2.0,
+        "rightKneeX" : 1.0,
+        "rightKneeY" : 2.0,
+        "rightAnkleX" : 1.0,
+        "rightAnkleY" : 2.0,
+        "leftShoulderX" : 1.0,
+        "leftShoulderY" : 2.0,
+        "leftElbowX" : 1.0,
+        "leftElbowY" : 2.0,
+        "leftWristX" : 1.0,
+        "leftWristY" : 2.0,
+        "leftHipX" : 1.0,
+        "leftHipY" : 2.0,
+        "leftKneeX" : 1.0,
+        "leftKneeY" : 2.0,
+        "leftAnkleX" : 3.1,
+        "leftAnkleY" : 4.2
     }
 },
-header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkwNTM5ODUxLCJleHAiOjE2OTA1NDM0NTF9.pdUPf9j9jk_DTSyHypUzSo-23is5RtfogoIxQ2tjSv8"}
+header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkwOTA2NjQ1LCJleHAiOjE2OTA5MTAyNDV9.CeQhm8LOd5-cT3pKQypV8P6jVvGpNDaqW25yLXkYZLY"}
 ----
 
 ==== Response fields
@@ -127,79 +97,48 @@ header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyL
 [source,http,options="nowrap"]
 ----
 $ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:553
-message-id:0c9d0494-bc1d-1ade-2361-fef0de4e427e-79
+content-length:641
+message-id:18039120-b3d7-545f-c076-381bccd6e8e7-30
 subscription:sub-0
 content-type:application/json
 destination:/topic/stage
-content-length:553
+content-length:641
 
 {
-    "timeStamp":"2023/07/28 19:55:25",
+    "timeStamp":"2023/08/02 01:29:09",
     "type":"PLAY_SKELETON",
     "message":"스테이지 플레이 스켈레톤 전달",
     "data":{
         "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
         "playerNum":0,
         "skeleton":{
-            "nose":{
-                "x":1.0,
-                "y":2.0
-            },
-            "right":{
-                "shoulder":{
-                    "x":3.0,
-                    "y":4.0
-                },
-                "elbow":{
-                    "x":3.0,
-                    "y":4.0
-                },
-                "wrist":{
-                    "x":3.0,
-                    "y":4.0
-                },
-                "hip":{
-                    "x":3.0,
-                    "y":4.0
-                },
-                "knee":{
-                    "x":3.0,
-                    "y":4.0
-                },
-                "ankle":{
-                    "x":3.0,
-                    "y":4.0
-                }
-            },
-            "left":{
-                "shoulder":{
-                    "x":3.0,
-                    "y":4.0
-                },
-                "elbow":{
-                    "x":3.0,
-                    "y":4.0
-                },
-                "wrist":{
-                    "x":3.0,
-                    "y":4.0
-                },
-                "hip":{
-                    "x":3.0,
-                    "y":4.0
-                },
-                "knee":{
-                    "x":3.0,
-                    "y":4.0
-                },
-                "ankle":{
-                    "x":3.0,
-                    "y":4.0
-                }
-            }
+            "noseX":1.1,
+            "noseY":2.6,
+            "rightShoulderX":1.0,
+            "rightShoulderY":2.0,
+            "rightElbowX":1.0,
+            "rightElbowY":2.0,
+            "rightWristX":1.0,
+            "rightWristY":2.0,
+            "rightHipX":1.0,
+            "rightHipY":2.0,
+            "rightKneeX":1.0,
+            "rightKneeY":2.0,
+            "rightAnkleX":1.0,
+            "rightAnkleY":2.0,
+            "leftShoulderX":1.0,
+            "leftShoulderY":2.0,
+            "leftElbowX":1.0,
+            "leftElbowY":2.0,
+            "leftWristX":1.0,
+            "leftWristY":2.0,
+            "leftHipX":1.0,
+            "leftHipY":2.0,
+            "leftKneeX":1.0,
+            "leftKneeY":2.0,
+            "leftAnkleX":3.1,
+            "leftAnkleY":4.2
         }
     }
 }
-
 ----
