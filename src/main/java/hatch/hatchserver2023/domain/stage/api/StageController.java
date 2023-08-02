@@ -16,13 +16,16 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Slf4j
+@Validated
 @RestController
 @RequestMapping("api/v1/stage")
 public class StageController {
@@ -111,10 +114,10 @@ public class StageController {
      * @param request
      * @return similarity
      */
-    @PostMapping("/similarity")
-    public ResponseEntity<Object> calculateSimilarity(@RequestBody SimilarityRequestDto request) {
+    @PostMapping("/similarity") //TODO : stage/end 로 수정 또는 변경
+    public ResponseEntity<Object> calculateSimilarity(@RequestBody @Valid SimilarityRequestDto request) {
 
-        Float similarity = stageService.calculateSimilarity(request.getTitle(), request.getKeypoints());
+        Float similarity = stageService.calculateSimilarity(request.getTitle(), request.getSkeletons());
 
         return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, StageResponseDto.GetSimilarity.toDto(similarity)));
     }
