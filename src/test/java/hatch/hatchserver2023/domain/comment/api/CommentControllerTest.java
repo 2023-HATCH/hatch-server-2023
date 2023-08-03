@@ -166,7 +166,7 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.message").value(code.getMessage()))
                 .andExpect(jsonPath("$.data.uuid").value(comment1.getUuid().toString()))
                 .andExpect(jsonPath("$.data.content").value(comment1.getContent()))
-                .andExpect(jsonPath("$.data.user.uuid").value(comment1.getUserId().getUuid().toString()))
+                .andExpect(jsonPath("$.data.user.userId").value(comment1.getUserId().getUuid().toString()))
         ;
 
         resultActions
@@ -186,7 +186,7 @@ public class CommentControllerTest {
                                         beneathPath("data"),
                                         fieldWithPath("uuid").type(JsonFieldType.STRING).description("생성된 댓글 UUID 식별자"),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용"),
-                                        fieldWithPath("user.uuid").type(JsonFieldType.STRING).description("댓글 작성자 UUID 식별자"),
+                                        fieldWithPath("user.userId").type(JsonFieldType.STRING).description("댓글 작성자 UUID 식별자"),
                                         fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("댓글 작성자 닉네임"),
                                         fieldWithPath("user.email").type(JsonFieldType.STRING).description("댓글 작성자 이메일"),
                                         fieldWithPath("user.profileImg").type(JsonFieldType.STRING).description("댓글 작성자 프로필 사진 S3 경로")
@@ -271,8 +271,8 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.data.commentList[1].uuid").value(comment2.getUuid().toString()))
                 .andExpect(jsonPath("$.data.commentList[0].content").value(comment1.getContent()))
                 .andExpect(jsonPath("$.data.commentList[1].content").value(comment2.getContent()))
-                .andExpect(jsonPath("$.data.commentList[0].user.uuid").value(comment1.getUserId().getUuid().toString()))
-                .andExpect(jsonPath("$.data.commentList[1].user.uuid").value(comment2.getUserId().getUuid().toString()))
+                .andExpect(jsonPath("$.data.commentList[0].user.userId").value(comment1.getUserId().getUuid().toString()))
+                .andExpect(jsonPath("$.data.commentList[1].user.userId").value(comment2.getUserId().getUuid().toString()))
         ;
 
         resultActions
@@ -285,7 +285,7 @@ public class CommentControllerTest {
                                         beneathPath("data.commentList").withSubsectionId("beneath-data-comment-list"),
                                         fieldWithPath("uuid").type(JsonFieldType.STRING).description("생성된 댓글 UUID 식별자"),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용"),
-                                        fieldWithPath("user.uuid").type(JsonFieldType.STRING).description("댓글 작성자 UUID 식별자"),
+                                        fieldWithPath("user.userId").type(JsonFieldType.STRING).description("댓글 작성자 UUID 식별자"),
                                         fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("댓글 작성자 닉네임"),
                                         fieldWithPath("user.email").type(JsonFieldType.STRING).description("댓글 작성자 이메일"),
                                         fieldWithPath("user.profileImg").type(JsonFieldType.STRING).description("댓글 작성자 프로필 사진 S3 경로"),

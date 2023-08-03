@@ -39,34 +39,83 @@ $ _INFO_:send STOMP message, destination = /app/stage/play/skeleton, content =
     "skeleton" : {
         "noseX" : 1.1,
         "noseY" : 2.6,
+        "noseZ" : 3.6,
         "rightShoulderX" : 1.0,
         "rightShoulderY" : 2.0,
+        "rightShoulderZ" : 2.0,
         "rightElbowX" : 1.0,
         "rightElbowY" : 2.0,
+        "rightElbowZ" : 2.0,
         "rightWristX" : 1.0,
         "rightWristY" : 2.0,
+        "rightWristZ" : 2.0,
         "rightHipX" : 1.0,
         "rightHipY" : 2.0,
+        "rightHipZ" : 2.0,
         "rightKneeX" : 1.0,
         "rightKneeY" : 2.0,
+        "rightKneeZ" : 2.0,
         "rightAnkleX" : 1.0,
         "rightAnkleY" : 2.0,
+        "rightAnkleZ" : 2.0,
         "leftShoulderX" : 1.0,
         "leftShoulderY" : 2.0,
+        "leftShoulderZ" : 2.0,
         "leftElbowX" : 1.0,
         "leftElbowY" : 2.0,
+        "leftElbowZ" : 2.0,
         "leftWristX" : 1.0,
         "leftWristY" : 2.0,
+        "leftWristZ" : 2.0,
         "leftHipX" : 1.0,
         "leftHipY" : 2.0,
+        "leftHipZ" : 2.0,
         "leftKneeX" : 1.0,
         "leftKneeY" : 2.0,
+        "leftKneeZ" : 2.0,
         "leftAnkleX" : 3.1,
         "leftAnkleY" : 4.2
+        "leftAnkleZ" : 4.2
     }
 },
-header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkwOTA2NjQ1LCJleHAiOjE2OTA5MTAyNDV9.CeQhm8LOd5-cT3pKQypV8P6jVvGpNDaqW25yLXkYZLY"}
+header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkxMDczMjQ0LCJleHAiOjE2OTEwNzY4NDR9.PEr4_CnlgGLLQtsuv0FMw9sXROVuabBdEsvldgSvg_M"
+}
 ----
+// // z 점 추가 전 버전
+// $ _INFO_:send STOMP message, destination = /app/stage/play/skeleton, content =
+// {
+//     "playerNum" : 0,
+//     "skeleton" : {
+//         "noseX" : 1.1,
+//         "noseY" : 2.6,
+//         "rightShoulderX" : 1.0,
+//         "rightShoulderY" : 2.0,
+//         "rightElbowX" : 1.0,
+//         "rightElbowY" : 2.0,
+//         "rightWristX" : 1.0,
+//         "rightWristY" : 2.0,
+//         "rightHipX" : 1.0,
+//         "rightHipY" : 2.0,
+//         "rightKneeX" : 1.0,
+//         "rightKneeY" : 2.0,
+//         "rightAnkleX" : 1.0,
+//         "rightAnkleY" : 2.0,
+//         "leftShoulderX" : 1.0,
+//         "leftShoulderY" : 2.0,
+//         "leftElbowX" : 1.0,
+//         "leftElbowY" : 2.0,
+//         "leftWristX" : 1.0,
+//         "leftWristY" : 2.0,
+//         "leftHipX" : 1.0,
+//         "leftHipY" : 2.0,
+//         "leftKneeX" : 1.0,
+//         "leftKneeY" : 2.0,
+//         "leftAnkleX" : 3.1,
+//         "leftAnkleY" : 4.2
+//     }
+// },
+// header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkwOTA2NjQ1LCJleHAiOjE2OTA5MTAyNDV9.CeQhm8LOd5-cT3pKQypV8P6jVvGpNDaqW25yLXkYZLY"}
+
 
 ==== Response fields
 |===
@@ -97,48 +146,108 @@ header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyL
 [source,http,options="nowrap"]
 ----
 $ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:641
-message-id:18039120-b3d7-545f-c076-381bccd6e8e7-30
+content-length:875
+message-id:78adf6ef-c3f9-e1a9-ca75-2a69e557e407-5
 subscription:sub-0
 content-type:application/json
 destination:/topic/stage
-content-length:641
+content-length:875
 
 {
-    "timeStamp":"2023/08/02 01:29:09",
+    "timeStamp":"2023/08/03 23:38:22",
     "type":"PLAY_SKELETON",
     "message":"스테이지 플레이 스켈레톤 전달",
     "data":{
         "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
         "playerNum":0,
         "skeleton":{
-            "noseX":1.1,
-            "noseY":2.6,
-            "rightShoulderX":1.0,
-            "rightShoulderY":2.0,
-            "rightElbowX":1.0,
-            "rightElbowY":2.0,
-            "rightWristX":1.0,
-            "rightWristY":2.0,
-            "rightHipX":1.0,
-            "rightHipY":2.0,
-            "rightKneeX":1.0,
-            "rightKneeY":2.0,
-            "rightAnkleX":1.0,
-            "rightAnkleY":2.0,
-            "leftShoulderX":1.0,
-            "leftShoulderY":2.0,
-            "leftElbowX":1.0,
-            "leftElbowY":2.0,
-            "leftWristX":1.0,
-            "leftWristY":2.0,
-            "leftHipX":1.0,
-            "leftHipY":2.0,
-            "leftKneeX":1.0,
-            "leftKneeY":2.0,
-            "leftAnkleX":3.1,
-            "leftAnkleY":4.2
+            "noseX" : 1.1,
+            "noseY" : 2.6,
+            "noseZ" : 3.6,
+            "rightShoulderX" : 1.0,
+            "rightShoulderY" : 2.0,
+            "rightShoulderZ" : 2.0,
+            "rightElbowX" : 1.0,
+            "rightElbowY" : 2.0,
+            "rightElbowZ" : 2.0,
+            "rightWristX" : 1.0,
+            "rightWristY" : 2.0,
+            "rightWristZ" : 2.0,
+            "rightHipX" : 1.0,
+            "rightHipY" : 2.0,
+            "rightHipZ" : 2.0,
+            "rightKneeX" : 1.0,
+            "rightKneeY" : 2.0,
+            "rightKneeZ" : 2.0,
+            "rightAnkleX" : 1.0,
+            "rightAnkleY" : 2.0,
+            "rightAnkleZ" : 2.0,
+            "leftShoulderX" : 1.0,
+            "leftShoulderY" : 2.0,
+            "leftShoulderZ" : 2.0,
+            "leftElbowX" : 1.0,
+            "leftElbowY" : 2.0,
+            "leftElbowZ" : 2.0,
+            "leftWristX" : 1.0,
+            "leftWristY" : 2.0,
+            "leftWristZ" : 2.0,
+            "leftHipX" : 1.0,
+            "leftHipY" : 2.0,
+            "leftHipZ" : 2.0,
+            "leftKneeX" : 1.0,
+            "leftKneeY" : 2.0,
+            "leftKneeZ" : 2.0,
+            "leftAnkleX" : 3.1,
+            "leftAnkleY" : 4.2
+            "leftAnkleZ" : 4.2
         }
     }
 }
+
 ----
+// // z 점 추가 전 버전
+// $ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
+// content-length:641
+// message-id:18039120-b3d7-545f-c076-381bccd6e8e7-30
+// subscription:sub-0
+// content-type:application/json
+// destination:/topic/stage
+// content-length:641
+//
+// {
+//     "timeStamp":"2023/08/02 01:29:09",
+//     "type":"PLAY_SKELETON",
+//     "message":"스테이지 플레이 스켈레톤 전달",
+//     "data":{
+//         "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+//         "playerNum":0,
+//         "skeleton":{
+//             "noseX":1.1,
+//             "noseY":2.6,
+//             "rightShoulderX":1.0,
+//             "rightShoulderY":2.0,
+//             "rightElbowX":1.0,
+//             "rightElbowY":2.0,
+//             "rightWristX":1.0,
+//             "rightWristY":2.0,
+//             "rightHipX":1.0,
+//             "rightHipY":2.0,
+//             "rightKneeX":1.0,
+//             "rightKneeY":2.0,
+//             "rightAnkleX":1.0,
+//             "rightAnkleY":2.0,
+//             "leftShoulderX":1.0,
+//             "leftShoulderY":2.0,
+//             "leftElbowX":1.0,
+//             "leftElbowY":2.0,
+//             "leftWristX":1.0,
+//             "leftWristY":2.0,
+//             "leftHipX":1.0,
+//             "leftHipY":2.0,
+//             "leftKneeX":1.0,
+//             "leftKneeY":2.0,
+//             "leftAnkleX":3.1,
+//             "leftAnkleY":4.2
+//         }
+//     }
+// }

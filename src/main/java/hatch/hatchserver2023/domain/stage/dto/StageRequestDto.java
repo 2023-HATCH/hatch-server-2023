@@ -30,39 +30,48 @@ public class StageRequestDto {
     public static class Skeleton {
         private Double noseX;
         private Double noseY;
+        private Double noseZ;
 
         private Double rightShoulderX;
         private Double rightShoulderY;
+        private Double rightShoulderZ;
         private Double rightElbowX;
         private Double rightElbowY;
+        private Double rightElbowZ;
         private Double rightWristX;
         private Double rightWristY;
+        private Double rightWristZ;
         private Double rightHipX;
         private Double rightHipY;
+        private Double rightHipZ;
         private Double rightKneeX;
         private Double rightKneeY;
+        private Double rightKneeZ;
         private Double rightAnkleX;
         private Double rightAnkleY;
+        private Double rightAnkleZ;
 
         private Double leftShoulderX;
         private Double leftShoulderY;
+        private Double leftShoulderZ;
         private Double leftElbowX;
         private Double leftElbowY;
+        private Double leftElbowZ;
         private Double leftWristX;
         private Double leftWristY;
+        private Double leftWristZ;
         private Double leftHipX;
         private Double leftHipY;
+        private Double leftHipZ;
         private Double leftKneeX;
         private Double leftKneeY;
+        private Double leftKneeZ;
         private Double leftAnkleX;
         private Double leftAnkleY;
+        private Double leftAnkleZ;
 
         public Float[] toFloatArray() {
             List<Float> values = new ArrayList<>();
-            //TODO : 주석지우기
-//            Field[] temp = this.getClass().getDeclaredFields();
-//            log.info("fields name : {}", temp[0]);
-//            log.info("fields name : {}", temp[1]);
             for(Field field : this.getClass().getDeclaredFields()) { //모든 필드명 얻기
                 try{
                     values.add(Float.parseFloat(field.get(this).toString())); // 이 객체의 해당 필드값 얻기
@@ -71,30 +80,30 @@ public class StageRequestDto {
                 }
             }
 
-            //TODO : 주석지우기
-//            Float[] arr = values.toArray(new Float[0]);
-//            int i =0;
-//            for (Field field : this.getClass().getDeclaredFields()) {
-//
-//            }
             return values.toArray(new Float[0]);
-//            return (Float[]) values.toArray();
         }
 
         public static Float[][] toFloatArrays(List<Skeleton> skeletons) {
             List<Float[]> arrays = new ArrayList<>();
             for(Skeleton skeleton : skeletons) {
-                //TODO : 주석지우기
-//                Float[] tmp = skeleton.toFloatArray();
-//                log.info("skeleton tmp : {}", tmp[0]);
-//                log.info("skeleton tmp : {}", tmp[1]);
                 arrays.add(skeleton.toFloatArray());
             }
 
             return arrays.toArray(new Float[0][0]);
-//            return (Float[][]) arrays.toArray();
         }
     }
+
+// 플레이 종료 api 가 필요 없게 됨
+//    @ToString
+//    @Getter
+//    @Builder
+//    public static class EndPlay {
+//        @NotNull
+//        private String title;
+//
+//        @NotNull
+//        private List<StageRequestDto.Skeleton> skeletons;
+//    }
 
 
 //
