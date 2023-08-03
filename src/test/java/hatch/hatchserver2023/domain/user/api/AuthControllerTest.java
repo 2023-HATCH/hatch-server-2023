@@ -119,6 +119,7 @@ class AuthControllerTest {
                 .uuid(uuid)
                 .nickname(nickname)
                 .email(email)
+                .profileImg(profileImg)
                 .build();
         MockHttpServletResponse servletResponse = new MockHttpServletResponse();
 
@@ -140,9 +141,10 @@ class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(code.getCode()))
                 .andExpect(jsonPath("$.message").value(code.getMessage()))
-                .andExpect(jsonPath("$.data.uuid").value(resultUser.getUuid().toString()))
+                .andExpect(jsonPath("$.data.userId").value(resultUser.getUuid().toString()))
                 .andExpect(jsonPath("$.data.nickname").value(resultUser.getNickname()))
                 .andExpect(jsonPath("$.data.email").value(resultUser.getEmail()))
+                .andExpect(jsonPath("$.data.profileImg").value(resultUser.getProfileImg()))
         ;
         resultActions
                 .andDo(
@@ -155,9 +157,10 @@ class AuthControllerTest {
                         ),
                         responseFields(
                                 beneathPath("data"),
-                                fieldWithPath("uuid").type(JsonFieldType.STRING).description("사용자 식별자"),
+                                fieldWithPath("userId").type(JsonFieldType.STRING).description("사용자 식별자"),
                                 fieldWithPath("nickname").type(JsonFieldType.STRING).description("사용자 닉네임(카카오에서 가져온 데이터)"),
-                                fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일(카카오에서 가져온 데이터)").optional()
+                                fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일(카카오에서 가져온 데이터)").optional(),
+                                fieldWithPath("profileImg").type(JsonFieldType.STRING).description("사용자 프로필 이미지(카카오에서 가져온 데이터)").optional()
                                 )
                         )
                 )

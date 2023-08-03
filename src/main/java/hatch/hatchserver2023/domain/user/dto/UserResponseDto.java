@@ -15,15 +15,17 @@ public class UserResponseDto {
     @Getter
     @Builder
     public static class KakaoLogin { //응답dto 에도 생성자?
-        private UUID uuid;
+        private UUID userId;
         private String nickname;
         private String email;
+        private String profileImg;
 
         public static KakaoLogin toDto(User user) {
             return KakaoLogin.builder()
-                    .uuid(user.getUuid())
+                    .userId(user.getUuid())
                     .nickname(user.getNickname())
                     .email(user.getEmail())
+                    .profileImg(user.getProfileImg())
                     .build();
         }
     }
