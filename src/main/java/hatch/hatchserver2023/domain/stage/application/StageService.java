@@ -45,6 +45,7 @@ public class StageService {
         this.stageSocketResponser = stageSocketResponser;
     }
 
+    // TODO : 플레이 마무리 로직에서 참고하여 사용할 것
     /**
      * 스테이지에서 댄스 정확도 계산
      *
@@ -54,11 +55,6 @@ public class StageService {
     // TODO: 어떤 사용자인지도 필요한가?
 //    public Float calculateSimilarity(String musicTitle, Float[][] sequence) {
     public Float calculateSimilarity(String musicTitle, List<StageRequestDto.Skeleton> skeletons) {
-        //TODO : 주석지우기
-//        log.info("skeletons : {}", skeletons);
-//        Float[][] temp = StageRequestDto.Skeleton.toFloatArrays(skeletons);
-//        log.info("skeletons toFloatArrays : {}", temp[0][0]);
-//        log.info("skeletons toFloatArrays : {}", temp[temp.length-1][0]);
         // 곡명으로 음악 찾기
         Music music = musicRepository.findByTitle(musicTitle);
 
