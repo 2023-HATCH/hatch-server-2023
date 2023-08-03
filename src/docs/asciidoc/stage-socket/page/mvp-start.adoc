@@ -1,6 +1,6 @@
 
 // api 명 : h3
-=== *MVP Start*
+== *MVP Start*
 (응답) 스테이지 MVP세리머니 시작
 
 

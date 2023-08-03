@@ -1,6 +1,6 @@
 
 // api 명 : h3
-=== *Send Talk Message*
+== *Send Talk Message*
 라이브톡 메세지 전송
 
 - URL : `/app/talks/messages`

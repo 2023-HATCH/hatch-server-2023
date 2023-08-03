@@ -1,5 +1,5 @@
 // 도메인 명 : h1
-= Stage (Web Socket)
+== *Stage (Web Socket)*
 
 
 - link:stage-socket/page/connect-subscribe.html[소켓 연결 & 스테이지 구독, window=_blank]

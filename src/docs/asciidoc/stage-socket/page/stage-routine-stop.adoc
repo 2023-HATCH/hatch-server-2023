@@ -1,6 +1,6 @@
 
 // api 명 : h3
-=== *Stage Routine Stop*
+== *Stage Routine Stop*
 (응답) 스테이지 진행 멈춤
 
 

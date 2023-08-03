@@ -1,6 +1,6 @@
 
 // api 명 : h3
-=== *Catch Start*
+== *Catch Start*
 (응답) 스테이지 캐치 시작
 
 

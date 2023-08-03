@@ -1,5 +1,5 @@
 // 도메인 명 : h1
-= Stage
+== *Stage*
 
 - link:stage/page/enter-stage.html[스테이지 입장, window=_blank]
 

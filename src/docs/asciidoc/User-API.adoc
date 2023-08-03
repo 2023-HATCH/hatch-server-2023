@@ -1,8 +1,5 @@
 // 도메인 명 : h1
-= USER
+== *USER*
 
-// api 명 : h3
-=== *Kakao Login*
-카카오 회원가입 & 로그인 api
+- link:user/page/kakao-login.html[카카오 로그인 & 회원가입, window=_blank]
 
-operation::login[snippets='http-request,request-parameters,request-fields,response-fields-beneath-data,http-response']

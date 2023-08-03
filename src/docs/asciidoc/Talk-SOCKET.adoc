@@ -1,7 +1,6 @@
 // 도메인 명 : h1
-= Talk (Web Socket)
+== *Talk (Web Socket)*
 
 - link:talk-socket/page/talk-message-send.html[라이브톡 메세지 전송, window=_blank]
-
 - link:talk-socket/page/talk-reaction-send.html[라이브톡 반응 전송, window=_blank]
 

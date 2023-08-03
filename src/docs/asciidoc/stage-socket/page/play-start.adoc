@@ -1,6 +1,6 @@
 
 // api 명 : h3
-=== *Play Start*
+== *Play Start*
 (응답) 스테이지 플레이 시작
 
 
