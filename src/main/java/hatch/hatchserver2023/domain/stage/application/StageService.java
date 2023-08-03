@@ -77,6 +77,7 @@ public class StageService {
          return response.getBody().getSimilarity();
     }
 
+    // TODO : 8/9 이후 주석코드로 변경할 것
     /**
      * 스테이지 입장 로직
      * @param user
@@ -85,24 +86,55 @@ public class StageService {
     public int addStageUser(User user) {
         log.info("[SERVICE] addAndGetStageUserCount");
 
-        int userCount = stageRoutineService.getStageUserCount();
-
-        if(isExistUser(user)){
+//        if(isExistUser(user)){
 //            throw new StageException(StageStatusCode.ALREADY_ENTERED_USER);
-            log.info("already entered user in stage");
-        }
-        else{
-            userCount += 1;
-            redisDao.setValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
-            redisDao.setValues(StageRoutineService.STAGE_ENTER_USER_COUNT, String.valueOf(userCount));
-            runStageRoutine(userCount);
-        }
+//        }
 
-        stageSocketResponser.userCount(userCount);
+        int increasedCount = addStageData(user);
 
-        return userCount;
+        stageSocketResponser.userCount(increasedCount);
 
+        runStageRoutine(increasedCount);
+
+        return increasedCount;
     }
+
+    private int addStageData(User user) {
+        // 인원수 increase
+        int increasedCount = stageRoutineService.getStageUserCount() + 1;
+        redisDao.setValues(StageRoutineService.STAGE_ENTER_USER_COUNT, String.valueOf(increasedCount));
+        log.info("[SERVICE] increasedCount : {}", increasedCount);
+
+        // redis 입장 목록에 입장한 사용자 PK 추가
+        redisDao.setValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
+        return increasedCount;
+    }
+
+    /**
+     * 스테이지 입장 로직 2 : 중복 입장 불가. 8/9 이후 이걸로 변경
+     * @param user
+     * @return
+     */
+//    public int addStageUser(User user) {
+//        log.info("[SERVICE] addAndGetStageUserCount");
+//
+//        int userCount = stageRoutineService.getStageUserCount();
+//
+//        if(isExistUser(user)){
+////            throw new StageException(StageStatusCode.ALREADY_ENTERED_USER);
+//            log.info("already entered user in stage");
+//        }
+//        else{
+//            userCount += 1;
+//            redisDao.setValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
+//            redisDao.setValues(StageRoutineService.STAGE_ENTER_USER_COUNT, String.valueOf(userCount));
+//            runStageRoutine(userCount);
+//        }
+//
+//        stageSocketResponser.userCount(userCount);
+//
+//        return userCount;
+//    }
 
     private void runStageRoutine(int increasedCount) {
         String stageStatus = getStageStatus();
