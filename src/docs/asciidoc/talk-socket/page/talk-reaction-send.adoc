@@ -1,5 +1,5 @@
 // api 명 : h3
-=== *Send Talk Reaction*
+== *Send Talk Reaction*
 라이브톡 반응 전송
 
 - URL : `/app/talks/reactions`

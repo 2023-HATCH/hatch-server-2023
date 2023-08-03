@@ -1,6 +1,6 @@
 
 // api 명 : h3
-=== Connect
+== *Connect*
 웹소켓 통신 연결 요청
 
 ==== Connect Request URL
@@ -16,7 +16,7 @@ $ _INFO_:Connect STOMP server success, url = ws://localhost:8080/ws-popo, connec
 ----
 
 
-=== Subscribe Stage
+== *Subscribe Stage*
 스테이지 구독 요청 (스테이지 진행상황과 라이브톡 수신)
 
 ==== Subscribe Stage Request URL Path

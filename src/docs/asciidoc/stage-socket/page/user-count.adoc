@@ -1,7 +1,7 @@
 
 // api 명 : h3
-=== *MVP Start*
-(응답) 스테이지 MVP세리머니 시작
+== *User Count*
+(응답) 스테이지 내 사용자 수 변경 시 응답
 
 
 ==== Response fields
@@ -14,11 +14,11 @@
 |`+type+`
 |`+String+`
 |true
-|소켓 통신 유형. 고정값(MVP_START)
-|`+data.+`
-|`+-+`
+|소켓 통신 유형. 고정값(USER_COUNT)
+|`+data.userCount+`
+|`+Integer+`
 |true
-|개발중
+|사용자수
 |===
 
 
@@ -26,17 +26,19 @@
 [source,http,options="nowrap"]
 ----
 $ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:121
-message-id:c7b84486-b761-c839-8f41-998629713a8b-4
+content-length:113
+message-id:c7b84486-b761-c839-8f41-998629713a8b-0
 subscription:sub-0
 content-type:application/json
 destination:/topic/stage
-content-length:121
+content-length:113
 
 {
-    "timeStamp":"2023/07/26 23:29:44",
-    "type":"MVP_START",
-    "message":"스테이지 MVP세리머니 시작",
-    "data":"개발중"
+    "timeStamp":"2023/07/26 23:29:38",
+    "type":"USER_COUNT",
+    "message":"스테이지 인원수",
+    "data":{
+        "userCount":2
+    }
 }
 ----
