@@ -16,7 +16,8 @@ public class StageSocketService {
 
 
     public void sendPlayerSkeleton() {
-        if(!stageRoutineService.getStageStatus().equals(StageRoutineService.STAGE_STATUS_PLAY)) {
+        String status = stageRoutineService.getStageStatus();
+        if(status==null || !status.equals(StageRoutineService.STAGE_STATUS_PLAY)) {
             throw new StageException(StageStatusCode.STAGE_STATUS_NOT_PLAY);
         }
     }

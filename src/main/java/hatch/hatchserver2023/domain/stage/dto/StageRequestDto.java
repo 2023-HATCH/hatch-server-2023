@@ -30,32 +30,45 @@ public class StageRequestDto {
     public static class Skeleton {
         private Double noseX;
         private Double noseY;
+        private Double noseZ;
 
         private Double rightShoulderX;
         private Double rightShoulderY;
+        private Double rightShoulderZ;
         private Double rightElbowX;
         private Double rightElbowY;
+        private Double rightElbowZ;
         private Double rightWristX;
         private Double rightWristY;
+        private Double rightWristZ;
         private Double rightHipX;
         private Double rightHipY;
+        private Double rightHipZ;
         private Double rightKneeX;
         private Double rightKneeY;
+        private Double rightKneeZ;
         private Double rightAnkleX;
         private Double rightAnkleY;
+        private Double rightAnkleZ;
 
         private Double leftShoulderX;
         private Double leftShoulderY;
+        private Double leftShoulderZ;
         private Double leftElbowX;
         private Double leftElbowY;
+        private Double leftElbowZ;
         private Double leftWristX;
         private Double leftWristY;
+        private Double leftWristZ;
         private Double leftHipX;
         private Double leftHipY;
+        private Double leftHipZ;
         private Double leftKneeX;
         private Double leftKneeY;
+        private Double leftKneeZ;
         private Double leftAnkleX;
         private Double leftAnkleY;
+        private Double leftAnkleZ;
 
         public Float[] toFloatArray() {
             List<Float> values = new ArrayList<>();
