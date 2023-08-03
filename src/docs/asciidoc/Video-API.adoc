@@ -39,7 +39,7 @@ operation::post-video-upload[snippets='http-request,request-headers,request-part
 
 === 검색 - 태그 검색
 
-operation::search-video-list-by-hasthag[snippets='http-request,request-parameters,response-fields-beneath-data-video-list,http-response']
+operation::search-video-list-by-hashtag[snippets='http-request,request-parameters,response-fields-beneath-data-video-list,http-response']
 
 
 
