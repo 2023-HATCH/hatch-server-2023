@@ -1,6 +1,6 @@
 
 // api 명 : h3
-=== *Send Play Skeleton*
+== *Send Play Skeleton*
 스테이지 플레이 스켈레톤 전송
 
 - URL : `/app/stage/play/skeleton`

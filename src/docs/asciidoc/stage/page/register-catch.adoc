@@ -1,0 +1,4 @@
+== *Register Catch*
+스테이지 캐치 등록 api
+
+operation::register-catch[snippets='http-request,http-response']

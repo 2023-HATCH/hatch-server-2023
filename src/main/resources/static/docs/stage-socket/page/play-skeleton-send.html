@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Status Code</title>
+<title>Send Play Skeleton</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -435,23 +435,254 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="book">
+<body class="article">
 <div id="header">
-<h1>Status Code</h1>
-<div class="details">
-<span id="revnumber">version 0.0.1-SNAPSHOT</span>
-</div>
 </div>
 <div id="content">
-<div id="preamble">
+<div class="sect1">
+<h2 id="_send_play_skeleton"><strong>Send Play Skeleton</strong></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>상태 코드 명세서</p>
+<p>스테이지 플레이 스켈레톤 전송</p>
 </div>
-<div class="paragraph">
-<p>Unresolved directive in code.adoc - include::etc/StatusCode.adoc[]</p>
+<div class="ulist">
+<ul>
+<li>
+<p>URL : <code>/app/stage/play/skeleton</code></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_request_header">Request header</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제약조건</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x-access-token</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JWT 형식</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">액세스 토큰</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_request_fields">Request fields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제약조건</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>playerNum</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">공백 불가</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보낼 사용자의 플레이어 번호(CATCH_END 응답에서 받은 번호)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보낼 스켈레톤 좌표값 한세트(Double)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_request_body">Request body</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>$ _INFO_:send STOMP message, destination = /app/stage/play/skeleton, content =
+{
+    "playerNum" : 0,
+    "skeleton" : {
+        "noseX" : 1.1,
+        "noseY" : 2.6,
+        "noseZ" : 3.6,
+        "rightShoulderX" : 1.0,
+        "rightShoulderY" : 2.0,
+        "rightShoulderZ" : 2.0,
+        "rightElbowX" : 1.0,
+        "rightElbowY" : 2.0,
+        "rightElbowZ" : 2.0,
+        "rightWristX" : 1.0,
+        "rightWristY" : 2.0,
+        "rightWristZ" : 2.0,
+        "rightHipX" : 1.0,
+        "rightHipY" : 2.0,
+        "rightHipZ" : 2.0,
+        "rightKneeX" : 1.0,
+        "rightKneeY" : 2.0,
+        "rightKneeZ" : 2.0,
+        "rightAnkleX" : 1.0,
+        "rightAnkleY" : 2.0,
+        "rightAnkleZ" : 2.0,
+        "leftShoulderX" : 1.0,
+        "leftShoulderY" : 2.0,
+        "leftShoulderZ" : 2.0,
+        "leftElbowX" : 1.0,
+        "leftElbowY" : 2.0,
+        "leftElbowZ" : 2.0,
+        "leftWristX" : 1.0,
+        "leftWristY" : 2.0,
+        "leftWristZ" : 2.0,
+        "leftHipX" : 1.0,
+        "leftHipY" : 2.0,
+        "leftHipZ" : 2.0,
+        "leftKneeX" : 1.0,
+        "leftKneeY" : 2.0,
+        "leftKneeZ" : 2.0,
+        "leftAnkleX" : 3.1,
+        "leftAnkleY" : 4.2
+        "leftAnkleZ" : 4.2
+    }
+},
+header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkxMDczMjQ0LCJleHAiOjE2OTEwNzY4NDR9.PEr4_CnlgGLLQtsuv0FMw9sXROVuabBdEsvldgSvg_M"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_fields">Response fields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeStamp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 시각</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(PLAY_SKELETON)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보낸 사용자 고유값</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.playerNum</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보낸 사용자의 플레이어 번호(CATCH_END 응답에서 받은 번호)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.skeleton</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보낸 스켈레톤 좌표값 한세트(Double)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_response_body">Response body</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
+content-length:875
+message-id:78adf6ef-c3f9-e1a9-ca75-2a69e557e407-5
+subscription:sub-0
+content-type:application/json
+destination:/topic/stage
+content-length:875
+
+{
+    "timeStamp":"2023/08/03 23:38:22",
+    "type":"PLAY_SKELETON",
+    "message":"스테이지 플레이 스켈레톤 전달",
+    "data":{
+        "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+        "playerNum":0,
+        "skeleton":{
+            "noseX" : 1.1,
+            "noseY" : 2.6,
+            "noseZ" : 3.6,
+            "rightShoulderX" : 1.0,
+            "rightShoulderY" : 2.0,
+            "rightShoulderZ" : 2.0,
+            "rightElbowX" : 1.0,
+            "rightElbowY" : 2.0,
+            "rightElbowZ" : 2.0,
+            "rightWristX" : 1.0,
+            "rightWristY" : 2.0,
+            "rightWristZ" : 2.0,
+            "rightHipX" : 1.0,
+            "rightHipY" : 2.0,
+            "rightHipZ" : 2.0,
+            "rightKneeX" : 1.0,
+            "rightKneeY" : 2.0,
+            "rightKneeZ" : 2.0,
+            "rightAnkleX" : 1.0,
+            "rightAnkleY" : 2.0,
+            "rightAnkleZ" : 2.0,
+            "leftShoulderX" : 1.0,
+            "leftShoulderY" : 2.0,
+            "leftShoulderZ" : 2.0,
+            "leftElbowX" : 1.0,
+            "leftElbowY" : 2.0,
+            "leftElbowZ" : 2.0,
+            "leftWristX" : 1.0,
+            "leftWristY" : 2.0,
+            "leftWristZ" : 2.0,
+            "leftHipX" : 1.0,
+            "leftHipY" : 2.0,
+            "leftHipZ" : 2.0,
+            "leftKneeX" : 1.0,
+            "leftKneeY" : 2.0,
+            "leftKneeZ" : 2.0,
+            "leftAnkleX" : 3.1,
+            "leftAnkleY" : 4.2
+            "leftAnkleZ" : 4.2
+        }
+    }
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -459,11 +690,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-04 00:40:00 +0900
+Last updated 2023-08-04 02:11:38 +0900
 </div>
 </div>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
-<script>hljs.initHighlighting()</script>
 </body>
 </html>

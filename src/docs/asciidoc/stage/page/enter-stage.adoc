@@ -1,0 +1,8 @@
+
+// api 명 : h3
+== *Enter Stage*
+스테이지 입장 api
+
+- 이 요청 전에 반드시 웹소켓 connect 요청과 스테이지 구독 요청을 해주세요! - Stage (Web Socket) 명세 참고
+
+operation::enter-stage[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data,http-response']
