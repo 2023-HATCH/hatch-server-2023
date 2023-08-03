@@ -486,30 +486,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#_stage">Stage</a></li>
-<li><a href="#_stage_web_socket">Stage (Web Socket)</a>
-<ul class="sectlevel2">
-<li><a href="#_connect">Connect</a></li>
-<li><a href="#_subscribe_stage">Subscribe Stage</a></li>
-<li><a href="#_user_count"><strong>User Count</strong></a></li>
-<li><a href="#_catch_start"><strong>Catch Start</strong></a></li>
-<li><a href="#_catch_end"><strong>Catch End</strong></a></li>
-<li><a href="#_play_start"><strong>Play Start</strong></a></li>
-<li><a href="#_send_play_skeleton"><strong>Send Play Skeleton</strong></a></li>
-<li><a href="#_mvp_start"><strong>MVP Start</strong></a></li>
-<li><a href="#_stage_routine_stop"><strong>Stage Routine Stop</strong></a></li>
-</ul>
-</li>
+<li><a href="#_stage_web_socket">Stage (Web Socket)</a></li>
 <li><a href="#_talk">Talk</a>
 <ul class="sectlevel2">
 <li><a href="#_get_talk_messages"><strong>Get Talk Messages</strong></a></li>
 </ul>
 </li>
-<li><a href="#_talk_web_socket">Talk (Web Socket)</a>
-<ul class="sectlevel2">
-<li><a href="#_send_talk_message"><strong>Send Talk Message</strong></a></li>
-<li><a href="#_send_talk_reaction"><strong>Send Talk Reaction</strong></a></li>
-</ul>
-</li>
+<li><a href="#_talk_web_socket">Talk (Web Socket)</a></li>
 <li><a href="#_status_code">Status Code</a>
 <ul class="sectlevel2">
 <li><a href="#_common">COMMON</a></li>
@@ -596,7 +579,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 159
 
-{"timeStamp":"2023/08/04 01:42:34","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
+{"timeStamp":"2023/08/04 01:53:33","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
 </div>
 </div>
 </div>
@@ -615,7 +598,7 @@ Content-Length: 159
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/auth/login?type=kakao HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 41
-X-CSRF-TOKEN: 66f78792-b227-4ece-9af8-13539ffc14cb
+X-CSRF-TOKEN: 7c758fc4-6fd4-42d0-985c-3ead9243804c
 Host: localhost:8080
 
 {
@@ -728,11 +711,11 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 322
 
 {
-  "timeStamp" : "2023/08/04 01:42:50",
+  "timeStamp" : "2023/08/04 01:53:44",
   "code" : "USER-2000",
   "message" : "[사용자] 카카오 회원가입 및 로그인 성공",
   "data" : {
-    "userId" : "c30df895-6e15-4292-8ff1-6dbe72b049e7",
+    "userId" : "ecbe2fe9-08ce-4827-9e2e-d2e969e26018",
     "nickname" : "nicknameTest",
     "email" : "test@email.com",
     "profileImg" : "http://testurl"
@@ -756,7 +739,7 @@ Content-Length: 322
 <h4 id="_영상_상세_조회_http_request"><a class="link" href="#_영상_상세_조회_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/videos/12b44cc3-1537-4ebf-9b1b-e304cdd778c1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/videos/68540794-a9b7-492d-bcf7-0b88141d478e HTTP/1.1
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
 Host: localhost:8080</code></pre>
@@ -922,15 +905,15 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 678
 
 {
-  "timeStamp" : "2023/08/04 01:42:54",
+  "timeStamp" : "2023/08/04 01:53:46",
   "code" : "VIDEO-2003",
   "message" : "VIDEO-동영상 상세 정보 조회 성공",
   "data" : {
-    "uuid" : "12b44cc3-1537-4ebf-9b1b-e304cdd778c1",
+    "uuid" : "68540794-a9b7-492d-bcf7-0b88141d478e",
     "title" : "타이틀",
     "tag" : "#해시 #태그",
     "user" : {
-      "userId" : "3a8769b7-a968-469e-89c4-8f9b464fb69b",
+      "userId" : "227d6565-994d-4c0e-8652-01d27ce8bc68",
       "nickname" : "닉네임",
       "email" : "이메일",
       "profileImg" : "프로필 이미지 s3 경로"
@@ -1098,16 +1081,16 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 1339
 
 {
-  "timeStamp" : "2023/08/04 01:42:54",
+  "timeStamp" : "2023/08/04 01:53:46",
   "code" : "VIDEO-2004",
   "message" : "VIDEO-동영상 목록 정보 조회 성공",
   "data" : {
     "videoList" : [ {
-      "uuid" : "c26871a2-0639-4bf5-9bf6-529eab209b8d",
+      "uuid" : "4752b2da-7d17-4dd3-a1c8-314ffe031f35",
       "title" : "타이틀",
       "tag" : "#해시 #태그",
       "user" : {
-        "userId" : "7cefeb33-250e-41f2-8738-562c2133e58f",
+        "userId" : "17640cf3-483b-4c56-ae61-4afea71a4e6f",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -1120,11 +1103,11 @@ Content-Length: 1339
       "createdAt" : null,
       "liked" : false
     }, {
-      "uuid" : "6bf05b8e-3a9b-4f4a-bcac-472f96fb7cd3",
+      "uuid" : "cf1bd286-a816-4888-8a4c-4a264be32231",
       "title" : "타이틀 1",
       "tag" : "#해시 #태그 #1",
       "user" : {
-        "userId" : "7cefeb33-250e-41f2-8738-562c2133e58f",
+        "userId" : "17640cf3-483b-4c56-ae61-4afea71a4e6f",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -1294,16 +1277,16 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 1339
 
 {
-  "timeStamp" : "2023/08/04 01:42:54",
+  "timeStamp" : "2023/08/04 01:53:46",
   "code" : "VIDEO-2004",
   "message" : "VIDEO-동영상 목록 정보 조회 성공",
   "data" : {
     "videoList" : [ {
-      "uuid" : "68461613-3cc6-45ee-85d1-ef1e33086780",
+      "uuid" : "b84345f7-8c2a-423a-978c-c37e4c5404e3",
       "title" : "타이틀",
       "tag" : "#해시 #태그",
       "user" : {
-        "userId" : "2f5febeb-77fd-47f4-a24b-951cfd8a8a14",
+        "userId" : "c91259a7-d0f4-488c-946e-8e04fa242c0b",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -1316,11 +1299,11 @@ Content-Length: 1339
       "createdAt" : null,
       "liked" : false
     }, {
-      "uuid" : "5b8334ff-35bb-4654-918e-3e5ec4d4efa2",
+      "uuid" : "a3abfd66-2c55-4aca-b7f1-f6dad0bb8ef3",
       "title" : "타이틀 1",
       "tag" : "#해시 #태그 #1",
       "user" : {
-        "userId" : "2f5febeb-77fd-47f4-a24b-951cfd8a8a14",
+        "userId" : "c91259a7-d0f4-488c-946e-8e04fa242c0b",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -1346,7 +1329,7 @@ Content-Length: 1339
 <h4 id="_영상_삭제_http_request"><a class="link" href="#_영상_삭제_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/videos/5547a739-148d-4d15-8b0a-0034aeafa654?_csrf=cd3adf7a-929e-4503-8ec2-865805ac79e1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/videos/e16ce06b-0ba0-4a0d-84dd-80f9e3f6a6b6?_csrf=1861447a-2615-459b-b080-4750f35d4baf HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1407,7 +1390,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 159
 
 {
-  "timeStamp" : "2023/08/04 01:42:54",
+  "timeStamp" : "2023/08/04 01:53:46",
   "code" : "VIDEO-2002",
   "message" : "VIDEO-동영상 삭제 성공",
   "data" : {
@@ -1442,7 +1425,7 @@ Content-Disposition: form-data; name=tag
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Content-Disposition: form-data; name=_csrf
 
-eb133f43-e8d2-4130-854a-3c7a4d62131f
+b6425e39-cd58-489d-97db-3f0e4d0c90d3
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Content-Disposition: form-data; name=video; filename=video
 Content-Type: application/json
@@ -1559,11 +1542,11 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 193
 
 {
-  "timeStamp" : "2023/08/04 01:42:54",
+  "timeStamp" : "2023/08/04 01:53:46",
   "code" : "VIDEO-2001",
   "message" : "VIDEO-동영상 업로드 성공",
   "data" : {
-    "uuid" : "11341cf3-3753-46a4-b221-a8b79640b1dc"
+    "uuid" : "f617d8bb-c7be-4e7f-8887-21fb162f716e"
   }
 }</code></pre>
 </div>
@@ -1642,7 +1625,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 231
 
 {
-  "timeStamp" : "2023/08/04 01:42:53",
+  "timeStamp" : "2023/08/04 01:53:45",
   "code" : "VIDEO-2011",
   "message" : "VIDEO-해시태그 목록 조회 성공",
   "data" : {
@@ -1668,7 +1651,7 @@ Content-Length: 231
 <h4 id="_댓글_등록_http_request"><a class="link" href="#_댓글_등록_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/comments/056e424a-ec1f-4818-90cc-e88d0d27313d?_csrf=f288af6c-20c5-44ce-b7fa-db4c7110f705 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/comments/f0dec0de-b370-4bc9-8f24-e3e6a4f4755b?_csrf=d4f80a7a-90bd-4019-b79c-842e156dd959 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
@@ -1781,14 +1764,14 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 433
 
 {
-  "timeStamp" : "2023/08/04 01:42:38",
+  "timeStamp" : "2023/08/04 01:53:36",
   "code" : "VIDEO-2020",
   "message" : "VIDEO-댓글 등록 성공",
   "data" : {
-    "uuid" : "34a1385c-3412-4941-9b3c-4fa8497ec44b",
+    "uuid" : "e1634fa8-2555-4b9d-b768-bb60459646ae",
     "content" : "댓글을 작성했어요!",
     "user" : {
-      "userId" : "ad6b2815-70a7-4af0-83fc-84a4d1622ec5",
+      "userId" : "54659dcc-e67f-4abb-869d-fd3cdc035983",
       "nickname" : "닉네임",
       "email" : "이메일",
       "profileImg" : "프로필 이미지 s3 경로"
@@ -1805,7 +1788,7 @@ Content-Length: 433
 <h4 id="_댓글_삭제_http_request"><a class="link" href="#_댓글_삭제_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/comments/f7c54212-2020-4379-b042-efb913d7cc31?_csrf=2e905eca-e9b0-4c50-94d5-ab6ae8fd51ce HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/comments/8bca171d-2e94-4c2d-a3d8-b2088f173a19?_csrf=05c900ca-b8e6-4677-b13f-2059b3fc9ec6 HTTP/1.1
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
 Host: localhost:8080</code></pre>
@@ -1893,7 +1876,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 156
 
 {
-  "timeStamp" : "2023/08/04 01:42:37",
+  "timeStamp" : "2023/08/04 01:53:35",
   "code" : "VIDEO-2021",
   "message" : "VIDEO-댓글 삭제 성공",
   "data" : {
@@ -1910,7 +1893,7 @@ Content-Length: 156
 <h4 id="_동영상의_댓글_목록_조회_http_request"><a class="link" href="#_동영상의_댓글_목록_조회_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/comments/a3d302a4-ea5e-42be-937a-5cdd8b3400ba HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/comments/c83891dd-5ac6-44e2-b14f-f3147f88f01a HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2007,25 +1990,25 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 876
 
 {
-  "timeStamp" : "2023/08/04 01:42:38",
+  "timeStamp" : "2023/08/04 01:53:36",
   "code" : "VIDEO-2022",
   "message" : "VIDEO-댓글 목록 조회 성공",
   "data" : {
     "commentList" : [ {
-      "uuid" : "0afd14c4-1ea3-4e55-a51e-f587124e89ec",
+      "uuid" : "e517907d-b5ea-481e-a39a-1eb645c3882e",
       "content" : "댓글을 작성했어요!",
       "user" : {
-        "userId" : "1587fce5-0ec9-4aa3-999f-4f9d85c32825",
+        "userId" : "38f5abce-f157-4944-886e-c17070cae44a",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
       },
       "createdAt" : null
     }, {
-      "uuid" : "4cf57e4e-dbd1-489e-8df7-e3551bcdba97",
+      "uuid" : "cd4de9fa-6bf5-4573-a3a9-7b46c4329493",
       "content" : "또 다른 댓글을 썼습니다",
       "user" : {
-        "userId" : "1587fce5-0ec9-4aa3-999f-4f9d85c32825",
+        "userId" : "38f5abce-f157-4944-886e-c17070cae44a",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -2053,13 +2036,13 @@ Content-Length: 876
 <h4 id="_좋아요_등록_http_request"><a class="link" href="#_좋아요_등록_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/likes/1375be0b-94a6-439a-b647-9923f4a29e1b HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/likes/ac112abe-c5a2-4733-9bc2-dd4fb4914129 HTTP/1.1
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
 Host: localhost:8080
 Content-Type: application/x-www-form-urlencoded
 
-_csrf=0c7538ce-16ef-4eb4-ac59-7056af43a40c</code></pre>
+_csrf=d352f513-c515-41ff-8a76-ebf5e3cd1829</code></pre>
 </div>
 </div>
 </div>
@@ -2144,7 +2127,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 159
 
 {
-  "timeStamp" : "2023/08/04 01:42:40",
+  "timeStamp" : "2023/08/04 01:53:38",
   "code" : "VIDEO-2030",
   "message" : "VIDEO-좋아요 등록 성공",
   "data" : {
@@ -2161,7 +2144,7 @@ Content-Length: 159
 <h4 id="_좋아요_삭제_http_request"><a class="link" href="#_좋아요_삭제_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/likes/8095bbc8-b013-4826-ae27-44193b63b919?_csrf=c1e6d7cf-befc-4cc5-ac2a-46b8c07f8279 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/likes/2a6cfdb1-f6c6-4acb-b1f2-9573d2641678?_csrf=e2b938ea-f66c-4004-a50d-e66dfe0d8c1e HTTP/1.1
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
 Host: localhost:8080</code></pre>
@@ -2249,7 +2232,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 159
 
 {
-  "timeStamp" : "2023/08/04 01:42:40",
+  "timeStamp" : "2023/08/04 01:53:38",
   "code" : "VIDEO-2031",
   "message" : "VIDEO-좋아요 삭제 성공",
   "data" : {
@@ -2266,7 +2249,7 @@ Content-Length: 159
 <h4 id="_사용자_좋아요_영상_목록_조회_http_request"><a class="link" href="#_사용자_좋아요_영상_목록_조회_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/likes/c4774aa9-3997-4033-9673-e6a09504d727?page=0&amp;size=2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/likes/509c485c-6536-47c5-99ca-ca928408f328?page=0&amp;size=2 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2399,16 +2382,16 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 1346
 
 {
-  "timeStamp" : "2023/08/04 01:42:40",
+  "timeStamp" : "2023/08/04 01:53:38",
   "code" : "VIDEO-2032",
   "message" : "VIDEO-좋아요 누른 영상 목록 조회 성공",
   "data" : {
     "videoList" : [ {
-      "uuid" : "3addbd24-82b1-46f0-a826-17c62f1bec87",
+      "uuid" : "1f9ad842-d65f-4ef3-8c2e-cda3065268f1",
       "title" : "타이틀",
       "tag" : "#해시 #태그",
       "user" : {
-        "userId" : "c4774aa9-3997-4033-9673-e6a09504d727",
+        "userId" : "509c485c-6536-47c5-99ca-ca928408f328",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -2421,11 +2404,11 @@ Content-Length: 1346
       "createdAt" : null,
       "liked" : false
     }, {
-      "uuid" : "b0c73520-09fa-413a-807c-726b144078d0",
+      "uuid" : "8119e113-f2d9-4cc7-bda7-02e82200a3b2",
       "title" : "타이틀 1",
       "tag" : "#해시 #태그 #1",
       "user" : {
-        "userId" : "c4774aa9-3997-4033-9673-e6a09504d727",
+        "userId" : "509c485c-6536-47c5-99ca-ca928408f328",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -2471,729 +2454,35 @@ Content-Length: 1346
 </div>
 </div>
 <h1 id="_stage_web_socket" class="sect0"><a class="link" href="#_stage_web_socket">Stage (Web Socket)</a></h1>
-<div class="sect2">
-<h3 id="_connect"><a class="link" href="#_connect">Connect</a></h3>
-<div class="paragraph">
-<p>웹소켓 통신 연결 요청</p>
-</div>
-<div class="sect3">
-<h4 id="_connect_request_url"><a class="link" href="#_connect_request_url">Connect Request URL</a></h4>
-<div class="listingblock">
+<div class="openblock partintro">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">ws://(api서버주소):8080/ws-popo</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_connect_response_body"><a class="link" href="#_connect_response_body">Connect Response body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="http" class="language-http hljs">$ _INFO_:Connect STOMP server success, url = ws://localhost:8080/ws-popo, connectHeader = {"x-access-token" : "액세스 토큰 값"}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_subscribe_stage"><a class="link" href="#_subscribe_stage">Subscribe Stage</a></h3>
-<div class="paragraph">
-<p>스테이지 구독 요청 (스테이지 진행상황과 라이브톡 수신)</p>
-</div>
-<div class="sect3">
-<h4 id="_subscribe_stage_request_url_path"><a class="link" href="#_subscribe_stage_request_url_path">Subscribe Stage Request URL Path</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">/topic/stage</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_subscribe_log"><a class="link" href="#_subscribe_log">Subscribe log</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">$ _INFO_:subscribe destination /topic/stage success</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_user_count"><a class="link" href="#_user_count"><strong>User Count</strong></a></h3>
-<div class="paragraph">
-<p>(응답) 스테이지 내 사용자 수 변경 시 응답</p>
-</div>
-<div class="sect3">
-<h4 id="_response_fields"><a class="link" href="#_response_fields">Response fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeStamp</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 시각</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(USER_COUNT)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.userCount</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자수</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_response_body"><a class="link" href="#_response_body">Response body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:113
-message-id:c7b84486-b761-c839-8f41-998629713a8b-0
-subscription:sub-0
-content-type:application/json
-destination:/topic/stage
-content-length:113
-
-{
-    "timeStamp":"2023/07/26 23:29:38",
-    "type":"USER_COUNT",
-    "message":"스테이지 인원수",
-    "data":{
-        "userCount":2
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_catch_start"><a class="link" href="#_catch_start"><strong>Catch Start</strong></a></h3>
-<div class="paragraph">
-<p>(응답) 스테이지 캐치 시작</p>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_2"><a class="link" href="#_response_fields_2">Response fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeStamp</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 시각</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(CATCH_START)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">개발중</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_response_body_2"><a class="link" href="#_response_body_2">Response body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:114
-message-id:c7b84486-b761-c839-8f41-998629713a8b-2
-subscription:sub-0
-content-type:application/json
-destination:/topic/stage
-content-length:114
-
-{
-    "timeStamp":"2023/07/26 23:29:40",
-    "type":"CATCH_START",
-    "message":"스테이지 캐치 시작",
-    "data":"개발중"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_catch_end"><a class="link" href="#_catch_end"><strong>Catch End</strong></a></h3>
-<div class="paragraph">
-<p>(응답) 스테이지 캐치 끝</p>
-</div>
 <div class="ulist">
 <ul>
 <li>
-<p>스테이지가 아직 개발중이고 편의상 인원수 확인을 느슨하게 하고 있기 때문에, 캐치 요청자가 0명이어도 플레이가 진행됩니다</p>
+<p><a href="stage-socket/page/connect-subscribe.html" target="_blank" rel="noopener">소켓 연결 &amp; 스테이지 구독</a></p>
 </li>
-</ul>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_3"><a class="link" href="#_response_fields_3">Response fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeStamp</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 시각</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(CATCH_END)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[]</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">캐치 성공자(플레이어) 목록</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].playerNum</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 식별 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].userId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 사용자 식별자</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].nickname</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 닉네임</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].profileImg</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 프로필 사진 url</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.music</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">개발중</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_response_body_3"><a class="link" href="#_response_body_3">Response body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:233
-message-id:7094c524-6e96-cb1c-a560-4c4647938ad6-4
-subscription:sub-0
-content-type:application/json
-destination:/topic/stage
-content-length:233
-
-{
-    "timeStamp":"2023/07/28 22:55:19",
-    "type":"CATCH_END",
-    "message":"스테이지 캐치 끝",
-    "data":{
-        "players":[
-            {
-                "playerNum":0,
-                "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
-                "nickname":"user_1",
-                "profileImg":null
-            },
-            {
-                "playerNum":1,
-                "userId":"또다른 uuid 값2",
-                "nickname":"user_2",
-                "profileImg":null
-            },
-            {
-                "playerNum":2,
-                "userId":"또다른 uuid 값3",
-                "nickname":"user_3",
-                "profileImg":null
-            }
-        ],
-        "music":"개발중"
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_play_start"><a class="link" href="#_play_start"><strong>Play Start</strong></a></h3>
-<div class="paragraph">
-<p>(응답) 스테이지 플레이 시작</p>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_4"><a class="link" href="#_response_fields_4">Response fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeStamp</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 시각</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(PLAY_START)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">개발중</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_response_body_4"><a class="link" href="#_response_body_4">Response body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:116
-message-id:c7b84486-b761-c839-8f41-998629713a8b-3
-subscription:sub-0
-content-type:application/json
-destination:/topic/stage
-content-length:116
-
-{
-    "timeStamp":"2023/07/26 23:29:43",
-    "type":"PLAY_START",
-    "message":"스테이지 플레이 시작",
-    "data":"개발중"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_send_play_skeleton"><a class="link" href="#_send_play_skeleton"><strong>Send Play Skeleton</strong></a></h3>
-<div class="paragraph">
-<p>스테이지 플레이 스켈레톤 전송</p>
-</div>
-<div class="ulist">
-<ul>
 <li>
-<p>URL : <code>/app/stage/play/skeleton</code></p>
+<p><a href="stage-socket/page/user-count.html" target="_blank" rel="noopener">(응답) 스테이지 입장 사용자수</a></p>
+</li>
+<li>
+<p><a href="stage-socket/page/catch-start.html" target="_blank" rel="noopener">(응답) 캐치 시작</a></p>
+</li>
+<li>
+<p><a href="stage-socket/page/catch-end.html" target="_blank" rel="noopener">(응답) 캐치 끝</a></p>
+</li>
+<li>
+<p><a href="stage-socket/page/play-start.html" target="_blank" rel="noopener">(응답) 플레이 시작</a></p>
+</li>
+<li>
+<p><a href="stage-socket/page/play-skeleton-send.html" target="_blank" rel="noopener">플레이 스켈레톤 전송</a></p>
+</li>
+<li>
+<p><a href="stage-socket/page/mvp-start.html" target="_blank" rel="noopener">(응답) MVP세리머니 시작</a></p>
+</li>
+<li>
+<p><a href="stage-socket/page/stage-routine-stop.html" target="_blank" rel="noopener">(응답) 스테이지 진행 멈춤</a></p>
 </li>
 </ul>
-</div>
-<div class="sect3">
-<h4 id="_request_header"><a class="link" href="#_request_header">Request header</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">제약조건</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x-access-token</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JWT 형식</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">액세스 토큰</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_request_fields"><a class="link" href="#_request_fields">Request fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">제약조건</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>playerNum</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">공백 불가</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">보낼 사용자의 플레이어 번호(CATCH_END 응답에서 받은 번호)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">보낼 스켈레톤 좌표값 한세트(Double)</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_request_body"><a class="link" href="#_request_body">Request body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">$ _INFO_:send STOMP message, destination = /app/stage/play/skeleton, content =
-{
-    "playerNum" : 0,
-    "skeleton" : {
-        "noseX" : 1.1,
-        "noseY" : 2.6,
-        "noseZ" : 3.6,
-        "rightShoulderX" : 1.0,
-        "rightShoulderY" : 2.0,
-        "rightShoulderZ" : 2.0,
-        "rightElbowX" : 1.0,
-        "rightElbowY" : 2.0,
-        "rightElbowZ" : 2.0,
-        "rightWristX" : 1.0,
-        "rightWristY" : 2.0,
-        "rightWristZ" : 2.0,
-        "rightHipX" : 1.0,
-        "rightHipY" : 2.0,
-        "rightHipZ" : 2.0,
-        "rightKneeX" : 1.0,
-        "rightKneeY" : 2.0,
-        "rightKneeZ" : 2.0,
-        "rightAnkleX" : 1.0,
-        "rightAnkleY" : 2.0,
-        "rightAnkleZ" : 2.0,
-        "leftShoulderX" : 1.0,
-        "leftShoulderY" : 2.0,
-        "leftShoulderZ" : 2.0,
-        "leftElbowX" : 1.0,
-        "leftElbowY" : 2.0,
-        "leftElbowZ" : 2.0,
-        "leftWristX" : 1.0,
-        "leftWristY" : 2.0,
-        "leftWristZ" : 2.0,
-        "leftHipX" : 1.0,
-        "leftHipY" : 2.0,
-        "leftHipZ" : 2.0,
-        "leftKneeX" : 1.0,
-        "leftKneeY" : 2.0,
-        "leftKneeZ" : 2.0,
-        "leftAnkleX" : 3.1,
-        "leftAnkleY" : 4.2
-        "leftAnkleZ" : 4.2
-    }
-},
-header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkxMDczMjQ0LCJleHAiOjE2OTEwNzY4NDR9.PEr4_CnlgGLLQtsuv0FMw9sXROVuabBdEsvldgSvg_M"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_5"><a class="link" href="#_response_fields_5">Response fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeStamp</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 시각</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(PLAY_SKELETON)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.userId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">보낸 사용자 고유값</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.playerNum</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">보낸 사용자의 플레이어 번호(CATCH_END 응답에서 받은 번호)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.skeleton</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">보낸 스켈레톤 좌표값 한세트(Double)</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_response_body_5"><a class="link" href="#_response_body_5">Response body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:875
-message-id:78adf6ef-c3f9-e1a9-ca75-2a69e557e407-5
-subscription:sub-0
-content-type:application/json
-destination:/topic/stage
-content-length:875
-
-{
-    "timeStamp":"2023/08/03 23:38:22",
-    "type":"PLAY_SKELETON",
-    "message":"스테이지 플레이 스켈레톤 전달",
-    "data":{
-        "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
-        "playerNum":0,
-        "skeleton":{
-            "noseX" : 1.1,
-            "noseY" : 2.6,
-            "noseZ" : 3.6,
-            "rightShoulderX" : 1.0,
-            "rightShoulderY" : 2.0,
-            "rightShoulderZ" : 2.0,
-            "rightElbowX" : 1.0,
-            "rightElbowY" : 2.0,
-            "rightElbowZ" : 2.0,
-            "rightWristX" : 1.0,
-            "rightWristY" : 2.0,
-            "rightWristZ" : 2.0,
-            "rightHipX" : 1.0,
-            "rightHipY" : 2.0,
-            "rightHipZ" : 2.0,
-            "rightKneeX" : 1.0,
-            "rightKneeY" : 2.0,
-            "rightKneeZ" : 2.0,
-            "rightAnkleX" : 1.0,
-            "rightAnkleY" : 2.0,
-            "rightAnkleZ" : 2.0,
-            "leftShoulderX" : 1.0,
-            "leftShoulderY" : 2.0,
-            "leftShoulderZ" : 2.0,
-            "leftElbowX" : 1.0,
-            "leftElbowY" : 2.0,
-            "leftElbowZ" : 2.0,
-            "leftWristX" : 1.0,
-            "leftWristY" : 2.0,
-            "leftWristZ" : 2.0,
-            "leftHipX" : 1.0,
-            "leftHipY" : 2.0,
-            "leftHipZ" : 2.0,
-            "leftKneeX" : 1.0,
-            "leftKneeY" : 2.0,
-            "leftKneeZ" : 2.0,
-            "leftAnkleX" : 3.1,
-            "leftAnkleY" : 4.2
-            "leftAnkleZ" : 4.2
-        }
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_mvp_start"><a class="link" href="#_mvp_start"><strong>MVP Start</strong></a></h3>
-<div class="paragraph">
-<p>(응답) 스테이지 MVP세리머니 시작</p>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_6"><a class="link" href="#_response_fields_6">Response fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeStamp</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 시각</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(MVP_START)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">개발중</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_response_body_6"><a class="link" href="#_response_body_6">Response body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:121
-message-id:c7b84486-b761-c839-8f41-998629713a8b-4
-subscription:sub-0
-content-type:application/json
-destination:/topic/stage
-content-length:121
-
-{
-    "timeStamp":"2023/07/26 23:29:44",
-    "type":"MVP_START",
-    "message":"스테이지 MVP세리머니 시작",
-    "data":"개발중"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_stage_routine_stop"><a class="link" href="#_stage_routine_stop"><strong>Stage Routine Stop</strong></a></h3>
-<div class="paragraph">
-<p>(응답) 스테이지 진행 멈춤</p>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_7"><a class="link" href="#_response_fields_7">Response fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeStamp</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 시각</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(STAGE_ROUTINE_STOP)</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_response_body_7"><a class="link" href="#_response_body_7">Response body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:102
-message-id:c7b84486-b761-c839-8f41-998629713a8b-14
-subscription:sub-0
-content-type:application/json
-destination:/topic/stage
-content-length:102
-
-{
-    "timeStamp":"2023/07/26 23:30:25",
-    "type":"STAGE_ROUTINE_STOP",
-    "message":"스테이지 진행 멈춤"
-}</code></pre>
-</div>
 </div>
 <hr>
 </div>
@@ -3212,7 +2501,7 @@ content-length:102
 Content-Type: application/json;charset=UTF-8
 x-access-token: 액세스 토큰 값
 x-refresh-token: 리프레시 토큰 값
-X-CSRF-TOKEN: ab794ddb-0c1e-40f0-9cc7-f734ae8fe417
+X-CSRF-TOKEN: 7696a199-cfb3-44e6-a934-f333ad3954cf
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3320,27 +2609,27 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 932
 
 {
-  "timeStamp" : "2023/08/04 01:42:45",
+  "timeStamp" : "2023/08/04 01:53:42",
   "code" : "TALK-2001",
   "message" : "[라이브톡] 라이브톡 메세지 목록 조회 성공",
   "data" : {
     "page" : 0,
     "size" : 3,
     "messages" : [ {
-      "messageId" : "426cffd4-9363-4f94-9663-c1baaad6b848",
+      "messageId" : "7345825d-f9fc-46f4-a1f7-b0859a46ec03",
       "content" : "1 메세지내용 test",
-      "createdAt" : "2023-08-04T01:42:45.221420300+09:00[Asia/Seoul]",
+      "createdAt" : "2023-08-04T01:53:42.354397300+09:00[Asia/Seoul]",
       "sender" : {
-        "userId" : "ca68eb04-07b5-48ff-910b-0b3871eb5639",
+        "userId" : "fdcfc37c-e1a7-43dd-bb9e-cc9c305f1c83",
         "nickname" : "nicknameTest",
         "profileImg" : "http://testurl"
       }
     }, {
-      "messageId" : "c6e8c229-b339-4358-a343-e7620386bb7e",
+      "messageId" : "02a31efc-7c28-49e5-b5b8-3d3d42167148",
       "content" : "2 메세지내용 test",
-      "createdAt" : "2023-08-04T01:42:45.221420300+09:00[Asia/Seoul]",
+      "createdAt" : "2023-08-04T01:53:42.354397300+09:00[Asia/Seoul]",
       "sender" : {
-        "userId" : "ca68eb04-07b5-48ff-910b-0b3871eb5639",
+        "userId" : "fdcfc37c-e1a7-43dd-bb9e-cc9c305f1c83",
         "nickname" : "nicknameTest",
         "profileImg" : "http://testurl"
       }
@@ -3353,269 +2642,17 @@ Content-Length: 932
 <hr>
 </div>
 <h1 id="_talk_web_socket" class="sect0"><a class="link" href="#_talk_web_socket">Talk (Web Socket)</a></h1>
-<div class="sect2">
-<h3 id="_send_talk_message"><a class="link" href="#_send_talk_message"><strong>Send Talk Message</strong></a></h3>
-<div class="paragraph">
-<p>라이브톡 메세지 전송</p>
-</div>
+<div class="openblock partintro">
+<div class="content">
 <div class="ulist">
 <ul>
 <li>
-<p>URL : <code>/app/talks/messages</code></p>
+<p><a href="talk-socket/page/talk-message-send.html" target="_blank" rel="noopener">라이브톡 메세지 전송</a></p>
 </li>
-</ul>
-</div>
-<div class="sect3">
-<h4 id="_request_header_2"><a class="link" href="#_request_header_2">Request header</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">제약조건</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x-access-token</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JWT 형식</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">액세스 토큰</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_request_fields_2"><a class="link" href="#_request_fields_2">Request fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">제약조건</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">공백 불가</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">전송 메세지 내용</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_request_body_2"><a class="link" href="#_request_body_2">Request body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">$ _INFO_:send STOMP message, destination = /app/talks/messages, content = {"content":"메세지내용~~"}, header = {"x-access-token" : "액세스 토큰 값"}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_8"><a class="link" href="#_response_fields_8">Response fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeStamp</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 시각</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(TALK_MESSAGE)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.content</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 내용</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.sender.userId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">보낸 사용자 고유값</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.sender.nickname</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">보낸 사용자 닉네임</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.sender.profileImg</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">보낸 사용자 프로필 사진</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_response_body_8"><a class="link" href="#_response_body_8">Response body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:231
-message-id:716dc9e4-1749-66cd-e0ac-932e4d656238-1
-subscription:sub-0
-content-type:application/json
-destination:/topic/stage
-content-length:231
-
-{
-    "timeStamp":"2023/07/26 23:45:11",
-    "type":"TALK_MESSAGE",
-    "message":"라이브톡 메세지 전송",
-    "data":{
-        "content":"메세지내용~~",
-        "sender":{
-            "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
-            "nickname":"user_1",
-            "profileImg":"http://이미지url"
-        }
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_send_talk_reaction"><a class="link" href="#_send_talk_reaction"><strong>Send Talk Reaction</strong></a></h3>
-<div class="paragraph">
-<p>라이브톡 반응 전송</p>
-</div>
-<div class="ulist">
-<ul>
 <li>
-<p>URL : <code>/app/talks/reactions</code></p>
+<p><a href="talk-socket/page/talk-reaction-send.html" target="_blank" rel="noopener">라이브톡 반응 전송</a></p>
 </li>
 </ul>
-</div>
-<div class="sect3">
-<h4 id="_request_header_3"><a class="link" href="#_request_header_3">Request header</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">제약조건</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x-access-token</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JWT 형식</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">액세스 토큰</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_request_body_3"><a class="link" href="#_request_body_3">Request body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code data-lang="http" class="language-http hljs">$ _INFO_:send STOMP message, destination = /app/talks/reactions, content = , header = {"x-access-token" : "액세스 토큰 값"}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_9"><a class="link" href="#_response_fields_9">Response fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeStamp</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 시각</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(TALK_REACTION)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.content</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 내용</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_response_body_9"><a class="link" href="#_response_body_9">Response body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:97
-message-id:716dc9e4-1749-66cd-e0ac-932e4d656238-0
-subscription:sub-0
-content-type:application/json
-destination:/topic/stage
-content-length:97
-
-{
-    "timeStamp":"2023/07/26 23:44:27",
-    "type":"TALK_REACTION",
-    "message":"라이브톡 반응 전송"
-}</code></pre>
-</div>
 </div>
 <hr>
 </div>
