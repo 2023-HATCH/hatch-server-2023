@@ -16,13 +16,13 @@ operation::get-video-detail[snippets='http-request,request-headers,path-paramete
 
 === 홈 영상 목록 조회 - 최신순
 
-operation::get-video-list-by-created-at[snippets='http-request,request-parameters,response-fields-beneath-data,http-response']
+operation::get-video-list-by-created-at[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data,http-response']
 
 
 
 === 랜덤 영상 목록 조회 (검색 화면)
 
-operation::get-video-list-by-random[snippets='http-request,request-parameters,response-fields-beneath-data,http-response']
+operation::get-video-list-by-random[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data,http-response']
 
 
 
@@ -39,7 +39,7 @@ operation::post-video-upload[snippets='http-request,request-headers,request-part
 
 === 검색 - 태그 검색
 
-operation::search-video-list-by-hasthag[snippets='http-request,request-parameters,response-fields-beneath-data-video-list,http-response']
+operation::search-video-list-by-hashtag[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data-video-list,http-response']
 
 
 

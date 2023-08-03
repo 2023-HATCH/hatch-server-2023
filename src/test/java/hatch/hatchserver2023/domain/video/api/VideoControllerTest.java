@@ -287,9 +287,12 @@ public class VideoControllerTest {
                 //when & then
                 StatusCode code = VideoStatusCode.GET_VIDEO_LIST_SUCCESS;
 
-                MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders.get("/api/v1/videos")
-                                                                                            .param("page", "0")
-                                                                                            .param("size", "2");
+                MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
+                        .get("/api/v1/videos")
+                        .header("headerXAccessToken", "headerXAccessToken")
+                        .header("headerXRefreshToken", "headerXRefreshToken")
+                        .param("page", "0")
+                        .param("size", "2");
 
                 ResultActions resultActions = mockMvc.perform(requestGet);
 
@@ -308,6 +311,10 @@ public class VideoControllerTest {
                 resultActions
                         .andDo( //rest docs 문서 작성 시작
                                 docs.document(    //문서 조각 디렉토리 명
+                                        requestHeaders(
+                                                headerWithName("headerXAccessToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n liked의 차이").optional(),
+                                                headerWithName("headerXRefreshToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n liked의 차이").optional()
+                                        ),
                                         requestParameters(
                                                 parameterWithName("page").description("페이지 번호(0부터 시작)"),
                                                 parameterWithName("size").description("페이지 크기")
@@ -350,9 +357,12 @@ public class VideoControllerTest {
                 //when
                 StatusCode code = VideoStatusCode.GET_VIDEO_LIST_SUCCESS;
 
-                MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders.get("/api/v1/videos/random")
-                                                                                            .param("page", "0")
-                                                                                            .param("size", "2");
+                MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
+                        .get("/api/v1/videos/random")
+                        .header("headerXAccessToken", "headerXAccessToken")
+                        .header("headerXRefreshToken", "headerXRefreshToken")
+                        .param("page", "0")
+                        .param("size", "2");
 
                 //then
                 ResultActions resultActions = mockMvc.perform(requestGet);
@@ -372,6 +382,10 @@ public class VideoControllerTest {
                 resultActions
                         .andDo( //rest docs 문서 작성 시작
                                 docs.document(    //문서 조각 디렉토리 명
+                                        requestHeaders(
+                                                headerWithName("headerXAccessToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n liked의 차이").optional(),
+                                                headerWithName("headerXRefreshToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n liked의 차이").optional()
+                                        ),
                                         requestParameters(
                                                 parameterWithName("page").description("페이지 번호(0부터 시작)"),
                                                 parameterWithName("size").description("페이지 크기")
@@ -508,6 +522,8 @@ public class VideoControllerTest {
 
                 MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
                                                             .get("/api/v1/videos/search")
+                                                            .header("headerXAccessToken", "headerXAccessToken")
+                                                            .header("headerXRefreshToken", "headerXRefreshToken")
                                                             .param("tag", tag)
                                                             .param("page", "0")
                                                             .param("size", "2");
@@ -530,6 +546,10 @@ public class VideoControllerTest {
                 resultActions
                         .andDo( //rest docs 문서 작성 시작
                                 docs.document(
+                                        requestHeaders(
+                                                headerWithName("headerXAccessToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n liked의 차이").optional(),
+                                                headerWithName("headerXRefreshToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n liked의 차이").optional()
+                                        ),
                                         requestParameters(
                                                 parameterWithName("tag").description("검색하고자 하는 해시태그"),
                                                 parameterWithName("page").description("페이지 번호(0부터 시작)"),

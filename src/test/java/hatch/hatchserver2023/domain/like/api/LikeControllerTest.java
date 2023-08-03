@@ -247,6 +247,8 @@ public class LikeControllerTest {
 
         MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
                 .get("/api/v1/likes/{userId}", user.getUuid())
+                .header("headerXAccessToken", "headerXAccessToken")
+                .header("headerXRefreshToken", "headerXRefreshToken")
                 .param("page", "0")
                 .param("size", "2");
 
@@ -268,6 +270,10 @@ public class LikeControllerTest {
         resultActions
                 .andDo(
                         docs.document(
+                                requestHeaders(
+                                        headerWithName("headerXAccessToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\nliked의 차이").optional(),
+                                        headerWithName("headerXRefreshToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\nliked의 차이").optional()
+                                ),
                                 pathParameters(
                                         parameterWithName("userId").description("사용자 UUID")
                                 ),
