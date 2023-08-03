@@ -2,8 +2,8 @@
 = Talk (Web Socket)
 
 // 수동으로 작성
-include::talk-socket/talk-message-send.adoc[]
+include::talk-socket/page/talk-message-send.adoc[]
 
 // 수동으로 작성
-include::talk-socket/talk-reaction-send.adoc[]
+include::talk-socket/page/talk-reaction-send.adoc[]
 

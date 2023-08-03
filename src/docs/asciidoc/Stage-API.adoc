@@ -1,29 +1,11 @@
 // 도메인 명 : h1
 = Stage
 
-// api 명 : h3
-=== *Enter Stage*
-스테이지 입장 api
+- link:stage/page/enter-stage.html[스테이지 입장, window=_blank]
 
-- 이 요청 전에 반드시 웹소켓 connect 요청과 스테이지 구독 요청을 해주세요! - Stage (Web Socket) 명세 참고
+- link:stage/page/get-stage-enter-users.html[스테이지 입장 사용자 목록 조회, window=_blank]
 
-operation::enter-stage[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data,http-response']
+- link:stage/page/register-catch.html[캐치 등록, window=_blank]
 
-=== *Get Stage Enter Users*
-스테이지 내 사용자 목록 조회 api
+- link:stage/page/exit-stage.html[스테이지 퇴장, window=_blank]
 
-operation::get-stage-users[snippets='http-request,response-fields-beneath-data,http-response']
-
-=== *Register Catch*
-스테이지 캐치 등록 api
-
-operation::register-catch[snippets='http-request,http-response']
-
-
-=== *Exit Stage*
-스테이지 퇴장 api (임시. 개발용)
-
-- 인원수-1 처리, 입장목록에서 삭제됨
-- 입장목록이 비어있을 경우, 인원수를 0으로 초기화시킴
-
-operation::exit-stage[snippets='http-request,request-headers,http-response']
