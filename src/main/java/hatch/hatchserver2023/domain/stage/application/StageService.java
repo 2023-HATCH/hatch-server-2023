@@ -85,28 +85,23 @@ public class StageService {
     public int addStageUser(User user) {
         log.info("[SERVICE] addAndGetStageUserCount");
 
-//        if(isExistUser(user)){
+        int userCount = stageRoutineService.getStageUserCount();
+
+        if(isExistUser(user)){
 //            throw new StageException(StageStatusCode.ALREADY_ENTERED_USER);
-//        }
+            log.info("already entered user in stage");
+        }
+        else{
+            userCount += 1;
+            redisDao.setValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
+            redisDao.setValues(StageRoutineService.STAGE_ENTER_USER_COUNT, String.valueOf(userCount));
+            runStageRoutine(userCount);
+        }
 
-        int increasedCount = addStageData(user);
+        stageSocketResponser.userCount(userCount);
 
-        stageSocketResponser.userCount(increasedCount);
+        return userCount;
 
-        runStageRoutine(increasedCount);
-
-        return increasedCount;
-    }
-
-    private int addStageData(User user) {
-        // 인원수 increase
-        int increasedCount = stageRoutineService.getStageUserCount() + 1;
-        redisDao.setValues(StageRoutineService.STAGE_ENTER_USER_COUNT, String.valueOf(increasedCount));
-        log.info("[SERVICE] increasedCount : {}", increasedCount);
-
-        // redis 입장 목록에 입장한 사용자 PK 추가
-        redisDao.setValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
-        return increasedCount;
     }
 
     private void runStageRoutine(int increasedCount) {
