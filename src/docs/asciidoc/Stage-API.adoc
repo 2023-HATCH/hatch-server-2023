@@ -9,11 +9,16 @@
 
 operation::enter-stage[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data,http-response']
 
-// api 명 : h3
 === *Get Stage Enter Users*
 스테이지 내 사용자 목록 조회 api
 
 operation::get-stage-users[snippets='http-request,response-fields-beneath-data,http-response']
+
+=== *Register Catch*
+스테이지 캐치 등록 api
+
+operation::register-catch[snippets='http-request,http-response']
+
 
 === *Exit Stage*
 스테이지 퇴장 api (임시. 개발용)

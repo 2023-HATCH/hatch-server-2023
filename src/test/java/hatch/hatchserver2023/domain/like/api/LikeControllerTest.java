@@ -263,8 +263,8 @@ public class LikeControllerTest {
                 .andExpect(jsonPath("$.data.videoList[1].uuid").value(video2.getUuid().toString()))
                 .andExpect(jsonPath("$.data.videoList[0].title").value(video1.getTitle()))
                 .andExpect(jsonPath("$.data.videoList[1].title").value(video2.getTitle()))
-                .andExpect(jsonPath("$.data.videoList[0].user.uuid").value(video1.getUserId().getUuid().toString()))
-                .andExpect(jsonPath("$.data.videoList[1].user.uuid").value(video2.getUserId().getUuid().toString()))
+                .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUserId().getUuid().toString()))
+                .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUserId().getUuid().toString()))
         ;
 
         resultActions
@@ -286,7 +286,7 @@ public class LikeControllerTest {
                                         fieldWithPath("uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID"),
                                         fieldWithPath("title").type(JsonFieldType.STRING).description("영상 제목"),
                                         fieldWithPath("tag").type(JsonFieldType.STRING).description("해시태그"),
-                                        fieldWithPath("user.uuid").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
+                                        fieldWithPath("user.userId").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
                                         fieldWithPath("user.email").type(JsonFieldType.STRING).description("사용자 이메일"),
                                         fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
                                         fieldWithPath("user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 S3 경로"),

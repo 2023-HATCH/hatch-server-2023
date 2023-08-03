@@ -176,7 +176,7 @@ public class VideoControllerTest {
                         .andExpect(jsonPath("$.message").value(code.getMessage()))
                         .andExpect(jsonPath("$.data.uuid").value(video1.getUuid().toString()))
                         .andExpect(jsonPath("$.data.title").value(video1.getTitle()))
-                        .andExpect(jsonPath("$.data.user.uuid").value(video1.getUserId().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.user.userId").value(video1.getUserId().getUuid().toString()))
                         .andExpect(jsonPath("$.data.videoUrl").value(video1.getVideoUrl()))
                         .andExpect(jsonPath("$.data.liked").value(isLiked))
                 ;
@@ -196,7 +196,7 @@ public class VideoControllerTest {
                                                 fieldWithPath("uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID"),
                                                 fieldWithPath("title").type(JsonFieldType.STRING).description("영상 제목"),
                                                 fieldWithPath("tag").type(JsonFieldType.STRING).description("해시태그"),
-                                                fieldWithPath("user.uuid").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
+                                                fieldWithPath("user.userId").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
                                                 fieldWithPath("user.email").type(JsonFieldType.STRING).description("사용자 이메일"),
                                                 fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
                                                 fieldWithPath("user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 S3 경로"),
@@ -304,8 +304,8 @@ public class VideoControllerTest {
                         .andExpect(jsonPath("$.data.videoList[1].uuid").value(video2.getUuid().toString()))
                         .andExpect(jsonPath("$.data.videoList[0].title").value(video1.getTitle()))
                         .andExpect(jsonPath("$.data.videoList[1].title").value(video2.getTitle()))
-                        .andExpect(jsonPath("$.data.videoList[0].user.uuid").value(video1.getUserId().getUuid().toString()))
-                        .andExpect(jsonPath("$.data.videoList[1].user.uuid").value(video2.getUserId().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUserId().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUserId().getUuid().toString()))
                         ;
 
                 resultActions
@@ -326,7 +326,7 @@ public class VideoControllerTest {
                                                 fieldWithPath("videoList.[].uuid").type(JsonFieldType.STRING).description("생성된 동영상 식별자 UUID"),
                                                 fieldWithPath("videoList.[].title").type(JsonFieldType.STRING).description("영상 제목"),
                                                 fieldWithPath("videoList.[].tag").type(JsonFieldType.STRING).description("해시태그"),
-                                                fieldWithPath("videoList.[].user.uuid").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
+                                                fieldWithPath("videoList.[].user.userId").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
                                                 fieldWithPath("videoList.[].user.email").type(JsonFieldType.STRING).description("사용자 이메일"),
                                                 fieldWithPath("videoList.[].user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
                                                 fieldWithPath("videoList.[].user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 S3 경로"),
@@ -375,8 +375,8 @@ public class VideoControllerTest {
                         .andExpect(jsonPath("$.data.videoList[1].uuid").value(video2.getUuid().toString()))
                         .andExpect(jsonPath("$.data.videoList[0].title").value(video1.getTitle()))
                         .andExpect(jsonPath("$.data.videoList[1].title").value(video2.getTitle()))
-                        .andExpect(jsonPath("$.data.videoList[0].user.uuid").value(video1.getUserId().getUuid().toString()))
-                        .andExpect(jsonPath("$.data.videoList[1].user.uuid").value(video2.getUserId().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUserId().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUserId().getUuid().toString()))
                 ;
 
                 resultActions
@@ -397,7 +397,7 @@ public class VideoControllerTest {
                                                 fieldWithPath("videoList.[].uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID"),
                                                 fieldWithPath("videoList.[].title").type(JsonFieldType.STRING).description("영상 제목"),
                                                 fieldWithPath("videoList.[].tag").type(JsonFieldType.STRING).description("해시태그"),
-                                                fieldWithPath("videoList.[].user.uuid").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
+                                                fieldWithPath("videoList.[].user.userId").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
                                                 fieldWithPath("videoList.[].user.email").type(JsonFieldType.STRING).description("사용자 이메일"),
                                                 fieldWithPath("videoList.[].user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
                                                 fieldWithPath("videoList.[].user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 S3 경로"),
@@ -539,8 +539,8 @@ public class VideoControllerTest {
                         .andExpect(jsonPath("$.data.videoList[1].uuid").value(video2.getUuid().toString()))
                         .andExpect(jsonPath("$.data.videoList[0].title").value(video1.getTitle()))
                         .andExpect(jsonPath("$.data.videoList[1].title").value(video2.getTitle()))
-                        .andExpect(jsonPath("$.data.videoList[0].user.uuid").value(video1.getUserId().getUuid().toString()))
-                        .andExpect(jsonPath("$.data.videoList[1].user.uuid").value(video2.getUserId().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUserId().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUserId().getUuid().toString()))
                 ;
 
                 resultActions
@@ -560,7 +560,7 @@ public class VideoControllerTest {
                                                 fieldWithPath("uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID"),
                                                 fieldWithPath("title").type(JsonFieldType.STRING).description("영상 제목"),
                                                 fieldWithPath("tag").type(JsonFieldType.STRING).description("해시태그"),
-                                                fieldWithPath("user.uuid").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
+                                                fieldWithPath("user.userId").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
                                                 fieldWithPath("user.email").type(JsonFieldType.STRING).description("사용자 이메일"),
                                                 fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
                                                 fieldWithPath("user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 S3 경로"),
