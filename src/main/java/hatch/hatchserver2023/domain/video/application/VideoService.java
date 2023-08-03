@@ -52,6 +52,9 @@ public class VideoService {
     @Value("${DEFAULT_THUMBNAIL_URL}")
     private String DEFAULT_THUMBNAIL_URL;
 
+    @Value("${CLOUDFRONT_URL}")
+    private String CLOUDFRONT_URL;
+
 
     /**
      * 영상 하나 상세 조회
@@ -164,7 +167,8 @@ public class VideoService {
         log.info("[VideoService] Single video Upload");
 
         // 영상 업로드하고
-        String videoUrl = s3Service.uploadToVideo(video, user);
+        String s3VideoUrl = s3Service.uploadToVideo(video, user);
+        String videoUrl = CLOUDFRONT_URL + s3VideoUrl.substring(49);
 
         // 영상을 File로 바꾸고
         File diskVideo = multipartfileToFile(video);
@@ -250,7 +254,10 @@ public class VideoService {
             MultipartFile multipartFileThumbnail = fileToMultipartFile(thumbnail);
 
             // 썸네일 S3에 업로드
-            thumbnailUrl = uploadImg(multipartFileThumbnail, user);
+            String s3ThumbnailUrl = uploadImg(multipartFileThumbnail, user);
+
+            //cloudfront URL로 변경
+            thumbnailUrl = CLOUDFRONT_URL + s3ThumbnailUrl.substring(49);
 
             //임시 파일 지우기(다른 메서드)
             removeTempFile(thumbnail);

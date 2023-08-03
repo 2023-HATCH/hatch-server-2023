@@ -88,6 +88,7 @@ public class VideoResponseDto {
 
         private Boolean isLast;
 
+        // 비회원 조회
         public static GetVideoList toDto(Slice<Video> slice){
 
             List<GetVideo> getVideos = new ArrayList<>();
@@ -96,6 +97,24 @@ public class VideoResponseDto {
                 //dto로 만들어 add
                 getVideos.add(GetVideo.toDto(video));
             }
+            return GetVideoList.builder()
+                    .videoList(getVideos)
+                    .isLast(slice.isLast())
+                    .build();
+        }
+
+        // 회원 조회: 좋아요 리스트를 함께 받는 경우
+        public static GetVideoList toDto(Slice<Video> slice, List<Boolean> likeList){
+
+            List<GetVideo> getVideos = new ArrayList<>();
+            List<Video> videoList = slice.getContent();
+
+            for(int idx = 0; idx < slice.getSize(); idx++){
+
+                //dto로 만들어 add
+                getVideos.add(GetVideo.toDto(videoList.get(idx), likeList.get(idx)));
+            }
+
             return GetVideoList.builder()
                     .videoList(getVideos)
                     .isLast(slice.isLast())
