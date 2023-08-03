@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -86,13 +87,32 @@ public class VideoController {
      * - 홈에서 사용할 api
      * - 최신순 조회
      *
-     * @param pageable
+     * @param user, pageable
      * @return
      */
+    @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
     @GetMapping
-    public ResponseEntity<CommonResponse> getVideoList(Pageable pageable){
+    public ResponseEntity<CommonResponse> getVideoList(@AuthenticationPrincipal User user,
+                                                       Pageable pageable){
         Slice<Video> slice = videoService.findByCreatedAt(pageable);
 
+        //회원이면 좋아요를 눌렀는지 확인
+        if(user != null) {
+            // 각 인덱스에서 좋아요를 눌렀는지 아닌지를 가지고 있는 리스트
+            List<Boolean> likeList = new ArrayList<>();
+
+            for (Video video : slice) {
+                likeList.add(likeService.isAlreadyLiked(video, user));
+            }
+
+            //좋아요 여부 리스트와 함께 DTO로 만듦
+            return ResponseEntity.ok(CommonResponse.toResponse(
+                    VideoStatusCode.GET_VIDEO_LIST_SUCCESS,
+                    VideoResponseDto.GetVideoList.toDto(slice, likeList)
+            ));
+        }
+
+        //비회원이면, liked가 모두 false
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.GET_VIDEO_LIST_SUCCESS,
                 VideoResponseDto.GetVideoList.toDto(slice)
@@ -103,13 +123,33 @@ public class VideoController {
      * 영상 목록 조회
      * - 검색 화면에서 사용할 api
      *
-     * @param pageable
+     * @param user, pageable
      * @return
      */
+    @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
     @GetMapping("/random")
-    public ResponseEntity<CommonResponse> getRandomVideoList(Pageable pageable) {
+    public ResponseEntity<CommonResponse> getRandomVideoList(@AuthenticationPrincipal User user,
+                                                             Pageable pageable) {
+
         Slice<Video> slice = videoService.findByRandom(pageable);
 
+        //회원이면 좋아요를 눌렀는지 확인
+        if (user != null) {
+            // 각 인덱스에서 좋아요를 눌렀는지 아닌지를 가지고 있는 리스트
+            List<Boolean> likeList = new ArrayList<>();
+
+            for (Video video : slice) {
+                likeList.add(likeService.isAlreadyLiked(video, user));
+            }
+
+            //좋아요 여부 리스트와 함께 DTO로 만듦
+            return ResponseEntity.ok(CommonResponse.toResponse(
+                    VideoStatusCode.GET_VIDEO_LIST_SUCCESS,
+                    VideoResponseDto.GetVideoList.toDto(slice, likeList)
+            ));
+        }
+
+        //비회원이면, liked가 모두 false
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.GET_VIDEO_LIST_SUCCESS,
                 VideoResponseDto.GetVideoList.toDto(slice)
@@ -214,14 +254,34 @@ public class VideoController {
      * @param pageable
      * @return videoList
      */
+    @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
     @GetMapping("/search")
-    public ResponseEntity<CommonResponse> searchByHashtag(@RequestParam String tag, Pageable pageable) {
-        Slice<Video> videoList = hashtagService.searchHashtag(tag, pageable);
+    public ResponseEntity<CommonResponse> searchByHashtag(@AuthenticationPrincipal User user,
+                                                          @RequestParam String tag,
+                                                          Pageable pageable) {
 
-        //videoList 출력
+        Slice<Video> slice = hashtagService.searchHashtag(tag, pageable);
+
+        //회원이면 좋아요를 눌렀는지 확인
+        if (user != null) {
+            // 각 인덱스에서 좋아요를 눌렀는지 아닌지를 가지고 있는 리스트
+            List<Boolean> likeList = new ArrayList<>();
+
+            for (Video video : slice) {
+                likeList.add(likeService.isAlreadyLiked(video, user));
+            }
+
+            //좋아요 여부 리스트와 함께 DTO로 만듦
+            return ResponseEntity.ok(CommonResponse.toResponse(
+                    VideoStatusCode.HASHTAG_SEARCH_SUCCESS,
+                    VideoResponseDto.GetVideoList.toDto(slice, likeList)
+            ));
+        }
+
+        //비회원이면, liked가 모두 false
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.HASHTAG_SEARCH_SUCCESS,
-                VideoResponseDto.GetVideoList.toDto(videoList)
+                VideoResponseDto.GetVideoList.toDto(slice)
         ));
     }
 
