@@ -56,8 +56,8 @@ public class StageRoutineService {
                 endCatch();
 
                 // 플레이 시작
-                int musicTime = startPlay();
-                TimeUnit.SECONDS.sleep(musicTime);
+                int playTime = startPlay();
+                TimeUnit.SECONDS.sleep(playTime);
                 endPlay();
 
                 // MVP 시작
@@ -103,8 +103,9 @@ public class StageRoutineService {
         log.info("StageRoutineUtil startPlay");
         redisDao.setValues(STAGE_STATUS, STAGE_STATUS_PLAY);
         stageSocketResponser.startPlay("개발중");
-        int musicTime = 5; //TODO
-        return musicTime;
+        final int readyTime = 5;
+        int musicTime = 10; //TODO
+        return readyTime + musicTime;
     }
 
     private void endPlay() {

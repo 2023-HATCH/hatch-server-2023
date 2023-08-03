@@ -49,6 +49,7 @@ public class TestController {
         KakaoDto.GetUserInfo dto = KakaoDto.GetUserInfo.builder()
                 .kakaoAccountNumber(userNum)
                 .nickname("user_" + userNum)
+                .profileImg(null)
                 .build();
         User user = authService.signUpAndLogin(dto, servletResponse);
         return ResponseEntity.ok().body(CommonResponse.toResponse(CommonCode.CREATED, UserResponseDto.KakaoLogin.toDto(user)));

@@ -1,7 +1,7 @@
 package hatch.hatchserver2023.domain.stage.api;
 
 import hatch.hatchserver2023.domain.stage.application.StageService;
-import hatch.hatchserver2023.domain.stage.dto.SimilarityRequestDto;
+import hatch.hatchserver2023.domain.stage.dto.StageRequestDto;
 import hatch.hatchserver2023.domain.stage.dto.StageResponseDto;
 import hatch.hatchserver2023.domain.talk.application.TalkService;
 import hatch.hatchserver2023.domain.talk.domain.TalkMessage;
@@ -107,18 +107,36 @@ public class StageController {
     }
 
 
-    /**
-     * 안무 정확도 계산 API
-     * 음악 제목과 안무 스켈레톤 배열을 입력하면 AI 서버와 통신하여 해당 곡 안무 정답과의 유사도 계산
-     *
-     * @param request
-     * @return similarity
-     */
-    @PostMapping("/similarity") //TODO : stage/end 로 수정 또는 변경
-    public ResponseEntity<Object> calculateSimilarity(@RequestBody @Valid SimilarityRequestDto request) {
+// 이거 두개 필요 없게 됨 - 플레이 스켈레톤 전송 시 스켈레톤 전장해두고 사용하므로
 
-        Float similarity = stageService.calculateSimilarity(request.getTitle(), request.getSkeletons());
+//    /**
+//     * 플레이 종료 api
+//     *
+//     * @param requestDto
+//     * @return similarity
+//     */
+//    @PostMapping("/play/end")
+//    public ResponseEntity<Object> endPlay(@RequestBody @Valid StageRequestDto.EndPlay requestDto, @AuthenticationPrincipal @NotNull User user) {
+//        log.info("[API] POST /stage/play/end");
+//
+//        Float similarity = stageService.calculateSimilarity(requestDto.getTitle(), requestDto.getSkeletons());
+//        // TODO : redis 에 저장
+//
+//        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK));
+//    }
 
-        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, StageResponseDto.GetSimilarity.toDto(similarity)));
-    }
+//    /**
+//     * 안무 정확도 계산 API
+//     * 음악 제목과 안무 스켈레톤 배열을 입력하면 AI 서버와 통신하여 해당 곡 안무 정답과의 유사도 계산
+//     *
+//     * @param request
+//     * @return similarity
+//     */
+//    @PostMapping("/similarity")
+//    public ResponseEntity<Object> calculateSimilarity(@RequestBody @Valid SimilarityRequestDto request) {
+//
+//        Float similarity = stageService.calculateSimilarity(request.getTitle(), request.getSkeletons());
+//
+//        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, StageResponseDto.GetSimilarity.toDto(similarity)));
+//    }
 }

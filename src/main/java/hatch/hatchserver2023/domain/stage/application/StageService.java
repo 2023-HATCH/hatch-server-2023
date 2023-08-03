@@ -45,6 +45,7 @@ public class StageService {
         this.stageSocketResponser = stageSocketResponser;
     }
 
+    // TODO : 플레이 마무리 로직에서 참고하여 사용할 것
     /**
      * 스테이지에서 댄스 정확도 계산
      *
@@ -54,11 +55,6 @@ public class StageService {
     // TODO: 어떤 사용자인지도 필요한가?
 //    public Float calculateSimilarity(String musicTitle, Float[][] sequence) {
     public Float calculateSimilarity(String musicTitle, List<StageRequestDto.Skeleton> skeletons) {
-        //TODO : 주석지우기
-//        log.info("skeletons : {}", skeletons);
-//        Float[][] temp = StageRequestDto.Skeleton.toFloatArrays(skeletons);
-//        log.info("skeletons toFloatArrays : {}", temp[0][0]);
-//        log.info("skeletons toFloatArrays : {}", temp[temp.length-1][0]);
         // 곡명으로 음악 찾기
         Music music = musicRepository.findByTitle(musicTitle);
 
@@ -81,6 +77,7 @@ public class StageService {
          return response.getBody().getSimilarity();
     }
 
+    // TODO : 8/9 이후 주석코드로 변경할 것
     /**
      * 스테이지 입장 로직
      * @param user
@@ -112,6 +109,32 @@ public class StageService {
         redisDao.setValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
         return increasedCount;
     }
+
+    /**
+     * 스테이지 입장 로직 2 : 중복 입장 불가. 8/9 이후 이걸로 변경
+     * @param user
+     * @return
+     */
+//    public int addStageUser(User user) {
+//        log.info("[SERVICE] addAndGetStageUserCount");
+//
+//        int userCount = stageRoutineService.getStageUserCount();
+//
+//        if(isExistUser(user)){
+////            throw new StageException(StageStatusCode.ALREADY_ENTERED_USER);
+//            log.info("already entered user in stage");
+//        }
+//        else{
+//            userCount += 1;
+//            redisDao.setValuesSet(StageRoutineService.STAGE_ENTER_USER_LIST, user.getId().toString());
+//            redisDao.setValues(StageRoutineService.STAGE_ENTER_USER_COUNT, String.valueOf(userCount));
+//            runStageRoutine(userCount);
+//        }
+//
+//        stageSocketResponser.userCount(userCount);
+//
+//        return userCount;
+//    }
 
     private void runStageRoutine(int increasedCount) {
         String stageStatus = getStageStatus();
