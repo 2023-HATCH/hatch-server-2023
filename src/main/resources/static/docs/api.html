@@ -603,7 +603,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 159
 
-{"timeStamp":"2023/08/03 22:38:50","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
+{"timeStamp":"2023/08/03 23:51:51","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
 </div>
 </div>
 </div>
@@ -622,7 +622,7 @@ Content-Length: 159
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/auth/login?type=kakao HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 41
-X-CSRF-TOKEN: 80e1e9ac-8f4f-4f57-8290-a23b99c88e35
+X-CSRF-TOKEN: 7ed09b1a-d58d-4dee-8e42-8107d0475575
 Host: localhost:8080
 
 {
@@ -700,7 +700,7 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uuid</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">사용자 식별자</p></td>
@@ -717,6 +717,12 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">사용자 이메일(카카오에서 가져온 데이터)</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>profileImg</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 프로필 이미지(카카오에서 가져온 데이터)</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -726,16 +732,17 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 282
+Content-Length: 322
 
 {
-  "timeStamp" : "2023/08/03 22:39:02",
+  "timeStamp" : "2023/08/03 23:52:03",
   "code" : "USER-2000",
   "message" : "[사용자] 카카오 회원가입 및 로그인 성공",
   "data" : {
-    "uuid" : "bdc7d28c-5f79-4189-9540-f1e7a3261c8a",
+    "userId" : "b4547c43-3643-4a6c-9470-350128409060",
     "nickname" : "nicknameTest",
-    "email" : "test@email.com"
+    "email" : "test@email.com",
+    "profileImg" : "http://testurl"
   }
 }</code></pre>
 </div>
@@ -756,7 +763,7 @@ Content-Length: 282
 <h4 id="_영상_상세_조회_http_request"><a class="link" href="#_영상_상세_조회_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/videos/0fc21e52-4912-4cdb-a921-a9ebab301584 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/videos/740c7b99-b5f3-4491-9c10-689d89d41985 HTTP/1.1
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
 Host: localhost:8080</code></pre>
@@ -922,15 +929,15 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 678
 
 {
-  "timeStamp" : "2023/08/03 22:39:05",
+  "timeStamp" : "2023/08/03 23:52:06",
   "code" : "VIDEO-2003",
   "message" : "VIDEO-동영상 상세 정보 조회 성공",
   "data" : {
-    "uuid" : "0fc21e52-4912-4cdb-a921-a9ebab301584",
+    "uuid" : "740c7b99-b5f3-4491-9c10-689d89d41985",
     "title" : "타이틀",
     "tag" : "#해시 #태그",
     "user" : {
-      "userId" : "cfac77e0-74c8-46df-a6ab-fafd530f0970",
+      "userId" : "a4a22927-0c63-49df-8039-3f0e387c6316",
       "nickname" : "닉네임",
       "email" : "이메일",
       "profileImg" : "프로필 이미지 s3 경로"
@@ -1098,16 +1105,16 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 1339
 
 {
-  "timeStamp" : "2023/08/03 22:39:05",
+  "timeStamp" : "2023/08/03 23:52:06",
   "code" : "VIDEO-2004",
   "message" : "VIDEO-동영상 목록 정보 조회 성공",
   "data" : {
     "videoList" : [ {
-      "uuid" : "245f3efc-38f7-464a-8889-c3790f6c5ae5",
+      "uuid" : "281f3f9e-f61c-40e9-a1fb-fdb431acd3c8",
       "title" : "타이틀",
       "tag" : "#해시 #태그",
       "user" : {
-        "userId" : "0acc617a-f52d-4e8a-b9a9-fd6bd4dcef51",
+        "userId" : "1a4880db-b18f-47d5-ac99-c98bb5428128",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -1120,11 +1127,11 @@ Content-Length: 1339
       "createdAt" : null,
       "liked" : false
     }, {
-      "uuid" : "a5422faf-6ea7-4507-8e5d-5cea33add260",
+      "uuid" : "3488eed1-7a61-4137-bda2-b13b97f65e57",
       "title" : "타이틀 1",
       "tag" : "#해시 #태그 #1",
       "user" : {
-        "userId" : "0acc617a-f52d-4e8a-b9a9-fd6bd4dcef51",
+        "userId" : "1a4880db-b18f-47d5-ac99-c98bb5428128",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -1294,16 +1301,16 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 1339
 
 {
-  "timeStamp" : "2023/08/03 22:39:05",
+  "timeStamp" : "2023/08/03 23:52:06",
   "code" : "VIDEO-2004",
   "message" : "VIDEO-동영상 목록 정보 조회 성공",
   "data" : {
     "videoList" : [ {
-      "uuid" : "60845294-3bba-4448-8ed9-7b0be6f76dd1",
+      "uuid" : "5ff3facb-9ac3-40f3-b615-8004834d1e49",
       "title" : "타이틀",
       "tag" : "#해시 #태그",
       "user" : {
-        "userId" : "a9daa987-bbf5-47e2-929b-ddde58e56b7f",
+        "userId" : "42315a77-7100-48df-b8d3-a5ece476d8db",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -1316,11 +1323,11 @@ Content-Length: 1339
       "createdAt" : null,
       "liked" : false
     }, {
-      "uuid" : "f5d29585-d380-4f71-8ebb-4c10e33271d4",
+      "uuid" : "2d9635dd-a196-493d-9d08-d08f8842ee0c",
       "title" : "타이틀 1",
       "tag" : "#해시 #태그 #1",
       "user" : {
-        "userId" : "a9daa987-bbf5-47e2-929b-ddde58e56b7f",
+        "userId" : "42315a77-7100-48df-b8d3-a5ece476d8db",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -1346,7 +1353,7 @@ Content-Length: 1339
 <h4 id="_영상_삭제_http_request"><a class="link" href="#_영상_삭제_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/videos/6c5bae59-a4b0-4712-bfe7-14555eee7057?_csrf=6078506f-1023-4e1a-911c-f5e3463cc35a HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/videos/f36bba5c-86b7-4e6f-867c-c8b43b5d169b?_csrf=6c84730c-ea6d-47f4-9049-6411c804bd9c HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1407,7 +1414,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 159
 
 {
-  "timeStamp" : "2023/08/03 22:39:05",
+  "timeStamp" : "2023/08/03 23:52:06",
   "code" : "VIDEO-2002",
   "message" : "VIDEO-동영상 삭제 성공",
   "data" : {
@@ -1442,7 +1449,7 @@ Content-Disposition: form-data; name=tag
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Content-Disposition: form-data; name=_csrf
 
-a86a649a-c031-4ee7-98a8-7aac4a65e67e
+f99dfc36-b950-4c00-9737-276be9443137
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Content-Disposition: form-data; name=video; filename=video
 Content-Type: application/json
@@ -1559,11 +1566,11 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 193
 
 {
-  "timeStamp" : "2023/08/03 22:39:05",
+  "timeStamp" : "2023/08/03 23:52:06",
   "code" : "VIDEO-2001",
   "message" : "VIDEO-동영상 업로드 성공",
   "data" : {
-    "uuid" : "cae4ad64-8e66-41b2-a5f8-43f44aa42113"
+    "uuid" : "51a968dc-4d05-438f-885a-68a5d318e161"
   }
 }</code></pre>
 </div>
@@ -1642,7 +1649,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 231
 
 {
-  "timeStamp" : "2023/08/03 22:39:04",
+  "timeStamp" : "2023/08/03 23:52:06",
   "code" : "VIDEO-2011",
   "message" : "VIDEO-해시태그 목록 조회 성공",
   "data" : {
@@ -1668,7 +1675,7 @@ Content-Length: 231
 <h4 id="_댓글_등록_http_request"><a class="link" href="#_댓글_등록_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/comments/cf4f5b43-9221-4154-b10e-99d17e9f564c?_csrf=e0524c4a-64e7-425a-890d-1fd7bf1bd05b HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/comments/4768a767-a22c-455b-b094-b9be629ca9c2?_csrf=6abfd72e-ae67-4847-b0bf-2a85ac3c6e73 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
@@ -1781,14 +1788,14 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 433
 
 {
-  "timeStamp" : "2023/08/03 22:38:53",
+  "timeStamp" : "2023/08/03 23:51:54",
   "code" : "VIDEO-2020",
   "message" : "VIDEO-댓글 등록 성공",
   "data" : {
-    "uuid" : "d9464813-1b3e-4bce-b75d-46435037de6e",
+    "uuid" : "f8a69915-71b4-4e68-aa6f-3b1fa96a8bb9",
     "content" : "댓글을 작성했어요!",
     "user" : {
-      "userId" : "732db54a-efc8-4ebc-94b2-653219ca8cbb",
+      "userId" : "9fd1c91a-309b-4e7a-a206-282be8a5fe3a",
       "nickname" : "닉네임",
       "email" : "이메일",
       "profileImg" : "프로필 이미지 s3 경로"
@@ -1805,7 +1812,7 @@ Content-Length: 433
 <h4 id="_댓글_삭제_http_request"><a class="link" href="#_댓글_삭제_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/comments/2a419040-4910-467b-bd60-51e4a803f64c?_csrf=5eee6bea-857d-4a9b-8e13-c7dd88dc9fe7 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/comments/78134669-4df3-4a0c-98b4-eefba34d46a8?_csrf=cd0a5134-972a-4230-b3f5-aa4a5918e9bb HTTP/1.1
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
 Host: localhost:8080</code></pre>
@@ -1893,7 +1900,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 156
 
 {
-  "timeStamp" : "2023/08/03 22:38:52",
+  "timeStamp" : "2023/08/03 23:51:54",
   "code" : "VIDEO-2021",
   "message" : "VIDEO-댓글 삭제 성공",
   "data" : {
@@ -1910,7 +1917,7 @@ Content-Length: 156
 <h4 id="_동영상의_댓글_목록_조회_http_request"><a class="link" href="#_동영상의_댓글_목록_조회_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/comments/a0d392e4-6f0f-4c69-925b-a30ae87b130c HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/comments/32506b33-7448-46a4-bd15-bbc6b19f2999 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2007,25 +2014,25 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 876
 
 {
-  "timeStamp" : "2023/08/03 22:38:53",
+  "timeStamp" : "2023/08/03 23:51:54",
   "code" : "VIDEO-2022",
   "message" : "VIDEO-댓글 목록 조회 성공",
   "data" : {
     "commentList" : [ {
-      "uuid" : "19ca253c-6c54-4f23-9b70-1460a58e60f5",
+      "uuid" : "0087dcd2-8166-45c9-9c52-3e07d109a509",
       "content" : "댓글을 작성했어요!",
       "user" : {
-        "userId" : "ec2f5ba3-db25-4e67-a2c8-2811bbb95505",
+        "userId" : "68b797d2-310e-4818-9b74-701307f19691",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
       },
       "createdAt" : null
     }, {
-      "uuid" : "89e0d501-c659-44fe-9c2c-89e70380896d",
+      "uuid" : "9aca7cae-6de5-45f8-aec6-6361df30b226",
       "content" : "또 다른 댓글을 썼습니다",
       "user" : {
-        "userId" : "ec2f5ba3-db25-4e67-a2c8-2811bbb95505",
+        "userId" : "68b797d2-310e-4818-9b74-701307f19691",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -2053,13 +2060,13 @@ Content-Length: 876
 <h4 id="_좋아요_등록_http_request"><a class="link" href="#_좋아요_등록_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/likes/d9b71b69-7c1a-4b31-a9b5-29f244e6d714 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/likes/3a8146a4-bf1b-4e67-9b9f-13ed3668e298 HTTP/1.1
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
 Host: localhost:8080
 Content-Type: application/x-www-form-urlencoded
 
-_csrf=43ec03cd-179c-4f17-bb53-a271b501cf54</code></pre>
+_csrf=8dedfd87-a92f-458a-a90d-dc154cb7e026</code></pre>
 </div>
 </div>
 </div>
@@ -2144,7 +2151,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 159
 
 {
-  "timeStamp" : "2023/08/03 22:38:55",
+  "timeStamp" : "2023/08/03 23:51:56",
   "code" : "VIDEO-2030",
   "message" : "VIDEO-좋아요 등록 성공",
   "data" : {
@@ -2161,7 +2168,7 @@ Content-Length: 159
 <h4 id="_좋아요_삭제_http_request"><a class="link" href="#_좋아요_삭제_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/likes/9081a69b-994a-4be8-bb1e-b353d25f0059?_csrf=e91dec03-0f4e-4974-beec-c64017c18572 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/likes/19f61a97-3a46-449d-bd33-adacb901ac2e?_csrf=16011d6c-b753-451e-ae2b-a04bf3958750 HTTP/1.1
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
 Host: localhost:8080</code></pre>
@@ -2249,7 +2256,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 159
 
 {
-  "timeStamp" : "2023/08/03 22:38:56",
+  "timeStamp" : "2023/08/03 23:51:57",
   "code" : "VIDEO-2031",
   "message" : "VIDEO-좋아요 삭제 성공",
   "data" : {
@@ -2266,7 +2273,7 @@ Content-Length: 159
 <h4 id="_사용자_좋아요_영상_목록_조회_http_request"><a class="link" href="#_사용자_좋아요_영상_목록_조회_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/likes/7049402c-c218-439e-9b08-0f15487fce1e?page=0&amp;size=2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/likes/718d035b-9310-43d4-8fbe-115ab8c05541?page=0&amp;size=2 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2399,16 +2406,16 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 1346
 
 {
-  "timeStamp" : "2023/08/03 22:38:56",
+  "timeStamp" : "2023/08/03 23:51:57",
   "code" : "VIDEO-2032",
   "message" : "VIDEO-좋아요 누른 영상 목록 조회 성공",
   "data" : {
     "videoList" : [ {
-      "uuid" : "94daab2e-4d11-43a3-986a-44792696e0f6",
+      "uuid" : "2ed96cc9-22df-48d1-8fc0-957380a3c3df",
       "title" : "타이틀",
       "tag" : "#해시 #태그",
       "user" : {
-        "userId" : "7049402c-c218-439e-9b08-0f15487fce1e",
+        "userId" : "718d035b-9310-43d4-8fbe-115ab8c05541",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -2421,11 +2428,11 @@ Content-Length: 1346
       "createdAt" : null,
       "liked" : false
     }, {
-      "uuid" : "3ddcae14-7062-4232-9054-94f4608d7a0a",
+      "uuid" : "83787e99-1b98-4074-acf1-ab22beca98fa",
       "title" : "타이틀 1",
       "tag" : "#해시 #태그 #1",
       "user" : {
-        "userId" : "7049402c-c218-439e-9b08-0f15487fce1e",
+        "userId" : "718d035b-9310-43d4-8fbe-115ab8c05541",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -2469,7 +2476,7 @@ Content-Length: 1346
 Content-Type: application/json;charset=UTF-8
 x-access-token: 액세스 토큰 값
 x-refresh-token: 리프레시 토큰 값
-X-CSRF-TOKEN: e31908ef-d930-45c2-aa65-42bf3a396291
+X-CSRF-TOKEN: 8446f997-7108-42af-95a3-a142354e897b
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2614,7 +2621,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 1040
 
 {
-  "timeStamp" : "2023/08/03 22:38:58",
+  "timeStamp" : "2023/08/03 23:51:59",
   "code" : "STAGE-2001",
   "message" : "[스테이지] 스테이지 입장 성공",
   "data" : {
@@ -2624,20 +2631,20 @@ Content-Length: 1040
       "page" : 0,
       "size" : 3,
       "messages" : [ {
-        "messageId" : "42b1b5de-8b50-4fa1-9089-81b4605ebbc6",
+        "messageId" : "c46d7003-6891-4c40-9490-5fddfb1706c0",
         "content" : "1 메세지내용 test",
-        "createdAt" : "2023-08-03T22:38:58.535667500+09:00[Asia/Seoul]",
+        "createdAt" : "2023-08-03T23:51:59.505082200+09:00[Asia/Seoul]",
         "sender" : {
-          "userId" : "e412cdec-a8f2-4d2f-8dbd-be367122b1ad",
+          "userId" : "0eb41b52-7785-49d5-b9af-897d9ba6034f",
           "nickname" : "nicknameTest",
           "profileImg" : "http://testurl"
         }
       }, {
-        "messageId" : "b3bd0443-dc43-484e-8a9f-7bdc8ec076bf",
+        "messageId" : "c4c20462-3abd-40cb-90a0-a9c9bd35825d",
         "content" : "2 메세지내용 test",
-        "createdAt" : "2023-08-03T22:38:58.539496+09:00[Asia/Seoul]",
+        "createdAt" : "2023-08-03T23:51:59.508973+09:00[Asia/Seoul]",
         "sender" : {
-          "userId" : "e412cdec-a8f2-4d2f-8dbd-be367122b1ad",
+          "userId" : "0eb41b52-7785-49d5-b9af-897d9ba6034f",
           "nickname" : "nicknameTest",
           "profileImg" : "http://testurl"
         }
@@ -2662,7 +2669,7 @@ Content-Length: 1040
 Content-Type: application/json;charset=UTF-8
 x-access-token: 액세스 토큰 값
 x-refresh-token: 리프레시 토큰 값
-X-CSRF-TOKEN: 2eb6c3ac-3cae-426c-8c5e-fa3c870ff5c4
+X-CSRF-TOKEN: 286aef40-ab63-488c-9458-981dbdf8a9dd
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2713,19 +2720,19 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 577
 
 {
-  "timeStamp" : "2023/08/03 22:38:58",
+  "timeStamp" : "2023/08/03 23:51:59",
   "code" : "STAGE-2003",
   "message" : "[스테이지] 스테이지 내 사용자 목록 조회 성공",
   "data" : [ {
-    "userId" : "941909d1-8c1c-48ba-8001-a7ec21c2ce25",
+    "userId" : "24cae9e6-7087-4032-8913-decf055ba409",
     "nickname" : "nicknameTest1",
     "profileImg" : "http://testurl1"
   }, {
-    "userId" : "941909d1-8c1c-48ba-8001-a7ec21c2ce25",
+    "userId" : "24cae9e6-7087-4032-8913-decf055ba409",
     "nickname" : "nicknameTest2",
     "profileImg" : "http://testurl2"
   }, {
-    "userId" : "941909d1-8c1c-48ba-8001-a7ec21c2ce25",
+    "userId" : "24cae9e6-7087-4032-8913-decf055ba409",
     "nickname" : "nicknameTest3",
     "profileImg" : "http://testurl3"
   } ]
@@ -2747,7 +2754,7 @@ Content-Length: 577
 Content-Type: application/json;charset=UTF-8
 x-access-token: 액세스 토큰 값
 x-refresh-token: 리프레시 토큰 값
-X-CSRF-TOKEN: 7766fa3e-85e4-4053-aa30-c8d8e333e22c
+X-CSRF-TOKEN: 8037f032-4938-4f6e-9363-dec8dbe2bd85
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2761,7 +2768,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 123
 
 {
-  "timeStamp" : "2023/08/03 22:38:58",
+  "timeStamp" : "2023/08/03 23:51:59",
   "code" : "STAGE-2004",
   "message" : "[스테이지] 캐치 요청 성공"
 }</code></pre>
@@ -2792,7 +2799,7 @@ Content-Length: 123
 Content-Type: application/json;charset=UTF-8
 x-access-token: 액세스 토큰 값
 x-refresh-token: 리프레시 토큰 값
-X-CSRF-TOKEN: 68a2f523-84eb-4394-898a-7e571365b7e2
+X-CSRF-TOKEN: 692e96c3-6f82-4cb3-844a-8671777596e9
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2831,7 +2838,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 129
 
 {
-  "timeStamp" : "2023/08/03 22:38:58",
+  "timeStamp" : "2023/08/03 23:51:59",
   "code" : "STAGE-2002",
   "message" : "[스테이지] 스테이지 퇴장 성공"
 }</code></pre>
@@ -3287,33 +3294,47 @@ content-length:116
     "skeleton" : {
         "noseX" : 1.1,
         "noseY" : 2.6,
+        "noseZ" : 3.6,
         "rightShoulderX" : 1.0,
         "rightShoulderY" : 2.0,
+        "rightShoulderZ" : 2.0,
         "rightElbowX" : 1.0,
         "rightElbowY" : 2.0,
+        "rightElbowZ" : 2.0,
         "rightWristX" : 1.0,
         "rightWristY" : 2.0,
+        "rightWristZ" : 2.0,
         "rightHipX" : 1.0,
         "rightHipY" : 2.0,
+        "rightHipZ" : 2.0,
         "rightKneeX" : 1.0,
         "rightKneeY" : 2.0,
+        "rightKneeZ" : 2.0,
         "rightAnkleX" : 1.0,
         "rightAnkleY" : 2.0,
+        "rightAnkleZ" : 2.0,
         "leftShoulderX" : 1.0,
         "leftShoulderY" : 2.0,
+        "leftShoulderZ" : 2.0,
         "leftElbowX" : 1.0,
         "leftElbowY" : 2.0,
+        "leftElbowZ" : 2.0,
         "leftWristX" : 1.0,
         "leftWristY" : 2.0,
+        "leftWristZ" : 2.0,
         "leftHipX" : 1.0,
         "leftHipY" : 2.0,
+        "leftHipZ" : 2.0,
         "leftKneeX" : 1.0,
         "leftKneeY" : 2.0,
+        "leftKneeZ" : 2.0,
         "leftAnkleX" : 3.1,
         "leftAnkleY" : 4.2
+        "leftAnkleZ" : 4.2
     }
 },
-header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkwOTA2NjQ1LCJleHAiOjE2OTA5MTAyNDV9.CeQhm8LOd5-cT3pKQypV8P6jVvGpNDaqW25yLXkYZLY"}</code></pre>
+header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkxMDczMjQ0LCJleHAiOjE2OTEwNzY4NDR9.PEr4_CnlgGLLQtsuv0FMw9sXROVuabBdEsvldgSvg_M"
+}</code></pre>
 </div>
 </div>
 </div>
@@ -3371,47 +3392,60 @@ header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyL
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:641
-message-id:18039120-b3d7-545f-c076-381bccd6e8e7-30
+content-length:875
+message-id:78adf6ef-c3f9-e1a9-ca75-2a69e557e407-5
 subscription:sub-0
 content-type:application/json
 destination:/topic/stage
-content-length:641
+content-length:875
 
 {
-    "timeStamp":"2023/08/02 01:29:09",
+    "timeStamp":"2023/08/03 23:38:22",
     "type":"PLAY_SKELETON",
     "message":"스테이지 플레이 스켈레톤 전달",
     "data":{
         "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
         "playerNum":0,
         "skeleton":{
-            "noseX":1.1,
-            "noseY":2.6,
-            "rightShoulderX":1.0,
-            "rightShoulderY":2.0,
-            "rightElbowX":1.0,
-            "rightElbowY":2.0,
-            "rightWristX":1.0,
-            "rightWristY":2.0,
-            "rightHipX":1.0,
-            "rightHipY":2.0,
-            "rightKneeX":1.0,
-            "rightKneeY":2.0,
-            "rightAnkleX":1.0,
-            "rightAnkleY":2.0,
-            "leftShoulderX":1.0,
-            "leftShoulderY":2.0,
-            "leftElbowX":1.0,
-            "leftElbowY":2.0,
-            "leftWristX":1.0,
-            "leftWristY":2.0,
-            "leftHipX":1.0,
-            "leftHipY":2.0,
-            "leftKneeX":1.0,
-            "leftKneeY":2.0,
-            "leftAnkleX":3.1,
-            "leftAnkleY":4.2
+            "noseX" : 1.1,
+            "noseY" : 2.6,
+            "noseZ" : 3.6,
+            "rightShoulderX" : 1.0,
+            "rightShoulderY" : 2.0,
+            "rightShoulderZ" : 2.0,
+            "rightElbowX" : 1.0,
+            "rightElbowY" : 2.0,
+            "rightElbowZ" : 2.0,
+            "rightWristX" : 1.0,
+            "rightWristY" : 2.0,
+            "rightWristZ" : 2.0,
+            "rightHipX" : 1.0,
+            "rightHipY" : 2.0,
+            "rightHipZ" : 2.0,
+            "rightKneeX" : 1.0,
+            "rightKneeY" : 2.0,
+            "rightKneeZ" : 2.0,
+            "rightAnkleX" : 1.0,
+            "rightAnkleY" : 2.0,
+            "rightAnkleZ" : 2.0,
+            "leftShoulderX" : 1.0,
+            "leftShoulderY" : 2.0,
+            "leftShoulderZ" : 2.0,
+            "leftElbowX" : 1.0,
+            "leftElbowY" : 2.0,
+            "leftElbowZ" : 2.0,
+            "leftWristX" : 1.0,
+            "leftWristY" : 2.0,
+            "leftWristZ" : 2.0,
+            "leftHipX" : 1.0,
+            "leftHipY" : 2.0,
+            "leftHipZ" : 2.0,
+            "leftKneeX" : 1.0,
+            "leftKneeY" : 2.0,
+            "leftKneeZ" : 2.0,
+            "leftAnkleX" : 3.1,
+            "leftAnkleY" : 4.2
+            "leftAnkleZ" : 4.2
         }
     }
 }</code></pre>
@@ -3555,7 +3589,7 @@ content-length:102
 Content-Type: application/json;charset=UTF-8
 x-access-token: 액세스 토큰 값
 x-refresh-token: 리프레시 토큰 값
-X-CSRF-TOKEN: c73a88c1-8fa5-43f7-a956-4030a52fd1af
+X-CSRF-TOKEN: 7e85c3e5-d6d5-4569-8c91-16ef318970df
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3663,27 +3697,27 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 932
 
 {
-  "timeStamp" : "2023/08/03 22:39:00",
+  "timeStamp" : "2023/08/03 23:52:01",
   "code" : "TALK-2001",
   "message" : "[라이브톡] 라이브톡 메세지 목록 조회 성공",
   "data" : {
     "page" : 0,
     "size" : 3,
     "messages" : [ {
-      "messageId" : "ddbdfb2f-5ae6-431c-aba1-f825c5034491",
+      "messageId" : "4b2eb7b3-14d4-479c-9e41-0139c16c07bc",
       "content" : "1 메세지내용 test",
-      "createdAt" : "2023-08-03T22:39:00.754508100+09:00[Asia/Seoul]",
+      "createdAt" : "2023-08-03T23:52:01.760980700+09:00[Asia/Seoul]",
       "sender" : {
-        "userId" : "331bcba4-5310-461a-bfb0-2a511b549f34",
+        "userId" : "48733b8a-e7ca-4a01-89a0-36ddb257fe08",
         "nickname" : "nicknameTest",
         "profileImg" : "http://testurl"
       }
     }, {
-      "messageId" : "39ddd19d-66f5-42f0-85aa-2b788832b72e",
+      "messageId" : "19b29628-7ace-40fe-928e-279dd44e2c1c",
       "content" : "2 메세지내용 test",
-      "createdAt" : "2023-08-03T22:39:00.754508100+09:00[Asia/Seoul]",
+      "createdAt" : "2023-08-03T23:52:01.760980700+09:00[Asia/Seoul]",
       "sender" : {
-        "userId" : "331bcba4-5310-461a-bfb0-2a511b549f34",
+        "userId" : "48733b8a-e7ca-4a01-89a0-36ddb257fe08",
         "nickname" : "nicknameTest",
         "profileImg" : "http://testurl"
       }
