@@ -23,6 +23,11 @@
 |true
 |공백 불가
 |보낼 사용자의 플레이어 번호(CATCH_END 응답에서 받은 번호)
+|`+frameNum+`
+|`+Integer+`
+|true
+|공백 불가
+|보낼 스켈레톤의 순서(프레임) 번호. 0부터 시작
 |`+skeleton+`
 |`+-+`
 |false
@@ -36,6 +41,7 @@
 $ _INFO_:send STOMP message, destination = /app/stage/play/skeleton, content =
 {
     "playerNum" : 0,
+    "frameNum" : 0,
     "skeleton" : {
         "noseX" : 1.1,
         "noseY" : 2.6,
@@ -85,6 +91,7 @@ header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyL
 // $ _INFO_:send STOMP message, destination = /app/stage/play/skeleton, content =
 // {
 //     "playerNum" : 0,
+//     "frameNum" : 0,
 //     "skeleton" : {
 //         "noseX" : 1.1,
 //         "noseY" : 2.6,
@@ -136,6 +143,10 @@ header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyL
 |`+Integer+`
 |true
 |보낸 사용자의 플레이어 번호(CATCH_END 응답에서 받은 번호)
+|`+data.frameNum+`
+|`+Integer+`
+|true
+|이 사용자가 보낸 스켈레톤 순서(프레임) 번호. 0부터 시작
 |`+data.skeleton+`
 |`+-+`
 |false
@@ -160,6 +171,7 @@ content-length:875
     "data":{
         "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
         "playerNum":0,
+        "frameNum":0,
         "skeleton":{
             "noseX" : 1.1,
             "noseY" : 2.6,
@@ -221,6 +233,7 @@ content-length:875
 //     "data":{
 //         "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
 //         "playerNum":0,
+//         "frameNum":0,
 //         "skeleton":{
 //             "noseX":1.1,
 //             "noseY":2.6,
