@@ -21,6 +21,9 @@ public class StageRequestDto {
         private Integer playerNum;
 
         @NotNull
+        private Integer frameNum;
+
+        @NotNull
         private Skeleton skeleton;
     }
 
