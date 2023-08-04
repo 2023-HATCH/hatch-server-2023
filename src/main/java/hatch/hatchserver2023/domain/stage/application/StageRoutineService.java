@@ -1,6 +1,7 @@
 package hatch.hatchserver2023.domain.stage.application;
 
 import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
+import hatch.hatchserver2023.domain.stage.dto.StageRequestDto;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
@@ -8,24 +9,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class StageRoutineService {
-
-    public static final String STAGE_ENTER_USER_COUNT = "STAGE_ENTER_USER_COUNT";
-    public static final String STAGE_ENTER_USER_LIST = "STAGE_ENTER_USER_LIST";
-    public static final String STAGE_CATCH_USER_LIST = "STAGE_CATCH_USER_LIST";
-
     public static final String STAGE_STATUS = "STAGE_STATUS";
     public static final String STAGE_STATUS_WAIT = "WAIT";
     public static final String STAGE_STATUS_CATCH = "CATCH";
     public static final String STAGE_STATUS_PLAY = "PLAY";
     public static final String STAGE_STATUS_MVP = "MVP";
+
+    public static final String STAGE_ENTER_USER_COUNT = "STAGE_ENTER_USER_COUNT";
+    public static final String STAGE_ENTER_USER_LIST = "STAGE_ENTER_USER_LIST";
+    public static final String STAGE_CATCH_USER_LIST = "STAGE_CATCH_USER_LIST";
+
+    public static final String STAGE_PLAY_SKELETONS_PREFIX = "STAGE_PLAY_SKELETONS_";
+    public static final int STAGE_PLAYER_COUNT_VALUE = 3;
 
     private static final int STAGE_CATCH_TIME = 3;
     private static final int STAGE_MVP_TIME = 7;
@@ -34,11 +36,13 @@ public class StageRoutineService {
     private final UserRepository userRepository;
     private final RedisDao redisDao;
 
+    private final AIService aiService;
     private final StageSocketResponser stageSocketResponser;
 
-    public StageRoutineService(UserRepository userRepository, RedisDao redisDao, StageSocketResponser stageSocketResponser) {
+    public StageRoutineService(UserRepository userRepository, RedisDao redisDao, AIService aiService, StageSocketResponser stageSocketResponser) {
         this.userRepository = userRepository;
         this.redisDao = redisDao;
+        this.aiService = aiService;
         this.stageSocketResponser = stageSocketResponser;
     }
 
@@ -110,6 +114,36 @@ public class StageRoutineService {
 
     private void endPlay() {
         log.info("StageRoutineUtil endPlay");
+//
+//        float maxSimilarity = -2;
+//        int maxPlayerNum = -1;
+//
+//        // 유사도 계산하여 mvp 정하기
+//        for(int i = 0; i<STAGE_PLAYER_COUNT_VALUE; i++){
+//            // redis 에 저장해둔 스켈레톤 가져옴
+//            List<Object> skeletonObjects = redisDao.getValuesHashAll(STAGE_PLAY_SKELETONS_PREFIX+i);
+//            if(skeletonObjects==null) { // 이 유저의 스켈레톤이 비어있을 경우
+//                continue;
+//            }
+//
+//            // 원래 자료형으로 형변환
+//            List<StageRequestDto.Skeleton> skeletons = skeletonObjects
+//                    .stream().map(
+//                            s -> (StageRequestDto.Skeleton) s
+//                    ).collect(Collectors.toList());
+//
+//            // 유사도 계산
+//            Float similarity = aiService.calculateSimilarity("tempMusicTitle", skeletons); //TODO
+//            log.info("endPlay similarity {} : {}", i, similarity);
+//
+//            // mvp 선정
+//            if(maxSimilarity<similarity) {
+//                maxSimilarity = similarity;
+//                maxPlayerNum = i;
+//            }
+//        }
+
+
     }
 
     private void startMVP() {

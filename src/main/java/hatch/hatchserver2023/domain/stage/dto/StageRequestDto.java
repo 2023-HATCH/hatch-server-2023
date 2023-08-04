@@ -2,12 +2,15 @@ package hatch.hatchserver2023.domain.stage.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import hatch.hatchserver2023.domain.stage.SkeletonPoint;
+import hatch.hatchserver2023.domain.stage.application.StageRoutineService;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +22,12 @@ public class StageRequestDto {
     @Getter
     @Builder
     public static class SendPlaySkeleton {
+        @Max(StageRoutineService.STAGE_PLAYER_COUNT_VALUE -1)
+        @PositiveOrZero
         @NotNull
         private Integer playerNum;
 
+        @PositiveOrZero
         @NotNull
         private Integer frameNum;
 
