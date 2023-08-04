@@ -33,10 +33,10 @@ public class StageSocketController {
 
 
     @MessageMapping("/stage/play/skeleton")
-    public void sendPlayerSkeleton(@Valid StageRequestDto.SendPlaySkeleton requestDto, @AuthenticationPrincipal @NotNull User player) {
+    public void sendPlaySkeleton(@Valid StageRequestDto.SendPlaySkeleton requestDto, @AuthenticationPrincipal @NotNull User player) {
         log.info("[WS] /stage/play/skeleton");
 
-        stageSocketService.sendPlayerSkeleton();
+        stageSocketService.savePlaySkeleton(requestDto);
 
         StageSocketResponseDto.SendPlaySkeleton responseDto = StageSocketResponseDto.SendPlaySkeleton.toDto(requestDto, player);
         simpMessagingTemplate.convertAndSend(STAGE_WS_SEND_URL, CommonResponse.toSocketResponse(SocketResponseType.PLAY_SKELETON, responseDto));

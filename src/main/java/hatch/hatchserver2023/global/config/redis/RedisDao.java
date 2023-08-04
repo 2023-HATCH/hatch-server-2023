@@ -4,6 +4,7 @@ import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -78,16 +79,16 @@ public class RedisDao {
 //        return values.range(key, start, end);
 //    }
 
-//    /**
-//     * Hash 에 데이터를 저장하는 메서드
-//     * @param key : 해시 키값. 해시의 이름같은 것
-//     * @param hashKey : 이 해시 내에서의 찾으려는 키값. RDB의 필드명과 비슷함
-//     * @param data : 데이터
-//     */
-//    public void setValuesHash(String key, Object hashKey, Object data) {
-//        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
-//        values.put(key, hashKey, data);
-//    }
+    /**
+     * Hash 에 데이터를 저장하는 메서드
+     * @param key : 해시 키값. 해시의 이름같은 것
+     * @param hashKey : 이 해시 내에서의 찾으려는 키값. RDB의 필드명과 비슷함
+     * @param data : 데이터
+     */
+    public void setValuesHash(String key, Object hashKey, Object data) {
+        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
+        values.put(key, hashKey, data);
+    }
 
 
     ///////// == get method == /////////
@@ -152,14 +153,23 @@ public class RedisDao {
         values.remove(key, data);
     }
 
-//    /**
-//     * Hash 에서 데이터를 가져오는 메서드
-//     * @param key : 해시 키값. 해시의 이름같은 것
-//     * @param hashKey : 이 해시 내에서의 찾으려는 키값. RDB의 필드명과 비슷함
-//     */
-//    public Object getValuesHash(String key, Object hashKey) {
+    /**
+     * Hash 에서 데이터를 가져오는 메서드
+     * @param key : 해시 키값. 객체의 이름과 비슷함
+     * @param hashKey : 이 해시 내에서의 찾으려는 키값. 객체의 필드명과 비슷함
+     */
+    public Object getValuesHash(String key, Object hashKey) {
+        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
+        return values.get(key, hashKey);
+    }
+
+    /**
+     * 해당 Hash 의 전체 데이터를 가져오는 매서드
+     * @param key : 해시 키값. 객체의 이름과 비슷함
+     */
+//    public List<Object> getValuesHashAll(String key) {
 //        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
-//        return values.get(key, hashKey);
+//        return values.values();
 //    }
 
     /**

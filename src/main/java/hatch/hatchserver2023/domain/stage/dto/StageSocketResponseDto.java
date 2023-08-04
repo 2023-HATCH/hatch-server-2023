@@ -69,12 +69,14 @@ public class StageSocketResponseDto {
     public static class SendPlaySkeleton {
         private UUID userId;
         private Integer playerNum;
+        private Integer frameNum;
         private StageRequestDto.Skeleton skeleton;
 
         public static SendPlaySkeleton toDto(StageRequestDto.SendPlaySkeleton dto, User user) {
             return SendPlaySkeleton.builder()
                     .userId(user.getUuid())
                     .playerNum(dto.getPlayerNum())
+                    .frameNum(dto.getFrameNum())
                     .skeleton(dto.getSkeleton())
                     .build();
         }
