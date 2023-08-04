@@ -17,6 +17,7 @@ public enum StageStatusCode implements StatusCode {
     STAGE_ALREADY_EMPTY(HttpStatus.INTERNAL_SERVER_ERROR, "5002", "입장한 인원수가 0임. 퇴장 불가"), //500
     STAGE_STATUS_NOT_CATCH(HttpStatus.INTERNAL_SERVER_ERROR, "5003", "스테이지 상태가 캐치가 아님"), //500
     STAGE_STATUS_NOT_PLAY(HttpStatus.INTERNAL_SERVER_ERROR, "5004", "스테이지 상태가 플레이가 아님"), //500
+    STAGE_PLAYER_NUM_OUT_OF_BOUNDS(HttpStatus.INTERNAL_SERVER_ERROR, "5005", "스테이지 플레이어 번호가 유효 범위를 벗어남"), //500
     ;
 
     private final HttpStatus status;
