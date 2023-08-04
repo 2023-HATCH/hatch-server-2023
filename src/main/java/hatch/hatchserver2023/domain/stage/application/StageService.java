@@ -61,7 +61,7 @@ public class StageService {
         // ai 서버로 요청할 안무 두 개
         AISimilarityRequestDto requestDto = AISimilarityRequestDto.builder()
                 .seq1(music.getAnswer())
-                .seq2(StageRequestDto.Skeleton.toFloatArrays(skeletons))
+                .seq2(StageRequestDto.Skeleton.toAIFloatArrays(skeletons))
                 .build();
 
         // ai 서버로 계산 요청
