@@ -31,7 +31,7 @@ public class StageRequestDto {
         @NotNull
         private Integer frameNum;
 
-        @NotNull
+//        @NotNull
         private Skeleton skeleton;
     }
 
@@ -172,7 +172,7 @@ public class StageRequestDto {
     @Getter
     @Builder
     public static class Point {
-        private String type;
+        private Integer type;
         private Double x;
         private Double y;
         private Double z;
