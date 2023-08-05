@@ -1,0 +1,3 @@
+== 동영상의 댓글 목록 조회
+
+operation::get-comment-list-from-video[snippets='http-request,path-parameters,response-fields-beneath-data-comment-list,http-response']
