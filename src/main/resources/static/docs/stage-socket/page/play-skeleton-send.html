@@ -521,7 +521,49 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">보낼 스켈레톤 좌표값 한세트(Double)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보낼 스켈레톤 데이터</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton.0</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보낼 관절 객체 하나. 0~32 각 관절 인덱스 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton.0.type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관절 인덱스 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton.0.x</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Double</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관절 x 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton.0.y</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Double</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관절 y 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton.0.z</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Double</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관절 z 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton.0.likelihood</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Double</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가능도? 프론트에서 정해준거라 뭔지 몰라요..</p></td>
 </tr>
 </tbody>
 </table>
@@ -613,7 +655,7 @@ header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyL
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.skeleton</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">보낸 스켈레톤 좌표값 한세트(Double)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보낸 스켈레톤 데이터 (하위 형식 request field 와 동일)</p></td>
 </tr>
 </tbody>
 </table>
@@ -640,14 +682,14 @@ content-length:699
         "frameNum":0,
         "skeleton":{
             "0":{
-                "type":"0",
+                "type":0,
                 "x":91.0,
                 "y":253.0,
                 "z":395.12,
                 "likelihood":0.99
             },
             "1":{
-                "type":"1",
+                "type":1,
                 "x":91.0,
                 "y":253.0,
                 "z":395.12,
@@ -655,7 +697,7 @@ content-length:699
             },
 //...
             "32":{
-                "type":"32",
+                "type":32,
                 "x":91.0,
                 "y":253.0,
                 "z":395.12,
@@ -666,6 +708,184 @@ content-length:699
 }</code></pre>
 </div>
 </div>
+<hr>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+관절 인덱스 번호
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>서버 버전</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NOSE = "0";
+Left {
+    EYE_INNER = "1";
+    EYE = "2";
+    EYE_OUTER = "3";
+
+    EAR = "7";
+    MOUTH = "9";
+    SHOULDER = "11";
+    ELBOW = "13";
+    WRIST = "15";
+
+    PINKY = "17";
+    INDEX = "19";
+    THUMB = "21";
+
+    HIP = "23";
+    KNEE = "25";
+    ANKLE = "27";
+    HEEL = "29";
+    FOOT_INDEX = "31";
+}
+
+Right {
+    EYE_INNER = "4";
+    EYE = "5";
+    EYE_OUTER = "6";
+
+    EAR = "8";
+    MOUTH = "10";
+    SHOULDER = "12";
+    ELBOW = "14";
+    WRIST = "16";
+
+    PINKY = "18";
+    INDEX = "20";
+    THUMB = "22";
+
+    HIP = "24";
+    KNEE = "26";
+    ANKLE = "28";
+    HEEL = "30";
+    FOOT_INDEX = "32";
+}</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>프론트 버전</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>nose,</p>
+</li>
+<li>
+<p>leftEyeInner,</p>
+</li>
+<li>
+<p>leftEye,</p>
+</li>
+<li>
+<p>leftEyeOuter,</p>
+</li>
+<li>
+<p>rightEyeInner,</p>
+</li>
+<li>
+<p>rightEye,</p>
+</li>
+<li>
+<p>rightEyeOuter,</p>
+</li>
+<li>
+<p>leftEar,</p>
+</li>
+<li>
+<p>rightEar,</p>
+</li>
+<li>
+<p>leftMouth,</p>
+</li>
+<li>
+<p>rightMouth,</p>
+</li>
+<li>
+<p>leftShoulder,</p>
+</li>
+<li>
+<p>rightShoulder,</p>
+</li>
+<li>
+<p>leftElbow,</p>
+</li>
+<li>
+<p>rightElbow,</p>
+</li>
+<li>
+<p>leftWrist,</p>
+</li>
+<li>
+<p>rightWrist,</p>
+</li>
+<li>
+<p>leftPinky,</p>
+</li>
+<li>
+<p>rightPinky,</p>
+</li>
+<li>
+<p>leftIndex,</p>
+</li>
+<li>
+<p>rightIndex,</p>
+</li>
+<li>
+<p>leftThumb,</p>
+</li>
+<li>
+<p>rightThumb,</p>
+</li>
+<li>
+<p>leftHip,</p>
+</li>
+<li>
+<p>rightHip,</p>
+</li>
+<li>
+<p>leftKnee,</p>
+</li>
+<li>
+<p>rightKnee,</p>
+</li>
+<li>
+<p>leftAnkle,</p>
+</li>
+<li>
+<p>rightAnkle,</p>
+</li>
+<li>
+<p>leftHeel,</p>
+</li>
+<li>
+<p>rightHeel,</p>
+</li>
+<li>
+<p>leftFootIndex,</p>
+</li>
+<li>
+<p>rightFootIndex</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
@@ -673,7 +893,7 @@ content-length:699
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-04 23:55:06 +0900
+Last updated 2023-08-06 01:00:14 +0900
 </div>
 </div>
 </body>

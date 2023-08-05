@@ -369,3 +369,89 @@ content-length:699
 //         }
 //     }
 // }
+'''
+
+NOTE: 관절 인덱스 번호
+
+- 서버 버전
+----
+NOSE = "0";
+Left {
+    EYE_INNER = "1";
+    EYE = "2";
+    EYE_OUTER = "3";
+
+    EAR = "7";
+    MOUTH = "9";
+    SHOULDER = "11";
+    ELBOW = "13";
+    WRIST = "15";
+
+    PINKY = "17";
+    INDEX = "19";
+    THUMB = "21";
+
+    HIP = "23";
+    KNEE = "25";
+    ANKLE = "27";
+    HEEL = "29";
+    FOOT_INDEX = "31";
+}
+
+Right {
+    EYE_INNER = "4";
+    EYE = "5";
+    EYE_OUTER = "6";
+
+    EAR = "8";
+    MOUTH = "10";
+    SHOULDER = "12";
+    ELBOW = "14";
+    WRIST = "16";
+
+    PINKY = "18";
+    INDEX = "20";
+    THUMB = "22";
+
+    HIP = "24";
+    KNEE = "26";
+    ANKLE = "28";
+    HEEL = "30";
+    FOOT_INDEX = "32";
+}
+----
+
+- 프론트 버전
+0. nose,
+1. leftEyeInner,
+2. leftEye,
+3. leftEyeOuter,
+4. rightEyeInner,
+5. rightEye,
+6. rightEyeOuter,
+7. leftEar,
+8. rightEar,
+9. leftMouth,
+10. rightMouth,
+11. leftShoulder,
+12. rightShoulder,
+13. leftElbow,
+14. rightElbow,
+15. leftWrist,
+16. rightWrist,
+17. leftPinky,
+18. rightPinky,
+19. leftIndex,
+20. rightIndex,
+21. leftThumb,
+22. rightThumb,
+23. leftHip,
+24. rightHip,
+25. leftKnee,
+26. rightKnee,
+27. leftAnkle,
+28. rightAnkle,
+29. leftHeel,
+30. rightHeel,
+31. leftFootIndex,
+32. rightFootIndex
