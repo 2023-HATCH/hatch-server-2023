@@ -107,14 +107,14 @@ public class VideoController {
 
             //좋아요 여부 리스트와 함께 DTO로 만듦
             return ResponseEntity.ok(CommonResponse.toResponse(
-                    VideoStatusCode.GET_VIDEO_LIST_SUCCESS,
+                    VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_USER,
                     VideoResponseDto.GetVideoList.toDto(slice, likeList)
             ));
         }
 
         //비회원이면, liked가 모두 false
         return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.GET_VIDEO_LIST_SUCCESS,
+                VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS,
                 VideoResponseDto.GetVideoList.toDto(slice)
         ));
     }
@@ -144,14 +144,14 @@ public class VideoController {
 
             //좋아요 여부 리스트와 함께 DTO로 만듦
             return ResponseEntity.ok(CommonResponse.toResponse(
-                    VideoStatusCode.GET_VIDEO_LIST_SUCCESS,
+                    VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_USER,
                     VideoResponseDto.GetVideoList.toDto(slice, likeList)
             ));
         }
 
         //비회원이면, liked가 모두 false
         return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.GET_VIDEO_LIST_SUCCESS,
+                VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS,
                 VideoResponseDto.GetVideoList.toDto(slice)
         ));
     }
@@ -273,14 +273,14 @@ public class VideoController {
 
             //좋아요 여부 리스트와 함께 DTO로 만듦
             return ResponseEntity.ok(CommonResponse.toResponse(
-                    VideoStatusCode.HASHTAG_SEARCH_SUCCESS,
+                    VideoStatusCode.HASHTAG_SEARCH_SUCCESS_FOR_USER,
                     VideoResponseDto.GetVideoList.toDto(slice, likeList)
             ));
         }
 
         //비회원이면, liked가 모두 false
         return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.HASHTAG_SEARCH_SUCCESS,
+                VideoStatusCode.HASHTAG_SEARCH_SUCCESS_FOR_ANONYMOUS,
                 VideoResponseDto.GetVideoList.toDto(slice)
         ));
     }
