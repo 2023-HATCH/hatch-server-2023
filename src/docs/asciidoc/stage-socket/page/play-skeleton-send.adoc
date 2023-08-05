@@ -34,7 +34,37 @@
 |`+-+`
 |false
 |
-|보낼 스켈레톤 좌표값 한세트(Double)
+|보낼 스켈레톤 데이터
+|`+skeleton.0+`
+|`+-+`
+|false
+|
+|보낼 관절 객체 하나. 0~32 각 관절 인덱스 번호
+|`+skeleton.0.type+`
+|`+Integer+`
+|false
+|
+|관절 인덱스 번호
+|`+skeleton.0.x+`
+|`+Double+`
+|false
+|
+|관절 x 좌표
+|`+skeleton.0.y+`
+|`+Double+`
+|false
+|
+|관절 y 좌표
+|`+skeleton.0.z+`
+|`+Double+`
+|false
+|
+|관절 z 좌표
+|`+skeleton.0.likelihood+`
+|`+Double+`
+|false
+|
+|가능도? 프론트에서 정해준거라 뭔지 몰라요..
 |===
 
 ==== Request body
@@ -183,7 +213,7 @@ header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyL
 |`+data.skeleton+`
 |`+-+`
 |false
-|보낸 스켈레톤 좌표값 한세트(Double)
+|보낸 스켈레톤 데이터 (하위 형식 request field 와 동일)
 |===
 
 ==== Response body
@@ -207,14 +237,14 @@ content-length:699
         "frameNum":0,
         "skeleton":{
             "0":{
-                "type":"0",
+                "type":0,
                 "x":91.0,
                 "y":253.0,
                 "z":395.12,
                 "likelihood":0.99
             },
             "1":{
-                "type":"1",
+                "type":1,
                 "x":91.0,
                 "y":253.0,
                 "z":395.12,
@@ -222,7 +252,7 @@ content-length:699
             },
 //...
             "32":{
-                "type":"32",
+                "type":32,
                 "x":91.0,
                 "y":253.0,
                 "z":395.12,
