@@ -1,0 +1,3 @@
+== 검색 - 태그 검색
+
+operation::search-video-list-by-hashtag[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data-video-list,http-response']

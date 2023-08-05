@@ -1,0 +1,3 @@
+== 사용자 좋아요 영상 목록 조회
+
+operation::get-liked-video-list[snippets='http-request,request-headers,path-parameters,response-fields-beneath-data-video-list,http-response']

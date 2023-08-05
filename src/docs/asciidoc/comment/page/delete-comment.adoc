@@ -1,0 +1,3 @@
+== 댓글 삭제
+
+operation::delete-comment[snippets='http-request,request-headers,path-parameters,response-fields-beneath-data,http-response']

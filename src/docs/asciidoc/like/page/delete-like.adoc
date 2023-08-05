@@ -1,0 +1,3 @@
+== 좋아요 삭제
+
+operation::delete-like[snippets='http-request,request-headers,path-parameters,response-fields-beneath-data,http-response']

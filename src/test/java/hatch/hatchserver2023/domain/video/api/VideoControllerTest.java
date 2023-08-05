@@ -285,7 +285,7 @@ public class VideoControllerTest {
                         .willReturn(slice);
 
                 //when & then
-                StatusCode code = VideoStatusCode.GET_VIDEO_LIST_SUCCESS;
+                StatusCode code = VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS;
 
                 MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
                         .get("/api/v1/videos")
@@ -355,7 +355,7 @@ public class VideoControllerTest {
                         .willReturn(slice);
 
                 //when
-                StatusCode code = VideoStatusCode.GET_VIDEO_LIST_SUCCESS;
+                StatusCode code = VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS;
 
                 MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
                         .get("/api/v1/videos/random")
@@ -518,7 +518,7 @@ public class VideoControllerTest {
                         .willReturn(slice);
 
                 //when
-                StatusCode code = VideoStatusCode.HASHTAG_SEARCH_SUCCESS;
+                StatusCode code = VideoStatusCode.HASHTAG_SEARCH_SUCCESS_FOR_ANONYMOUS;
 
                 MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
                                                             .get("/api/v1/videos/search")

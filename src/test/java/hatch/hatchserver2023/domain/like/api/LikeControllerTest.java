@@ -243,7 +243,7 @@ public class LikeControllerTest {
                 .willReturn(slice);
 
         //when
-        StatusCode code = VideoStatusCode.GET_LIKE_VIDEO_LIST_SUCCESS;
+        StatusCode code = VideoStatusCode.GET_LIKE_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS;
 
         MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
                 .get("/api/v1/likes/{userId}", user.getUuid())
