@@ -14,7 +14,13 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@Table(name = "likes")  //like는 sql 예약어로 사용 X
+@Table(name="likes",    //like는 sql 예약어로 사용 X
+        uniqueConstraints={
+                @UniqueConstraint(
+                        columnNames={"video_id", "user_id"}
+                )
+            }
+        )
 public class Like extends BaseTimeEntity {
 
     @Id

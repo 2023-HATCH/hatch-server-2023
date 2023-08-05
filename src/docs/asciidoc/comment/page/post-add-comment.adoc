@@ -1,0 +1,3 @@
+== 댓글 등록
+
+operation::post-add-comment[snippets='http-request,request-headers,request-body,response-fields-beneath-data,http-response']

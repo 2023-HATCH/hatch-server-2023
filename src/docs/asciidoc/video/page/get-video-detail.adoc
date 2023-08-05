@@ -1,0 +1,6 @@
+== 영상 상세 조회
+
+operation::get-video-detail[snippets='http-request,request-headers,path-parameters,response-fields-beneath-data,http-response']
+
+
+

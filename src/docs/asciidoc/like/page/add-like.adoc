@@ -1,0 +1,3 @@
+== 좋아요 등록
+
+operation::add-like[snippets='http-request,request-headers,path-parameters,response-fields-beneath-data,http-response']

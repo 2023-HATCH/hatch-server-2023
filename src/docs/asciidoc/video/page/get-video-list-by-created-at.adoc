@@ -1,0 +1,3 @@
+== 홈 영상 목록 조회 - 최신순
+
+operation::get-video-list-by-created-at[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data,http-response']
