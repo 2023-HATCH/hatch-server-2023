@@ -35,7 +35,7 @@ public class StageSocketService {
         }
 
         ///ZSet
-        String setName = StageRoutineService.STAGE_PLAY_SKELETONS_PREFIX+dto.getPlayerNum();
+        String setName = StageRoutineService.KEY_STAGE_PLAYER_SKELETONS_PREFIX +dto.getPlayerNum();
         String floatArrayString = Arrays.toString(dto.getSkeleton().toAIFloatArray());
 //        log.info("savePlaySkeleton floatArrayString : {}", floatArrayString);
         redisDao.setValuesZSet(setName, floatArrayString, dto.getFrameNum());
