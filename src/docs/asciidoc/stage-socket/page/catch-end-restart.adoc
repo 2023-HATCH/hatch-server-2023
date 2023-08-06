@@ -1,0 +1,24 @@
+
+// api 명 : h3
+== *Catch End Resatrt*
+(응답) 스테이지 캐치 끝 후 캐치 재진행
+
+CAUTION: 캐치 시 캐치요청자가 없어 2초간 휴식 후 캐치를 다시 진행합니다.
+
+==== Response body
+[source,http,options="nowrap"]
+----
+$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
+content-length:120
+message-id:3538d046-28e5-7e29-2cae-39041d9137a6-29
+subscription:sub-0
+content-type:application/json
+destination:/topic/stage
+content-length:120
+
+{
+    "timeStamp":"2023/08/06 19:51:49",
+    "type":"CATCH_END_RESTART",
+    "message":"스테이지 캐치 끝, 캐치 다시 시작"
+}
+----

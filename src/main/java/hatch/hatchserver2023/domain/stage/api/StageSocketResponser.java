@@ -50,7 +50,7 @@ public class StageSocketResponser {
     }
 
     public void endPlay(UserResponseDto.SimpleUserProfile mvpUSer) {
-        sendToStage(SocketResponseType.PLAY_START, mvpUSer);
+        sendToStage(SocketResponseType.PLAY_END, mvpUSer);
     }
 
     public void startMVP(String tempData) {
