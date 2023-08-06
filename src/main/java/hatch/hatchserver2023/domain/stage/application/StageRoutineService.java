@@ -1,9 +1,12 @@
 package hatch.hatchserver2023.domain.stage.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
-import hatch.hatchserver2023.domain.stage.dto.StageRequestDto;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
+import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
+import hatch.hatchserver2023.global.common.response.exception.StageException;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -114,34 +117,43 @@ public class StageRoutineService {
 
     private void endPlay() {
         log.info("StageRoutineUtil endPlay");
-//
-//        float maxSimilarity = -2;
-//        int maxPlayerNum = -1;
-//
-//        // 유사도 계산하여 mvp 정하기
-//        for(int i = 0; i<STAGE_PLAYER_COUNT_VALUE; i++){
-//            // redis 에 저장해둔 스켈레톤 가져옴
-//            List<Object> skeletonObjects = redisDao.getValuesHashAll(STAGE_PLAY_SKELETONS_PREFIX+i);
-//            if(skeletonObjects==null) { // 이 유저의 스켈레톤이 비어있을 경우
-//                continue;
-//            }
-//
-//            // 원래 자료형으로 형변환
-//            List<StageRequestDto.Skeleton> skeletons = skeletonObjects
-//                    .stream().map(
-//                            s -> (StageRequestDto.Skeleton) s
-//                    ).collect(Collectors.toList());
-//
-//            // 유사도 계산
-//            Float similarity = aiService.calculateSimilarity("tempMusicTitle", skeletons); //TODO
-//            log.info("endPlay similarity {} : {}", i, similarity);
-//
-//            // mvp 선정
-//            if(maxSimilarity<similarity) {
-//                maxSimilarity = similarity;
-//                maxPlayerNum = i;
-//            }
-//        }
+
+        float maxSimilarity = -2;
+        int maxPlayerNum = -1;
+
+        // 유사도 계산하여 mvp 정하기
+        for(int i = 0; i<STAGE_PLAYER_COUNT_VALUE; i++){
+            // redis 에 저장해둔 스켈레톤 가져옴
+            Set<String> skeletonStringSet = redisDao.getValuesZSetAll(STAGE_PLAY_SKELETONS_PREFIX+i);
+            if(skeletonStringSet==null) { // 이 유저의 스켈레톤이 비어있을 경우
+                continue;
+            }
+
+            // 원래 자료형으로 형변환
+            Float[][] skeletonFloatArray = skeletonToFloatArrays(skeletonStringSet);
+//            log.info("endPlay skeletonFloatArray : {}", skeletonFloatArray);
+//            log.info("endPlay skeletonFloatArray[0] : {}", skeletonFloatArray[0]);
+//            log.info("endPlay skeletonFloatArray[0][0] : {}", skeletonFloatArray[0][0]);
+//            log.info("endPlay skeletonFloatArray[0][0] : {}", skeletonFloatArray[1][0]);
+
+            // 유사도 계산
+            Float similarity;
+            try{
+                similarity = aiService.calculateSimilarity("tempMusicTitle", skeletonFloatArray); //TODO
+                log.info("endPlay similarity {} : {}", i, similarity);
+            }catch (NullPointerException e) {
+                throw new StageException(StageStatusCode.MUSIC_NOT_FOUND);
+            }
+
+            // mvp 선정
+            if(maxSimilarity<similarity) {
+                maxSimilarity = similarity;
+                maxPlayerNum = i;
+            }
+        }
+
+        // 응답
+//        stageSocketResponser.
 
 
     }
@@ -164,6 +176,35 @@ public class StageRoutineService {
         }
     }
 
+
+    /**
+     * Redis 에서 가져온 스켈레톤 세트들 Set<String>을 AI서버에 맞게 Float[][] 형식으로 형변환하는 메서드
+     * @param skeletonStringSet
+     * @return
+     */
+    private Float[][] skeletonToFloatArrays(Set<String> skeletonStringSet) {
+        List<Float[]> floatArrays = new ArrayList<>();
+
+        //set 을 순서대로 돌면서 Float[] 로 만들고 floatArrays 에 모음
+        for (String arrayString : skeletonStringSet) {
+            // String -> List<Object> 로 형변환
+            List list;
+            try {
+                list = new ObjectMapper().readValue(arrayString, List.class);
+            } catch (JsonProcessingException e) {
+                log.info("savePlaySkeleton list ObjectMapper error");
+                throw new RuntimeException(e);
+            }
+
+            // List<Object> -> List<Float> 로 형변환
+            List<Float> floatList = (List<Float>) list.stream().map(value -> Float.parseFloat(value.toString())).collect(Collectors.toList());
+
+            // 모으기
+            floatArrays.add(floatList.toArray(new Float[0]));
+        }
+
+        return floatArrays.toArray(new Float[0][]);
+    }
 
     public int getStageUserCount() {
         String countString = redisDao.getValues(StageRoutineService.STAGE_ENTER_USER_COUNT);

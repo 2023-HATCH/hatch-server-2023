@@ -121,6 +121,7 @@ public class StageRequestDto {
         private Point rightFootIndex;
 
         public Float[] toAIFloatArray() {
+            // TODO : null인 필드 에러 발생
             List<Point> AIPoints = List.of(nose, rightShoulder, rightElbow, rightWrist, leftShoulder, leftElbow, leftWrist, rightHip, rightKnee, rightAnkle, leftHip, leftKnee, leftAnkle);
 
             List<Float> values = new ArrayList<>();

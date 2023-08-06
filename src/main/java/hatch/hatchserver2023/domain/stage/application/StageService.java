@@ -92,6 +92,7 @@ public class StageService {
 //        return userCount;
 //    }
 
+    // TODO : 스테이지가 진행 도중 멈춰버렸을 때 (왜?) 새로 누군가 입장 시 스테이지 처음부터 새로 run시키기.. how? 상태값이 아니면 진행중(Thread.sleep)인지 아닌지 어떻게 알지... 스레드..?
     private void runStageRoutine(int increasedCount) {
         String stageStatus = getStageStatus();
         switch (stageStatus) {

@@ -10,6 +10,7 @@ public enum StageStatusCode implements StatusCode {
     GET_CATCH_SUCCESS(HttpStatus.OK, "2004", "캐치 요청 성공"), //200
 
     // 4xx
+    MUSIC_NOT_FOUND(HttpStatus.NOT_FOUND, "4401", "음악 제목에 해당하는 스테이지 음악을 찾을 수 없음"), //404
 
     // 5xx
     ALREADY_ENTERED_USER(HttpStatus.INTERNAL_SERVER_ERROR, "5001", "스테이지에 이미 입장되어있는 사용자임"), //500

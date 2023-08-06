@@ -40,6 +40,10 @@ public class StageSocketResponser {
         sendToStage(SocketResponseType.PLAY_START, tempData);
     }
 
+//    public void endPlay() {
+//        sendToStage(SocketResponseType.PLAY_START, tempData);
+//    }
+
     public void startMVP(String tempData) {
         sendToStage(SocketResponseType.MVP_START, tempData);
     }
