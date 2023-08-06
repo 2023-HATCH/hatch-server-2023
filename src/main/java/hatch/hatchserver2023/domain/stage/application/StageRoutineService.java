@@ -27,6 +27,7 @@ public class StageRoutineService {
     public static final String STAGE_STATUS_PLAY = "PLAY";
     public static final String STAGE_STATUS_PLAY_END = "PLAY_END";
     public static final String STAGE_STATUS_MVP = "MVP";
+    private static final String STAGE_STATUS_MVP_END = "MVP_END";
 
     public static final String KEY_STAGE_ENTER_USER_COUNT = "STAGE_ENTER_USER_COUNT";
     public static final String KEY_STAGE_ENTER_USER_LIST = "STAGE_ENTER_USER_LIST";
@@ -159,9 +160,10 @@ public class StageRoutineService {
 
     private void endMVP() {
         log.info("StageRoutineUtil endMVP");
+        setStageStatus(STAGE_STATUS_MVP_END);
+        stageSocketResponser.endMvp();
 
-
-        // mvp 데이터 초기화
+        // mvp 데이터 초기화 - 할 게 없음
         // initMvpData();
 
         // 사용자 목록이 3명 미만이면 스테이지 대기상태로 변경
@@ -174,8 +176,7 @@ public class StageRoutineService {
     }
 
 
-
-
+    ///// ======= util methods ======= /////
 
     /**
      * endCatch 시작점에서 사용자 수를 검사하는 메서드

@@ -55,6 +55,11 @@ public class StageSocketResponser {
         sendToStage(SocketResponseType.MVP_START, StageSocketResponseDto.StartMvp.toDto(mvpUSer));
     }
 
+    public void endMvp() {
+        sendToStage(SocketResponseType.MVP_END);
+    }
+
+
     private void sendToStage(SocketResponseType type) {
         sendToStage(type, null);
     }

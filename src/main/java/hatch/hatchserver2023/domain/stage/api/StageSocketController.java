@@ -41,4 +41,13 @@ public class StageSocketController {
         StageSocketResponseDto.SendPlaySkeleton responseDto = StageSocketResponseDto.SendPlaySkeleton.toDto(requestDto, player);
         simpMessagingTemplate.convertAndSend(STAGE_WS_SEND_URL, CommonResponse.toSocketResponse(SocketResponseType.PLAY_SKELETON, responseDto));
     }
+
+    @MessageMapping("/stage/mvp/skeleton")
+    public void sendMvpSkeleton(@Valid StageRequestDto.SendMvpSkeleton requestDto) {
+        log.info("[WS] /stage/mvp/skeleton");
+
+        stageSocketService.checkStageStatusMvp();
+
+        simpMessagingTemplate.convertAndSend(STAGE_WS_SEND_URL, CommonResponse.toSocketResponse(SocketResponseType.MVP_SKELETON, requestDto));
+    }
 }

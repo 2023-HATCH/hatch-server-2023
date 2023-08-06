@@ -62,4 +62,11 @@ public class StageSocketService {
 //        String hashName = StageRoutineService.STAGE_PLAY_SKELETONS_PREFIX+dto.getPlayerNum();
 //        redisDao.setValuesHash(hashName, dto.getFrameNum().toString(), dto.getSkeleton());
     }
+
+    public void checkStageStatusMvp() {
+        String status = stageRoutineService.getStageStatus();
+        if(status==null || !status.equals(StageRoutineService.STAGE_STATUS_MVP)) {
+            throw new StageException(StageStatusCode.STAGE_STATUS_NOT_MVP);
+        }
+    }
 }
