@@ -22,12 +22,10 @@ public class StageSocketController {
     private final String STAGE_WS_SEND_URL = "/topic/stage";
 
     private final StageSocketService stageSocketService;
-    private final StageRoutineService stageRoutineService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public StageSocketController(StageSocketService stageSocketService, StageRoutineService stageRoutineService, SimpMessagingTemplate simpMessagingTemplate) {
+    public StageSocketController(StageSocketService stageSocketService, SimpMessagingTemplate simpMessagingTemplate) {
         this.stageSocketService = stageSocketService;
-        this.stageRoutineService = stageRoutineService;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
@@ -43,11 +41,12 @@ public class StageSocketController {
     }
 
     @MessageMapping("/stage/mvp/skeleton")
-    public void sendMvpSkeleton(@Valid StageRequestDto.SendMvpSkeleton requestDto) {
+    public void sendMvpSkeleton(@Valid StageRequestDto.SendMvpSkeleton requestDto, @AuthenticationPrincipal @NotNull User mvp) {
         log.info("[WS] /stage/mvp/skeleton");
 
         stageSocketService.checkStageStatusMvp();
 
-        simpMessagingTemplate.convertAndSend(STAGE_WS_SEND_URL, CommonResponse.toSocketResponse(SocketResponseType.MVP_SKELETON, requestDto));
+        StageSocketResponseDto.SendMvpSkeleton responseDto = StageSocketResponseDto.SendMvpSkeleton.toDto(requestDto, mvp);
+        simpMessagingTemplate.convertAndSend(STAGE_WS_SEND_URL, CommonResponse.toSocketResponse(SocketResponseType.MVP_SKELETON, responseDto));
     }
 }

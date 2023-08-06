@@ -513,21 +513,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:197
-message-id:c44113a4-6be4-e743-b622-8f270543f84d-10
+content-length:209
+message-id:f6d951ba-11bd-f871-0e17-53560bff420e-13
 subscription:sub-0
 content-type:application/json
 destination:/topic/stage
-content-length:197
+content-length:209
 
 {
-    "timeStamp":"2023/08/06 21:15:12",
+    "timeStamp":"2023/08/06 22:35:35",
     "type":"MVP_START",
     "message":"스테이지 MVP세리머니 시작",
     "data":{
-        "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
-        "nickname":"user_1",
-        "profileImg":null
+        "mvpUser":{
+            "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+            "nickname":"user_1",
+            "profileImg":null
+        }
     }
 }</code></pre>
 </div>
@@ -539,7 +541,7 @@ content-length:197
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-06 22:07:59 +0900
+Last updated 2023-08-06 22:41:38 +0900
 </div>
 </div>
 </body>

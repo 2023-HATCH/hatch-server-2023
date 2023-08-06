@@ -94,4 +94,20 @@ public class StageSocketResponseDto {
         }
     }
 
+    @ToString
+    @Getter
+    @Builder
+    public static class SendMvpSkeleton {
+        private UUID userId;
+        private Integer frameNum;
+        private StageRequestDto.Skeleton skeleton;
+
+        public static SendMvpSkeleton toDto(StageRequestDto.SendMvpSkeleton dto, User user) {
+            return SendMvpSkeleton.builder()
+                    .userId(user.getUuid())
+                    .frameNum(dto.getFrameNum())
+                    .skeleton(dto.getSkeleton())
+                    .build();
+        }
+    }
 }
