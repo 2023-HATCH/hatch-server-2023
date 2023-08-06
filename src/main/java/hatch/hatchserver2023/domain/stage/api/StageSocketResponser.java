@@ -36,6 +36,15 @@ public class StageSocketResponser {
         sendToStage(SocketResponseType.CATCH_START, tempData);
     }
 
+    public void endCatch(List<User> users) {
+        List<StageSocketResponseDto.Player> players = StageSocketResponseDto.Player.toDtos(users);
+        sendToStage(SocketResponseType.CATCH_END, StageSocketResponseDto.CatchEnd.toDto(players, "개발중"));
+    }
+
+    public void endCatch() {
+        sendToStage(SocketResponseType.CATCH_END_RESTART);
+    }
+
     public void startPlay(String tempData) {
         sendToStage(SocketResponseType.PLAY_START, tempData);
     }
@@ -47,16 +56,6 @@ public class StageSocketResponser {
     public void startMVP(String tempData) {
         sendToStage(SocketResponseType.MVP_START, tempData);
     }
-
-    public void endCatch(List<User> users) {
-        List<StageSocketResponseDto.Player> players = StageSocketResponseDto.Player.toDtos(users);
-        sendToStage(SocketResponseType.CATCH_END, StageSocketResponseDto.CatchEnd.toDto(players, "개발중"));
-    }
-
-    public void endCatch() {
-        sendToStage(SocketResponseType.CATCH_END_RESTART);
-    }
-
     private void sendToStage(SocketResponseType type) {
         sendToStage(type, null);
     }

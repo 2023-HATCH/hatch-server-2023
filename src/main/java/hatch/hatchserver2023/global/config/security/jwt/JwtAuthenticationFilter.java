@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter implements Filter { //OncePerRequestFilter 
 
         // access 토큰 유효
         if(jwtProvider.isTokenValid(accessToken)) {
-            log.info("[FILTER] jwtAuthenticationFilter : access token is valid");
+//            log.info("[FILTER] jwtAuthenticationFilter : access token is valid");
             setSecurityAuthentication(accessToken);
         }
         // access 토큰 유효하지 않음
@@ -76,11 +76,11 @@ public class JwtAuthenticationFilter implements Filter { //OncePerRequestFilter 
     private void setSecurityAuthentication(String token) {
         try{
             Authentication authentication = jwtProvider.getAuthentication(token); // 인증정보 가져와서
-            log.info("[FILTER] jwtAuthenticationFilter setSecurityAuthentication :   " + authentication);
+//            log.info("[FILTER] jwtAuthenticationFilter setSecurityAuthentication :   " + authentication);
 
             SecurityContextHolder.getContext().setAuthentication(authentication); // 시큐리티에 저장
 
-            log.info("[FILTER] jwtAuthenticationFilter setSecurityAuthentication :  SecurityContextHolder Authentication " + SecurityContextHolder.getContext().getAuthentication());
+//            log.info("[FILTER] jwtAuthenticationFilter setSecurityAuthentication :  SecurityContextHolder Authentication " + SecurityContextHolder.getContext().getAuthentication());
         } catch (AuthException authException) {
             if (authException.getCode() == UserStatusCode.UUID_NOT_FOUND){
                 log.info("[FILTER] jwtAuthenticationFilter :  User of this token doesn't exist now. Guest user");

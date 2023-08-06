@@ -121,15 +121,15 @@ public class StageRoutineService {
         List<User> users = userRepository.findAllById(userIds.stream().map(Long::parseLong).collect(Collectors.toList())); // 참고 : 이 List 의 인덱스 순서로 playerNum이 정해짐
 
         // user의 필요한 정보만 추출하여 Redis Hash에 플레이어 정보로 저장
-        List<UserResponseDto.SimpleUserProfile> userSimple = users.stream().map(UserResponseDto.SimpleUserProfile::toDto).collect(Collectors.toList());
-        for(int i=0; i<userSimple.size(); i++){ // i는 playerNum과 같음
-            String userJson;
+        List<UserResponseDto.SimpleUserProfile> userSimples = users.stream().map(UserResponseDto.SimpleUserProfile::toDto).collect(Collectors.toList());
+        for(int i=0; i<userSimples.size(); i++){ // i는 playerNum과 같음
+            String userSimpleJson;
             try {
-                userJson = new ObjectMapper().writeValueAsString(userSimple.get(i));
+                userSimpleJson = new ObjectMapper().writeValueAsString(userSimples.get(i));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e); //TODO
             }
-            redisDao.setValuesHash(KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(i), userJson); // TODO : user cannot cast toString - ObjectMapper 사용해서 json 으로 저장하고 객체로 다시 복원하자
+            redisDao.setValuesHash(KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(i), userSimpleJson);
         }
 
         // 응답
