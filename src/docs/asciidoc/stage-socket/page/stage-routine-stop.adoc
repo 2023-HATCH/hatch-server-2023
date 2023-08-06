@@ -15,6 +15,10 @@
 |`+String+`
 |true
 |소켓 통신 유형. 고정값(STAGE_ROUTINE_STOP)
+|`+message+`
+|`+String+`
+|true
+|소켓 통신 유형 설명
 |===
 
 

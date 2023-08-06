@@ -113,6 +113,10 @@ header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyL
 |`+String+`
 |true
 |소켓 통신 유형. 고정값(PLAY_SKELETON)
+|`+message+`
+|`+String+`
+|true
+|소켓 통신 유형 설명
 |`+data.userId+`
 |`+String+`
 |true

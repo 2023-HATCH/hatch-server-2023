@@ -16,6 +16,10 @@ CAUTION: 캐치 요청자가 존재해야 플레이가 진행됩니다. 캐치 �
 |`+String+`
 |true
 |소켓 통신 유형. 고정값(CATCH_END)
+|`+message+`
+|`+String+`
+|true
+|소켓 통신 유형 설명
 |`+data.players[]+`
 |`+-+`
 |true

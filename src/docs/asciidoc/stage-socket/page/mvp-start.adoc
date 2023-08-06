@@ -17,6 +17,10 @@
 |`+String+`
 |true
 |소켓 통신 유형. 고정값(MVP_START)
+|`+message+`
+|`+String+`
+|true
+|소켓 통신 유형 설명
 |`+data.userId+`
 |`+UUID+`
 |true

@@ -14,6 +14,10 @@
 |`+String+`
 |true
 |소켓 통신 유형. 고정값(PLAY_END)
+|`+message+`
+|`+String+`
+|true
+|소켓 통신 유형 설명
 |===
 
 
