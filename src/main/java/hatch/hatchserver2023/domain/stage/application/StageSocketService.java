@@ -34,33 +34,11 @@ public class StageSocketService {
             throw new StageException(StageStatusCode.STAGE_STATUS_NOT_PLAY);
         }
 
-        ///ZSet
         String setName = StageRoutineService.KEY_STAGE_PLAYER_SKELETONS_PREFIX +dto.getPlayerNum();
         String floatArrayString = Arrays.toString(dto.getSkeleton().toAIFloatArray());
 //        log.info("savePlaySkeleton floatArrayString : {}", floatArrayString);
         redisDao.setValuesZSet(setName, floatArrayString, dto.getFrameNum());
 
-
-
-        ///test
-        Set<String> dataSet = redisDao.getValuesZSetAll(setName);
-        log.info("savePlaySkeleton dataSet : {}", dataSet);
-        String arrayString = (String) dataSet.toArray()[0];
-        log.info("savePlaySkeleton dataSet.toArray()[0] : {}", arrayString);
-//        Float[] floatArray = (Float[]) dataSet.toArray()[0];
-        List floatArray = null;
-        try {
-            floatArray = new ObjectMapper().readValue(arrayString, List.class);
-        } catch (JsonProcessingException e) {
-            log.info("savePlaySkeleton floatArray ObjectMapper error");
-            throw new RuntimeException(e);
-        }
-        log.info("savePlaySkeleton floatArray : {}", floatArray);
-        log.info("savePlaySkeleton floatArray.get(0) : {}", floatArray.get(0));
-
-        //Hash
-//        String hashName = StageRoutineService.STAGE_PLAY_SKELETONS_PREFIX+dto.getPlayerNum();
-//        redisDao.setValuesHash(hashName, dto.getFrameNum().toString(), dto.getSkeleton());
     }
 
     public void checkStageStatusMvp() {
