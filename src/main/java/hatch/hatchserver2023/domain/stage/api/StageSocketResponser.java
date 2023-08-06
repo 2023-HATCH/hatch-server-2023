@@ -1,12 +1,10 @@
 package hatch.hatchserver2023.domain.stage.api;
 
-import hatch.hatchserver2023.domain.stage.application.StageRoutineService;
 import hatch.hatchserver2023.domain.stage.dto.StageSocketResponseDto;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.socket.SocketResponseType;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -54,8 +52,9 @@ public class StageSocketResponser {
     }
 
     public void startMVP(UserResponseDto.SimpleUserProfile mvpUSer) {
-        sendToStage(SocketResponseType.MVP_START, mvpUSer);
+        sendToStage(SocketResponseType.MVP_START, StageSocketResponseDto.StartMvp.toDto(mvpUSer));
     }
+
     private void sendToStage(SocketResponseType type) {
         sendToStage(type, null);
     }

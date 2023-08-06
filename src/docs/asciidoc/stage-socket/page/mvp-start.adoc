@@ -52,9 +52,11 @@ content-length:197
     "type":"MVP_START",
     "message":"스테이지 MVP세리머니 시작",
     "data":{
-        "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
-        "nickname":"user_1",
-        "profileImg":null
+        "mvpUser":{
+            "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+            "nickname":"user_1",
+            "profileImg":null
+        }
     }
 }
 ----
