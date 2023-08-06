@@ -102,11 +102,7 @@ public class StageRoutineService {
         setStageStatus(STAGE_STATUS_CATCH_END);
 
         // TODO : 개발 편의를 위해 인원 검사 안함
-//        if(Integer.parseInt(redisDao.getValues(STAGE_ENTER_USER_COUNT))<3 || redisDao.getSetSize(STAGE_CATCH_USER_LIST)<3) {
-//            setStageStatus(STAGE_STATUS_WAIT);
-//            log.info("endCatch : change stage status to WAIT. enter or catch user count is less then 3");
-//            return;
-//        }
+//        checkUserCountInEndCatch();
 
         // 선착순 캐치 성공자 얻기
         Set<String> userIds = redisDao.getValuesZSet(KEY_STAGE_CATCH_USER_LIST, 0, STAGE_CATCH_SUCCESS_LAST_INDEX);
@@ -121,18 +117,9 @@ public class StageRoutineService {
         List<User> users = userRepository.findAllById(userIds.stream().map(Long::parseLong).collect(Collectors.toList())); // 참고 : 이 List 의 인덱스 순서로 playerNum이 정해짐
 
         // user의 필요한 정보만 추출하여 Redis Hash에 플레이어 정보로 저장
-        List<UserResponseDto.SimpleUserProfile> userSimples = users.stream().map(UserResponseDto.SimpleUserProfile::toDto).collect(Collectors.toList());
-        for(int i=0; i<userSimples.size(); i++){ // i는 playerNum과 같음
-            String userSimpleJson;
-            try {
-                userSimpleJson = new ObjectMapper().writeValueAsString(userSimples.get(i));
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e); //TODO
-            }
-            redisDao.setValuesHash(KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(i), userSimpleJson);
-        }
+        savePlayerInfo(users);
 
-        // 응답
+        // 응답, 데이터 정리
         stageSocketResponser.endCatch(users);
         redisDao.deleteValues(KEY_STAGE_CATCH_USER_LIST);
         return true;
@@ -151,10 +138,97 @@ public class StageRoutineService {
         log.info("StageRoutineUtil endPlay");
         setStageStatus(STAGE_STATUS_PLAY_END);
 
+        int mvpPlayerNum = getMvpPlayerNum();
+
+        // mvp 선정된 playerNum에 해당하는 플레이어 사용자정보 가져오기
+        UserResponseDto.SimpleUserProfile mvpUser = getMvpUserInfo(mvpPlayerNum);
+
+        // 응답
+        stageSocketResponser.endPlay(mvpUser);
+
+        // 캐치, 플레이 데이터 초기화
+        initPlayData();
+    }
+
+    private void startMVP() {
+        log.info("StageRoutineUtil startMVP");
+        redisDao.setValues(KEY_STAGE_STATUS, STAGE_STATUS_MVP);
+        stageSocketResponser.startMVP("개발중");
+    }
+
+    private void endMVP() {
+        log.info("StageRoutineUtil endMVP");
+
+
+        // mvp 데이터 초기화
+        // initMvpData();
+
+        // 사용자 목록이 3명 미만이면 스테이지 대기상태로 변경
+        Long size = redisDao.getSetSize(StageRoutineService.KEY_STAGE_ENTER_USER_LIST);
+//        log.info("tempCheckStageEmpty STAGE_ENTER_USER_LIST set size : {}", size);
+        if(size < 3) {
+//            log.info("endMVP set STAGE_ENTER_USER_COUNT = 0");
+            redisDao.setValues(KEY_STAGE_STATUS, STAGE_STATUS_WAIT);
+        }
+    }
+
+
+
+
+
+    /**
+     * endCatch 시작점에서 사용자 수를 검사하는 메서드
+     */
+    private void checkUserCountInEndCatch() {
+//        if(Integer.parseInt(redisDao.getValues(STAGE_ENTER_USER_COUNT))<3 || redisDao.getSetSize(STAGE_CATCH_USER_LIST)<3) {
+//            setStageStatus(STAGE_STATUS_WAIT);
+//            log.info("endCatch : change stage status to WAIT. enter or catch user count is less then 3");
+//            return;
+//        }
+    }
+
+    /**
+     * 플레이어 사용자 정보를 Redis Hash 에 저장하는 메서드
+     * @param users
+     */
+    private void savePlayerInfo(List<User> users) {
+        List<UserResponseDto.SimpleUserProfile> userSimples = users.stream().map(UserResponseDto.SimpleUserProfile::toDto).collect(Collectors.toList());
+        for(int i=0; i<userSimples.size(); i++){ // i는 playerNum과 같음
+            String userSimpleJson;
+            try {
+                userSimpleJson = new ObjectMapper().writeValueAsString(userSimples.get(i));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e); //TODO
+            }
+            redisDao.setValuesHash(KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(i), userSimpleJson);
+        }
+    }
+
+    /**
+     * mvpPlayerNum에 해당하는 플레이어 사용자 정보 가져오기
+     * @param mvpPlayerNum
+     * @return
+     */
+    private UserResponseDto.SimpleUserProfile getMvpUserInfo(int mvpPlayerNum) {
+        String userJson = redisDao.getValuesHash(KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(mvpPlayerNum)).toString();
+        UserResponseDto.SimpleUserProfile mvpUser;
+        try {
+            mvpUser = new ObjectMapper().readValue(userJson, UserResponseDto.SimpleUserProfile.class); // TODO : ObjectMapper 사용 util 만들어서 모으기
+        } catch (JsonProcessingException e) {
+            throw new StageException(StageStatusCode.FAIL_GET_MVP_USER_INFO_FROM_REDIS_JSON);
+        }
+        return mvpUser;
+    }
+
+    /**
+     * 각 플레이어들의 유사도를 계산하여 MVP를 선정하고 MVP유저의 playerNum을 반환하는 메서드
+     * @return
+     */
+    private int getMvpPlayerNum() {
         float maxSimilarity = -2;
         int maxPlayerNum = -1;
 
-        // 유사도 계산하여 mvp 정하기 // TODO : Refactor
+        // 유사도 계산하여 mvp 정하기
         for(int i = 0; i<STAGE_PLAYER_COUNT_VALUE; i++){
             // redis 에 저장해둔 스켈레톤 가져옴
             Set<String> skeletonStringSet = redisDao.getValuesZSetAll(KEY_STAGE_PLAYER_SKELETONS_PREFIX +i);
@@ -185,39 +259,7 @@ public class StageRoutineService {
                 maxPlayerNum = i;
             }
         }
-
-        // mvp 선정된 playerNum에 해당하는 플레이어 사용자정보 가져오기
-        String userJson = redisDao.getValuesHash(KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(maxPlayerNum)).toString();
-        UserResponseDto.SimpleUserProfile mvpUser;
-        try {
-            mvpUser = new ObjectMapper().readValue(userJson, UserResponseDto.SimpleUserProfile.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e); //TODO
-        }
-
-        // 응답
-        stageSocketResponser.endPlay(mvpUser);
-
-        // 캐치, 플레이 데이터 초기화
-        initPlayData();
-    }
-
-    private void startMVP() {
-        log.info("StageRoutineUtil startMVP");
-        redisDao.setValues(KEY_STAGE_STATUS, STAGE_STATUS_MVP);
-        stageSocketResponser.startMVP("개발중");
-    }
-
-    private void endMVP() {
-        log.info("StageRoutineUtil endMVP");
-
-        // 사용자 목록이 3명 미만이면 스테이지 대기상태로 변경
-        Long size = redisDao.getSetSize(StageRoutineService.KEY_STAGE_ENTER_USER_LIST);
-//        log.info("tempCheckStageEmpty STAGE_ENTER_USER_LIST set size : {}", size);
-        if(size < 3) {
-//            log.info("endMVP set STAGE_ENTER_USER_COUNT = 0");
-            redisDao.setValues(KEY_STAGE_STATUS, STAGE_STATUS_WAIT);
-        }
+        return maxPlayerNum;
     }
 
 
@@ -236,8 +278,7 @@ public class StageRoutineService {
             try {
                 list = new ObjectMapper().readValue(arrayString, List.class);
             } catch (JsonProcessingException e) {
-                log.info("savePlaySkeleton list ObjectMapper error");
-                throw new RuntimeException(e);
+                throw new StageException(StageStatusCode.FAIL_SAVE_MVP_USER_INFO_JSON);
             }
 
             // List<Object> -> List<Float> 로 형변환
