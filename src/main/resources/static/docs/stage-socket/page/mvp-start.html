@@ -444,7 +444,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_mvp_start"><strong>MVP Start</strong></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>(응답) 스테이지 MVP세리머니 시작</p>
+<p>(응답) 스테이지 MVP세리머니 시작. MVP 사용자 정보 전달</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>음악과 유사도 적용 아직 안되어있습니다. (현재 mvp 선정 기준은 스켈레톤을 전송한 유저들 중 playerNum값 최소인 유저)</p>
+</li>
+</ul>
 </div>
 <div class="sect3">
 <h4 id="_response_fields">Response fields</h4>
@@ -475,10 +482,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(MVP_START)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UUID</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">개발중</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mvp 사용자 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mvp 사용자 닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.profileImg</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mvp 사용자 프로필 이미지 url</p></td>
 </tr>
 </tbody>
 </table>
@@ -488,18 +507,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:121
-message-id:c7b84486-b761-c839-8f41-998629713a8b-4
+content-length:197
+message-id:c44113a4-6be4-e743-b622-8f270543f84d-10
 subscription:sub-0
 content-type:application/json
 destination:/topic/stage
-content-length:121
+content-length:197
 
 {
-    "timeStamp":"2023/07/26 23:29:44",
+    "timeStamp":"2023/08/06 21:15:12",
     "type":"MVP_START",
     "message":"스테이지 MVP세리머니 시작",
-    "data":"개발중"
+    "data":{
+        "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+        "nickname":"user_1",
+        "profileImg":null
+    }
 }</code></pre>
 </div>
 </div>
@@ -510,7 +533,7 @@ content-length:121
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-04 15:26:15 +0900
+Last updated 2023-08-06 21:22:09 +0900
 </div>
 </div>
 </body>
