@@ -49,12 +49,12 @@ public class StageSocketResponser {
         sendToStage(SocketResponseType.PLAY_START, tempData);
     }
 
-    public void endPlay(UserResponseDto.SimpleUserProfile mvpUSer) {
-        sendToStage(SocketResponseType.PLAY_END, mvpUSer);
+    public void endPlay() {
+        sendToStage(SocketResponseType.PLAY_END);
     }
 
-    public void startMVP(String tempData) {
-        sendToStage(SocketResponseType.MVP_START, tempData);
+    public void startMVP(UserResponseDto.SimpleUserProfile mvpUSer) {
+        sendToStage(SocketResponseType.MVP_START, mvpUSer);
     }
     private void sendToStage(SocketResponseType type) {
         sendToStage(type, null);

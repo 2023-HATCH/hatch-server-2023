@@ -138,22 +138,23 @@ public class StageRoutineService {
         log.info("StageRoutineUtil endPlay");
         setStageStatus(STAGE_STATUS_PLAY_END);
 
+        stageSocketResponser.endPlay();
+    }
+
+    private void startMVP() {
+        log.info("StageRoutineUtil startMVP");
+
         int mvpPlayerNum = getMvpPlayerNum();
 
         // mvp 선정된 playerNum에 해당하는 플레이어 사용자정보 가져오기
         UserResponseDto.SimpleUserProfile mvpUser = getMvpUserInfo(mvpPlayerNum);
 
-        // 응답
-        stageSocketResponser.endPlay(mvpUser);
+        // 상태 변경, 응답
+        setStageStatus(STAGE_STATUS_MVP);
+        stageSocketResponser.startMVP(mvpUser);
 
         // 캐치, 플레이 데이터 초기화
         initPlayData();
-    }
-
-    private void startMVP() {
-        log.info("StageRoutineUtil startMVP");
-        redisDao.setValues(KEY_STAGE_STATUS, STAGE_STATUS_MVP);
-        stageSocketResponser.startMVP("개발중");
     }
 
     private void endMVP() {
