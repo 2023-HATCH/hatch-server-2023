@@ -14,7 +14,7 @@ public enum SocketResponseType implements StatusCode {
     CATCH_END_RESTART( "CATCH_END_RESTART", "스테이지 캐치 끝, 캐치 다시 시작"),
     PLAY_START( "PLAY_START", "스테이지 플레이 시작"),
     PLAY_SKELETON( "PLAY_SKELETON", "스테이지 플레이 스켈레톤 전달"),
-//    PLAY_END( "PLAY_END", "스테이지 플레이 끝"),
+    PLAY_END( "PLAY_END", "스테이지 플레이 끝"),
     MVP_START( "MVP_START", "스테이지 MVP세리머니 시작"),
 //    MVP_END( "MVP_END", "스테이지 MVP세리머니 끝"),
 
