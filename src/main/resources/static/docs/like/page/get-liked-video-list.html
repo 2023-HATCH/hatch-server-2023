@@ -447,7 +447,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_사용자_좋아요_영상_목록_조회_http_request">HTTP request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/likes/000af0a7-10c5-47f2-9bf5-5ad3967b70e3?page=0&amp;size=2 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/likes/2d0e5ae7-d811-4763-8f2a-9fdcc824be26?page=0&amp;size=2 HTTP/1.1
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
 Host: localhost:8080</code></pre>
@@ -609,16 +609,16 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 1356
 
 {
-  "timeStamp" : "2023/08/06 22:05:59",
+  "timeStamp" : "2023/08/06 22:10:15",
   "code" : "VIDEO-2033",
   "message" : "VIDEO-비회원 좋아요 누른 영상 목록 조회 성공",
   "data" : {
     "videoList" : [ {
-      "uuid" : "79ad3e2f-ea0a-4ded-bb48-67aa030c498d",
+      "uuid" : "7250f922-c0e5-4844-9062-0f67d232771e",
       "title" : "타이틀",
       "tag" : "#해시 #태그",
       "user" : {
-        "userId" : "000af0a7-10c5-47f2-9bf5-5ad3967b70e3",
+        "userId" : "2d0e5ae7-d811-4763-8f2a-9fdcc824be26",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
@@ -631,11 +631,11 @@ Content-Length: 1356
       "createdAt" : null,
       "liked" : false
     }, {
-      "uuid" : "e8d9eb08-bbb2-4de0-a1f0-e4ab97ca3870",
+      "uuid" : "2311391d-c213-44e8-b0ef-086a03c1d894",
       "title" : "타이틀 1",
       "tag" : "#해시 #태그 #1",
       "user" : {
-        "userId" : "000af0a7-10c5-47f2-9bf5-5ad3967b70e3",
+        "userId" : "2d0e5ae7-d811-4763-8f2a-9fdcc824be26",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"

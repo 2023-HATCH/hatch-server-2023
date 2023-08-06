@@ -5,6 +5,23 @@
 
 CAUTION: 캐치 시 캐치요청자가 없어 2초간 휴식 후 캐치를 다시 진행합니다.
 
+==== Response fields
+|===
+|필드명|타입|필수여부|설명
+|`+timeStamp+`
+|`+LocalDateTime+`
+|true
+|응답 시각
+|`+type+`
+|`+String+`
+|true
+|소켓 통신 유형. 고정값(PLAY_START)
+|`+message+`
+|`+String+`
+|true
+|소켓 통신 유형 설명
+|===
+
 ==== Response body
 [source,http,options="nowrap"]
 ----
