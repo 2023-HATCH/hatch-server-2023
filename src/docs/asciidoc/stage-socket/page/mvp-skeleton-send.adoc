@@ -1,9 +1,9 @@
 
 // api 명 : h3
-== *Send Play Skeleton*
-스테이지 플레이 스켈레톤 전송
+== *Send MVP Skeleton*
+스테이지 MVP세리머니 스켈레톤 전송
 
-- URL : `/app/stage/play/skeleton`
+- URL : `/app/stage/mvp/skeleton`
 
 ==== Request header
 |===
@@ -18,11 +18,6 @@
 ==== Request fields
 |===
 |필드명|타입|필수여부|제약조건|설명
-|`+playerNum+`
-|`+Integer+`
-|true
-|공백 불가
-|보낼 사용자의 플레이어 번호(CATCH_END 응답에서 받은 번호)
 |`+frameNum+`
 |`+Integer+`
 |true
@@ -68,9 +63,8 @@
 ==== Request body
 [source,options="wrap"]
 ----
-$ _INFO_:send STOMP message, destination = /app/stage/play/skeleton, content =
+$ _INFO_:send STOMP message, destination = /app/stage/mvp/skeleton, content =
 {
-    "playerNum" : 0,
     "frameNum" : 0,
     "skeleton" : {
         "0":  {
@@ -110,7 +104,7 @@ header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyL
 |`+type+`
 |`+String+`
 |true
-|소켓 통신 유형. 고정값(PLAY_SKELETON)
+|소켓 통신 유형. 고정값(MVP_SKELETON)
 |`+message+`
 |`+String+`
 |true
@@ -119,10 +113,6 @@ header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyL
 |`+String+`
 |true
 |보낸 사용자 고유값
-|`+data.playerNum+`
-|`+Integer+`
-|true
-|보낸 사용자의 플레이어 번호(CATCH_END 응답에서 받은 번호)
 |`+data.frameNum+`
 |`+Integer+`
 |true
@@ -137,20 +127,19 @@ header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyL
 [source,http,options="nowrap"]
 ----
 $ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:699
-message-id:3f017a8a-ec17-26fe-57cf-536d851ee8ec-22
+content-length:2278
+message-id:f6d951ba-11bd-f871-0e17-53560bff420e-89
 subscription:sub-0
 content-type:application/json
 destination:/topic/stage
-content-length:699
+content-length:2278
 
 {
-    "timeStamp":"2023/08/04 23:41:06",
-    "type":"PLAY_SKELETON",
-    "message":"스테이지 플레이 스켈레톤 전달",
+    "timeStamp":"2023/08/06 22:39:17",
+    "type":"MVP_SKELETON",
+    "message":"스테이지 MVP세리머니 스켈레톤 전달",
     "data":{
         "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
-        "playerNum":0,
         "frameNum":0,
         "skeleton":{
             "0":{

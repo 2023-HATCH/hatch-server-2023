@@ -1,7 +1,9 @@
 
 // api 명 : h3
 == *MVP Start*
-(응답) 스테이지 MVP세리머니 시작
+(응답) 스테이지 MVP세리머니 시작. MVP 사용자 정보 전달
+
+- 음악과 유사도 적용 아직 안되어있습니다. (현재 mvp 선정 기준은 스켈레톤을 전송한 유저들 중 playerNum값 최소인 유저)
 
 
 ==== Response fields
@@ -15,10 +17,22 @@
 |`+String+`
 |true
 |소켓 통신 유형. 고정값(MVP_START)
-|`+data.+`
-|`+-+`
+|`+message+`
+|`+String+`
 |true
-|개발중
+|소켓 통신 유형 설명
+|`+data.userId+`
+|`+UUID+`
+|true
+|mvp 사용자 식별자
+|`+data.nickname+`
+|`+String+`
+|true
+|mvp 사용자 닉네임
+|`+data.profileImg+`
+|`+String+`
+|true
+|mvp 사용자 프로필 이미지 url
 |===
 
 
@@ -26,17 +40,23 @@
 [source,http,options="nowrap"]
 ----
 $ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:121
-message-id:c7b84486-b761-c839-8f41-998629713a8b-4
+content-length:209
+message-id:f6d951ba-11bd-f871-0e17-53560bff420e-13
 subscription:sub-0
 content-type:application/json
 destination:/topic/stage
-content-length:121
+content-length:209
 
 {
-    "timeStamp":"2023/07/26 23:29:44",
+    "timeStamp":"2023/08/06 22:35:35",
     "type":"MVP_START",
     "message":"스테이지 MVP세리머니 시작",
-    "data":"개발중"
+    "data":{
+        "mvpUser":{
+            "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+            "nickname":"user_1",
+            "profileImg":null
+        }
+    }
 }
 ----

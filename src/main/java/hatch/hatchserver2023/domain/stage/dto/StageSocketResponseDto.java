@@ -9,7 +9,6 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class StageSocketResponseDto {
 
@@ -82,5 +81,33 @@ public class StageSocketResponseDto {
         }
     }
 
+    @ToString
+    @Getter
+    @Builder
+    public static class StartMvp {
+        private UserResponseDto.SimpleUserProfile mvpUser;
 
+        public static StartMvp toDto(UserResponseDto.SimpleUserProfile mvpUser) {
+            return StartMvp.builder()
+                    .mvpUser(mvpUser)
+                    .build();
+        }
+    }
+
+    @ToString
+    @Getter
+    @Builder
+    public static class SendMvpSkeleton {
+        private UUID userId;
+        private Integer frameNum;
+        private StageRequestDto.Skeleton skeleton;
+
+        public static SendMvpSkeleton toDto(StageRequestDto.SendMvpSkeleton dto, User user) {
+            return SendMvpSkeleton.builder()
+                    .userId(user.getUuid())
+                    .frameNum(dto.getFrameNum())
+                    .skeleton(dto.getSkeleton())
+                    .build();
+        }
+    }
 }

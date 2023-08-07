@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Catch End</title>
+<title>랜덤 영상 목록 조회 (검색 화면)</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -441,25 +441,75 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_catch_end"><strong>Catch End</strong></h2>
+<h2 id="_랜덤_영상_목록_조회_검색_화면">랜덤 영상 목록 조회 (검색 화면)</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>(응답) 스테이지 캐치 끝</p>
+<div class="sect2">
+<h3 id="_랜덤_영상_목록_조회_검색_화면_http_request">HTTP request</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/videos/random?page=0&amp;size=2 HTTP/1.1
+headerXAccessToken: headerXAccessToken
+headerXRefreshToken: headerXRefreshToken
+Host: localhost:8080</code></pre>
 </div>
-<div class="admonitionblock caution">
-<table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_랜덤_영상_목록_조회_검색_화면_request_headers">Request headers</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
 <tr>
-<td class="icon">
-<div class="title">Caution</div>
-</td>
-<td class="content">
-캐치 요청자가 존재해야 플레이가 진행됩니다. 캐치 요청이 없을 경우 2초 후 캐치를 다시 진행합니다.
-</td>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
 </tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>headerXAccessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.
+ liked의 차이</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>headerXRefreshToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.
+ liked의 차이</p></td>
+</tr>
+</tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_response_fields">Response fields</h4>
+<div class="sect2">
+<h3 id="_랜덤_영상_목록_조회_검색_화면_request_parameters">Request parameters</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">파라미터</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 번호(0부터 시작)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_랜덤_영상_목록_조회_검색_화면_response_fields-beneath-data">Response fields-beneath-data</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -475,101 +525,142 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeStamp</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>isLast</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 시각</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마지막 페이지 여부</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoList.[].uuid</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(CATCH_END)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">동영상 식별자 UUID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoList.[].title</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형 설명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">영상 제목</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[]</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">캐치 성공자(플레이어) 목록</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].playerNum</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 식별 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoList.[].tag</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 사용자 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">해시태그</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoList.[].user.userId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 닉네임</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성 사용자 식별자 uuid</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].profileImg</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoList.[].user.email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 프로필 사진 url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 이메일</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.music</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoList.[].user.nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">개발중</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoList.[].user.profileImg</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 프로필 사진 S3 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoList.[].videoUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">동영상 S3 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoList.[].thumbnailUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">썸네일 이미지 S3 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoList.[].likeCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좋아요 개수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoList.[].commentCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 개수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoList.[].length</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">milliseconds 단위 동영상 길이</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoList.[].createdAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DateTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성 시각</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_response_body">Response body</h4>
+<div class="sect2">
+<h3 id="_랜덤_영상_목록_조회_검색_화면_http_response">HTTP response</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:233
-message-id:7094c524-6e96-cb1c-a560-4c4647938ad6-4
-subscription:sub-0
-content-type:application/json
-destination:/topic/stage
-content-length:233
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 1349
 
 {
-    "timeStamp":"2023/07/28 22:55:19",
-    "type":"CATCH_END",
-    "message":"스테이지 캐치 끝",
-    "data":{
-        "players":[
-            {
-                "playerNum":0,
-                "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
-                "nickname":"user_1",
-                "profileImg":null
-            },
-            {
-                "playerNum":1,
-                "userId":"또다른 uuid 값2",
-                "nickname":"user_2",
-                "profileImg":null
-            },
-            {
-                "playerNum":2,
-                "userId":"또다른 uuid 값3",
-                "nickname":"user_3",
-                "profileImg":null
-            }
-        ],
-        "music":"개발중"
-    }
+  "timeStamp" : "2023/08/06 23:19:22",
+  "code" : "VIDEO-2005",
+  "message" : "VIDEO-비회원 동영상 목록 정보 조회 성공",
+  "data" : {
+    "videoList" : [ {
+      "uuid" : "6aff651c-8e88-4137-ac0b-3cc404864c48",
+      "title" : "타이틀",
+      "tag" : "#해시 #태그",
+      "user" : {
+        "userId" : "f8ce5f16-15c1-422f-8003-55b770402c8a",
+        "nickname" : "닉네임",
+        "email" : "이메일",
+        "profileImg" : "프로필 이미지 s3 경로"
+      },
+      "videoUrl" : "동영상 s3 경로",
+      "thumbnailUrl" : "썸네일 이미지 s3 경로",
+      "likeCount" : 3,
+      "commentCount" : 11,
+      "length" : 107800,
+      "createdAt" : null,
+      "liked" : false
+    }, {
+      "uuid" : "b5cbf8fc-b22a-4a00-8462-7cfb5959b786",
+      "title" : "타이틀 1",
+      "tag" : "#해시 #태그 #1",
+      "user" : {
+        "userId" : "f8ce5f16-15c1-422f-8003-55b770402c8a",
+        "nickname" : "닉네임",
+        "email" : "이메일",
+        "profileImg" : "프로필 이미지 s3 경로"
+      },
+      "videoUrl" : "동영상 s3 경로 1",
+      "thumbnailUrl" : "썸네일 이미지 s3 경로 1",
+      "likeCount" : 5,
+      "commentCount" : 2,
+      "length" : 9999,
+      "createdAt" : null,
+      "liked" : false
+    } ],
+    "isLast" : true
+  }
 }</code></pre>
 </div>
 </div>
@@ -580,7 +671,7 @@ content-length:233
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-06 22:07:27 +0900
+Last updated 2023-08-06 15:29:44 +0900
 </div>
 </div>
 </body>

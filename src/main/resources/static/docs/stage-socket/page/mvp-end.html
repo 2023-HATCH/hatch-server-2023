@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Catch End</title>
+<title>MVP End</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -441,22 +441,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_catch_end"><strong>Catch End</strong></h2>
+<h2 id="_mvp_end"><strong>MVP End</strong></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>(응답) 스테이지 캐치 끝</p>
-</div>
-<div class="admonitionblock caution">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Caution</div>
-</td>
-<td class="content">
-캐치 요청자가 존재해야 플레이가 진행됩니다. 캐치 요청이 없을 경우 2초 후 캐치를 다시 진행합니다.
-</td>
-</tr>
-</table>
+<p>(응답) 스테이지 MVP세리머니 끝</p>
 </div>
 <div class="sect3">
 <h4 id="_response_fields">Response fields</h4>
@@ -484,49 +472,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(CATCH_END)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(MVP_END)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형 설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[]</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">캐치 성공자(플레이어) 목록</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].playerNum</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 식별 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].userId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 사용자 식별자</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].nickname</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 닉네임</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].profileImg</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 프로필 사진 url</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.music</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">개발중</p></td>
 </tr>
 </tbody>
 </table>
@@ -536,40 +488,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:233
-message-id:7094c524-6e96-cb1c-a560-4c4647938ad6-4
+content-length:97
+message-id:f6d951ba-11bd-f871-0e17-53560bff420e-90
 subscription:sub-0
 content-type:application/json
 destination:/topic/stage
-content-length:233
+content-length:97
 
 {
-    "timeStamp":"2023/07/28 22:55:19",
-    "type":"CATCH_END",
-    "message":"스테이지 캐치 끝",
-    "data":{
-        "players":[
-            {
-                "playerNum":0,
-                "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
-                "nickname":"user_1",
-                "profileImg":null
-            },
-            {
-                "playerNum":1,
-                "userId":"또다른 uuid 값2",
-                "nickname":"user_2",
-                "profileImg":null
-            },
-            {
-                "playerNum":2,
-                "userId":"또다른 uuid 값3",
-                "nickname":"user_3",
-                "profileImg":null
-            }
-        ],
-        "music":"개발중"
-    }
+    "timeStamp":"2023/08/06 22:39:20",
+    "type":"MVP_END",
+    "message":"스테이지 MVP세리머니 끝"
 }</code></pre>
 </div>
 </div>
@@ -580,7 +509,7 @@ content-length:233
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-06 22:07:27 +0900
+Last updated 2023-08-06 22:43:21 +0900
 </div>
 </div>
 </body>
