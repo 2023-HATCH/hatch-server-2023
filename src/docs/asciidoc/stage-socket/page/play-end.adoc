@@ -1,8 +1,7 @@
 
 // api 명 : h3
-== *Play Start*
-(응답) 스테이지 플레이 시작
-
+== *Play End*
+(응답) 스테이지 플레이 끝
 
 ==== Response fields
 |===
@@ -14,15 +13,11 @@
 |`+type+`
 |`+String+`
 |true
-|소켓 통신 유형. 고정값(PLAY_START)
+|소켓 통신 유형. 고정값(PLAY_END)
 |`+message+`
 |`+String+`
 |true
 |소켓 통신 유형 설명
-|`+data.+`
-|`+-+`
-|true
-|개발중
 |===
 
 
@@ -30,17 +25,16 @@
 [source,http,options="nowrap"]
 ----
 $ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:116
-message-id:c7b84486-b761-c839-8f41-998629713a8b-3
+content-length:192
+message-id:3538d046-28e5-7e29-2cae-39041d9137a6-38
 subscription:sub-0
 content-type:application/json
 destination:/topic/stage
-content-length:116
+content-length:192
 
 {
-    "timeStamp":"2023/07/26 23:29:43",
-    "type":"PLAY_START",
-    "message":"스테이지 플레이 시작",
-    "data":"개발중"
+    "timeStamp":"2023/08/06 19:52:14",
+    "type":"PLAY_END",
+    "message":"스테이지 플레이 끝"
 }
 ----

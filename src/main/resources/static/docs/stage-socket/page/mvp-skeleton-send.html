@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Catch End</title>
+<title>Send MVP Skeleton</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -441,22 +441,158 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_catch_end"><strong>Catch End</strong></h2>
+<h2 id="_send_mvp_skeleton"><strong>Send MVP Skeleton</strong></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>(응답) 스테이지 캐치 끝</p>
+<p>스테이지 MVP세리머니 스켈레톤 전송</p>
 </div>
-<div class="admonitionblock caution">
-<table>
+<div class="ulist">
+<ul>
+<li>
+<p>URL : <code>/app/stage/mvp/skeleton</code></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_request_header">Request header</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
 <tr>
-<td class="icon">
-<div class="title">Caution</div>
-</td>
-<td class="content">
-캐치 요청자가 존재해야 플레이가 진행됩니다. 캐치 요청이 없을 경우 2초 후 캐치를 다시 진행합니다.
-</td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제약조건</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x-access-token</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JWT 형식</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">액세스 토큰</p></td>
+</tr>
+</tbody>
 </table>
+</div>
+<div class="sect3">
+<h4 id="_request_fields">Request fields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제약조건</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>frameNum</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">공백 불가</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보낼 스켈레톤의 순서(프레임) 번호. 0부터 시작</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보낼 스켈레톤 데이터</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton.0</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보낼 관절 객체 하나. 0~32 각 관절 인덱스 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton.0.type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관절 인덱스 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton.0.x</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Double</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관절 x 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton.0.y</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Double</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관절 y 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton.0.z</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Double</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">관절 z 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skeleton.0.likelihood</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Double</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가능도? 프론트에서 정해준거라 뭔지 몰라요..</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_request_body">Request body</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>$ _INFO_:send STOMP message, destination = /app/stage/mvp/skeleton, content =
+{
+    "frameNum" : 0,
+    "skeleton" : {
+        "0":  {
+            "type": 0,
+            "x": 91.00,
+            "y": 253.00,
+            "z": 395.12,
+            "likelihood": 0.99
+        },
+        "1":  {
+            "type": 1,
+            "x": 91.00,
+            "y": 253.00,
+            "z": 395.12,
+            "likelihood": 0.99
+        },
+//...
+        "32": {
+            "type": 32,
+            "x": 91.00,
+            "y": 253.00,
+            "z": 395.12,
+            "likelihood": 0.99
+        }
+    }
+},
+header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkxMTU5NjI1LCJleHAiOjE2OTExNjMyMjV9.qgBY3mGpPDGfOFeJlVyN_OxnWUkrzzanRLezgNd7W_w"}</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_response_fields">Response fields</h4>
@@ -484,7 +620,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(CATCH_END)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형. 고정값(MVP_SKELETON)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -493,40 +629,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">소켓 통신 유형 설명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[]</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">캐치 성공자(플레이어) 목록</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보낸 사용자 고유값</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].playerNum</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.frameNum</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 식별 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].userId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 사용자 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이 사용자가 보낸 스켈레톤 순서(프레임) 번호. 0부터 시작</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].nickname</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 닉네임</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.players[].profileImg</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">플레이어 프로필 사진 url</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.music</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.skeleton</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">개발중</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보낸 스켈레톤 데이터 (하위 형식 request field 와 동일)</p></td>
 </tr>
 </tbody>
 </table>
@@ -536,42 +654,225 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:233
-message-id:7094c524-6e96-cb1c-a560-4c4647938ad6-4
+content-length:2278
+message-id:f6d951ba-11bd-f871-0e17-53560bff420e-89
 subscription:sub-0
 content-type:application/json
 destination:/topic/stage
-content-length:233
+content-length:2278
 
 {
-    "timeStamp":"2023/07/28 22:55:19",
-    "type":"CATCH_END",
-    "message":"스테이지 캐치 끝",
+    "timeStamp":"2023/08/06 22:39:17",
+    "type":"MVP_SKELETON",
+    "message":"스테이지 MVP세리머니 스켈레톤 전달",
     "data":{
-        "players":[
-            {
-                "playerNum":0,
-                "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
-                "nickname":"user_1",
-                "profileImg":null
+        "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+        "frameNum":0,
+        "skeleton":{
+            "0":{
+                "type":0,
+                "x":91.0,
+                "y":253.0,
+                "z":395.12,
+                "likelihood":0.99
             },
-            {
-                "playerNum":1,
-                "userId":"또다른 uuid 값2",
-                "nickname":"user_2",
-                "profileImg":null
+            "1":{
+                "type":1,
+                "x":91.0,
+                "y":253.0,
+                "z":395.12,
+                "likelihood":0.99
             },
-            {
-                "playerNum":2,
-                "userId":"또다른 uuid 값3",
-                "nickname":"user_3",
-                "profileImg":null
+//...
+            "32":{
+                "type":32,
+                "x":91.0,
+                "y":253.0,
+                "z":395.12,
+                "likelihood":0.99
             }
-        ],
-        "music":"개발중"
+        }
     }
 }</code></pre>
 </div>
+</div>
+<hr>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+관절 인덱스 번호
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>서버 버전</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NOSE = "0";
+Left {
+    EYE_INNER = "1";
+    EYE = "2";
+    EYE_OUTER = "3";
+
+    EAR = "7";
+    MOUTH = "9";
+    SHOULDER = "11";
+    ELBOW = "13";
+    WRIST = "15";
+
+    PINKY = "17";
+    INDEX = "19";
+    THUMB = "21";
+
+    HIP = "23";
+    KNEE = "25";
+    ANKLE = "27";
+    HEEL = "29";
+    FOOT_INDEX = "31";
+}
+
+Right {
+    EYE_INNER = "4";
+    EYE = "5";
+    EYE_OUTER = "6";
+
+    EAR = "8";
+    MOUTH = "10";
+    SHOULDER = "12";
+    ELBOW = "14";
+    WRIST = "16";
+
+    PINKY = "18";
+    INDEX = "20";
+    THUMB = "22";
+
+    HIP = "24";
+    KNEE = "26";
+    ANKLE = "28";
+    HEEL = "30";
+    FOOT_INDEX = "32";
+}</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>프론트 버전</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>nose,</p>
+</li>
+<li>
+<p>leftEyeInner,</p>
+</li>
+<li>
+<p>leftEye,</p>
+</li>
+<li>
+<p>leftEyeOuter,</p>
+</li>
+<li>
+<p>rightEyeInner,</p>
+</li>
+<li>
+<p>rightEye,</p>
+</li>
+<li>
+<p>rightEyeOuter,</p>
+</li>
+<li>
+<p>leftEar,</p>
+</li>
+<li>
+<p>rightEar,</p>
+</li>
+<li>
+<p>leftMouth,</p>
+</li>
+<li>
+<p>rightMouth,</p>
+</li>
+<li>
+<p>leftShoulder,</p>
+</li>
+<li>
+<p>rightShoulder,</p>
+</li>
+<li>
+<p>leftElbow,</p>
+</li>
+<li>
+<p>rightElbow,</p>
+</li>
+<li>
+<p>leftWrist,</p>
+</li>
+<li>
+<p>rightWrist,</p>
+</li>
+<li>
+<p>leftPinky,</p>
+</li>
+<li>
+<p>rightPinky,</p>
+</li>
+<li>
+<p>leftIndex,</p>
+</li>
+<li>
+<p>rightIndex,</p>
+</li>
+<li>
+<p>leftThumb,</p>
+</li>
+<li>
+<p>rightThumb,</p>
+</li>
+<li>
+<p>leftHip,</p>
+</li>
+<li>
+<p>rightHip,</p>
+</li>
+<li>
+<p>leftKnee,</p>
+</li>
+<li>
+<p>rightKnee,</p>
+</li>
+<li>
+<p>leftAnkle,</p>
+</li>
+<li>
+<p>rightAnkle,</p>
+</li>
+<li>
+<p>leftHeel,</p>
+</li>
+<li>
+<p>rightHeel,</p>
+</li>
+<li>
+<p>leftFootIndex,</p>
+</li>
+<li>
+<p>rightFootIndex</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -580,7 +881,7 @@ content-length:233
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-06 22:07:27 +0900
+Last updated 2023-08-06 23:00:35 +0900
 </div>
 </div>
 </body>

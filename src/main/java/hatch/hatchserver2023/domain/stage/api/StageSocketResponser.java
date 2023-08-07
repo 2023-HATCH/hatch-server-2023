@@ -1,12 +1,10 @@
 package hatch.hatchserver2023.domain.stage.api;
 
-import hatch.hatchserver2023.domain.stage.application.StageRoutineService;
 import hatch.hatchserver2023.domain.stage.dto.StageSocketResponseDto;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.socket.SocketResponseType;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -36,18 +34,31 @@ public class StageSocketResponser {
         sendToStage(SocketResponseType.CATCH_START, tempData);
     }
 
-    public void startPlay(String tempData) {
-        sendToStage(SocketResponseType.PLAY_START, tempData);
-    }
-
-    public void startMVP(String tempData) {
-        sendToStage(SocketResponseType.MVP_START, tempData);
-    }
-
     public void endCatch(List<User> users) {
         List<StageSocketResponseDto.Player> players = StageSocketResponseDto.Player.toDtos(users);
         sendToStage(SocketResponseType.CATCH_END, StageSocketResponseDto.CatchEnd.toDto(players, "개발중"));
     }
+
+    public void endCatch() {
+        sendToStage(SocketResponseType.CATCH_END_RESTART);
+    }
+
+    public void startPlay(String tempData) {
+        sendToStage(SocketResponseType.PLAY_START, tempData);
+    }
+
+    public void endPlay() {
+        sendToStage(SocketResponseType.PLAY_END);
+    }
+
+    public void startMVP(UserResponseDto.SimpleUserProfile mvpUSer) {
+        sendToStage(SocketResponseType.MVP_START, StageSocketResponseDto.StartMvp.toDto(mvpUSer));
+    }
+
+    public void endMvp() {
+        sendToStage(SocketResponseType.MVP_END);
+    }
+
 
     private void sendToStage(SocketResponseType type) {
         sendToStage(type, null);

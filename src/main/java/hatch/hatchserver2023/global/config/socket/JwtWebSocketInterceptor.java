@@ -40,7 +40,7 @@ public class JwtWebSocketInterceptor implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         log.info("[INTERCEPTOR] WebSocketInterceptor preSend");
-        log.info("message : {}", message);
+//        log.info("message : {}", message);
 //        log.info("native header : {}", headerAccessor.getHeader("nativeHeaders"));
 //        log.info("native header - Authorization : {}", headerAccessor.getFirstNativeHeader("Authorization"));
 
@@ -66,15 +66,15 @@ public class JwtWebSocketInterceptor implements ChannelInterceptor {
 
             //확인 로그 찍기
             Principal principal = headerAccessor.getUser();
-            log.info("[INTERCEPTOR] WebSocketInterceptor headerAccessor : getUser {}", principal);
+//            log.info("[INTERCEPTOR] WebSocketInterceptor headerAccessor : getUser {}", principal);
             if(principal instanceof UsernamePasswordAuthenticationToken) {
                 UsernamePasswordAuthenticationToken userToken = (UsernamePasswordAuthenticationToken) principal;
                 User user = (User) userToken.getPrincipal();
-                log.info("[INTERCEPTOR] WebSocketInterceptor headerAccessor : principal to User nickname {}", user.getNickname());
+//                log.info("[INTERCEPTOR] WebSocketInterceptor headerAccessor : principal to User nickname {}", user.getNickname());
             }
         }
 
-        log.info("[INTERCEPTOR] END preSend");
+//        log.info("[INTERCEPTOR] END preSend");
         return message;
     }
 

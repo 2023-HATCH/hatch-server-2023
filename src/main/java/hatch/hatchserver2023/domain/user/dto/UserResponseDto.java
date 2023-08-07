@@ -38,6 +38,16 @@ public class UserResponseDto {
         private String nickname;
         private String profileImg;
 
+        // ObjectMapper 로 json 변환을 위한 생성자 2개
+        public SimpleUserProfile(UUID userId, String nickname, String profileImg) {
+            this.userId = userId;
+            this.nickname = nickname;
+            this.profileImg = profileImg;
+        }
+
+        public SimpleUserProfile() {
+        }
+
         public static List<SimpleUserProfile> toDtos(List<User> users) {
             return users.stream().map(SimpleUserProfile::toDto).collect(Collectors.toList());
         }

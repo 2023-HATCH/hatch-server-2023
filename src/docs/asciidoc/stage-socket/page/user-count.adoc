@@ -15,6 +15,10 @@
 |`+String+`
 |true
 |소켓 통신 유형. 고정값(USER_COUNT)
+|`+message+`
+|`+String+`
+|true
+|소켓 통신 유형 설명
 |`+data.userCount+`
 |`+Integer+`
 |true

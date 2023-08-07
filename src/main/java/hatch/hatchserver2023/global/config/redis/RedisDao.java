@@ -144,6 +144,15 @@ public class RedisDao {
     }
 
     /**
+     * Sorted Set 에서 해당 키의 모든 데이터들을 가져오는 메서드
+     * @param key
+     */
+    public Set<String> getValuesZSetAll(String key) {
+        ZSetOperations<String, String> values = redisTemplate.opsForZSet();
+        return values.range(key, 0, -1);
+    }
+
+    /**
      * Set 에서 해당 데이터를 삭제하는 메서드
      * @param key
      * @param data
