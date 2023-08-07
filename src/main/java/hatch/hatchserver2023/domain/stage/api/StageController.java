@@ -92,7 +92,7 @@ public class StageController {
     }
 
     /**
-     * 스테이지 사용자 퇴장 api (임시)
+     * 스테이지 사용자 퇴장 api (임시) -> 삭제 예정
      * @param user
      * @return
      */

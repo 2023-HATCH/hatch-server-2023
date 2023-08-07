@@ -212,7 +212,7 @@ public class StageRoutineService {
      * @return
      */
     private UserResponseDto.SimpleUserProfile getMvpUserInfo(int mvpPlayerNum) {
-        String userJson = redisDao.getValuesHash(KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(mvpPlayerNum)).toString();
+        String userJson = redisDao.getValuesHash(KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(mvpPlayerNum)).toString(); //TODO : nullPointException
         UserResponseDto.SimpleUserProfile mvpUser;
         try {
             mvpUser = new ObjectMapper().readValue(userJson, UserResponseDto.SimpleUserProfile.class); // TODO : ObjectMapper 사용 util 만들어서 모으기

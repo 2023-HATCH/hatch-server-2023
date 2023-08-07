@@ -156,10 +156,10 @@ public class StageService {
     }
 
     /**
-     * 스테이지 퇴장 로직 (임시)
+     * 스테이지 퇴장 로직 (임시) -> http에서 ws로 변경
      * @param user
      */
-    public void deleteStageUser(User user) {
+    public void deleteStageUser(User user) { // TODO : 8/9 이후 temp로직들 수정
         log.info("[SERVICE] deleteStageUser");
 
         int count = stageRoutineService.getStageUserCount();
