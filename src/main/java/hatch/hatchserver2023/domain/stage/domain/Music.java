@@ -1,10 +1,10 @@
 package hatch.hatchserver2023.domain.stage.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -41,6 +41,7 @@ public class Music {
 
     // 정답 안무 스켈레톤
     @Lob
+    @JsonIgnore
     // ALTER TABLE music MODIFY answer mediumblob;
     private Float[][] answer;
 

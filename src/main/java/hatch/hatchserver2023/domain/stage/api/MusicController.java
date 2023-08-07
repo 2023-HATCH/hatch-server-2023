@@ -53,6 +53,15 @@ public class MusicController {
         return musicRepository.findAll();
     }
 
+    //삭제
+    @DeleteMapping("/delete/{title}")
+    public ResponseEntity<CommonResponse> deleteMusic(@PathVariable String title) {
+        Music music = musicRepository.findByTitle(title);
+
+        musicRepository.delete(music);
+
+        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, title + " 삭제 완료"));
+    }
 
     /**
      * 음악 재생 테스트
