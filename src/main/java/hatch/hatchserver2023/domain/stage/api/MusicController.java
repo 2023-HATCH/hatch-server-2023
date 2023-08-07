@@ -2,15 +2,18 @@ package hatch.hatchserver2023.domain.stage.api;
 
 import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.stage.dto.MusicRequestDto;
+import hatch.hatchserver2023.domain.stage.dto.MusicResponseDto;
 import hatch.hatchserver2023.domain.stage.repository.MusicRepository;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.CommonCode;
+import hatch.hatchserver2023.global.common.response.exception.DefaultException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -48,5 +51,24 @@ public class MusicController {
     @GetMapping("/list")
     public List<Music> getList() {
         return musicRepository.findAll();
+    }
+
+
+    /**
+     * 음악 재생 테스트
+     *
+     * input: 음악 uuid, 재생 시각(milliseconds 단위)
+     * output: 음악 제목, 음악 링크, 음악 길이(milliseconds 단위), 재생 시각(milliseconds 단위)
+     *
+     * @param uuid
+     * @param playTime
+     * @return title, musicUrl, length, playTime
+     */
+    @GetMapping("/play/{uuid}")
+    public ResponseEntity<CommonResponse> playMusicTest(@PathVariable UUID uuid,
+                                                        @RequestParam(defaultValue="3000") Integer playTime) {
+        Music music = musicRepository.findByUuid(uuid);
+
+        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK, MusicResponseDto.Play.toDto(music, playTime)));
     }
 }
