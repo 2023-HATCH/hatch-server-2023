@@ -66,6 +66,17 @@ public class StageService {
     }
 
     /**
+     * 스테이지 진행 상태 확인 로직
+     * @return
+     */
+    public String getStageInfo() {
+        log.info("[SERVICE] getStageStatus");
+        return stageDataService.getStageStatus();
+        //TODO : 상태에 따라 진행중인 정보 같이 보내줘야 함
+    }
+
+
+    /**
      * 스테이지 입장 로직 2 : 중복 입장 불가. 8/9 이후 이걸로 변경
      * @param user
      * @return
@@ -93,7 +104,7 @@ public class StageService {
 
     // TODO : 스테이지가 진행 도중 멈춰버렸을 때 (왜?) 새로 누군가 입장 시 스테이지 처음부터 새로 run시키기.. how? 상태값이 아니면 진행중(Thread.sleep)인지 아닌지 어떻게 알지... 스레드..?
     private void runStageRoutine(int increasedCount) {
-        String stageStatus = getStageStatus();
+        String stageStatus = stageDataService.getStageStatus();
         switch (stageStatus) {
             case StageRoutineService.STAGE_STATUS_WAIT:
                 log.info("stage status : wait ");
@@ -113,16 +124,6 @@ public class StageService {
         }
     }
 
-
-    /**
-     * 스테이지 상태 확인 로직
-     * @return
-     */
-    public String getStageStatus() {
-        log.info("[SERVICE] getStageStatus");
-        return stageDataService.getStageStatus();
-        //TODO : 상태에 따라 진행중인 정보 같이 보내줘야 함
-    }
 
     /**
      * 스테이지 참여자 고유값 목록 확인 로직

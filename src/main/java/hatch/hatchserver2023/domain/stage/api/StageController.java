@@ -56,7 +56,7 @@ public class StageController {
                                                      @AuthenticationPrincipal User user) {
         log.info("[API] GET /stage/enter");
         int stageUserCount = stageService.addStageUser(user);
-        String stageStatus = stageService.getStageStatus();
+        String stageStatus = stageService.getStageInfo();
         Slice<TalkMessage> talkMessages = talkService.getTalkMessages(page, size);
 
         // ws upgrade -> x 그냥 다른 요청으로 분리 사용

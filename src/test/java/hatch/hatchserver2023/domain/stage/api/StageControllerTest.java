@@ -7,7 +7,6 @@ import hatch.hatchserver2023.domain.talk.application.TalkService;
 import hatch.hatchserver2023.domain.talk.domain.TalkMessage;
 import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;
@@ -126,7 +125,7 @@ class StageControllerTest {
 
         //when
         when(stageService.addStageUser(any(User.class))).thenReturn(userCount);
-        when(stageService.getStageStatus()).thenReturn(stageStatus);
+        when(stageService.getStageInfo()).thenReturn(stageStatus);
         when(talkService.getTalkMessages(page, size)).thenReturn(talkMessages);
 
         //then
