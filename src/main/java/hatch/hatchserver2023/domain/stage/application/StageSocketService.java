@@ -13,11 +13,12 @@ import java.util.Arrays;
 @Slf4j
 @Service
 public class StageSocketService {
-    private final StageRoutineService stageRoutineService;
+    private final StageDataService stageDataService;
 
     private final RedisDao redisDao;
-    public StageSocketService(StageRoutineService stageRoutineService, RedisDao redisDao) {
-        this.stageRoutineService = stageRoutineService;
+
+    public StageSocketService(StageDataService stageDataService, RedisDao redisDao) {
+        this.stageDataService = stageDataService;
         this.redisDao = redisDao;
     }
 
@@ -25,7 +26,7 @@ public class StageSocketService {
     public void savePlaySkeleton(StageRequestDto.SendPlaySkeleton dto) {
         log.info("[SERVICE] savePlaySkeleton");
 
-        String status = stageRoutineService.getStageStatus();
+        String status = stageDataService.getStageStatus();
         if(status==null || !status.equals(StageRoutineService.STAGE_STATUS_PLAY)) {
             throw new StageException(StageStatusCode.STAGE_STATUS_NOT_PLAY);
         }
@@ -38,7 +39,7 @@ public class StageSocketService {
     }
 
     public void checkStageStatusMvp() {
-        String status = stageRoutineService.getStageStatus();
+        String status = stageDataService.getStageStatus();
         if(status==null || !status.equals(StageRoutineService.STAGE_STATUS_MVP)) {
             throw new StageException(StageStatusCode.STAGE_STATUS_NOT_MVP);
         }
@@ -51,14 +52,14 @@ public class StageSocketService {
     public int deleteStageUser(User user) throws StageException { // TODO : 8/9 이후 temp로직들 수정
         log.info("[SERVICE] deleteStageUser");
 
-        // 이 유저가 입장되어있는 유저인지 확인
+        // 이 유저가 입장되어있는 유저인지 확인 // TODO : Refactor
         boolean isStageUser = redisDao.isSetDataExist(StageRoutineService.KEY_STAGE_ENTER_USER_LIST, user.getId().toString());
         if(!isStageUser) {
             log.info("[SERVICE] Not stage entered user. No delete");
             throw new StageException(StageStatusCode.NOT_ENTERED_USER);
         }
 
-        int count = stageRoutineService.getSendStageUserCount();
+        int count = stageDataService.getStageUserCount();
         log.info("[SERVICE] count : {}", count);
 
         if(count == 0){

@@ -75,8 +75,9 @@ public class StageSocketController {
             userCount = stageSocketService.deleteStageUser(user);
         }catch (StageException stageException) {
             if(stageException.getCode() == StageStatusCode.NOT_ENTERED_USER){
-                log.info(stageException.getCode().getMessage());
                 return; // 인원수 변경 응답 없이 종료
+            }else{
+                throw stageException;
             }
         }
 

@@ -10,6 +10,7 @@ import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
+import hatch.hatchserver2023.global.common.response.exception.StageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
@@ -101,7 +102,14 @@ public class StageController {
     public ResponseEntity<CommonResponse> exitStage(@AuthenticationPrincipal User user) {
         log.info("[API] GET /stage/exit");
 //        stageService.deleteStageUser(user);
-        stageSocketService.deleteStageUser(user); //TODO : 이 api 삭제
+
+        try {
+            stageSocketService.deleteStageUser(user); //TODO : 이 api 삭제
+        }catch (StageException stageException) {
+            if(stageException.getCode() != StageStatusCode.NOT_ENTERED_USER){
+                throw stageException;
+            }
+        }
 
         return ResponseEntity.ok().body(CommonResponse.toResponse(
                 StageStatusCode.GET_STAGE_EXIT_SUCCESS));

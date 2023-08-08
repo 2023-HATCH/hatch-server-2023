@@ -18,14 +18,16 @@ import java.util.stream.Collectors;
 public class StageService {
 
     private final StageRoutineService stageRoutineService;
+    private final StageDataService stageDataService;
 
     private final RedisDao redisDao;
 
     private final StageSocketResponser stageSocketResponser;
 
-    public StageService(RedisDao redisDao, StageRoutineService stageRoutineService, StageSocketResponser stageSocketResponser) {
+    public StageService(RedisDao redisDao, StageRoutineService stageRoutineService, StageDataService stageDataService, StageSocketResponser stageSocketResponser) {
         this.redisDao = redisDao;
         this.stageRoutineService = stageRoutineService;
+        this.stageDataService = stageDataService;
         this.stageSocketResponser = stageSocketResponser;
     }
 
@@ -55,7 +57,7 @@ public class StageService {
 
     private int addStageData(User user) {
         // 인원수 increase
-        int increasedCount = stageRoutineService.getSendStageUserCount() + 1;
+        int increasedCount = stageDataService.getStageUserCount() + 1;
         redisDao.setValues(StageRoutineService.KEY_STAGE_ENTER_USER_COUNT, String.valueOf(increasedCount));
         log.info("[SERVICE] increasedCount : {}", increasedCount);
 
@@ -122,7 +124,7 @@ public class StageService {
      */
     public String getStageStatus() {
         log.info("[SERVICE] getStageStatus");
-        String stageStatus = stageRoutineService.getStageStatus();
+        String stageStatus = stageDataService.getStageStatus();
         return (stageStatus==null) ? StageRoutineService.STAGE_STATUS_WAIT : stageStatus;
         //TODO : 상태에 따라 진행중인 정보 같이 보내줘야 함
     }
@@ -146,7 +148,7 @@ public class StageService {
     public void registerCatch(User user) {
         log.info("[SERVICE] registerCatch");
 
-        if(!stageRoutineService.getStageStatus().equals(StageRoutineService.STAGE_STATUS_CATCH)) {
+        if(!stageDataService.getStageStatus().equals(StageRoutineService.STAGE_STATUS_CATCH)) {
             throw new StageException(StageStatusCode.STAGE_STATUS_NOT_CATCH);
         }
 

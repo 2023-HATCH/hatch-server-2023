@@ -3,8 +3,10 @@ package hatch.hatchserver2023.global.config.socket;
 import hatch.hatchserver2023.domain.stage.application.StageService;
 import hatch.hatchserver2023.domain.stage.application.StageSocketService;
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.AuthException;
+import hatch.hatchserver2023.global.common.response.exception.StageException;
 import hatch.hatchserver2023.global.config.security.jwt.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -27,11 +29,11 @@ import java.security.Principal;
 // 소켓에서는 토큰 RTR 적용 일단 안함
 public class JwtWebSocketInterceptor implements ChannelInterceptor {
     private final JwtProvider jwtProvider;
-//    private final StageSocketService stageSocketService;
+    private final StageSocketService stageSocketService;
 
-    public JwtWebSocketInterceptor(JwtProvider jwtProvider) { //, StageSocketService stageSocketService
+    public JwtWebSocketInterceptor(JwtProvider jwtProvider, StageSocketService stageSocketService) {
         this.jwtProvider = jwtProvider;
-//        this.stageSocketService = stageSocketService;
+        this.stageSocketService = stageSocketService;
     }
 
 
@@ -108,7 +110,14 @@ public class JwtWebSocketInterceptor implements ChannelInterceptor {
 
                 // 입장했던 유저면 퇴장 로직 진행
                 User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//                stageSocketService.deleteStageUser(user); // responser 미포함 메서드
+                try {
+                    stageSocketService.deleteStageUser(user);
+                }catch (StageException stageException) {
+                    if(stageException.getCode() != StageStatusCode.NOT_ENTERED_USER){
+                        throw stageException;
+                    }
+                }
+
                 break;
             default:
                 log.info("[INTERCEPTOR] postSend command {}. sessionId {}", accessor.getCommand(), sessionId);

@@ -45,12 +45,14 @@ public class StageRoutineService {
     private final UserRepository userRepository;
     private final RedisDao redisDao;
 
+    private final StageDataService stageDataService;
     private final AIService aiService;
     private final StageSocketResponser stageSocketResponser;
 
-    public StageRoutineService(UserRepository userRepository, RedisDao redisDao, AIService aiService, StageSocketResponser stageSocketResponser) {
+    public StageRoutineService(UserRepository userRepository, RedisDao redisDao, StageDataService stageDataService, AIService aiService, StageSocketResponser stageSocketResponser) {
         this.userRepository = userRepository;
         this.redisDao = redisDao;
+        this.stageDataService = stageDataService;
         this.aiService = aiService;
         this.stageSocketResponser = stageSocketResponser;
     }
@@ -94,13 +96,13 @@ public class StageRoutineService {
 
     private void startCatch() {
         log.info("StageRoutineUtil startCatch");
-        setStageStatus(STAGE_STATUS_CATCH);
+        stageDataService.setStageStatus(STAGE_STATUS_CATCH);
         stageSocketResponser.startCatch("개발중");
     }
 
     private boolean endCatch() throws InterruptedException {
         log.info("StageRoutineUtil endCatch");
-        setStageStatus(STAGE_STATUS_CATCH_END);
+        stageDataService.setStageStatus(STAGE_STATUS_CATCH_END);
 
         // TODO : 개발 편의를 위해 인원 검사 안함
 //        checkUserCountInEndCatch();
@@ -137,7 +139,7 @@ public class StageRoutineService {
 
     private void endPlay() {
         log.info("StageRoutineUtil endPlay");
-        setStageStatus(STAGE_STATUS_PLAY_END);
+        stageDataService.setStageStatus(STAGE_STATUS_PLAY_END);
 
         stageSocketResponser.endPlay();
     }
@@ -151,7 +153,7 @@ public class StageRoutineService {
         UserResponseDto.SimpleUserProfile mvpUser = getMvpUserInfo(mvpPlayerNum);
 
         // 상태 변경, 응답
-        setStageStatus(STAGE_STATUS_MVP);
+        stageDataService.setStageStatus(STAGE_STATUS_MVP);
         stageSocketResponser.startMVP(mvpUser);
 
         // 캐치, 플레이 데이터 초기화
@@ -160,7 +162,7 @@ public class StageRoutineService {
 
     private void endMVP() {
         log.info("StageRoutineUtil endMVP");
-        setStageStatus(STAGE_STATUS_MVP_END);
+        stageDataService.setStageStatus(STAGE_STATUS_MVP_END);
         stageSocketResponser.endMvp();
 
         // mvp 데이터 초기화 - 할 게 없음
@@ -303,18 +305,10 @@ public class StageRoutineService {
         redisDao.deleteValues(KEY_STAGE_PLAYER_INFO_HASH);
     }
 
-    public int getSendStageUserCount() {
-        String countString = redisDao.getValues(StageRoutineService.KEY_STAGE_ENTER_USER_COUNT);
-        log.info("StageRoutineUtil countString : {}", countString);
-        int userCount = (countString==null) ? 0 : Integer.parseInt(countString);
+    private int getSendStageUserCount() {
+        int userCount = stageDataService.getStageUserCount();
         stageSocketResponser.userCount(userCount);
         return userCount;
     }
 
-    public void setStageStatus(String status) {
-        redisDao.setValues(KEY_STAGE_STATUS, status);
-    }
-    public String getStageStatus() {
-        return redisDao.getValues(KEY_STAGE_STATUS);
-    }
 }
