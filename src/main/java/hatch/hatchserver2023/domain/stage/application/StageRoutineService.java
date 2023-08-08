@@ -3,9 +3,12 @@ package hatch.hatchserver2023.domain.stage.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
+import hatch.hatchserver2023.domain.stage.domain.Music;
+import hatch.hatchserver2023.domain.stage.repository.MusicRepository;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
+import hatch.hatchserver2023.global.common.ObjectMapperUtil;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.StageException;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
@@ -36,18 +39,23 @@ public class StageRoutineService {
     private static final int STAGE_CATCH_SUCCESS_LAST_INDEX = 2;
 
     private final UserRepository userRepository;
+    private final MusicRepository musicRepository;
     private final RedisDao redisDao;
 
     private final StageDataService stageDataService;
     private final AIService aiService;
-    private final StageSocketResponser stageSocketResponser;
 
-    public StageRoutineService(UserRepository userRepository, RedisDao redisDao, StageDataService stageDataService, AIService aiService, StageSocketResponser stageSocketResponser) {
+    private final StageSocketResponser stageSocketResponser;
+    private final ObjectMapperUtil objectMapperUtil;
+
+    public StageRoutineService(UserRepository userRepository, MusicRepository musicRepository, RedisDao redisDao, StageDataService stageDataService, AIService aiService, StageSocketResponser stageSocketResponser, ObjectMapperUtil objectMapperUtil) {
         this.userRepository = userRepository;
+        this.musicRepository = musicRepository;
         this.redisDao = redisDao;
         this.stageDataService = stageDataService;
         this.aiService = aiService;
         this.stageSocketResponser = stageSocketResponser;
+        this.objectMapperUtil = objectMapperUtil;
     }
 
     /**
@@ -59,16 +67,17 @@ public class StageRoutineService {
         while(getSendStageUserCount() >= 3) {
             try {
                 // 캐치 시작
-                startCatch();
+                Music music = startCatch();
                 TimeUnit.SECONDS.sleep(STAGE_CATCH_TIME);
                 // 캐치한 사람이 없을 경우 2초 후 다시 캐치 시작
                 if(!endCatch()) {
+                    redisDao.deleteValues(StageDataService.KEY_STAGE_MUSIC); // 직전 캐치 음악 데이터 삭제
                     TimeUnit.SECONDS.sleep(STAGE_CATCH_AGAIN_INTERVAL);
                     continue;
                 }
 
                 // 플레이 시작
-                int playTime = startPlay();
+                int playTime = startPlay(music);
                 TimeUnit.SECONDS.sleep(playTime);
                 endPlay();
 
@@ -87,11 +96,17 @@ public class StageRoutineService {
     }
 
 
-    private void startCatch() {
+    private Music startCatch() {
         log.info("StageRoutineUtil startCatch");
         stageDataService.setStageStatus(STAGE_STATUS_CATCH);
+
+        // 음악 랜덤 선정
+        Music music = musicRepository.findRandomOne().get(0);
+        stageDataService.setStageMusic(music);
+
         stageDataService.setStageStatusStartTime();
-        stageSocketResponser.startCatch("개발중");
+        stageSocketResponser.startCatch(music);
+        return music;
     }
 
     private boolean endCatch() throws InterruptedException {
@@ -122,14 +137,16 @@ public class StageRoutineService {
         return true;
     }
 
-    private int startPlay() {
+    private int startPlay(Music music) {
         log.info("StageRoutineUtil startPlay");
         stageDataService.setStageStatus(STAGE_STATUS_PLAY);
-        stageDataService.setStageStatusStartTime();
-        stageSocketResponser.startPlay("개발중");
 
         final int readyTime = 5;
-        int musicTime = 10; //TODO
+        int musicTime = 10; //TODO : 개발 편의 위해 잠시 //music.getLength()
+
+        stageDataService.setStageStatusStartTime();
+        stageSocketResponser.startPlay();
+
         return readyTime + musicTime;
     }
 
@@ -161,10 +178,8 @@ public class StageRoutineService {
     private void endMVP() {
         log.info("StageRoutineUtil endMVP");
         stageDataService.setStageStatus(STAGE_STATUS_MVP_END);
+        redisDao.deleteValues(StageDataService.KEY_STAGE_MUSIC);
         stageSocketResponser.endMvp();
-
-        // mvp 데이터 초기화 - 할 게 없음
-        // initMvpData();
 
         // 입장자 3명 미만이면 스테이지 대기상태로 변경
         int userCount = stageDataService.getStageEnterUserCount();
@@ -197,11 +212,7 @@ public class StageRoutineService {
         List<UserResponseDto.SimpleUserProfile> userSimples = users.stream().map(UserResponseDto.SimpleUserProfile::toDto).collect(Collectors.toList());
         for(int i=0; i<userSimples.size(); i++){ // i는 playerNum과 같음
             String userSimpleJson;
-            try {
-                userSimpleJson = new ObjectMapper().writeValueAsString(userSimples.get(i));
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e); //TODO
-            }
+            userSimpleJson = objectMapperUtil.toJson(userSimples.get(i)); //TODO : StageDataService로
             redisDao.setValuesHash(StageDataService.KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(i), userSimpleJson);
         }
     }
@@ -215,7 +226,7 @@ public class StageRoutineService {
         String userJson = redisDao.getValuesHash(StageDataService.KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(mvpPlayerNum)).toString(); //TODO : nullPointException
         UserResponseDto.SimpleUserProfile mvpUser;
         try {
-            mvpUser = new ObjectMapper().readValue(userJson, UserResponseDto.SimpleUserProfile.class); // TODO : ObjectMapper 사용 util 만들어서 모으기
+            mvpUser = objectMapperUtil.toOriginalType(userJson, UserResponseDto.SimpleUserProfile.class); //TODO : StageDataService로
         } catch (JsonProcessingException e) {
             throw new StageException(StageStatusCode.FAIL_GET_MVP_USER_INFO_FROM_REDIS_JSON);
         }

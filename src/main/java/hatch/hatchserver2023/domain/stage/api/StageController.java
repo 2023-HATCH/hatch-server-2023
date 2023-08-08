@@ -42,7 +42,6 @@ public class StageController {
         this.userUtilService = userUtilService;
     }
 
-    // TODO : WAIT 말고 PLAY, MVP 상태에서 입장한 상황 처리로직 추가하기 (음원 정보, 플레이어 정보 등 응답)
     /**
      * 스테이지 입장 api (WAIT 상태에서 입장하는 상황만 가정함)
      * @param page
@@ -59,8 +58,6 @@ public class StageController {
         int stageUserCount = stageService.addStageUser(user);
         StageModel.StageInfo stageInfo = stageService.getStageInfo();
         Slice<TalkMessage> talkMessages = talkService.getTalkMessages(page, size);
-
-        // ws upgrade -> x 그냥 다른 요청으로 분리 사용
 
         return ResponseEntity.ok().body(CommonResponse.toResponse(
                 StageStatusCode.GET_STAGE_ENTER_SUCCESS, StageResponseDto.Enter.toDto(stageInfo, stageUserCount, talkMessages)));

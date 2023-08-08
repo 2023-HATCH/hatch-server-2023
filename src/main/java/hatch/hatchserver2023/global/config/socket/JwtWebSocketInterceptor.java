@@ -109,14 +109,18 @@ public class JwtWebSocketInterceptor implements ChannelInterceptor {
                 log.info("[INTERCEPTOR] postSend command DISCONNECT. sessionId {}", sessionId);
 
                 // 입장했던 유저면 퇴장 로직 진행
-                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                try {
-                    stageSocketService.deleteStageUser(user);
-                }catch (StageException stageException) {
-                    if(stageException.getCode() != StageStatusCode.NOT_ENTERED_USER){
-                        throw stageException;
+                Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                if(principal instanceof User){
+                    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                    try {
+                        stageSocketService.deleteStageUser(user);
+                    }catch (StageException stageException) {
+                        if(stageException.getCode() != StageStatusCode.NOT_ENTERED_USER){
+                            throw stageException;
+                        }
                     }
                 }
+
 
                 break;
             default:

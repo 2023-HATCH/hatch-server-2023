@@ -1,7 +1,6 @@
 package hatch.hatchserver2023.domain.stage.dto;
 
 import hatch.hatchserver2023.domain.stage.StageModel;
-import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.talk.domain.TalkMessage;
 import hatch.hatchserver2023.domain.talk.dto.TalkResponseDto;
 import lombok.*;
@@ -32,17 +31,26 @@ public class StageResponseDto {
         private String stageStatus;
         private Integer userCount;
         private Long statusElapsedTime;
-        private MusicResponseDto.Play currentMusic;
+        private MusicResponseDto.BasicInfo currentMusic;
         private TalkResponseDto.GetMessagesContainer talkMessageData;
 
         public static StageResponseDto.Enter toDto(StageModel.StageInfo stageInfo, Integer userCount, Slice<TalkMessage> talkMessages) {
-            return Enter.builder()
-                    .stageStatus(stageInfo.getStageStatus())
-                    .userCount(userCount)
-                    .statusElapsedTime(stageInfo.getStatusElapsedTime())
-                    .currentMusic(stageInfo.getCurrentMusic())
-                    .talkMessageData(TalkResponseDto.GetMessagesContainer.toDto(talkMessages))
-                    .build();
+            if(stageInfo.getCurrentMusic() == null) {
+                return Enter.builder()
+                        .stageStatus(stageInfo.getStageStatus())
+                        .userCount(userCount)
+                        .statusElapsedTime(stageInfo.getStatusElapsedTime())
+                        .talkMessageData(TalkResponseDto.GetMessagesContainer.toDto(talkMessages))
+                        .build();
+            }else{
+                return Enter.builder()
+                        .stageStatus(stageInfo.getStageStatus())
+                        .userCount(userCount)
+                        .statusElapsedTime(stageInfo.getStatusElapsedTime())
+                        .currentMusic(MusicResponseDto.BasicInfo.toDto(stageInfo.getCurrentMusic()))
+                        .talkMessageData(TalkResponseDto.GetMessagesContainer.toDto(talkMessages))
+                        .build();
+            }
         }
     }
 

@@ -1,5 +1,10 @@
 package hatch.hatchserver2023.domain.stage.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import hatch.hatchserver2023.domain.stage.domain.Music;
+import hatch.hatchserver2023.global.common.ObjectMapperUtil;
+import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
+import hatch.hatchserver2023.global.common.response.exception.StageException;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,6 +15,7 @@ import java.util.Set;
 @Service
 public class StageDataService { //public 이 상수KEY는 다른 곳에서 한번씩 쓰여서 메서드화해도 이점이 별로 없음
     public static final String KEY_STAGE_STATUS = "STAGE_STATUS";
+    public static final String KEY_STAGE_MUSIC = "STAGE_MUSIC";
     private static final String KEY_STAGE_STATUS_START_TIME = "STAGE_STATUS_START_TIME"; // 스테이지 각 단계의 시작 시각 nanoTime을 저장하는 키
     private static final String KEY_STAGE_ENTER_USER_COUNT = "STAGE_ENTER_USER_COUNT";
     private static final String KEY_STAGE_ENTER_USER_LIST = "STAGE_ENTER_USER_LIST";
@@ -21,8 +27,11 @@ public class StageDataService { //public 이 상수KEY는 다른 곳에서 한�
 
     private final RedisDao redisDao;
 
-    public StageDataService(RedisDao redisDao) {
+    private final ObjectMapperUtil objectMapperUtil;
+
+    public StageDataService(RedisDao redisDao, ObjectMapperUtil objectMapperUtil) {
         this.redisDao = redisDao;
+        this.objectMapperUtil = objectMapperUtil;
     }
 
     /**
@@ -54,10 +63,14 @@ public class StageDataService { //public 이 상수KEY는 다른 곳에서 한�
      * 스테이지 상태 시작 시각 조회 메서드. null이면 "0" 반환
      * @return
      */
-    public long getStageStatusStartTime() {
-        String startTimeString = redisDao.getValues(KEY_STAGE_STATUS_START_TIME);
-        startTimeString = (startTimeString==null) ? "0" : startTimeString;
-        return Long.parseLong(startTimeString);
+    public Long getStageStatusStartTime(String status) {
+        if(status.equals(StageRoutineService.STAGE_STATUS_CATCH) || status.equals(StageRoutineService.STAGE_STATUS_PLAY) || status.equals(StageRoutineService.STAGE_STATUS_MVP)) { // !status.equals(StageRoutineService.STAGE_STATUS_WAIT) || !status.substring(status.length()-3).equals("_END") ??
+            String startTimeString = redisDao.getValues(KEY_STAGE_STATUS_START_TIME);
+            startTimeString = (startTimeString==null) ? "0" : startTimeString;
+            return Long.parseLong(startTimeString);
+        }else {
+            return null;
+        }
     }
 
     /**
@@ -117,5 +130,33 @@ public class StageDataService { //public 이 상수KEY는 다른 곳에서 한�
      */
     public void deleteStageEnterUserSet(long id) {
         redisDao.removeValuesSet(KEY_STAGE_ENTER_USER_LIST, String.valueOf(id));
+    }
+
+    /**
+     * 스테이지 현재 음악 저장 메서드
+     * @param music
+     */
+    public void setStageMusic(Music music) {
+        String musicJson = objectMapperUtil.toJson(music);
+        redisDao.setValues(KEY_STAGE_MUSIC, musicJson);
+    }
+
+    /**
+     * 스테이지 현재 음악 조회 메서드
+     * @return
+     */
+    public Music getStageMusic() {
+        String musicJson = redisDao.getValues(KEY_STAGE_MUSIC);
+        if(musicJson == null){
+            return null;
+        }
+
+        Music music;
+        try{
+            music = objectMapperUtil.toOriginalType(musicJson, Music.class);
+        } catch (JsonProcessingException e) {
+            throw new StageException(StageStatusCode.FAIL_GET_STAGE_MUSIC_FROM_REDIS_JSON);
+        }
+        return music;
     }
 }
