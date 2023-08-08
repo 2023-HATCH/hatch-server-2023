@@ -7,24 +7,24 @@
 
 -
 
-- link:stage-socket/page/catch-start.html[(응답) 캐치 시작, window=_blank]
-- link:stage-socket/page/catch-end.html[CAUTION (응답) 캐치 끝, window=_blank]
-- link:stage-socket/page/catch-end-restart.html['NEW (응답) 캐치 끝, 다시 시작', window=_blank]
+- link:stage-socket/page/catch-start.html[UPDATE (응답) 캐치 시작, window=_blank]
+- link:stage-socket/page/catch-end.html[(응답) 캐치 끝, window=_blank]
+- link:stage-socket/page/catch-end-restart.html['UPDATE (응답) 캐치 끝, 다시 시작', window=_blank]
 
 -
 
-- link:stage-socket/page/play-start.html[(응답) 플레이 시작, window=_blank]
+- link:stage-socket/page/play-start.html[UPDATE (응답) 플레이 시작, window=_blank]
 - link:stage-socket/page/play-skeleton-send.html[플레이 스켈레톤 전송, window=_blank]
-- link:stage-socket/page/play-end.html[NEW (응답) 플레이 끝, window=_blank]
+- link:stage-socket/page/play-end.html[(응답) 플레이 끝, window=_blank]
 
 -
 
-- link:stage-socket/page/mvp-start.html['NEW (응답) MVP세리머니 시작, MVP 정보', window=_blank]
-- link:stage-socket/page/mvp-skeleton-send.html[NEW MVP세리머니 스켈레톤 전송, window=_blank]
-- link:stage-socket/page/mvp-end.html[NEW (응답) MVP세리머니 끝, window=_blank]
+- link:stage-socket/page/mvp-start.html['(응답) MVP세리머니 시작, MVP 정보', window=_blank]
+- link:stage-socket/page/mvp-skeleton-send.html[MVP세리머니 스켈레톤 전송, window=_blank]
+- link:stage-socket/page/mvp-end.html[(응답) MVP세리머니 끝, window=_blank]
 
 -
 
-- link:stage-socket/page/stage-exit.html[NEW 스테이지 퇴장, window=_blank]
+- link:stage-socket/page/stage-exit.html[스테이지 퇴장, window=_blank]
 - link:stage-socket/page/stage-routine-stop.html[(응답) 스테이지 진행 멈춤, window=_blank]
 

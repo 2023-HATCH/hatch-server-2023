@@ -16,12 +16,12 @@ public class StageModel {
         private Long statusElapsedTime;
         private Music currentMusic;
 
-        public static StageModel.StageInfo toModel(String stageStatus, Long statusElapsedTime) {
-            return StageModel.StageInfo.builder()
-                    .stageStatus(stageStatus)
-                    .statusElapsedTime(statusElapsedTime)
-                    .build();
-        }
+//        public static StageModel.StageInfo toModel(String stageStatus, Long statusElapsedTime) {
+//            return StageModel.StageInfo.builder()
+//                    .stageStatus(stageStatus)
+//                    .statusElapsedTime(statusElapsedTime)
+//                    .build();
+//        }
 
         public static StageModel.StageInfo toModel(String stageStatus, Long statusElapsedTime, Music music) {
             return StageModel.StageInfo.builder()
