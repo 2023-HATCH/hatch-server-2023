@@ -31,7 +31,7 @@ public class StageSocketService {
             throw new StageException(StageStatusCode.STAGE_STATUS_NOT_PLAY);
         }
 
-        String setName = StageRoutineService.KEY_STAGE_PLAYER_SKELETONS_PREFIX +dto.getPlayerNum();
+        String setName = StageDataService.KEY_STAGE_PLAYER_SKELETONS_PREFIX +dto.getPlayerNum();
         String floatArrayString = Arrays.toString(dto.getSkeleton().toAIFloatArray());
 //        log.info("savePlaySkeleton floatArrayString : {}", floatArrayString);
         redisDao.setValuesZSet(setName, floatArrayString, dto.getFrameNum());
@@ -46,20 +46,20 @@ public class StageSocketService {
     }
 
     /**
-     * 스테이지 퇴장 로직 (임시) -> http에서 ws로 변경
+     * 스테이지 퇴장 로직 (임시) -> http에서 ws로 변경. 프론트 수정 후 삭제 예정
      * @param user
      */
     public int deleteStageUser(User user) throws StageException { // TODO : 8/9 이후 temp로직들 수정
         log.info("[SERVICE] deleteStageUser");
 
         // 이 유저가 입장되어있는 유저인지 확인 // TODO : Refactor
-        boolean isStageUser = redisDao.isSetDataExist(StageRoutineService.KEY_STAGE_ENTER_USER_LIST, user.getId().toString());
+        boolean isStageUser = stageDataService.isStageExistUser(user.getId());
         if(!isStageUser) {
             log.info("[SERVICE] Not stage entered user. No delete");
             throw new StageException(StageStatusCode.NOT_ENTERED_USER);
         }
 
-        int count = stageDataService.getStageUserCount();
+        int count = stageDataService.getStageEnterUserCount();
         log.info("[SERVICE] count : {}", count);
 
         if(count == 0){
@@ -78,11 +78,11 @@ public class StageSocketService {
     private int deleteStageData(User user, int count) {
         // 인원수 decrease
         int decreasedCount = count -1;
-        redisDao.setValues(StageRoutineService.KEY_STAGE_ENTER_USER_COUNT, String.valueOf(decreasedCount));
+        stageDataService.setStageEnterUserCount(decreasedCount);
         log.info("[SERVICE] decreasedCount : {}", decreasedCount);
 
         // redis 입장 목록에서 입장한 사용자 PK 제거
-        redisDao.removeValuesSet(StageRoutineService.KEY_STAGE_ENTER_USER_LIST, user.getId().toString());
+        stageDataService.deleteStageEnterUserSet(user.getId());
         return decreasedCount;
     }
 
@@ -91,11 +91,11 @@ public class StageSocketService {
      * 스테이지 exit 시 사용자 목록이 비어있으면 사용자수 0으로 변경
      */
     private void tempCheckStageEmpty() {
-        Long size = redisDao.getSetSize(StageRoutineService.KEY_STAGE_ENTER_USER_LIST);
+        Long size = stageDataService.getStageEnterUserSetSize();
         log.info("tempCheckStageEmpty STAGE_ENTER_USER_LIST set size : {}", size);
         if(size==0) {
             log.info("tempCheckStageEmpty set STAGE_ENTER_USER_COUNT = 0");
-            redisDao.setValues(StageRoutineService.KEY_STAGE_ENTER_USER_COUNT, "0");
+            stageDataService.setStageEnterUserCount(0);
         }
     }
 
