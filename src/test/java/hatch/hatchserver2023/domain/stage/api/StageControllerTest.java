@@ -2,6 +2,7 @@ package hatch.hatchserver2023.domain.stage.api;
 
 import hatch.hatchserver2023.domain.stage.application.StageRoutineService;
 import hatch.hatchserver2023.domain.stage.application.StageService;
+import hatch.hatchserver2023.domain.stage.application.StageSocketService;
 import hatch.hatchserver2023.domain.talk.application.TalkService;
 import hatch.hatchserver2023.domain.talk.domain.TalkMessage;
 import hatch.hatchserver2023.domain.user.application.UserUtilService;
@@ -72,6 +73,8 @@ class StageControllerTest {
 
     @MockBean
     private StageService stageService;
+    @MockBean
+    private StageSocketService stageSocketService; // 삭제
     @MockBean
     private TalkService talkService;
     @MockBean
