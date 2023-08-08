@@ -1,5 +1,6 @@
 package hatch.hatchserver2023.domain.stage.application;
 
+import hatch.hatchserver2023.domain.stage.StageModel;
 import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
@@ -69,10 +70,20 @@ public class StageService {
      * 스테이지 진행 상태 확인 로직
      * @return
      */
-    public String getStageInfo() {
+    public StageModel.StageInfo getStageInfo() {
         log.info("[SERVICE] getStageStatus");
-        return stageDataService.getStageStatus();
+        String status = stageDataService.getStageStatus();
+
         //TODO : 상태에 따라 진행중인 정보 같이 보내줘야 함
+        long statusStartTime = stageDataService.getStageStatusStartTime();
+        Long statusElapsedTime = (statusStartTime==0L) ? null : System.nanoTime() - statusStartTime; //
+
+        //음악 정보
+
+        return StageModel.StageInfo.builder()
+                .stageStatus(status)
+                .statusElapsedTime(statusElapsedTime)
+                .build();
     }
 
 

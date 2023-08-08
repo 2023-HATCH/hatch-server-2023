@@ -51,7 +51,7 @@ public class StageDataService { //public 이 상수KEY는 다른 곳에서 한�
     }
 
     /**
-     * 스테이지 상태 시작 시각 조회 메서드
+     * 스테이지 상태 시작 시각 조회 메서드. null이면 "0" 반환
      * @return
      */
     public long getStageStatusStartTime() {

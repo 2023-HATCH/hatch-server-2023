@@ -1,5 +1,6 @@
 package hatch.hatchserver2023.domain.stage.api;
 
+import hatch.hatchserver2023.domain.stage.StageModel;
 import hatch.hatchserver2023.domain.stage.application.StageRoutineService;
 import hatch.hatchserver2023.domain.stage.application.StageService;
 import hatch.hatchserver2023.domain.stage.application.StageSocketService;
@@ -116,6 +117,10 @@ class StageControllerTest {
         //given
         int userCount = 1;
         String stageStatus = StageRoutineService.STAGE_STATUS_WAIT;
+        long statusElapsedTime = 99L;
+        StageModel.StageInfo stageModel = StageModel.StageInfo.toModel(stageStatus, statusElapsedTime);
+
+        /// music data 넣고 응답 테스트...
 
         int page = 0;
         int size = 3;
@@ -125,7 +130,7 @@ class StageControllerTest {
 
         //when
         when(stageService.addStageUser(any(User.class))).thenReturn(userCount);
-        when(stageService.getStageInfo()).thenReturn(stageStatus);
+        when(stageService.getStageInfo()).thenReturn(stageModel);
         when(talkService.getTalkMessages(page, size)).thenReturn(talkMessages);
 
         //then
@@ -146,6 +151,8 @@ class StageControllerTest {
                 .andExpect(jsonPath("$.message").value(code.getMessage()))
                 .andExpect(jsonPath("$.data.userCount").value(userCount))
                 .andExpect(jsonPath("$.data.stageStatus").value(stageStatus))
+                .andExpect(jsonPath("$.data.statusElapsedTime").value(statusElapsedTime))
+//                .andExpect(jsonPath("$.data.currentMusic").value())
                 .andExpect(jsonPath("$.data.talkMessageData.page").value(page))
                 .andExpect(jsonPath("$.data.talkMessageData.size").value(size))
                 .andExpect(jsonPath("$.data.talkMessageData.messages[0].messageId").value(talkMessage1.getUuid().toString()))
@@ -175,7 +182,10 @@ class StageControllerTest {
                                 responseFields(
                                         beneathPath("data"),
                                         fieldWithPath("userCount").type("Integer").description("스테이지 내 사용자 수"),
-                                        fieldWithPath("stageStatus").type(JsonFieldType.STRING).description("스테이지 현재 상태. WAIT, CATCH, PLAY, MVP 중 하나"),
+                                        fieldWithPath("stageStatus").type(JsonFieldType.STRING).description("스테이지 현재 상태. WAIT, CATCH, CATCH_END, PLAY, PLAY_END, MVP MVP_END 중 하나"),
+                                        fieldWithPath("statusElapsedTime").type("Long").description("스테이지 현재 상태 진행 시간"),
+                                        fieldWithPath("currentMusic").type("Long").description("스테이지 현재 음악"),
+//                                        fieldWithPath("currentMusic.title").type(JsonFieldType.STRING).description("스테이지 현재 음악 제목"),
                                         fieldWithPath("talkMessageData.page").type("Integer").description("조회된 라이브톡 메세지 목록 페이지 번호"),
                                         fieldWithPath("talkMessageData.size").type("Integer").description("조회된 라이브톡 메세지 목록 한 페이지 크기"),
                                         fieldWithPath("talkMessageData.messages[].messageId").type("UUID").description("메세지 식별자"),

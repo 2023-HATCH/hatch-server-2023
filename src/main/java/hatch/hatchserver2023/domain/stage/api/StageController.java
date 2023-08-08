@@ -1,5 +1,6 @@
 package hatch.hatchserver2023.domain.stage.api;
 
+import hatch.hatchserver2023.domain.stage.StageModel;
 import hatch.hatchserver2023.domain.stage.application.StageService;
 import hatch.hatchserver2023.domain.stage.application.StageSocketService;
 import hatch.hatchserver2023.domain.stage.dto.StageResponseDto;
@@ -56,13 +57,13 @@ public class StageController {
                                                      @AuthenticationPrincipal User user) {
         log.info("[API] GET /stage/enter");
         int stageUserCount = stageService.addStageUser(user);
-        String stageStatus = stageService.getStageInfo();
+        StageModel.StageInfo stageInfo = stageService.getStageInfo();
         Slice<TalkMessage> talkMessages = talkService.getTalkMessages(page, size);
 
         // ws upgrade -> x 그냥 다른 요청으로 분리 사용
 
         return ResponseEntity.ok().body(CommonResponse.toResponse(
-                StageStatusCode.GET_STAGE_ENTER_SUCCESS, StageResponseDto.Enter.toDto(stageStatus, stageUserCount, talkMessages)));
+                StageStatusCode.GET_STAGE_ENTER_SUCCESS, StageResponseDto.Enter.toDto(stageInfo, stageUserCount, talkMessages)));
     }
 
     /**

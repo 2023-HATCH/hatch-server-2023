@@ -16,6 +16,10 @@ public class MusicResponseDto {
         //현재 재생 시각(milliseconds 단위)
         private Integer playTime;
 
+        public static Play toDto(Music music) {
+            return toDto(music, null);
+        }
+
         public static Play toDto(Music music, Integer playTime) {
             return Play.builder()
                     .title(music.getTitle())
