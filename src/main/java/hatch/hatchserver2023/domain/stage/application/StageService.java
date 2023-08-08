@@ -31,6 +31,7 @@ public class StageService {
 
 
     // TODO : 8/9 이후 주석코드로 변경할 것
+    // TODO : 입장도 퇴장처럼 ws 로 변경할 것
     /**
      * 스테이지 입장 로직
      * @param user
@@ -54,7 +55,7 @@ public class StageService {
 
     private int addStageData(User user) {
         // 인원수 increase
-        int increasedCount = stageRoutineService.getStageUserCount() + 1;
+        int increasedCount = stageRoutineService.getSendStageUserCount() + 1;
         redisDao.setValues(StageRoutineService.KEY_STAGE_ENTER_USER_COUNT, String.valueOf(increasedCount));
         log.info("[SERVICE] increasedCount : {}", increasedCount);
 
@@ -153,51 +154,6 @@ public class StageService {
         log.info("registerCatch user id : {}, nickname : {}, time : {}", user.getId(), user.getNickname(), now);
         redisDao.setValuesZSet(StageRoutineService.KEY_STAGE_CATCH_USER_LIST, user.getId().toString(), (int) now);
 //        redisDao.setValuesHash(StageRoutineService.STAGE_CATCH_USER_LIST, (int) now, user);
-    }
-
-    /**
-     * 스테이지 퇴장 로직 (임시) -> http에서 ws로 변경
-     * @param user
-     */
-    public void deleteStageUser(User user) { // TODO : 8/9 이후 temp로직들 수정
-        log.info("[SERVICE] deleteStageUser");
-
-        int count = stageRoutineService.getStageUserCount();
-        log.info("[SERVICE] count : {}", count);
-
-        if(count == 0){
-            throw new StageException(StageStatusCode.STAGE_ALREADY_EMPTY);
-        }
-
-        int decreasedCount = deleteStageData(user, count);
-
-        tempCheckStageEmpty();
-
-        stageSocketResponser.userCount(decreasedCount);
-    }
-
-    private int deleteStageData(User user, int count) {
-        // 인원수 decrease
-        int decreasedCount = count -1;
-        redisDao.setValues(StageRoutineService.KEY_STAGE_ENTER_USER_COUNT, String.valueOf(decreasedCount));
-        log.info("[SERVICE] decreasedCount : {}", decreasedCount);
-
-        // redis 입장 목록에서 입장한 사용자 PK 제거
-        redisDao.removeValuesSet(StageRoutineService.KEY_STAGE_ENTER_USER_LIST, user.getId().toString());
-        return decreasedCount;
-    }
-
-    /**
-     * 개발편의상 개발한 임시 로직 (한 사용자 여러번 count+1 가능한 환경 유지)
-     * 스테이지 exit 시 사용자 목록이 비어있으면 사용자수 0으로 변경
-     */
-    private void tempCheckStageEmpty() {
-        Long size = redisDao.getSetSize(StageRoutineService.KEY_STAGE_ENTER_USER_LIST);
-        log.info("tempCheckStageEmpty STAGE_ENTER_USER_LIST set size : {}", size);
-        if(size==0) {
-            log.info("tempCheckStageEmpty set STAGE_ENTER_USER_COUNT = 0");
-            redisDao.setValues(StageRoutineService.KEY_STAGE_ENTER_USER_COUNT, "0");
-        }
     }
 
 }

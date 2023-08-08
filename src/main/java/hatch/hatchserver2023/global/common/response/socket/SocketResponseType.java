@@ -19,6 +19,7 @@ public enum SocketResponseType implements StatusCode {
     MVP_SKELETON( "MVP_SKELETON", "스테이지 MVP세리머니 스켈레톤 전달"),
     MVP_END( "MVP_END", "스테이지 MVP세리머니 끝"),
 
+    STAGE_EXIT( "STAGE_ROUTINE_STOP", "스테이지 퇴장"),
     STAGE_ROUTINE_STOP( "STAGE_ROUTINE_STOP", "스테이지 진행 멈춤"),
     ;
 

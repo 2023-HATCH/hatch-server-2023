@@ -61,7 +61,7 @@ public class StageRoutineService {
     @Async //비동기 처리
     public void startRoutine() {
         log.info("StageRoutineUtil : stage routine start");
-        while(getStageUserCount() >= 3) {
+        while(getSendStageUserCount() >= 3) {
             try {
                 // 캐치 시작
                 startCatch();
@@ -303,10 +303,12 @@ public class StageRoutineService {
         redisDao.deleteValues(KEY_STAGE_PLAYER_INFO_HASH);
     }
 
-    public int getStageUserCount() {
+    public int getSendStageUserCount() {
         String countString = redisDao.getValues(StageRoutineService.KEY_STAGE_ENTER_USER_COUNT);
         log.info("StageRoutineUtil countString : {}", countString);
-        return (countString==null) ? 0 : Integer.parseInt(countString);
+        int userCount = (countString==null) ? 0 : Integer.parseInt(countString);
+        stageSocketResponser.userCount(userCount);
+        return userCount;
     }
 
     public void setStageStatus(String status) {

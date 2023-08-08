@@ -1,7 +1,7 @@
 package hatch.hatchserver2023.domain.stage.api;
 
 import hatch.hatchserver2023.domain.stage.application.StageService;
-import hatch.hatchserver2023.domain.stage.dto.StageRequestDto;
+import hatch.hatchserver2023.domain.stage.application.StageSocketService;
 import hatch.hatchserver2023.domain.stage.dto.StageResponseDto;
 import hatch.hatchserver2023.domain.talk.application.TalkService;
 import hatch.hatchserver2023.domain.talk.domain.TalkMessage;
@@ -9,7 +9,6 @@ import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
-import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
@@ -19,7 +18,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -31,11 +29,13 @@ import java.util.List;
 public class StageController {
 
     private final StageService stageService;
+    private final StageSocketService stageSocketService; //퇴장 api 삭제 후 삭제
     private final TalkService talkService;
     private final UserUtilService userUtilService;
 
-    public StageController(StageService stageService, TalkService talkService, UserUtilService userUtilService) {
+    public StageController(StageService stageService, StageSocketService stageSocketService, TalkService talkService, UserUtilService userUtilService) {
         this.stageService = stageService;
+        this.stageSocketService = stageSocketService;
         this.talkService = talkService;
         this.userUtilService = userUtilService;
     }
@@ -100,7 +100,8 @@ public class StageController {
     @GetMapping("/exit")
     public ResponseEntity<CommonResponse> exitStage(@AuthenticationPrincipal User user) {
         log.info("[API] GET /stage/exit");
-        stageService.deleteStageUser(user);
+//        stageService.deleteStageUser(user);
+        stageSocketService.deleteStageUser(user); //TODO : 이 api 삭제
 
         return ResponseEntity.ok().body(CommonResponse.toResponse(
                 StageStatusCode.GET_STAGE_EXIT_SUCCESS));

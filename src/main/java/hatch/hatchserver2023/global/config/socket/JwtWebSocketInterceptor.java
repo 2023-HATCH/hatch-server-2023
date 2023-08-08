@@ -1,6 +1,7 @@
 package hatch.hatchserver2023.global.config.socket;
 
 import hatch.hatchserver2023.domain.stage.application.StageService;
+import hatch.hatchserver2023.domain.stage.application.StageSocketService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.AuthException;
@@ -26,11 +27,11 @@ import java.security.Principal;
 // 소켓에서는 토큰 RTR 적용 일단 안함
 public class JwtWebSocketInterceptor implements ChannelInterceptor {
     private final JwtProvider jwtProvider;
-    private final StageService stageService;
+//    private final StageSocketService stageSocketService;
 
-    public JwtWebSocketInterceptor(JwtProvider jwtProvider, StageService stageService) {
+    public JwtWebSocketInterceptor(JwtProvider jwtProvider) { //, StageSocketService stageSocketService
         this.jwtProvider = jwtProvider;
-        this.stageService = stageService;
+//        this.stageSocketService = stageSocketService;
     }
 
 
@@ -69,13 +70,15 @@ public class JwtWebSocketInterceptor implements ChannelInterceptor {
             headerAccessor.setUser(jwtProvider.getAuthentication(token));
 
             //확인 로그 찍기
+            /*
             Principal principal = headerAccessor.getUser();
-//            log.info("[INTERCEPTOR] WebSocketInterceptor headerAccessor : getUser {}", principal);
+            log.info("[INTERCEPTOR] WebSocketInterceptor headerAccessor : getUser {}", principal);
             if(principal instanceof UsernamePasswordAuthenticationToken) {
                 UsernamePasswordAuthenticationToken userToken = (UsernamePasswordAuthenticationToken) principal;
                 User user = (User) userToken.getPrincipal();
-//                log.info("[INTERCEPTOR] WebSocketInterceptor headerAccessor : principal to User nickname {}", user.getNickname());
+                log.info("[INTERCEPTOR] WebSocketInterceptor headerAccessor : principal to User nickname {}", user.getNickname());
             }
+            */
         }
 
 //        log.info("[INTERCEPTOR] END preSend");
@@ -105,7 +108,7 @@ public class JwtWebSocketInterceptor implements ChannelInterceptor {
 
                 // 입장했던 유저면 퇴장 로직 진행
                 User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                stageService.deleteStageUser(user);
+//                stageSocketService.deleteStageUser(user); // responser 미포함 메서드
                 break;
             default:
                 log.info("[INTERCEPTOR] postSend command {}. sessionId {}", accessor.getCommand(), sessionId);
