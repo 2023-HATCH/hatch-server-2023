@@ -25,5 +25,6 @@
 
 -
 
+- link:stage-socket/page/stage-exit.html[NEW 스테이지 퇴장, window=_blank]
 - link:stage-socket/page/stage-routine-stop.html[(응답) 스테이지 진행 멈춤, window=_blank]
 
