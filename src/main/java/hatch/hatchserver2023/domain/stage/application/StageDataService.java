@@ -10,6 +10,7 @@ import java.util.Set;
 @Service
 public class StageDataService { //public 이 상수KEY는 다른 곳에서 한번씩 쓰여서 메서드화해도 이점이 별로 없음
     public static final String KEY_STAGE_STATUS = "STAGE_STATUS";
+    private static final String KEY_STAGE_STATUS_START_TIME = "STAGE_STATUS_START_TIME"; // 스테이지 각 단계의 시작 시각 nanoTime을 저장하는 키
     private static final String KEY_STAGE_ENTER_USER_COUNT = "STAGE_ENTER_USER_COUNT";
     private static final String KEY_STAGE_ENTER_USER_LIST = "STAGE_ENTER_USER_LIST";
 
@@ -41,6 +42,23 @@ public class StageDataService { //public 이 상수KEY는 다른 곳에서 한�
         return (stageStatus==null) ? StageRoutineService.STAGE_STATUS_WAIT : stageStatus;
     }
 
+    /**
+     * 스테이지 상태 시작 시각 저장 메서드
+     * @param
+     */
+    public void setStageStatusStartTime() { //long time
+        redisDao.setValues(KEY_STAGE_STATUS_START_TIME, String.valueOf(System.nanoTime())); //String.valueOf(time)
+    }
+
+    /**
+     * 스테이지 상태 시작 시각 조회 메서드
+     * @return
+     */
+    public long getStageStatusStartTime() {
+        String startTimeString = redisDao.getValues(KEY_STAGE_STATUS_START_TIME);
+        startTimeString = (startTimeString==null) ? "0" : startTimeString;
+        return Long.parseLong(startTimeString);
+    }
 
     /**
      * 스테이지 입장 인원수 저장 메서드

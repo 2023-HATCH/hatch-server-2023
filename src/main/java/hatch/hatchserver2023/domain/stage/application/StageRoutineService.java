@@ -90,6 +90,7 @@ public class StageRoutineService {
     private void startCatch() {
         log.info("StageRoutineUtil startCatch");
         stageDataService.setStageStatus(STAGE_STATUS_CATCH);
+        stageDataService.setStageStatusStartTime();
         stageSocketResponser.startCatch("개발중");
     }
 
@@ -124,7 +125,9 @@ public class StageRoutineService {
     private int startPlay() {
         log.info("StageRoutineUtil startPlay");
         stageDataService.setStageStatus(STAGE_STATUS_PLAY);
+        stageDataService.setStageStatusStartTime();
         stageSocketResponser.startPlay("개발중");
+
         final int readyTime = 5;
         int musicTime = 10; //TODO
         return readyTime + musicTime;
@@ -147,6 +150,8 @@ public class StageRoutineService {
 
         // 상태 변경, 응답
         stageDataService.setStageStatus(STAGE_STATUS_MVP);
+
+        stageDataService.setStageStatusStartTime();
         stageSocketResponser.startMVP(mvpUser);
 
         // 캐치, 플레이 데이터 초기화
@@ -289,7 +294,7 @@ public class StageRoutineService {
     }
 
     /**
-     * 캐치, 플레이 데이터 초기화 메서드
+     * 플레이 데이터 초기화 메서드
      */
     private void initPlayData() {
         for (int i=0; i<=STAGE_CATCH_SUCCESS_LAST_INDEX; i++) {

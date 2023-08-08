@@ -33,7 +33,6 @@ public class StageService {
 
 
     // TODO : 8/9 이후 주석코드로 변경할 것
-    // TODO : 입장도 퇴장처럼 ws 로 변경할 것
     /**
      * 스테이지 입장 로직
      * @param user
