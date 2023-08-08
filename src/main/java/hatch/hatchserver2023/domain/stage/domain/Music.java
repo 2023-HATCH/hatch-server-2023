@@ -1,10 +1,11 @@
 package hatch.hatchserver2023.domain.stage.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -21,8 +22,8 @@ public class Music {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, insertable = false, updatable = false)
-    @ColumnDefault("(uuid())")
+    @Column(nullable = false, updatable = false, length = 36, unique = true)
+    @Type(type = "org.hibernate.type.UUIDCharType")     //PathVariable로 UUID를 받기 위해 필요
     private UUID uuid;
 
     // 음악 제목
@@ -40,6 +41,7 @@ public class Music {
 
     // 정답 안무 스켈레톤
     @Lob
+    @JsonIgnore
     // ALTER TABLE music MODIFY answer mediumblob;
     private Float[][] answer;
 
@@ -50,4 +52,10 @@ public class Music {
     // 음악 컨셉
     @Column(length = 50)
     private String concept;
+
+
+    @PrePersist
+    public void prePersist() {
+        this.uuid = UUID.randomUUID();
+    }
 }
