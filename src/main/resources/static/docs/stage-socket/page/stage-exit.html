@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>좋아요 삭제</title>
+<title>Stage Exit</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -441,107 +441,79 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_좋아요_삭제">좋아요 삭제</h2>
+<h2 id="_stage_exit"><strong>Stage Exit</strong></h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_좋아요_삭제_http_request">HTTP request</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/v1/likes/9d8b77c0-85f4-433e-9f1b-b738f622e2ef?_csrf=305df764-1fed-4ec9-b100-b5edd6ee2ac7 HTTP/1.1
-headerXAccessToken: headerXAccessToken
-headerXRefreshToken: headerXRefreshToken
-Host: localhost:8080</code></pre>
+<div class="paragraph">
+<p>스테이지 퇴장 요청</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>URL : <code>/app/stage/exit</code></p>
+</li>
+</ul>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_좋아요_삭제_request_headers">Request headers</h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
+<div class="admonitionblock note">
+<table>
 <tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+퇴장 요청을 기존 임시 http api에서 소켓으로 변경<br>
+요청 시 별다른 응답 주지 않음. 입장했던 사람이 아니면 퇴장 진행 안 됨(인원수 유지. 에러는 안남)<br>
+(http로 만들었던 퇴장api 유지 중. 프론트 변경 완료 후 삭제예정)
+</td>
 </tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>headerXAccessToken</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">headerXAccessToken</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>headerXRefreshToken</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">headerXRefreshToken</p></td>
-</tr>
-</tbody>
 </table>
 </div>
-<div class="sect2">
-<h3 id="_좋아요_삭제_path_parameters">Path parameters</h3>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. /api/v1/likes/{videoId}</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
+<div class="admonitionblock note">
+<table>
 <tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+갑작스런 소켓 disconnect (앱 종료 등) 시 퇴장되도록 함.<br>
+하지만 이 경우 인원수 변동을 바로 응답 줄 수 없음.<br>
+대신 루틴 시작(캐치직전) 때마다 인원수 응답을 추가로 주도록 함
+</td>
 </tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">동영상 UUID</p></td>
-</tr>
-</tbody>
 </table>
 </div>
-<div class="sect2">
-<h3 id="_좋아요_삭제_response_fields-beneath-data">Response fields-beneath-data</h3>
+<div class="sect3">
+<h4 id="_request_header">Request header</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
 </colgroup>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제약조건</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>success</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>x-access-token</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">좋아요 삭제 성공 여부 (default: true)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JWT 형식</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">액세스 토큰</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="sect2">
-<h3 id="_좋아요_삭제_http_response">HTTP response</h3>
+<div class="sect3">
+<h4 id="_request">Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 159
-
-{
-  "timeStamp" : "2023/08/09 00:50:27",
-  "code" : "VIDEO-2031",
-  "message" : "VIDEO-좋아요 삭제 성공",
-  "data" : {
-    "success" : true
-  }
-}</code></pre>
+<pre class="highlight"><code>$ _INFO_:send STOMP message, destination = /app/stage/exit, content = , header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkxNDgxOTcyLCJleHAiOjE2OTE0ODU1NzJ9.MQ2F8STpQhz4-9t4pDw-SI01v4HHP9vfYhHk3kA30zc"}</code></pre>
 </div>
 </div>
 </div>
@@ -551,7 +523,7 @@ Content-Length: 159
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-06 15:29:44 +0900
+Last updated 2023-08-08 17:46:25 +0900
 </div>
 </div>
 </body>

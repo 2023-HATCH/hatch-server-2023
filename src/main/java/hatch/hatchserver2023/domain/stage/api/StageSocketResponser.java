@@ -1,5 +1,7 @@
 package hatch.hatchserver2023.domain.stage.api;
 
+import hatch.hatchserver2023.domain.stage.domain.Music;
+import hatch.hatchserver2023.domain.stage.dto.MusicResponseDto;
 import hatch.hatchserver2023.domain.stage.dto.StageSocketResponseDto;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
@@ -30,21 +32,22 @@ public class StageSocketResponser {
         sendToStage(SocketResponseType.STAGE_ROUTINE_STOP);
     }
 
-    public void startCatch(String tempData) {
-        sendToStage(SocketResponseType.CATCH_START, tempData);
+    public void startCatch(Music music) {
+        StageSocketResponseDto.CatchStart dto = StageSocketResponseDto.CatchStart.toDto(music);
+        sendToStage(SocketResponseType.CATCH_START, dto);
     }
 
     public void endCatch(List<User> users) {
         List<StageSocketResponseDto.Player> players = StageSocketResponseDto.Player.toDtos(users);
-        sendToStage(SocketResponseType.CATCH_END, StageSocketResponseDto.CatchEnd.toDto(players, "개발중"));
+        sendToStage(SocketResponseType.CATCH_END, StageSocketResponseDto.CatchEnd.toDto(players));
     }
 
     public void endCatch() {
         sendToStage(SocketResponseType.CATCH_END_RESTART);
     }
 
-    public void startPlay(String tempData) {
-        sendToStage(SocketResponseType.PLAY_START, tempData);
+    public void startPlay() {
+        sendToStage(SocketResponseType.PLAY_START);
     }
 
     public void endPlay() {

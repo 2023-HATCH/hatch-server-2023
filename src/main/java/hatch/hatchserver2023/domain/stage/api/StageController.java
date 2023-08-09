@@ -1,7 +1,8 @@
 package hatch.hatchserver2023.domain.stage.api;
 
+import hatch.hatchserver2023.domain.stage.StageModel;
 import hatch.hatchserver2023.domain.stage.application.StageService;
-import hatch.hatchserver2023.domain.stage.dto.StageRequestDto;
+import hatch.hatchserver2023.domain.stage.application.StageSocketService;
 import hatch.hatchserver2023.domain.stage.dto.StageResponseDto;
 import hatch.hatchserver2023.domain.talk.application.TalkService;
 import hatch.hatchserver2023.domain.talk.domain.TalkMessage;
@@ -9,8 +10,8 @@ import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
-import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
+import hatch.hatchserver2023.global.common.response.exception.StageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -31,16 +31,17 @@ import java.util.List;
 public class StageController {
 
     private final StageService stageService;
+    private final StageSocketService stageSocketService; //퇴장 api 삭제 후 삭제
     private final TalkService talkService;
     private final UserUtilService userUtilService;
 
-    public StageController(StageService stageService, TalkService talkService, UserUtilService userUtilService) {
+    public StageController(StageService stageService, StageSocketService stageSocketService, TalkService talkService, UserUtilService userUtilService) {
         this.stageService = stageService;
+        this.stageSocketService = stageSocketService;
         this.talkService = talkService;
         this.userUtilService = userUtilService;
     }
 
-    // TODO : WAIT 말고 PLAY, MVP 상태에서 입장한 상황 처리로직 추가하기 (음원 정보, 플레이어 정보 등 응답)
     /**
      * 스테이지 입장 api (WAIT 상태에서 입장하는 상황만 가정함)
      * @param page
@@ -55,13 +56,11 @@ public class StageController {
                                                      @AuthenticationPrincipal User user) {
         log.info("[API] GET /stage/enter");
         int stageUserCount = stageService.addStageUser(user);
-        String stageStatus = stageService.getStageStatus();
+        StageModel.StageInfo stageInfo = stageService.getStageInfo();
         Slice<TalkMessage> talkMessages = talkService.getTalkMessages(page, size);
 
-        // ws upgrade -> x 그냥 다른 요청으로 분리 사용
-
         return ResponseEntity.ok().body(CommonResponse.toResponse(
-                StageStatusCode.GET_STAGE_ENTER_SUCCESS, StageResponseDto.Enter.toDto(stageStatus, stageUserCount, talkMessages)));
+                StageStatusCode.GET_STAGE_ENTER_SUCCESS, StageResponseDto.Enter.toDto(stageInfo, stageUserCount, talkMessages)));
     }
 
     /**
@@ -92,7 +91,7 @@ public class StageController {
     }
 
     /**
-     * 스테이지 사용자 퇴장 api (임시)
+     * 스테이지 사용자 퇴장 api (임시) -> 삭제 예정
      * @param user
      * @return
      */
@@ -100,7 +99,15 @@ public class StageController {
     @GetMapping("/exit")
     public ResponseEntity<CommonResponse> exitStage(@AuthenticationPrincipal User user) {
         log.info("[API] GET /stage/exit");
-        stageService.deleteStageUser(user);
+//        stageService.deleteStageUser(user);
+
+        try {
+            stageSocketService.deleteStageUser(user); //TODO : 이 api 삭제
+        }catch (StageException stageException) {
+            if(stageException.getCode() != StageStatusCode.NOT_ENTERED_USER){
+                throw stageException;
+            }
+        }
 
         return ResponseEntity.ok().body(CommonResponse.toResponse(
                 StageStatusCode.GET_STAGE_EXIT_SUCCESS));

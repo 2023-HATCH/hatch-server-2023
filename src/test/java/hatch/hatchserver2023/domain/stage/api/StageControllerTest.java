@@ -1,12 +1,14 @@
 package hatch.hatchserver2023.domain.stage.api;
 
+import hatch.hatchserver2023.domain.stage.StageModel;
 import hatch.hatchserver2023.domain.stage.application.StageRoutineService;
 import hatch.hatchserver2023.domain.stage.application.StageService;
+import hatch.hatchserver2023.domain.stage.application.StageSocketService;
+import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.talk.application.TalkService;
 import hatch.hatchserver2023.domain.talk.domain.TalkMessage;
 import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;
@@ -73,6 +75,8 @@ class StageControllerTest {
     @MockBean
     private StageService stageService;
     @MockBean
+    private StageSocketService stageSocketService; // 삭제
+    @MockBean
     private TalkService talkService;
     @MockBean
     private UserUtilService userUtilService;
@@ -114,6 +118,24 @@ class StageControllerTest {
         //given
         int userCount = 1;
         String stageStatus = StageRoutineService.STAGE_STATUS_WAIT;
+        long statusElapsedTime = 99L;
+
+        UUID musicId = UUID.randomUUID();
+        String title = "해치짱";
+        String singer = "지혜";
+        int length = 11111;
+        String musicUrl = "http://tempMusicUrl";
+        String concept = "최고컨셉";
+        Music music = Music.builder()
+                .uuid(musicId)
+                .title(title)
+                .singer(singer)
+                .length(length)
+                .musicUrl(musicUrl)
+                .concept(concept)
+                .build();
+
+        StageModel.StageInfo stageModel = StageModel.StageInfo.toModel(stageStatus, statusElapsedTime, music);
 
         int page = 0;
         int size = 3;
@@ -123,7 +145,7 @@ class StageControllerTest {
 
         //when
         when(stageService.addStageUser(any(User.class))).thenReturn(userCount);
-        when(stageService.getStageStatus()).thenReturn(stageStatus);
+        when(stageService.getStageInfo()).thenReturn(stageModel);
         when(talkService.getTalkMessages(page, size)).thenReturn(talkMessages);
 
         //then
@@ -144,6 +166,13 @@ class StageControllerTest {
                 .andExpect(jsonPath("$.message").value(code.getMessage()))
                 .andExpect(jsonPath("$.data.userCount").value(userCount))
                 .andExpect(jsonPath("$.data.stageStatus").value(stageStatus))
+                .andExpect(jsonPath("$.data.statusElapsedTime").value(statusElapsedTime))
+                .andExpect(jsonPath("$.data.currentMusic.musicId").value(musicId.toString()))
+                .andExpect(jsonPath("$.data.currentMusic.title").value(title))
+                .andExpect(jsonPath("$.data.currentMusic.singer").value(singer))
+                .andExpect(jsonPath("$.data.currentMusic.length").value(length))
+                .andExpect(jsonPath("$.data.currentMusic.musicUrl").value(musicUrl))
+                .andExpect(jsonPath("$.data.currentMusic.concept").value(concept))
                 .andExpect(jsonPath("$.data.talkMessageData.page").value(page))
                 .andExpect(jsonPath("$.data.talkMessageData.size").value(size))
                 .andExpect(jsonPath("$.data.talkMessageData.messages[0].messageId").value(talkMessage1.getUuid().toString()))
@@ -173,7 +202,15 @@ class StageControllerTest {
                                 responseFields(
                                         beneathPath("data"),
                                         fieldWithPath("userCount").type("Integer").description("스테이지 내 사용자 수"),
-                                        fieldWithPath("stageStatus").type(JsonFieldType.STRING).description("스테이지 현재 상태. WAIT, CATCH, PLAY, MVP 중 하나"),
+                                        fieldWithPath("stageStatus").type(JsonFieldType.STRING).description("스테이지 현재 상태. WAIT, CATCH, CATCH_END, PLAY, PLAY_END, MVP MVP_END 중 하나"),
+                                        fieldWithPath("statusElapsedTime").type("Long").description("스테이지 현재 상태 진행 시간(나노초)").optional(),
+                                        fieldWithPath("currentMusic").type("-").description("스테이지 현재 음악").optional(),
+                                        fieldWithPath("currentMusic.musicId").type("UUID").description("음악 식별자").optional(),
+                                        fieldWithPath("currentMusic.title").type(JsonFieldType.STRING).description("음악 제목").optional(),
+                                        fieldWithPath("currentMusic.singer").type(JsonFieldType.STRING).description("음악 가수").optional(),
+                                        fieldWithPath("currentMusic.length").type("Integer").description("음악 길이(밀리초)").optional(),
+                                        fieldWithPath("currentMusic.musicUrl").type(JsonFieldType.STRING).description("음악 파일 url").optional(),
+                                        fieldWithPath("currentMusic.concept").type(JsonFieldType.STRING).description("음악 컨셉").optional(),
                                         fieldWithPath("talkMessageData.page").type("Integer").description("조회된 라이브톡 메세지 목록 페이지 번호"),
                                         fieldWithPath("talkMessageData.size").type("Integer").description("조회된 라이브톡 메세지 목록 한 페이지 크기"),
                                         fieldWithPath("talkMessageData.messages[].messageId").type("UUID").description("메세지 식별자"),

@@ -4,6 +4,8 @@ import hatch.hatchserver2023.domain.stage.domain.Music;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.UUID;
+
 public class MusicResponseDto {
 
     @Builder
@@ -22,6 +24,28 @@ public class MusicResponseDto {
                     .length(music.getLength())
                     .musicUrl(music.getMusicUrl())
                     .playTime(playTime)
+                    .build();
+        }
+    }
+
+    @Builder
+    @Getter
+    public static class BasicInfo {
+        private UUID musicId;
+        private String title;
+        private String singer;
+        private Integer length;
+        private String musicUrl;
+        private String concept;
+
+        public static BasicInfo toDto(Music music) {
+            return BasicInfo.builder()
+                    .musicId(music.getUuid())
+                    .title(music.getTitle())
+                    .singer(music.getSinger())
+                    .length(music.getLength())
+                    .musicUrl(music.getMusicUrl())
+                    .concept(music.getConcept())
                     .build();
         }
     }
