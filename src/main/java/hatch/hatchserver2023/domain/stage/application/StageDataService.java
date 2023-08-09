@@ -2,6 +2,8 @@ package hatch.hatchserver2023.domain.stage.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import hatch.hatchserver2023.domain.stage.domain.Music;
+import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.global.common.ObjectMapperUtil;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.StageException;
@@ -9,7 +11,9 @@ import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -130,6 +134,40 @@ public class StageDataService { //public 이 상수KEY는 다른 곳에서 한�
      */
     public void deleteStageEnterUserSet(long id) {
         redisDao.removeValuesSet(KEY_STAGE_ENTER_USER_LIST, String.valueOf(id));
+    }
+
+    /**
+     * 플레이어 사용자 정보 저장
+     * @param users
+     */
+    public void savePlayerInfo(List<User> users) {
+        List<UserResponseDto.SimpleUserProfile> userSimples = users.stream().map(UserResponseDto.SimpleUserProfile::toDto).collect(Collectors.toList());
+        for(int i=0; i<userSimples.size(); i++){ // i는 playerNum과 같음
+            String userSimpleJson;
+            userSimpleJson = objectMapperUtil.toJson(userSimples.get(i));
+            redisDao.setValuesHash(StageDataService.KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(i), userSimpleJson);
+        }
+    }
+
+    /**
+     * 플레이 직후 playerNum이 mvpPlayerNum에 해당하는 플레이어 사용자 정보 가져오기
+     * @param mvpPlayerNum
+     * @return
+     */
+    public UserResponseDto.SimpleUserProfile getMvpUserInfo(int mvpPlayerNum) {
+        Object userObject = redisDao.getValuesHash(StageDataService.KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(mvpPlayerNum));
+        if(userObject==null) {
+            throw new StageException(StageStatusCode.FAIL_GET_PLAYER_USER_FROM_REDIS);
+        }
+        String userJson = userObject.toString();
+
+        UserResponseDto.SimpleUserProfile mvpUser;
+        try {
+            mvpUser = objectMapperUtil.toOriginalType(userJson, UserResponseDto.SimpleUserProfile.class);
+        } catch (JsonProcessingException e) {
+            throw new StageException(StageStatusCode.FAIL_GET_MVP_USER_INFO_FROM_REDIS_JSON);
+        }
+        return mvpUser;
     }
 
     /**

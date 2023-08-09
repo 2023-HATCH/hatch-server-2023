@@ -129,7 +129,7 @@ public class StageRoutineService {
         List<User> users = userRepository.findAllById(userIds.stream().map(Long::parseLong).collect(Collectors.toList())); // 참고 : 이 List 의 인덱스 순서로 playerNum이 정해짐
 
         // user의 필요한 정보만 추출하여 Redis Hash에 플레이어 정보로 저장
-        savePlayerInfo(users);
+        stageDataService.savePlayerInfo(users);
 
         // 응답, 데이터 정리
         stageSocketResponser.endCatch(users);
@@ -163,7 +163,7 @@ public class StageRoutineService {
         int mvpPlayerNum = getMvpPlayerNum();
 
         // mvp 선정된 playerNum에 해당하는 플레이어 사용자정보 가져오기
-        UserResponseDto.SimpleUserProfile mvpUser = getMvpUserInfo(mvpPlayerNum);
+        UserResponseDto.SimpleUserProfile mvpUser = stageDataService.getMvpUserInfo(mvpPlayerNum);
 
         // 상태 변경, 응답
         stageDataService.setStageStatus(STAGE_STATUS_MVP);
@@ -205,35 +205,6 @@ public class StageRoutineService {
     }
 
     /**
-     * 플레이어 사용자 정보를 Redis Hash 에 저장하는 메서드
-     * @param users
-     */
-    private void savePlayerInfo(List<User> users) {
-        List<UserResponseDto.SimpleUserProfile> userSimples = users.stream().map(UserResponseDto.SimpleUserProfile::toDto).collect(Collectors.toList());
-        for(int i=0; i<userSimples.size(); i++){ // i는 playerNum과 같음
-            String userSimpleJson;
-            userSimpleJson = objectMapperUtil.toJson(userSimples.get(i)); //TODO : StageDataService로
-            redisDao.setValuesHash(StageDataService.KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(i), userSimpleJson);
-        }
-    }
-
-    /**
-     * mvpPlayerNum에 해당하는 플레이어 사용자 정보 가져오기
-     * @param mvpPlayerNum
-     * @return
-     */
-    private UserResponseDto.SimpleUserProfile getMvpUserInfo(int mvpPlayerNum) {
-        String userJson = redisDao.getValuesHash(StageDataService.KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(mvpPlayerNum)).toString(); //TODO : nullPointException
-        UserResponseDto.SimpleUserProfile mvpUser;
-        try {
-            mvpUser = objectMapperUtil.toOriginalType(userJson, UserResponseDto.SimpleUserProfile.class); //TODO : StageDataService로
-        } catch (JsonProcessingException e) {
-            throw new StageException(StageStatusCode.FAIL_GET_MVP_USER_INFO_FROM_REDIS_JSON);
-        }
-        return mvpUser;
-    }
-
-    /**
      * 각 플레이어들의 유사도를 계산하여 MVP를 선정하고 MVP유저의 playerNum을 반환하는 메서드
      * @return
      */
@@ -256,12 +227,13 @@ public class StageRoutineService {
 //            log.info("endPlay skeletonFloatArray[0][0] : {}", skeletonFloatArray[0][0]);
 //            log.info("endPlay skeletonFloatArray[0][0] : {}", skeletonFloatArray[1][0]);
 
+            String title = stageDataService.getStageMusic().getTitle();
             // 유사도 계산 TODO : 테스트 못해봄
 //            float similarity;
             float similarity=0f;
             try{
-//                similarity = aiService.calculateSimilarity("tempMusicTitle", skeletonFloatArray); //TODO
-//                log.info("endPlay similarity {} : {}", i, similarity);
+//                similarity = aiService.calculateSimilarity(title, skeletonFloatArray); //TODO
+//                log.info("endPlay music {} user {} similarity : {}", title, i, similarity);
             }catch (NullPointerException e) {
                 throw new StageException(StageStatusCode.MUSIC_NOT_FOUND);
             }
@@ -289,7 +261,7 @@ public class StageRoutineService {
             // String -> List<Object> 로 형변환
             List list;
             try {
-                list = new ObjectMapper().readValue(arrayString, List.class);
+                list = objectMapperUtil.toOriginalType(arrayString, List.class);
             } catch (JsonProcessingException e) {
                 throw new StageException(StageStatusCode.FAIL_SAVE_MVP_USER_INFO_JSON);
             }
@@ -297,10 +269,11 @@ public class StageRoutineService {
             // List<Object> -> List<Float> 로 형변환
             List<Float> floatList = (List<Float>) list.stream().map(value -> Float.parseFloat(value.toString())).collect(Collectors.toList());
 
-            // 모으기
+            // 모으기 (List<List<Float>>)
             floatArrays.add(floatList.toArray(new Float[0]));
         }
 
+        // List<List<Float>> -> Float[][] 로 형변환
         return floatArrays.toArray(new Float[0][]);
     }
 

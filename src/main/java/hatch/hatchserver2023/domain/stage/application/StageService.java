@@ -75,7 +75,6 @@ public class StageService {
         log.info("[SERVICE] getStageInfo");
         String status = stageDataService.getStageStatus();
 
-        //TODO : 상태에 따라 진행중인 정보 같이 보내줘야 함
         Long statusStartTime = stageDataService.getStageStatusStartTime(status);
 //        Long statusElapsedTime = null;
 //        if(statusStartTime != null) {
