@@ -19,10 +19,6 @@
 |`+String+`
 |true
 |소켓 통신 유형 설명
-|`+data.+`
-|`+-+`
-|true
-|개발중
 |===
 
 
@@ -40,7 +36,6 @@ content-length:116
 {
     "timeStamp":"2023/07/26 23:29:43",
     "type":"PLAY_START",
-    "message":"스테이지 플레이 시작",
-    "data":"개발중"
+    "message":"스테이지 플레이 시작"
 }
 ----

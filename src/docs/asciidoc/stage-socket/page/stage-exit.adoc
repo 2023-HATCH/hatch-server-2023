@@ -1,0 +1,30 @@
+
+// api 명 : h3
+== *Stage Exit*
+스테이지 퇴장 요청
+
+- URL : `/app/stage/exit`
+
+NOTE: 퇴장 요청을 기존 임시 http api에서 소켓으로 변경 +
+요청 시 별다른 응답 주지 않음. 입장했던 사람이 아니면 퇴장 진행 안 됨(인원수 유지. 에러는 안남) +
+(http로 만들었던 퇴장api 유지 중. 프론트 변경 완료 후 삭제예정)
+
+NOTE: 갑작스런 소켓 disconnect (앱 종료 등) 시 퇴장되도록 함. +
+하지만 이 경우 인원수 변동을 바로 응답 줄 수 없음. +
+대신 루틴 시작(캐치직전) 때마다 인원수 응답을 추가로 주도록 함
+
+==== Request header
+|===
+|필드명|타입|필수여부|제약조건|설명
+|`+x-access-token+`
+|`+String+`
+|true
+|JWT 형식
+|액세스 토큰
+|===
+
+==== Request
+[source,options="wrap"]
+----
+$ _INFO_:send STOMP message, destination = /app/stage/exit, content = , header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkxNDgxOTcyLCJleHAiOjE2OTE0ODU1NzJ9.MQ2F8STpQhz4-9t4pDw-SI01v4HHP9vfYhHk3kA30zc"}
+----

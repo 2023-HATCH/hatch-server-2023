@@ -1,8 +1,12 @@
 package hatch.hatchserver2023.global.config.socket;
 
+import hatch.hatchserver2023.domain.stage.application.StageService;
+import hatch.hatchserver2023.domain.stage.application.StageSocketService;
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.AuthException;
+import hatch.hatchserver2023.global.common.response.exception.StageException;
 import hatch.hatchserver2023.global.config.security.jwt.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -14,6 +18,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.security.Principal;
@@ -24,9 +29,11 @@ import java.security.Principal;
 // 소켓에서는 토큰 RTR 적용 일단 안함
 public class JwtWebSocketInterceptor implements ChannelInterceptor {
     private final JwtProvider jwtProvider;
+    private final StageSocketService stageSocketService;
 
-    public JwtWebSocketInterceptor(JwtProvider jwtProvider) {
+    public JwtWebSocketInterceptor(JwtProvider jwtProvider, StageSocketService stageSocketService) {
         this.jwtProvider = jwtProvider;
+        this.stageSocketService = stageSocketService;
     }
 
 
@@ -65,17 +72,61 @@ public class JwtWebSocketInterceptor implements ChannelInterceptor {
             headerAccessor.setUser(jwtProvider.getAuthentication(token));
 
             //확인 로그 찍기
+            /*
             Principal principal = headerAccessor.getUser();
-//            log.info("[INTERCEPTOR] WebSocketInterceptor headerAccessor : getUser {}", principal);
+            log.info("[INTERCEPTOR] WebSocketInterceptor headerAccessor : getUser {}", principal);
             if(principal instanceof UsernamePasswordAuthenticationToken) {
                 UsernamePasswordAuthenticationToken userToken = (UsernamePasswordAuthenticationToken) principal;
                 User user = (User) userToken.getPrincipal();
-//                log.info("[INTERCEPTOR] WebSocketInterceptor headerAccessor : principal to User nickname {}", user.getNickname());
+                log.info("[INTERCEPTOR] WebSocketInterceptor headerAccessor : principal to User nickname {}", user.getNickname());
             }
+            */
         }
 
 //        log.info("[INTERCEPTOR] END preSend");
         return message;
     }
 
+
+    @Override
+    public void postSend(Message<?> message, MessageChannel channel, boolean sent) {
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+        String sessionId = accessor.getSessionId(); //sessionId 얻을 수도 있음
+
+        if(accessor.getCommand() == null){
+            log.info("[INTERCEPTOR] postSend command null");
+            return;
+        }
+
+        // stomp command 값에 따라 작업 처리 가능
+        switch (accessor.getCommand()) {
+            case CONNECT:
+                // 유저가 웹소켓 connect() 한 뒤 호출됨
+                log.info("[INTERCEPTOR] postSend command CONNECT. sessionId {}", sessionId);
+                break;
+            case DISCONNECT:
+                // 유저가 웹소켓 disconnect() 한 뒤 or 세션이 끊어졌을 때 호출됨
+                log.info("[INTERCEPTOR] postSend command DISCONNECT. sessionId {}", sessionId);
+
+                // 입장했던 유저면 퇴장 로직 진행
+                Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                if(principal instanceof User){
+                    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                    try {
+                        stageSocketService.deleteStageUser(user);
+                    }catch (StageException stageException) {
+                        if(stageException.getCode() != StageStatusCode.NOT_ENTERED_USER){
+                            throw stageException;
+                        }
+                    }
+                }
+
+
+                break;
+            default:
+                log.info("[INTERCEPTOR] postSend command {}. sessionId {}", accessor.getCommand(), sessionId);
+                break;
+        }
+
+    }
 }

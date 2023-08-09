@@ -461,7 +461,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 Content-Type: application/json;charset=UTF-8
 x-access-token: 액세스 토큰 값
 x-refresh-token: 리프레시 토큰 값
-X-CSRF-TOKEN: 59ebe4f4-6c08-40fb-9ef5-318973eba4aa
+X-CSRF-TOKEN: eb138d87-bee6-4e6a-96c4-18caf6c38779
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -544,7 +544,55 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>stageStatus</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 현재 상태. WAIT, CATCH, PLAY, MVP 중 하나</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 현재 상태. WAIT, CATCH, CATCH_END, PLAY, PLAY_END, MVP MVP_END 중 하나</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusElapsedTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Long</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 현재 상태 진행 시간(나노초)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 현재 음악</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic.musicId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UUID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">음악 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic.title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">음악 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic.singer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">음악 가수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic.length</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">음악 길이(밀리초)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic.musicUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">음악 파일 url</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic.concept</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">음악 컨셉</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>talkMessageData.page</code></p></td>
@@ -603,33 +651,42 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1043
+Content-Length: 1325
 
 {
-  "timeStamp" : "2023/08/06 23:19:16",
+  "timeStamp" : "2023/08/09 00:50:30",
   "code" : "STAGE-2001",
   "message" : "[스테이지] 스테이지 입장 성공",
   "data" : {
     "stageStatus" : "WAIT",
     "userCount" : 1,
+    "statusElapsedTime" : 99,
+    "currentMusic" : {
+      "musicId" : "376d118f-de0a-42dc-ab36-43a8e1973018",
+      "title" : "해치짱",
+      "singer" : "지혜",
+      "length" : 11111,
+      "musicUrl" : "http://tempMusicUrl",
+      "concept" : "최고컨셉"
+    },
     "talkMessageData" : {
       "page" : 0,
       "size" : 3,
       "messages" : [ {
-        "messageId" : "da9cf285-86f0-448d-96b7-8ba03f7524a2",
+        "messageId" : "ff657f20-8bd0-4d1c-aa7d-6a1ad0e2af42",
         "content" : "1 메세지내용 test",
-        "createdAt" : "2023-08-06T23:19:16.961456900+09:00[Asia/Seoul]",
+        "createdAt" : "2023-08-09T00:50:30.456456500+09:00[Asia/Seoul]",
         "sender" : {
-          "userId" : "dd687a01-ce40-49a5-9579-d48489f8d072",
+          "userId" : "33a509a1-2145-41bf-bf22-f417fbd17ce3",
           "nickname" : "nicknameTest",
           "profileImg" : "http://testurl"
         }
       }, {
-        "messageId" : "c0a1d3fe-ff7b-47f5-a15c-944067388853",
+        "messageId" : "4efd0b60-102b-4b08-89a9-69a02f29ff36",
         "content" : "2 메세지내용 test",
-        "createdAt" : "2023-08-06T23:19:16.964460600+09:00[Asia/Seoul]",
+        "createdAt" : "2023-08-09T00:50:30.460458200+09:00[Asia/Seoul]",
         "sender" : {
-          "userId" : "dd687a01-ce40-49a5-9579-d48489f8d072",
+          "userId" : "33a509a1-2145-41bf-bf22-f417fbd17ce3",
           "nickname" : "nicknameTest",
           "profileImg" : "http://testurl"
         }
