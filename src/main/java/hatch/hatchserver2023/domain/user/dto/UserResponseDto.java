@@ -81,4 +81,57 @@ public class UserResponseDto {
         }
 
     }
+
+    @ToString
+    @Getter
+    @Builder
+    public static class IsSuccess {
+        private Boolean isSuccess;
+
+        public static IsSuccess toDto(Boolean isSuccess) {
+            return IsSuccess.builder()
+                    .isSuccess(isSuccess)
+                    .build();
+        }
+    }
+
+    @ToString
+    @Getter
+    @Builder
+    public static class FollowList {
+
+        private List<FollowUserInfo> followerList;
+        private List<FollowUserInfo> followingList;
+
+        public static FollowList toDto(List<FollowUserInfo> follower, List<FollowUserInfo> following) {
+            return FollowList.builder()
+                    .followerList(follower)
+                    .followingList(following)
+                    .build();
+        }
+    }
+
+    @ToString
+    @Getter
+    @Builder
+    public static class FollowUserInfo {
+
+        private UUID userId;
+        private String nickname;
+        private String email;
+        private String introduce;
+        private String profileImg;
+        private Boolean isFollowing;
+
+        public static FollowUserInfo toDto(User user, Boolean isFollowing){
+            return FollowUserInfo.builder()
+                    .userId(user.getUuid())
+                    .nickname(user.getNickname())
+                    .email(user.getEmail())
+                    .introduce(user.getIntroduce())
+                    .profileImg(user.getProfileImg())
+                    .isFollowing(isFollowing)
+                    .build();
+        }
+    }
 }
