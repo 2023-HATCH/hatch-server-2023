@@ -11,6 +11,7 @@ import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.AuthException;
 import hatch.hatchserver2023.global.common.response.exception.VideoException;
+import hatch.hatchserver2023.global.config.redis.RedisCacheUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -28,11 +29,13 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final VideoRepository videoRepository;
     private final UserRepository userRepository;
+    private final RedisCacheUtil redisCacheUtil;
 
-    public LikeService(LikeRepository likeRepository, VideoRepository videoRepository, UserRepository userRepository){
+    public LikeService(LikeRepository likeRepository, VideoRepository videoRepository, UserRepository userRepository, RedisCacheUtil redisCacheUtil){
         this.likeRepository = likeRepository;
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
+        this.redisCacheUtil = redisCacheUtil;
     }
 
 
@@ -45,7 +48,7 @@ public class LikeService {
      * @return likeUuid
      */
     public UUID addLike(UUID videoId, User user){
-
+        // 비디오 존재 유무 확인
         Video video = videoRepository.findByUuid(videoId)
                 .orElseThrow(() -> new VideoException(VideoStatusCode.VIDEO_NOT_FOUND));
 
@@ -61,7 +64,9 @@ public class LikeService {
                     .userId(user)
                     .build();
 
-            likeRepository.save(like);
+//            likeRepository.save(like);
+            // redis 에 좋아요 데이터 저장, 좋아요 수 저장
+            redisCacheUtil.addLike(video.getId(), user.getId());
 
             return like.getUuid();
         }
@@ -82,7 +87,8 @@ public class LikeService {
         Like like = likeRepository.findByVideoIdAndUserId(video, user)
                 .orElseThrow(() -> new VideoException(VideoStatusCode.LIKE_NOT_FOUND));
 
-        likeRepository.delete(like);
+//        likeRepository.delete(like);
+        redisCacheUtil.deleteLike(like.getVideoId().getId(), like.getUserId().getId());
     }
 
 
@@ -143,7 +149,7 @@ public class LikeService {
      * @return isLiked
      */
     public boolean isAlreadyLiked(Video video, User user){
-        return likeRepository.findByVideoIdAndUserId(video, user).isPresent();
+        return redisCacheUtil.isLiked(video, user);
     }
 
 

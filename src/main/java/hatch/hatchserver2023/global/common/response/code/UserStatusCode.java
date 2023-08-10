@@ -19,6 +19,7 @@ public enum UserStatusCode implements StatusCode {
 
     USER_PRE_FORBIDDEN(HttpStatus.FORBIDDEN, "4306", "사용자 권한 부족 (api 메서드 단위)"), //403
 //    NOT_FOUND(HttpStatus.NOT_FOUND, "404", "요청 리소스를 찾을 수 없음"), //404
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "4401", "PK에 해당하는 사용자를 찾을 수 없음"), //404
 
 
     // 5xx

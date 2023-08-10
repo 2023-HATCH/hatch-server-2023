@@ -4,8 +4,9 @@ import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class RedisDao {
@@ -187,6 +188,63 @@ public class RedisDao {
      */
     public void deleteValues(String key) {
         redisTemplate.delete(key);
+    }
+
+    /**
+     * 키값에 해당하는 데이터들을 삭제하는 메서드
+     * @param keys
+     */
+    public void deleteValues(Collection<String> keys) {
+        redisTemplate.delete(keys);
+    }
+
+
+    /**
+     * 해당 해시 키 존재 확인 메서드
+     * @param key
+     * @param hashKey
+     * @return
+     */
+//    public boolean isHashKeyExist(String key, String hashKey) {
+//        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
+//        Set<Object> hashKeysObject = values.keys(key);
+//        if(hashKeysObject.isEmpty()) {
+//            return false;
+//        }else{
+//            Set<String> hashKeys = hashKeysObject.stream().map(Object::toString).collect(Collectors.toSet());
+//            return hashKeys.contains(hashKey);
+//        }
+//    }
+
+    /**
+     * 해당 해시 키 존재 확인 메서드
+     * @param key
+     * @return
+     */
+    public boolean isKeyExist(String key) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
+    }
+
+
+    /**
+     * 패턴과 일치하는 키값들을 반환하는 메서드
+     * @param keyPattern
+     * @return
+     */
+    public Cursor<String> getKeys(String keyPattern) {
+        ScanOptions options = ScanOptions.scanOptions().match(keyPattern).build();
+        return redisTemplate.scan(options);
+    }
+
+    /**
+     * 해당 해시의 해시키값들을 반환하는 메서드
+     * @param key
+     * @return
+     */
+    public Set<String> getHashKeys(String key) {
+        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
+        Set<Object> hashKeysObject = values.keys(key);
+        return hashKeysObject.stream().map(Object::toString).collect(Collectors.toSet());
     }
 
 

@@ -28,6 +28,7 @@ public enum VideoStatusCode implements StatusCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "4420", "해당 댓글을 찾을 수 없음"),  //404
     NOT_YOUR_COMMENT(HttpStatus.UNAUTHORIZED, "4121", "댓글 작성자가 아닌 사용자가 댓글을 삭제할 수 없습니다."),   //401
     LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "4430", "해당 좋아요를 찾을 수 없습니다"),     //404
+//    LIKE_NOT_FOUND_REDIS(HttpStatus.NOT_FOUND, "4431", "해당 좋아요를 캐시서버에서 찾을 수 없습니다"),     //404
     ALREADY_LIKED(HttpStatus.BAD_REQUEST, "4031", "이미 좋아요를 눌러서 새로운 좋아요를 추가할 수 없습니다"), //400
 
 
