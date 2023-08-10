@@ -1,7 +1,6 @@
 package hatch.hatchserver2023.domain.stage.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
 import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.stage.repository.MusicRepository;
@@ -42,17 +41,17 @@ public class StageRoutineService {
     private final MusicRepository musicRepository;
     private final RedisDao redisDao;
 
-    private final StageDataService stageDataService;
+    private final StageDataUtil stageDataUtil;
     private final AIService aiService;
 
     private final StageSocketResponser stageSocketResponser;
     private final ObjectMapperUtil objectMapperUtil;
 
-    public StageRoutineService(UserRepository userRepository, MusicRepository musicRepository, RedisDao redisDao, StageDataService stageDataService, AIService aiService, StageSocketResponser stageSocketResponser, ObjectMapperUtil objectMapperUtil) {
+    public StageRoutineService(UserRepository userRepository, MusicRepository musicRepository, RedisDao redisDao, StageDataUtil stageDataUtil, AIService aiService, StageSocketResponser stageSocketResponser, ObjectMapperUtil objectMapperUtil) {
         this.userRepository = userRepository;
         this.musicRepository = musicRepository;
         this.redisDao = redisDao;
-        this.stageDataService = stageDataService;
+        this.stageDataUtil = stageDataUtil;
         this.aiService = aiService;
         this.stageSocketResponser = stageSocketResponser;
         this.objectMapperUtil = objectMapperUtil;
@@ -71,7 +70,7 @@ public class StageRoutineService {
                 TimeUnit.SECONDS.sleep(STAGE_CATCH_TIME);
                 // 캐치한 사람이 없을 경우 2초 후 다시 캐치 시작
                 if(!endCatch()) {
-                    redisDao.deleteValues(StageDataService.KEY_STAGE_MUSIC); // 직전 캐치 음악 데이터 삭제
+                    redisDao.deleteValues(StageDataUtil.KEY_STAGE_MUSIC); // 직전 캐치 음악 데이터 삭제
                     TimeUnit.SECONDS.sleep(STAGE_CATCH_AGAIN_INTERVAL);
                     continue;
                 }
@@ -90,7 +89,7 @@ public class StageRoutineService {
             }
         }
         log.info("StageRoutineUtil : userCount < 3, end Stage routine");
-        redisDao.deleteValues(StageDataService.KEY_STAGE_STATUS);
+        redisDao.deleteValues(StageDataUtil.KEY_STAGE_STATUS);
 
         stageSocketResponser.stageRoutineStop();
     }
@@ -98,26 +97,26 @@ public class StageRoutineService {
 
     private Music startCatch() {
         log.info("StageRoutineUtil startCatch");
-        stageDataService.setStageStatus(STAGE_STATUS_CATCH);
+        stageDataUtil.setStageStatus(STAGE_STATUS_CATCH);
 
         // 음악 랜덤 선정
         Music music = musicRepository.findRandomOne().get(0);
-        stageDataService.setStageMusic(music);
+        stageDataUtil.setStageMusic(music);
 
-        stageDataService.setStageStatusStartTime();
+        stageDataUtil.setStageStatusStartTime();
         stageSocketResponser.startCatch(music);
         return music;
     }
 
     private boolean endCatch() throws InterruptedException {
         log.info("StageRoutineUtil endCatch");
-        stageDataService.setStageStatus(STAGE_STATUS_CATCH_END);
+        stageDataUtil.setStageStatus(STAGE_STATUS_CATCH_END);
 
         // TODO : 개발 편의를 위해 인원 검사 안함
 //        checkUserCountInEndCatch();
 
         // 선착순 캐치 성공자 얻기
-        Set<String> userIds = redisDao.getValuesZSet(StageDataService.KEY_STAGE_CATCH_USER_LIST, 0, STAGE_CATCH_SUCCESS_LAST_INDEX);
+        Set<String> userIds = redisDao.getValuesZSet(StageDataUtil.KEY_STAGE_CATCH_USER_LIST, 0, STAGE_CATCH_SUCCESS_LAST_INDEX);
 
         // 아무도 캐치를 누르지 않은 경우
         if(userIds == null || userIds.size()==0){
@@ -129,22 +128,22 @@ public class StageRoutineService {
         List<User> users = userRepository.findAllById(userIds.stream().map(Long::parseLong).collect(Collectors.toList())); // 참고 : 이 List 의 인덱스 순서로 playerNum이 정해짐
 
         // user의 필요한 정보만 추출하여 Redis Hash에 플레이어 정보로 저장
-        stageDataService.savePlayerInfo(users);
+        stageDataUtil.savePlayerInfo(users);
 
         // 응답, 데이터 정리
         stageSocketResponser.endCatch(users);
-        redisDao.deleteValues(StageDataService.KEY_STAGE_CATCH_USER_LIST);
+        redisDao.deleteValues(StageDataUtil.KEY_STAGE_CATCH_USER_LIST);
         return true;
     }
 
     private int startPlay(Music music) {
         log.info("StageRoutineUtil startPlay");
-        stageDataService.setStageStatus(STAGE_STATUS_PLAY);
+        stageDataUtil.setStageStatus(STAGE_STATUS_PLAY);
 
         final int readyTime = 5;
         int musicTime = 10; //TODO : 개발 편의 위해 잠시 //music.getLength()
 
-        stageDataService.setStageStatusStartTime();
+        stageDataUtil.setStageStatusStartTime();
         stageSocketResponser.startPlay();
 
         return readyTime + musicTime;
@@ -152,7 +151,7 @@ public class StageRoutineService {
 
     private void endPlay() {
         log.info("StageRoutineUtil endPlay");
-        stageDataService.setStageStatus(STAGE_STATUS_PLAY_END);
+        stageDataUtil.setStageStatus(STAGE_STATUS_PLAY_END);
 
         stageSocketResponser.endPlay();
     }
@@ -163,12 +162,12 @@ public class StageRoutineService {
         int mvpPlayerNum = getMvpPlayerNum();
 
         // mvp 선정된 playerNum에 해당하는 플레이어 사용자정보 가져오기
-        UserResponseDto.SimpleUserProfile mvpUser = stageDataService.getMvpUserInfo(mvpPlayerNum);
+        UserResponseDto.SimpleUserProfile mvpUser = stageDataUtil.getMvpUserInfo(mvpPlayerNum);
 
         // 상태 변경, 응답
-        stageDataService.setStageStatus(STAGE_STATUS_MVP);
+        stageDataUtil.setStageStatus(STAGE_STATUS_MVP);
 
-        stageDataService.setStageStatusStartTime();
+        stageDataUtil.setStageStatusStartTime();
         stageSocketResponser.startMVP(mvpUser);
 
         // 캐치, 플레이 데이터 초기화
@@ -177,16 +176,16 @@ public class StageRoutineService {
 
     private void endMVP() {
         log.info("StageRoutineUtil endMVP");
-        stageDataService.setStageStatus(STAGE_STATUS_MVP_END);
-        redisDao.deleteValues(StageDataService.KEY_STAGE_MUSIC);
+        stageDataUtil.setStageStatus(STAGE_STATUS_MVP_END);
+        redisDao.deleteValues(StageDataUtil.KEY_STAGE_MUSIC);
         stageSocketResponser.endMvp();
 
         // 입장자 3명 미만이면 스테이지 대기상태로 변경
-        int userCount = stageDataService.getStageEnterUserCount();
+        int userCount = stageDataUtil.getStageEnterUserCount();
 //        log.info("tempCheckStageEmpty STAGE_ENTER_USER_LIST set size : {}", size);
         if(userCount < 3) {
 //            log.info("endMVP set STAGE_ENTER_USER_COUNT = 0");
-            stageDataService.setStageStatus(STAGE_STATUS_WAIT);
+            stageDataUtil.setStageStatus(STAGE_STATUS_WAIT);
         }
     }
 
@@ -215,7 +214,7 @@ public class StageRoutineService {
         // 유사도 계산하여 mvp 정하기
         for(int i = 0; i<STAGE_PLAYER_COUNT_VALUE; i++){
             // redis 에 저장해둔 스켈레톤 가져옴
-            Set<String> skeletonStringSet = redisDao.getValuesZSetAll(StageDataService.KEY_STAGE_PLAYER_SKELETONS_PREFIX +i);
+            Set<String> skeletonStringSet = redisDao.getValuesZSetAll(StageDataUtil.KEY_STAGE_PLAYER_SKELETONS_PREFIX +i);
             if(skeletonStringSet==null) { // 이 유저의 스켈레톤이 비어있을 경우
                 continue;
             }
@@ -227,7 +226,7 @@ public class StageRoutineService {
 //            log.info("endPlay skeletonFloatArray[0][0] : {}", skeletonFloatArray[0][0]);
 //            log.info("endPlay skeletonFloatArray[0][0] : {}", skeletonFloatArray[1][0]);
 
-            String title = stageDataService.getStageMusic().getTitle();
+            String title = stageDataUtil.getStageMusic().getTitle();
             // 유사도 계산 TODO : 테스트 못해봄
 //            float similarity;
             float similarity=0f;
@@ -282,13 +281,13 @@ public class StageRoutineService {
      */
     private void initPlayData() {
         for (int i=0; i<=STAGE_CATCH_SUCCESS_LAST_INDEX; i++) {
-            redisDao.deleteValues(StageDataService.KEY_STAGE_PLAYER_SKELETONS_PREFIX +i);
+            redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_SKELETONS_PREFIX +i);
         }
-        redisDao.deleteValues(StageDataService.KEY_STAGE_PLAYER_INFO_HASH);
+        redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_INFO_HASH);
     }
 
     private int getSendStageUserCount() {
-        int userCount = stageDataService.getStageEnterUserCount();
+        int userCount = stageDataUtil.getStageEnterUserCount();
         stageSocketResponser.userCount(userCount);
         return userCount;
     }

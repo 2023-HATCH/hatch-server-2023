@@ -9,15 +9,15 @@ import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.StageException;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Service
-public class StageDataService { //public 이 상수KEY는 다른 곳에서 한번씩 쓰여서 메서드화해도 이점이 별로 없음
+@Component //@Service @Component? 별 차이는 없다고 함 AOP..? Service는 비느지스 로직을 의미
+public class StageDataUtil { //public 이 상수KEY는 다른 곳에서 한번씩 쓰여서 메서드화해도 이점이 별로 없음
     public static final String KEY_STAGE_STATUS = "STAGE_STATUS";
     public static final String KEY_STAGE_MUSIC = "STAGE_MUSIC";
     private static final String KEY_STAGE_STATUS_START_TIME = "STAGE_STATUS_START_TIME"; // 스테이지 각 단계의 시작 시각 nanoTime을 저장하는 키
@@ -33,7 +33,7 @@ public class StageDataService { //public 이 상수KEY는 다른 곳에서 한�
 
     private final ObjectMapperUtil objectMapperUtil;
 
-    public StageDataService(RedisDao redisDao, ObjectMapperUtil objectMapperUtil) {
+    public StageDataUtil(RedisDao redisDao, ObjectMapperUtil objectMapperUtil) {
         this.redisDao = redisDao;
         this.objectMapperUtil = objectMapperUtil;
     }
@@ -145,7 +145,7 @@ public class StageDataService { //public 이 상수KEY는 다른 곳에서 한�
         for(int i=0; i<userSimples.size(); i++){ // i는 playerNum과 같음
             String userSimpleJson;
             userSimpleJson = objectMapperUtil.toJson(userSimples.get(i));
-            redisDao.setValuesHash(StageDataService.KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(i), userSimpleJson);
+            redisDao.setValuesHash(StageDataUtil.KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(i), userSimpleJson);
         }
     }
 
@@ -155,7 +155,7 @@ public class StageDataService { //public 이 상수KEY는 다른 곳에서 한�
      * @return
      */
     public UserResponseDto.SimpleUserProfile getMvpUserInfo(int mvpPlayerNum) {
-        Object userObject = redisDao.getValuesHash(StageDataService.KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(mvpPlayerNum));
+        Object userObject = redisDao.getValuesHash(StageDataUtil.KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(mvpPlayerNum));
         if(userObject==null) {
             throw new StageException(StageStatusCode.FAIL_GET_PLAYER_USER_FROM_REDIS);
         }
