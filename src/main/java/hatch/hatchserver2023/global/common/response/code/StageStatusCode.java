@@ -24,7 +24,7 @@ public enum StageStatusCode implements StatusCode {
     NOT_ENTERED_USER(HttpStatus.INTERNAL_SERVER_ERROR, "5009", "스테이지에 입장했던 사용자가 아니기에 퇴장할 수 없음"), //500
 //    FAIL_SAVE_STAGE_MUSIC_JSON(HttpStatus.INTERNAL_SERVER_ERROR, "5010", "스테이지 음악 정보 json 변환 저장 실패"), //500
     FAIL_GET_STAGE_MUSIC_FROM_REDIS_JSON(HttpStatus.INTERNAL_SERVER_ERROR, "5011", "스테이지 음악 정보 json 맵핑 실패"), //500
-    FAIL_GET_PLAYER_USER_FROM_REDIS(HttpStatus.INTERNAL_SERVER_ERROR, "5012", "스테이지 플레이어 데이터 중 MVP 사용자 가져오기 실해") //500
+    FAIL_GET_PLAYER_USER_FROM_REDIS(HttpStatus.INTERNAL_SERVER_ERROR, "5012", "스테이지 플레이어 데이터 중 MVP 사용자 가져오기 실패") //500
     ;
 
     private final HttpStatus status;
