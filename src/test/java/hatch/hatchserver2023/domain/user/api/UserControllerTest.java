@@ -5,6 +5,7 @@ import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
+import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,6 +33,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +47,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -234,5 +237,180 @@ public class UserControllerTest {
 
 
     }
+
+
+    @Test
+    @DisplayName("Add Follow")
+    void addFollow() throws Exception {
+        // user1 -> user2
+
+        //given
+        given(userUtilService.findOneByUuid(user2.getUuid()))
+                .willReturn(user2);
+//        given(userUtilService.addFollow(user1, user2));
+
+        //when
+        StatusCode code = UserStatusCode.ADD_FOLLOW_SUCCESS;
+
+        MockHttpServletRequestBuilder requestPost = RestDocumentationRequestBuilders
+                .post("/api/v1/users/follow/{userId}", user2.getUuid())
+                .header("headerXAccessToken", "headerXAccessToken")
+                .header("headerXRefreshToken", "headerXRefreshToken")
+                .with(csrf());
+
+        //then
+        ResultActions resultActions = mockMvc.perform(requestPost);
+
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(code.getCode()))
+                .andExpect(jsonPath("$.message").value(code.getMessage()))
+                .andExpect(jsonPath("$.data.success").value(true))
+        ;
+
+        resultActions
+                .andDo( //rest docs 문서 작성 시작
+                        docs.document(
+                                pathParameters(
+                                        parameterWithName("userId").description("팔로우 하고자 하는 사용자 UUID (ToUser)")
+                                ),
+                                requestParameters(
+                                        parameterWithName("_csrf").description("테스트할 때 넣은 csrf 이므로 무시").ignored()
+                                ),
+                                requestHeaders(
+                                        headerWithName("headerXAccessToken").description("팔로우 신청하는 로그인 사용자 (FromUser)"),
+                                        headerWithName("headerXRefreshToken").description("로그인 사용자 (FromUser)")
+                                ),
+                                responseFields( // response 필드 정보 입력
+                                        beneathPath("data"),
+                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("팔로우 추가 성공 여부 (default: true)")
+                                )
+                        )
+                )
+        ;
+
+    }
+
+
+    @Test
+    @DisplayName("Delete Follow")
+    void deleteFollow() throws Exception {
+        // user3 -> user2 delete
+
+        //given
+        given(userUtilService.findOneByUuid(user2.getUuid()))
+                .willReturn(user2);
+
+//        given(userUtilService.deleteFollow(user3, user2));
+
+        //when
+        StatusCode code = UserStatusCode.DELETE_FOLLOW_SUCCESS;
+
+        MockHttpServletRequestBuilder requestDelete = RestDocumentationRequestBuilders
+                .delete("/api/v1/users/follow/{userId}", user2.getUuid())
+                .header("headerXAccessToken", "headerXAccessToken")
+                .header("headerXRefreshToken", "headerXRefreshToken")
+                .with(csrf());
+
+        //then
+        ResultActions resultActions = mockMvc.perform(requestDelete);
+
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(code.getCode()))
+                .andExpect(jsonPath("$.message").value(code.getMessage()))
+                .andExpect(jsonPath("$.data.success").value(true))
+        ;
+
+        resultActions
+                .andDo(
+                        docs.document(
+                                pathParameters(
+                                        parameterWithName("userId").description("팔로우 지우고자 하는 사용자 UUID (ToUser)")
+                                ),
+                                requestParameters(
+                                        parameterWithName("_csrf").description("테스트할 때 넣은 csrf 이므로 무시").ignored()
+                                ),
+                                requestHeaders(
+                                        headerWithName("headerXAccessToken").description("로그인한 사용자 (FromUser)"),
+                                        headerWithName("headerXRefreshToken").description("로그인한 사용자 (FromUser)")
+                                ),
+                                responseFields( // response 필드 정보 입력
+                                        beneathPath("data"),
+                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("팔로우 삭제 성공 여부 (default: true)")
+                                )
+                        )
+                )
+        ;
+    }
+
+    @Test
+    @DisplayName("Get Follow List")
+    void getFollowList() throws Exception {
+        //given
+        List<User> followerList = Arrays.asList(user1, user3);
+        List<User> followingList = Arrays.asList(user3);
+
+        given(userUtilService.findOneByUuid(user2.getUuid()))
+                .willReturn(user2);
+        given(userUtilService.getFollowerList(user2))
+                .willReturn(followerList);
+        given(userUtilService.getFollowingList(user2))
+                .willReturn(followingList);
+
+        //when
+        StatusCode code = UserStatusCode.GET_FOLLOW_LIST_SUCCESS_FOR_ANONYMOUS;
+
+        MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
+                .get("/api/v1/users/follow/{userId}", user2.getUuid())
+                .header("headerXAccessToken", "headerXAccessToken")
+                .header("headerXRefreshToken", "headerXRefreshToken");
+
+        //then
+        ResultActions resultActions = mockMvc.perform(requestGet);
+
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(code.getCode()))
+                .andExpect(jsonPath("$.message").value(code.getMessage()))
+                .andExpect(jsonPath("$.data.followerList[0].userId").value(user1.getUuid().toString()))
+                .andExpect(jsonPath("$.data.followerList[1].userId").value(user3.getUuid().toString()))
+                .andExpect(jsonPath("$.data.followingList[0].userId").value(user3.getUuid().toString()))
+        ;
+
+        resultActions
+                .andDo(
+                        docs.document(
+                                requestHeaders(
+                                        headerWithName("headerXAccessToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n비회원: isFollowing이 false, 회원: isFollowing 여부").optional(),
+                                        headerWithName("headerXRefreshToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n비회원: isFollowing이 false, 회원: isFollowing 여부").optional()
+                                ),
+                                pathParameters(
+                                        parameterWithName("userId").description("팔로워/팔로잉을 알고자 하는 사용자 UUID")
+                                ),
+                                responseFields(
+                                        beneathPath("data.followingList").withSubsectionId("beneath-data-following-list"),
+                                        fieldWithPath("userId").type(JsonFieldType.STRING).description("사용자 식별자 UUID"),
+                                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                                        fieldWithPath("introduce").type(JsonFieldType.STRING).description("자기소개"),
+                                        fieldWithPath("profileImg").type(JsonFieldType.STRING).description("프로필 이미지 경로"),
+                                        fieldWithPath("isFollowing").type(JsonFieldType.BOOLEAN).description("로그인한 사용자가 팔로우를 하는지 여부")
+                                ),
+                                responseFields(
+                                        beneathPath("data.followerList").withSubsectionId("beneath-data-follower-list"),
+                                        fieldWithPath("userId").type(JsonFieldType.STRING).description("사용자 식별자 UUID"),
+                                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                                        fieldWithPath("introduce").type(JsonFieldType.STRING).description("자기소개"),
+                                        fieldWithPath("profileImg").type(JsonFieldType.STRING).description("프로필 이미지 경로"),
+                                        fieldWithPath("isFollowing").type(JsonFieldType.BOOLEAN).description("로그인한 사용자가 팔로우를 하는지 여부")
+                                )
+                        )
+                )
+        ;
+
+    }
+
 
 }

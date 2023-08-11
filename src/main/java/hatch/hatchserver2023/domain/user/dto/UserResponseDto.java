@@ -144,11 +144,11 @@ public class UserResponseDto {
     @Getter
     @Builder
     public static class IsSuccess {
-        private Boolean isSuccess;
+        private Boolean success;
 
         public static IsSuccess toDto(Boolean isSuccess) {
             return IsSuccess.builder()
-                    .isSuccess(isSuccess)
+                    .success(isSuccess)
                     .build();
         }
     }
