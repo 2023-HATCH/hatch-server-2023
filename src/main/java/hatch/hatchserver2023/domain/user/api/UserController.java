@@ -69,7 +69,16 @@ public class UserController {
     }
 
 
-    //업로드한 영상 목록 조회
+
+    /**
+     * 업로드한 영상 목록 조회
+     * + 페이지네이션
+     *
+     * @param loginUser
+     * @param userId
+     * @param pageable
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
     @GetMapping("/videos/{userId}")
     public ResponseEntity<CommonResponse> getUsersVideoList(@AuthenticationPrincipal User loginUser,

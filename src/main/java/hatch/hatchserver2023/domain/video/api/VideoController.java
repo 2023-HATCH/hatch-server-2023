@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -96,27 +97,28 @@ public class VideoController {
                                                        Pageable pageable){
         Slice<Video> slice = videoService.findByCreatedAt(pageable);
 
-        //회원이면 좋아요를 눌렀는지 확인
-        if(user != null) {
-            // 각 인덱스에서 좋아요를 눌렀는지 아닌지를 가지고 있는 리스트
-            List<Boolean> likeList = new ArrayList<>();
+        //회원: 영상 좋아요 여부 liked 지정
+        if (user != null) {
 
-            for (Video video : slice) {
-                likeList.add(likeService.isAlreadyLiked(video, user));
-            }
+            List<VideoResponseDto.GetVideo> videoList = slice.stream()
+                    .map(video -> VideoResponseDto.GetVideo.toDto(video, likeService.isAlreadyLiked(video, user)))
+                    .collect(Collectors.toList());
 
-            //좋아요 여부 리스트와 함께 DTO로 만듦
             return ResponseEntity.ok(CommonResponse.toResponse(
                     VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_USER,
-                    VideoResponseDto.GetVideoList.toDto(slice, likeList)
+                    VideoResponseDto.GetVideoList.toDto(videoList, slice.isLast())
+            ));
+        } else {
+            //비회원: liked는 모두 false
+            List<VideoResponseDto.GetVideo> videoList = slice.stream()
+                    .map(video -> VideoResponseDto.GetVideo.toDto(video, false))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(CommonResponse.toResponse(
+                    VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS,
+                    VideoResponseDto.GetVideoList.toDto(videoList, slice.isLast())
             ));
         }
-
-        //비회원이면, liked가 모두 false
-        return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS,
-                VideoResponseDto.GetVideoList.toDto(slice)
-        ));
     }
 
     /**
@@ -133,27 +135,28 @@ public class VideoController {
 
         Slice<Video> slice = videoService.findByRandom(pageable);
 
-        //회원이면 좋아요를 눌렀는지 확인
+        //회원: 영상 좋아요 여부 liked 지정
         if (user != null) {
-            // 각 인덱스에서 좋아요를 눌렀는지 아닌지를 가지고 있는 리스트
-            List<Boolean> likeList = new ArrayList<>();
 
-            for (Video video : slice) {
-                likeList.add(likeService.isAlreadyLiked(video, user));
-            }
+            List<VideoResponseDto.GetVideo> videoList = slice.stream()
+                    .map(video -> VideoResponseDto.GetVideo.toDto(video, likeService.isAlreadyLiked(video, user)))
+                    .collect(Collectors.toList());
 
-            //좋아요 여부 리스트와 함께 DTO로 만듦
             return ResponseEntity.ok(CommonResponse.toResponse(
                     VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_USER,
-                    VideoResponseDto.GetVideoList.toDto(slice, likeList)
+                    VideoResponseDto.GetVideoList.toDto(videoList, slice.isLast())
+            ));
+        } else {
+            //비회원: liked는 모두 false
+            List<VideoResponseDto.GetVideo> videoList = slice.stream()
+                    .map(video -> VideoResponseDto.GetVideo.toDto(video, false))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(CommonResponse.toResponse(
+                    VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS,
+                    VideoResponseDto.GetVideoList.toDto(videoList, slice.isLast())
             ));
         }
-
-        //비회원이면, liked가 모두 false
-        return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS,
-                VideoResponseDto.GetVideoList.toDto(slice)
-        ));
     }
 
 
@@ -262,27 +265,28 @@ public class VideoController {
 
         Slice<Video> slice = hashtagService.searchHashtag(tag, pageable);
 
-        //회원이면 좋아요를 눌렀는지 확인
+        //회원: 영상 좋아요 여부 liked 지정
         if (user != null) {
-            // 각 인덱스에서 좋아요를 눌렀는지 아닌지를 가지고 있는 리스트
-            List<Boolean> likeList = new ArrayList<>();
 
-            for (Video video : slice) {
-                likeList.add(likeService.isAlreadyLiked(video, user));
-            }
+            List<VideoResponseDto.GetVideo> videoList = slice.stream()
+                    .map(video -> VideoResponseDto.GetVideo.toDto(video, likeService.isAlreadyLiked(video, user)))
+                    .collect(Collectors.toList());
 
-            //좋아요 여부 리스트와 함께 DTO로 만듦
             return ResponseEntity.ok(CommonResponse.toResponse(
                     VideoStatusCode.HASHTAG_SEARCH_SUCCESS_FOR_USER,
-                    VideoResponseDto.GetVideoList.toDto(slice, likeList)
+                    VideoResponseDto.GetVideoList.toDto(videoList, slice.isLast())
+            ));
+        } else {
+            //비회원: liked는 모두 false
+            List<VideoResponseDto.GetVideo> videoList = slice.stream()
+                    .map(video -> VideoResponseDto.GetVideo.toDto(video, false))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(CommonResponse.toResponse(
+                    VideoStatusCode.HASHTAG_SEARCH_SUCCESS_FOR_ANONYMOUS,
+                    VideoResponseDto.GetVideoList.toDto(videoList, slice.isLast())
             ));
         }
-
-        //비회원이면, liked가 모두 false
-        return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.HASHTAG_SEARCH_SUCCESS_FOR_ANONYMOUS,
-                VideoResponseDto.GetVideoList.toDto(slice)
-        ));
     }
 
 
