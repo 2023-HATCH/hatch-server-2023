@@ -7,11 +7,13 @@ import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,6 +31,25 @@ public class UserController {
 
 
     /**
+     * 검색 - 계정 검색
+     * -닉네임 1순위, 이메일 2순위로 검색
+     *
+     * @param key
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/search")
+    public ResponseEntity<CommonResponse> searchUsers(@RequestParam @NotBlank String key,
+                                                      Pageable pageable) {
+
+        List<User> userList = userUtilService.searchUsers(key, pageable);
+
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                UserStatusCode.SEARCH_USERS_SUCCESS,
+                UserResponseDto.CommunityUserInfoList.toDto(userList)));
+    }
+
+    /**
      * 팔로우 등록
      *
      * @param fromUser
@@ -38,7 +59,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @PostMapping("/follow/{userId}")
     public ResponseEntity<CommonResponse> addFollow(@AuthenticationPrincipal User fromUser,
-                                                    @PathVariable UUID userId) {
+                                                    @PathVariable @NotBlank UUID userId) {
 
         User toUser = userUtilService.findOneByUuid(userId);
 
@@ -60,7 +81,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @DeleteMapping("/follow/{userId}")
     public ResponseEntity<CommonResponse> deleteFollow(@AuthenticationPrincipal User fromUser,
-                                                       @PathVariable UUID userId) {
+                                                       @PathVariable @NotBlank UUID userId) {
         User toUser = userUtilService.findOneByUuid(userId);
 
         userUtilService.deleteFollow(fromUser, toUser);
@@ -84,7 +105,7 @@ public class UserController {
     @GetMapping("/follow/{userId}")
     //TODO: dto로 만드는 과정 리팩토링 필요한듯. service.isFollowing()을 responseDto에 넣을 수 없어서 이렇게 됨
     public ResponseEntity<CommonResponse> getFollowList(@AuthenticationPrincipal User loginUser,
-                                                        @PathVariable UUID userId) {
+                                                        @PathVariable @NotBlank UUID userId) {
 
         User user = userUtilService.findOneByUuid(userId);
         List<User> follower = userUtilService.getFollowerList(user);

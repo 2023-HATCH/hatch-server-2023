@@ -82,6 +82,27 @@ public class UserResponseDto {
 
     }
 
+
+    @ToString
+    @Getter
+    @Builder
+    public static class CommunityUserInfoList {
+
+        private List<CommunityUserInfo> userList;
+
+        public static CommunityUserInfoList toDto(List<User> users) {
+
+            List<CommunityUserInfo> userInfoList = users.stream()
+                    .map(CommunityUserInfo::toDto)
+                    .collect(Collectors.toList());
+
+            return CommunityUserInfoList.builder()
+                    .userList(userInfoList)
+                    .build();
+        }
+    }
+
+
     @ToString
     @Getter
     @Builder

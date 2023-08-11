@@ -7,12 +7,15 @@ import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.UserException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -44,6 +47,32 @@ public class UserUtilService {
                 .orElseThrow(() -> new UserException(UserStatusCode.USER_NOT_FOUND));
 
         return user;
+    }
+
+
+    /**
+     * 계정 검색
+     * - 닉네임 1순위, 이메일 2순위로 검색
+     *
+     * @param key
+     * @param pageable
+     * @return
+     */
+    public List<User> searchUsers(String key, Pageable pageable) {
+
+        //닉네임으로 검색
+        List<User> searchedByNickname = userRepository.findAllByNicknameContainingIgnoreCase(key, pageable);
+
+        //이메일로 검색
+        List<User> searchedByEmail = userRepository.findAllByEmailContainingIgnoreCase(key, pageable);
+
+        //리스트 붙이고 중복 제거 (중복이면 뒤에거 제거)
+        List<User> searchList = Stream
+                                .concat(searchedByNickname.stream(), searchedByEmail.stream())
+                                .distinct()
+                                .collect(Collectors.toList());
+
+        return searchList;
     }
 
 
