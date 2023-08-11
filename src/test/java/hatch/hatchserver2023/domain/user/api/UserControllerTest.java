@@ -1,9 +1,11 @@
 package hatch.hatchserver2023.domain.user.api;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.user.dto.UserRequestDto;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
@@ -47,11 +49,13 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -302,6 +306,67 @@ public class UserControllerTest {
                                 )
                         )
                 );
+    }
+
+
+    @Test
+    @DisplayName("Update User Profile")
+    void updateProfile() throws Exception {
+        //given
+//        given(userUtilService.updateProfile(user1, "자기소개 수정", "인스타 계정 수정", "트위터 계정 수정"));
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        UserRequestDto.UpdateProfile request = UserRequestDto.UpdateProfile.builder()
+                .introduce("자기소개 수정")
+                .instagramId("인스타 계정 수정")
+                .twitterId("트위터 계정 수정")
+                .build();
+
+        //when
+        StatusCode code = UserStatusCode.UPDATE_MY_PROFILE_SUCCESS;
+
+        MockHttpServletRequestBuilder requestPatch = RestDocumentationRequestBuilders
+                .patch("/api/v1/users/me")
+                .content(objectMapper.writeValueAsString(request))
+                .header("headerXAccessToken", "headerXAccessToken")
+                .header("headerXRefreshToken", "headerXRefreshToken")
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .with(csrf());
+
+        //then
+        ResultActions resultActions = mockMvc.perform(requestPatch);
+
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(code.getCode()))
+                .andExpect(jsonPath("$.message").value(code.getMessage()))
+                .andExpect(jsonPath("$.data.success").value(true))
+        ;
+
+        resultActions
+                .andDo( //rest docs 문서 작성 시작
+                        docs.document(
+                                requestParameters(
+                                        parameterWithName("_csrf").description("테스트할 때 넣은 csrf 이므로 무시").ignored()
+                                ),
+                                requestHeaders(
+                                        headerWithName("headerXAccessToken").description("프로필을 수정하려는 로그인 사용자 (필수)"),
+                                        headerWithName("headerXRefreshToken").description("프로필을 수정하려는 로그인 사용자 (필수)")
+                                ),
+                                requestFields(
+                                        fieldWithPath("introduce").type(JsonFieldType.STRING).description("자기소개 수정").attributes(key("constraints").value("null 가능")),
+                                        fieldWithPath("instagramId").type(JsonFieldType.STRING).description("인스타 계정 수정").attributes(key("constraints").value("null 가능")),
+                                        fieldWithPath("twitterId").type(JsonFieldType.STRING).description("트위터 계정 수정").attributes(key("constraints").value("null 가능"))
+                                ),
+                                responseFields( // response 필드 정보 입력
+                                        beneathPath("data"),
+                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("수정 성공 여부 (default: true)")
+                                )
+                        )
+                )
+        ;
+
     }
 
     @Test

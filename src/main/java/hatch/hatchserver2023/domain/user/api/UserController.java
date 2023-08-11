@@ -127,6 +127,8 @@ public class UserController {
     public ResponseEntity<CommonResponse> updateMyProfile(@AuthenticationPrincipal User user,
                                                           @RequestBody UserRequestDto.UpdateProfile request) {
 
+        log.info("[UserController][Update Profile] request >> " + request);
+
         userUtilService.updateProfile(user, request.getIntroduce(), request.getInstagramId(), request.getTwitterId());
 
         return ResponseEntity.ok(CommonResponse.toResponse(
