@@ -2,6 +2,7 @@ package hatch.hatchserver2023.domain.user.application;
 
 import hatch.hatchserver2023.domain.user.domain.Follow;
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.user.dto.UserRequestDto;
 import hatch.hatchserver2023.domain.user.repository.FollowRepository;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.domain.video.domain.Video;
@@ -66,13 +67,27 @@ public class UserUtilService {
     }
 
 
-    //업로드한 영상 목록 조회
+    /**
+     * 업로드한 영상 목록 조회
+     *
+     * @param userId
+     * @param pageable
+     * @return
+     */
     public Slice<Video> getUsersVideoList(UUID userId, Pageable pageable) {
         User user = findOneByUuid(userId);
 
         Slice<Video> videoSlice = videoRepository.findAllByUserId(user, pageable);
 
         return videoSlice;
+    }
+
+
+    //프로필 수정
+    public void updateProfile(User user, String introduce, String instagramId, String twitterId) {
+
+        user.updateProfile(introduce, instagramId, twitterId);
+        userRepository.save(user);
     }
 
 

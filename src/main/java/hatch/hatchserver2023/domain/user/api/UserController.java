@@ -4,6 +4,7 @@ package hatch.hatchserver2023.domain.user.api;
 import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.user.dto.UserRequestDto;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.dto.VideoResponseDto;
@@ -18,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
@@ -110,6 +112,29 @@ public class UserController {
             ));
         }
     }
+
+
+    /**
+     * 프로필 수정
+     * - introduce, instagramId, twitterId 전체 수정
+     *
+     * @param user
+     * @param request
+     * @return success
+     */
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @PatchMapping("/me")
+    public ResponseEntity<CommonResponse> updateMyProfile(@AuthenticationPrincipal User user,
+                                                          @RequestBody UserRequestDto.UpdateProfile request) {
+
+        userUtilService.updateProfile(user, request.getIntroduce(), request.getInstagramId(), request.getTwitterId());
+
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                UserStatusCode.UPDATE_MY_PROFILE_SUCCESS,
+                UserResponseDto.IsSuccess.toDto(true)
+        ));
+    }
+
 
     /**
      * 검색 - 계정 검색
