@@ -18,16 +18,17 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component //@Service @Component? 별 차이는 없다고 함 AOP..? Service는 비느지스 로직을 의미
 public class StageDataUtil { //public 이 상수KEY는 다른 곳에서 한번씩 쓰여서 메서드화해도 이점이 별로 없음
-    public static final String KEY_STAGE_STATUS = "STAGE_STATUS";
-    public static final String KEY_STAGE_MUSIC = "STAGE_MUSIC";
-    private static final String KEY_STAGE_STATUS_START_TIME = "STAGE_STATUS_START_TIME"; // 스테이지 각 단계의 시작 시각 nanoTime을 저장하는 키
-    private static final String KEY_STAGE_ENTER_USER_COUNT = "STAGE_ENTER_USER_COUNT";
-    private static final String KEY_STAGE_ENTER_USER_LIST = "STAGE_ENTER_USER_LIST";
+    private static final String KEY_PREFIX_STAGE = "stage:";
+    public static final String KEY_STAGE_STATUS = KEY_PREFIX_STAGE+"status";
+    public static final String KEY_STAGE_MUSIC = KEY_PREFIX_STAGE+"music";
+    private static final String KEY_STAGE_STATUS_START_TIME = KEY_PREFIX_STAGE+"status:startTime"; // 스테이지 각 단계의 시작 시각 nanoTime을 저장하는 키
+    private static final String KEY_STAGE_ENTER_USER_COUNT = KEY_PREFIX_STAGE+"enterUser:count";
+    private static final String KEY_STAGE_ENTER_USER_LIST = KEY_PREFIX_STAGE+"enterUser:info";
 
-    public static final String KEY_STAGE_CATCH_USER_LIST = "STAGE_CATCH_USER_LIST";
+    public static final String KEY_STAGE_CATCH_USER_LIST = KEY_PREFIX_STAGE+"catchUser:info";
 
-    public static final String KEY_STAGE_PLAYER_INFO_HASH = "STAGE_PLAYER_INFO_HASH";
-    public static final String KEY_STAGE_PLAYER_SKELETONS_PREFIX = "STAGE_PLAYER_SKELETONS_";
+    public static final String KEY_STAGE_PLAYER_INFO_HASH = KEY_PREFIX_STAGE+"player:info";
+    public static final String KEY_STAGE_PLAYER_SKELETON = KEY_PREFIX_STAGE+"player:skeleton:";
 
     private final RedisDao redisDao;
 

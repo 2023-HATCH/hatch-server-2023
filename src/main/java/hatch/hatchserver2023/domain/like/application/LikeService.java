@@ -84,11 +84,11 @@ public class LikeService {
         Video video = videoRepository.findByUuid(videoId)
                 .orElseThrow(() -> new VideoException(VideoStatusCode.VIDEO_NOT_FOUND));
 
-        Like like = likeRepository.findByVideoIdAndUserId(video, user)
-                .orElseThrow(() -> new VideoException(VideoStatusCode.LIKE_NOT_FOUND));
+//        Like like = likeRepository.findByVideoIdAndUserId(video, user)
+//                .orElseThrow(() -> new VideoException(VideoStatusCode.LIKE_NOT_FOUND));
 
 //        likeRepository.delete(like);
-        redisCacheUtil.deleteLike(like.getVideoId().getId(), like.getUserId().getId());
+        redisCacheUtil.deleteLike(video, user);
     }
 
 

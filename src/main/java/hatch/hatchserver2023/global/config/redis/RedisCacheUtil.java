@@ -50,7 +50,7 @@ public class RedisCacheUtil {
      * 해당하는 키값으로 redis 데이터 존재 확인 -> redis 데이터 반환 또는 RDB에서 가져옴
      * @param video
      * @param user
-     * @return
+     * @return 좋아요 눌렀으면 true, 삭제했거나 누른적 없으면 false
      */
     public boolean isLiked(Video video, User user) {
         // 레디스에 존재하는지 확인
@@ -60,9 +60,10 @@ public class RedisCacheUtil {
         if(statusObject == null) {
             return likeRepository.findByVideoIdAndUserId(video, user).isPresent();
         }
-
-        // 레디스에 add 로 저장되어있으면 좋아요 누른 거 맞음
-        return statusObject.toString().equals(CACHE_LIKE_INFO_ADD);
+        else{
+            // 레디스에 있으면 add 로 저장되어있는지
+            return statusObject.toString().equals(CACHE_LIKE_INFO_ADD);
+        }
     }
 
     public void addLike(long videoId, long userId) {
@@ -71,10 +72,16 @@ public class RedisCacheUtil {
         updateLikeCount(videoId, 1);
     }
 
-    public void deleteLike(long videoId, long userId) {
+    public void deleteLike(Video video, User user) {
         log.info("[REDIS] deleteLike");
-        saveLike(videoId, userId, CACHE_LIKE_INFO_DELETE);
-        updateLikeCount(videoId, -1);
+
+        if(isLiked(video, user)) {
+            saveLike(video.getId(), user.getId(), CACHE_LIKE_INFO_DELETE);
+            updateLikeCount(video.getId(), -1);
+        }
+        else{
+            log.info("deleteLike : never liked or already deleted like");
+        }
     }
 
 

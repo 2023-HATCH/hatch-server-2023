@@ -214,7 +214,7 @@ public class StageRoutineService {
         // 유사도 계산하여 mvp 정하기
         for(int i = 0; i<STAGE_PLAYER_COUNT_VALUE; i++){
             // redis 에 저장해둔 스켈레톤 가져옴
-            Set<String> skeletonStringSet = redisDao.getValuesZSetAll(StageDataUtil.KEY_STAGE_PLAYER_SKELETONS_PREFIX +i);
+            Set<String> skeletonStringSet = redisDao.getValuesZSetAll(StageDataUtil.KEY_STAGE_PLAYER_SKELETON +i);
             if(skeletonStringSet==null || skeletonStringSet.isEmpty()) { // 이 유저의 스켈레톤이 비어있을 경우
                 continue;
             }
@@ -283,7 +283,7 @@ public class StageRoutineService {
      */
     private void initPlayData() {
         for (int i=0; i<=STAGE_CATCH_SUCCESS_LAST_INDEX; i++) {
-            redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_SKELETONS_PREFIX +i);
+            redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_SKELETON +i);
         }
         redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_INFO_HASH);
     }
