@@ -209,7 +209,7 @@ public class StageRoutineService {
      */
     private int getMvpPlayerNum() {
         float maxSimilarity = -100;  //TODO : 서버측 테스트를 위해 유사도 기본값을 -99보다 작게 함 (추후 -2로 변경)
-        int maxPlayerNum = -1;
+        int maxPlayerNum = 0; //TODO : 테스트가 용이하도록 아무도 플레이 스켈레톤을 전송하지 않으면 playerNum 0 번 유저가 mvp 가 되도록 설정
 
         // 유사도 계산하여 mvp 정하기
         for(int i = 0; i<STAGE_PLAYER_COUNT_VALUE; i++){
