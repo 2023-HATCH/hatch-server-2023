@@ -149,6 +149,7 @@ public class LikeService {
      * @return isLiked
      */
     public boolean isAlreadyLiked(Video video, User user){
+        log.info("isAlreadyLiked");
         return redisCacheUtil.isLiked(video, user);
     }
 

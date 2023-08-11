@@ -88,7 +88,7 @@ public class RedisDao {
      */
     public void setValuesHash(String key, Object hashKey, Object data) {
         HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
-        values.put(key, hashKey, data);
+        values.put(key, String.valueOf(hashKey), data);
     }
 
 
@@ -170,7 +170,7 @@ public class RedisDao {
      */
     public Object getValuesHash(String key, Object hashKey) {
         HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
-        return values.get(key, hashKey);
+        return values.get(key, hashKey); //TODO : String.valueOf(hashKey) 거나 serializer 바꾸거나
     }
 
     /**
@@ -192,10 +192,12 @@ public class RedisDao {
 
     /**
      * 키값에 해당하는 데이터들을 삭제하는 메서드
+     *
      * @param keys
+     * @return
      */
-    public void deleteValues(Collection<String> keys) {
-        redisTemplate.delete(keys);
+    public Long deleteValues(Collection<String> keys) {
+        return redisTemplate.delete(keys);
     }
 
 
