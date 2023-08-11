@@ -45,7 +45,10 @@ public class UserController {
         User user = userUtilService.findOneByUuid(userId);
 
         // 프로필 조회하는 주체가 자기자신의 프로필을 보는지 여부
-        Boolean isMe = loginUser.getUuid().equals(user.getUuid());
+        Boolean isMe = false;
+        if(loginUser != null){
+            isMe = loginUser.getUuid().equals(user.getUuid());
+        }
 
         //팔로워 수, 팔로잉 수
         //TODO: 팔로워, 팔로잉 count를 조회할 때 마다 하는 방식으로 하는데, redis를 쓰던지, db에 저장하던지 다른 방식을 생각해봐야함

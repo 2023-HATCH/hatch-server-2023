@@ -3,3 +3,5 @@
 
 - link:user/page/kakao-login.html[카카오 로그인 & 회원가입, window=_blank]
 
+- link:user/page/get-profile.html[ (NEW) 프로필 조회,window=_blank]
+

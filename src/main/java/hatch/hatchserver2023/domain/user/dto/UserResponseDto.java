@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -117,6 +118,8 @@ public class UserResponseDto {
         private String twitterId;
         private int followingCount;
         private int followerCount;
+        private ZonedDateTime createdAt;
+        private ZonedDateTime modifiedAt;
 
         public static Profile toDto(User user, Boolean isMe, int followingCount, int followerCount) {
             return Profile.builder()
@@ -130,6 +133,8 @@ public class UserResponseDto {
                     .twitterId(user.getTwitterAccount())
                     .followerCount(followerCount)
                     .followingCount(followingCount)
+                    .createdAt(user.getCreatedAt())
+                    .modifiedAt(user.getModifiedAt())
                     .build();
         }
     }
