@@ -1,13 +1,18 @@
 package hatch.hatchserver2023.domain.user.api;
 
 
+import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
+import hatch.hatchserver2023.domain.video.domain.Video;
+import hatch.hatchserver2023.domain.video.dto.VideoResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,9 +29,11 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserUtilService userUtilService;
+    private final LikeService likeService;
 
-    public UserController(UserUtilService userUtilService) {
+    public UserController(UserUtilService userUtilService, LikeService likeService) {
         this.userUtilService = userUtilService;
+        this.likeService = likeService;
     }
 
 
@@ -40,7 +47,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
     @GetMapping("/profile/{userId}")
     public ResponseEntity<CommonResponse> getProfile(@AuthenticationPrincipal User loginUser,
-                                                     @PathVariable UUID userId) {
+                                                     @PathVariable @NotBlank UUID userId) {
 
         User user = userUtilService.findOneByUuid(userId);
 
@@ -61,6 +68,39 @@ public class UserController {
         ));
     }
 
+
+    //업로드한 영상 목록 조회
+    @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
+    @GetMapping("/videos/{userId}")
+    public ResponseEntity<CommonResponse> getUsersVideoList(@AuthenticationPrincipal User loginUser,
+                                                            @PathVariable @NotBlank UUID userId,
+                                                            Pageable pageable) {
+
+        Slice<Video> videoSlice = userUtilService.getUsersVideoList(userId, pageable);
+
+        //회원: 영상 좋아요 여부 liked 지정
+        if(loginUser != null){
+
+            List<VideoResponseDto.GetVideo> videoList = videoSlice.stream()
+                    .map(video -> VideoResponseDto.GetVideo.toDto(video, likeService.isAlreadyLiked(video, loginUser)))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(CommonResponse.toResponse(
+                    UserStatusCode.GET_USERS_VIDEO_LIST_SUCCESS_FOR_USER,
+                    VideoResponseDto.GetVideoList.toDto(videoList, videoSlice.isLast())
+            ));
+        } else {
+            //비회원: liked는 모두 false
+            List<VideoResponseDto.GetVideo> videoList = videoSlice.stream()
+                    .map(video -> VideoResponseDto.GetVideo.toDto(video, false))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(CommonResponse.toResponse(
+                    UserStatusCode.GET_USERS_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS,
+                    VideoResponseDto.GetVideoList.toDto(videoList, videoSlice.isLast())
+            ));
+        }
+    }
 
     /**
      * 검색 - 계정 검색

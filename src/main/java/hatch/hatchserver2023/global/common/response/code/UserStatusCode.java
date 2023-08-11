@@ -7,8 +7,10 @@ public enum UserStatusCode implements StatusCode {
 
     // 2xx
     KAKAO_LOGIN_SUCCESS(HttpStatus.OK, "2000", "카카오 회원가입 및 로그인 성공"), //200
-    GET_PROFILE_SUCCESS(HttpStatus.OK, "2001", "사용자 프로필 조회 성공"),    //200
-    SEARCH_USERS_SUCCESS(HttpStatus.OK, "2016", "계정 검색 성공"),    //200
+    GET_PROFILE_SUCCESS(HttpStatus.OK, "2011", "사용자 프로필 조회 성공"),    //200
+    GET_USERS_VIDEO_LIST_SUCCESS_FOR_USER(HttpStatus.OK, "2012", "회원: 사용자가 업로드한 영상 목록 조회 성공"),  //200
+    GET_USERS_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS(HttpStatus.OK, "2013", "비회원: 사용자가 업로드한 영상 목록 조회 성공"),  //200
+    SEARCH_USERS_SUCCESS(HttpStatus.OK, "2015", "계정 검색 성공"),    //200
     ADD_FOLLOW_SUCCESS(HttpStatus.OK, "2021", "팔로우 등록 성공"), //200
     DELETE_FOLLOW_SUCCESS(HttpStatus.OK, "2022", "팔로우 삭제 성공"), //200
     GET_FOLLOW_LIST_SUCCESS_FOR_USER(HttpStatus.OK, "2023", "회원: 팔로잉/팔로워 목록 조회 성공"), //200

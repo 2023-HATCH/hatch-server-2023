@@ -4,6 +4,8 @@ import hatch.hatchserver2023.domain.user.domain.Follow;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.repository.FollowRepository;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
+import hatch.hatchserver2023.domain.video.domain.Video;
+import hatch.hatchserver2023.domain.video.repository.VideoRepository;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.UserException;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +27,12 @@ public class UserUtilService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final VideoRepository videoRepository;
 
-    public UserUtilService(UserRepository userRepository, FollowRepository followRepository) {
+    public UserUtilService(UserRepository userRepository, FollowRepository followRepository, VideoRepository videoRepository) {
         this.userRepository = userRepository;
         this.followRepository = followRepository;
+        this.videoRepository = videoRepository;
     }
 
 
@@ -60,6 +64,17 @@ public class UserUtilService {
     public int countFollowing(User fromUser) {
         return followRepository.countByFromUser(fromUser);
     }
+
+
+    //업로드한 영상 목록 조회
+    public Slice<Video> getUsersVideoList(UUID userId, Pageable pageable) {
+        User user = findOneByUuid(userId);
+
+        Slice<Video> videoSlice = videoRepository.findAllByUserId(user, pageable);
+
+        return videoSlice;
+    }
+
 
     /**
      * 계정 검색

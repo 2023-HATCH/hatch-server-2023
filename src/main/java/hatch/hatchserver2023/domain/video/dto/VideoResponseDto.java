@@ -121,16 +121,12 @@ public class VideoResponseDto {
                     .build();
         }
 
-        //인자로 List<Video>를 받고 isLast가 null인 버전
-        public static GetVideoList toDto(List<Video> videoList){
+        //인자로 List<GetVideo>를 받고 isLast도 직접 받음
+        public static GetVideoList toDto(List<GetVideo> videoList, Boolean isLast){
 
-            List<GetVideo> getVideos = new ArrayList<>();
-
-            for(Video video : videoList) {
-                getVideos.add(GetVideo.toDto(video));
-            }
             return GetVideoList.builder()
-                    .videoList(getVideos)
+                    .videoList(videoList)
+                    .isLast(isLast)
                     .build();
         }
     }
