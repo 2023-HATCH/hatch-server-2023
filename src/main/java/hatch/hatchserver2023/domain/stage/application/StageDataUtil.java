@@ -198,4 +198,28 @@ public class StageDataUtil { //public 이 상수KEY는 다른 곳에서 한번�
         }
         return music;
     }
+
+
+
+    ///////////////// 개발용 ////////////////////
+
+    /**
+     * 개발용 스테이지 데이터 초기화 메서드
+     */
+    public void initStage() {
+        redisDao.deleteValues(StageDataUtil.KEY_STAGE_STATUS); // 스테이지 상태
+        redisDao.deleteValues(StageDataUtil.KEY_STAGE_STATUS_START_TIME); // 스테이지 상태
+
+        redisDao.deleteValues(StageDataUtil.KEY_STAGE_ENTER_USER_LIST); // 스테이지 입장자
+        redisDao.deleteValues(StageDataUtil.KEY_STAGE_ENTER_USER_COUNT); // 스테이지 입장자 수
+
+        redisDao.deleteValues(StageDataUtil.KEY_STAGE_MUSIC); // 캐치 음악
+        redisDao.deleteValues(StageDataUtil.KEY_STAGE_CATCH_USER_LIST); // 캐치 사용자
+
+        //플레이 스켈레톤 데이터 초기화
+        for (int i=0; i<=StageRoutineService.STAGE_CATCH_SUCCESS_LAST_INDEX; i++) {
+            redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_SKELETON +i);
+        }
+        redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_INFO_HASH); // 플레이어 데이터
+    }
 }

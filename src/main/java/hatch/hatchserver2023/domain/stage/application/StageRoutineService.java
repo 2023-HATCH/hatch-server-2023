@@ -35,7 +35,7 @@ public class StageRoutineService {
     private static final int STAGE_CATCH_TIME = 3;
     private static final int STAGE_CATCH_AGAIN_INTERVAL = 2;
     private static final int STAGE_MVP_TIME = 7;
-    private static final int STAGE_CATCH_SUCCESS_LAST_INDEX = 2;
+    public static final int STAGE_CATCH_SUCCESS_LAST_INDEX = 2;
 
     private final UserRepository userRepository;
     private final MusicRepository musicRepository;
