@@ -102,6 +102,38 @@ public class UserResponseDto {
         }
     }
 
+    //프로필 조회
+    @ToString
+    @Getter
+    @Builder
+    public static class Profile {
+        private UUID userId;
+        private Boolean isMe;   //자기자신 프로필 조회 여부
+        private String nickname;
+        private String email;
+        private String profileImg;
+        private String introduce;
+        private String instagramId;
+        private String twitterId;
+        private int followingCount;
+        private int followerCount;
+
+        public static Profile toDto(User user, Boolean isMe, int followingCount, int followerCount) {
+            return Profile.builder()
+                    .userId(user.getUuid())
+                    .isMe(isMe)
+                    .nickname(user.getNickname())
+                    .email(user.getEmail())
+                    .profileImg(user.getProfileImg())
+                    .introduce(user.getIntroduce())
+                    .instagramId(user.getInstagramAccount())
+                    .twitterId(user.getTwitterAccount())
+                    .followerCount(followerCount)
+                    .followingCount(followingCount)
+                    .build();
+        }
+    }
+
 
     @ToString
     @Getter

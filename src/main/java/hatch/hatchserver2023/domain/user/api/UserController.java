@@ -31,6 +31,35 @@ public class UserController {
 
 
     /**
+     * 프로필 조회
+     *
+      * @param loginUser
+     * @param userId
+     * @return user_profile
+     */
+    @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<CommonResponse> getProfile(@AuthenticationPrincipal User loginUser,
+                                                     @PathVariable UUID userId) {
+
+        User user = userUtilService.findOneByUuid(userId);
+
+        // 프로필 조회하는 주체가 자기자신의 프로필을 보는지 여부
+        Boolean isMe = loginUser.getUuid().equals(user.getUuid());
+
+        //팔로워 수, 팔로잉 수
+        //TODO: 팔로워, 팔로잉 count를 조회할 때 마다 하는 방식으로 하는데, redis를 쓰던지, db에 저장하던지 다른 방식을 생각해봐야함
+        int followerCount = userUtilService.countFollower(user);
+        int followingCount = userUtilService.countFollowing(user);
+
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                UserStatusCode.GET_PROFILE_SUCCESS,
+                UserResponseDto.Profile.toDto(user, isMe, followingCount, followerCount)
+        ));
+    }
+
+
+    /**
      * 검색 - 계정 검색
      * -닉네임 1순위, 이메일 2순위로 검색
      *

@@ -49,6 +49,15 @@ public class UserUtilService {
         return user;
     }
 
+    //팔로워 수 세기
+    public int countFollower(User toUser) {
+        return followRepository.countByToUser(toUser);
+    }
+
+    //팔로잉 수 세기
+    public int countFollowing(User fromUser) {
+        return followRepository.countByFromUser(fromUser);
+    }
 
     /**
      * 계정 검색
