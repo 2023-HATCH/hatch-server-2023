@@ -4,10 +4,10 @@
 - link:video/page/get-video-detail.html[영상 상세 조회, window=_blank]
 
 
-- link:video/page/get-video-list-by-created-at.html[홈 영상 목록 조회 - 최신순, window=_blank]
+- link:video/page/get-video-list-by-created-at.html[ (가독성 향상) 홈 영상 목록 조회 - 최신순, window=_blank]
 
 
-- link:video/page/get-video-list-by-random.html[랜덤 영상 목록 조회 (검색 화면), window=_blank]
+- link:video/page/get-video-list-by-random.html[ (가독성 향상) 랜덤 영상 목록 조회 (검색 화면), window=_blank]
 
 
 - link:video/page/delete-video.html[영상 삭제, window=_blank]
