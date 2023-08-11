@@ -1,8 +1,10 @@
 package hatch.hatchserver2023.domain.user.api;
 
 
+import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
@@ -16,7 +18,10 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -68,6 +73,9 @@ public class UserControllerTest {
 
     @MockBean
     UserUtilService userUtilService;
+
+    @MockBean
+    LikeService likeService;
 
     private User user1;
     private User user2;
@@ -185,6 +193,115 @@ public class UserControllerTest {
                         )
                 )
         ;
+    }
+
+    @Test
+    @DisplayName("Get User's Uploaded Video List")
+    void getUsersVideoList() throws Exception {
+        //given
+        Video video1 = Video.builder()
+                .id(999L)
+                .uuid(UUID.randomUUID())
+                .title("타이틀 1")
+                .tag("#해시 #태그")
+                .userId(user1)
+                .videoUrl("동영상 s3 경로 1")
+                .thumbnailUrl("썸네일 이미지 s3 경로 1")
+                .likeCount(3)
+                .commentCount(11)
+                .length(107800)
+                .build();
+
+        Video video2 = Video.builder()
+                .id(998L)
+                .uuid(UUID.randomUUID())
+                .title("타이틀 2")
+                .tag("#해시 #태그 #2")
+                .userId(user1)
+                .videoUrl("동영상 s3 경로 2")
+                .thumbnailUrl("썸네일 이미지 s3 경로 2")
+                .likeCount(5)
+                .commentCount(2)
+                .length(9999)
+                .build();
+
+        List<Video> videoList = Arrays.asList(video1, video2);
+        Slice<Video> slice = new SliceImpl<>(videoList, PageRequest.of(0, 2), false);
+
+        given(userUtilService.getUsersVideoList(eq(user1.getUuid()), any(Pageable.class)))
+                .willReturn(slice);
+
+        //when
+        StatusCode code = UserStatusCode.GET_USERS_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS;
+
+        MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
+                .get("/api/v1/users/videos/{userId}", user1.getUuid())
+                .param("page", "0")
+                .param("size", "2");
+
+        //then
+        ResultActions resultActions = mockMvc.perform(requestGet);
+
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(code.getCode()))
+                .andExpect(jsonPath("$.message").value(code.getMessage()))
+                .andExpect(jsonPath("$.data.videoList[0].uuid").value(video1.getUuid().toString()))
+                .andExpect(jsonPath("$.data.videoList[1].uuid").value(video2.getUuid().toString()))
+                .andExpect(jsonPath("$.data.videoList[0].title").value(video1.getTitle()))
+                .andExpect(jsonPath("$.data.videoList[1].title").value(video2.getTitle()))
+                .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUserId().getUuid().toString()))
+                .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUserId().getUuid().toString()))
+        ;
+
+        resultActions
+                .andDo( //rest docs 문서 작성 시작
+                        docs.document(
+                                requestHeaders(
+                                        headerWithName("headerXAccessToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n\n liked의 차이").optional(),
+                                        headerWithName("headerXRefreshToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n\n liked의 차이").optional()
+                                ),
+                                requestParameters(
+                                        parameterWithName("page").description("페이지 번호(0부터 시작)"),
+                                        parameterWithName("size").description("페이지 크기")
+                                ),
+                                responseFields(
+                                        beneathPath("data.videoList").withSubsectionId("beneath-data-video-list"),
+                                        fieldWithPath("uuid").type(JsonFieldType.STRING).description("생성된 동영상 식별자 UUID"),
+                                        fieldWithPath("title").type(JsonFieldType.STRING).description("영상 제목"),
+                                        fieldWithPath("tag").type(JsonFieldType.STRING).description("해시태그"),
+                                        fieldWithPath("user.userId").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
+                                        fieldWithPath("user.email").type(JsonFieldType.STRING).description("사용자 이메일"),
+                                        fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
+                                        fieldWithPath("user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 경로"),
+                                        fieldWithPath("videoUrl").type(JsonFieldType.STRING).description("동영상 S3 경로"),
+                                        fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 이미지 S3 경로"),
+                                        fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
+                                        fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 개수"),
+                                        fieldWithPath("length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이"),
+                                        fieldWithPath("createdAt").type("DateTime").description("생성 시각"),
+                                        fieldWithPath("liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부")
+                                ),
+                                responseFields(
+                                        beneathPath("data"),
+                                        fieldWithPath("isLast").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"),
+                                        fieldWithPath("videoList.[].uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID").ignored(),
+                                        fieldWithPath("videoList.[].title").type(JsonFieldType.STRING).description("영상 제목").ignored(),
+                                        fieldWithPath("videoList.[].tag").type(JsonFieldType.STRING).description("해시태그").ignored(),
+                                        fieldWithPath("videoList.[].user.userId").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid").ignored(),
+                                        fieldWithPath("videoList.[].user.email").type(JsonFieldType.STRING).description("사용자 이메일").ignored(),
+                                        fieldWithPath("videoList.[].user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임").ignored(),
+                                        fieldWithPath("videoList.[].user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 S3 경로").ignored(),
+                                        fieldWithPath("videoList.[].videoUrl").type(JsonFieldType.STRING).description("동영상 S3 경로").ignored(),
+                                        fieldWithPath("videoList.[].thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 이미지 S3 경로").ignored(),
+                                        fieldWithPath("videoList.[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수").ignored(),
+                                        fieldWithPath("videoList.[].commentCount").type(JsonFieldType.NUMBER).description("댓글 개수").ignored(),
+                                        fieldWithPath("videoList.[].length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이").ignored(),
+                                        fieldWithPath("videoList.[].createdAt").type("DateTime").description("생성 시각").ignored(),
+                                        fieldWithPath("videoList.[].liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부").ignored()
+                                )
+                        )
+                );
     }
 
     @Test
