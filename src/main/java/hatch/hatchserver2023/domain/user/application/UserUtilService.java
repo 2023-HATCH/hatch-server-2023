@@ -8,6 +8,8 @@ import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.UserException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -67,6 +69,7 @@ public class UserUtilService {
      * @param pageable
      * @return
      */
+    //TODO: pageable 적용 안해놓음. 명세서에도 안적어놓음
     public List<User> searchUsers(String key, Pageable pageable) {
 
         //닉네임으로 검색

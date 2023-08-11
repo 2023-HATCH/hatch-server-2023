@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -31,15 +32,19 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -179,5 +184,55 @@ public class UserControllerTest {
         ;
     }
 
+    @Test
+    @DisplayName("Search Users")
+    void searchUser() throws Exception {
+        //given
+        String key = "user";
+        List<User> userList = Arrays.asList(user1, user2, user3);
+
+        given(userUtilService.searchUsers(eq(key), any(Pageable.class)))
+                .willReturn(userList);
+
+        //when
+        StatusCode code = UserStatusCode.SEARCH_USERS_SUCCESS;
+
+        MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders
+                .get("/api/v1/users/search")
+                .param("key", key);
+
+        //then
+        ResultActions resultActions = mockMvc.perform(requestGet);
+
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(code.getCode()))
+                .andExpect(jsonPath("$.message").value(code.getMessage()))
+                .andExpect(jsonPath("$.data.userList[0].userId").value(user1.getUuid().toString()))
+                .andExpect(jsonPath("$.data.userList[1].userId").value(user2.getUuid().toString()))
+                .andExpect(jsonPath("$.data.userList[2].userId").value(user3.getUuid().toString()))
+                .andExpect(jsonPath("$.data.userList[0].nickname").value(user1.getNickname()))
+                .andExpect(jsonPath("$.data.userList[1].nickname").value(user2.getNickname()))
+                .andExpect(jsonPath("$.data.userList[2].nickname").value(user3.getNickname()))
+        ;
+
+        resultActions
+                .andDo( //rest docs 문서 작성 시작
+                        docs.document(
+                                requestParameters(
+                                        parameterWithName("key").description("검색어 (대소문자 구별 X, 한글 가능)")
+                                ),
+                                responseFields(
+                                        beneathPath("data.userList").withSubsectionId("beneath-data-user-list"),
+                                        fieldWithPath("userId").type(JsonFieldType.STRING).description("사용자 식별자 UUID"),
+                                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                                        fieldWithPath("profileImg").type(JsonFieldType.STRING).description("프로필 이미지 경로")
+                                )
+                        )
+                );
+
 
     }
+
+}

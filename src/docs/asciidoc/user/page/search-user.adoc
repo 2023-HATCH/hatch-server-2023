@@ -1,0 +1,7 @@
+== 계정 검색
+
+- 검색은 닉네임 1순위, 이메일 2순위
+- 대소문자 구별 X
+- 한글 가능
+
+operation::search-user[snippets='http-request,request-parameters,response-fields-beneath-data-user-list,http-response']

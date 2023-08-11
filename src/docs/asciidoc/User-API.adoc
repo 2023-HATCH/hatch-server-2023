@@ -5,3 +5,5 @@
 
 - link:user/page/get-profile.html[ (NEW) 프로필 조회,window=_blank]
 
+- link:user/page/search-user.html[ (NEW) 계정 검색,window=_blank]
+
