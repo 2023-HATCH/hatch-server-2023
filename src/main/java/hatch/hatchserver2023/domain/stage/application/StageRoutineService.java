@@ -208,31 +208,33 @@ public class StageRoutineService {
      * @return
      */
     private int getMvpPlayerNum() {
-        float maxSimilarity = -2;
+        float maxSimilarity = -100;  //TODO : 서버측 테스트를 위해 유사도 기본값을 -99보다 작게 함 (추후 -2로 변경)
         int maxPlayerNum = -1;
 
         // 유사도 계산하여 mvp 정하기
         for(int i = 0; i<STAGE_PLAYER_COUNT_VALUE; i++){
             // redis 에 저장해둔 스켈레톤 가져옴
             Set<String> skeletonStringSet = redisDao.getValuesZSetAll(StageDataUtil.KEY_STAGE_PLAYER_SKELETONS_PREFIX +i);
-            if(skeletonStringSet==null) { // 이 유저의 스켈레톤이 비어있을 경우
+            if(skeletonStringSet==null || skeletonStringSet.isEmpty()) { // 이 유저의 스켈레톤이 비어있을 경우
                 continue;
             }
 
             // 원래 자료형으로 형변환
             Float[][] skeletonFloatArray = skeletonToFloatArrays(skeletonStringSet);
-//            log.info("endPlay skeletonFloatArray : {}", skeletonFloatArray);
+            log.info("endPlay skeletonFloatArray size : {}", skeletonFloatArray.length);
+            log.info("endPlay skeletonFloatArray : {}", skeletonFloatArray);
 //            log.info("endPlay skeletonFloatArray[0] : {}", skeletonFloatArray[0]);
 //            log.info("endPlay skeletonFloatArray[0][0] : {}", skeletonFloatArray[0][0]);
 //            log.info("endPlay skeletonFloatArray[0][0] : {}", skeletonFloatArray[1][0]);
 
             String title = stageDataUtil.getStageMusic().getTitle();
-            // 유사도 계산 TODO : 테스트 못해봄
-//            float similarity;
-            float similarity=0f;
+            // 유사도 계산
+            float similarity;
+//            float similarity=0f;
             try{
-//                similarity = aiService.calculateSimilarity(title, skeletonFloatArray); //TODO
-//                log.info("endPlay music {} user {} similarity : {}", title, i, similarity);
+                similarity = aiService.calculateSimilarity(title, skeletonFloatArray); //TODO
+                log.info("endPlay skeletonFloatArray size 2 : {}", skeletonFloatArray.length);
+                log.info("endPlay music {} playerNum {} similarity : {}", title, i, similarity);
             }catch (NullPointerException e) {
                 throw new StageException(StageStatusCode.MUSIC_NOT_FOUND);
             }
@@ -273,7 +275,7 @@ public class StageRoutineService {
         }
 
         // List<List<Float>> -> Float[][] 로 형변환
-        return floatArrays.toArray(new Float[0][]);
+        return floatArrays.toArray(new Float[0][0]);
     }
 
     /**

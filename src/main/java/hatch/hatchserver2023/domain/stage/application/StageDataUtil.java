@@ -27,7 +27,7 @@ public class StageDataUtil { //public 이 상수KEY는 다른 곳에서 한번�
     public static final String KEY_STAGE_CATCH_USER_LIST = "STAGE_CATCH_USER_LIST";
 
     public static final String KEY_STAGE_PLAYER_INFO_HASH = "STAGE_PLAYER_INFO_HASH";
-    public static final String KEY_STAGE_PLAYER_SKELETONS_PREFIX = "STAGE_PLAYER_SKELETONS_PREFIX";
+    public static final String KEY_STAGE_PLAYER_SKELETONS_PREFIX = "STAGE_PLAYER_SKELETONS_";
 
     private final RedisDao redisDao;
 

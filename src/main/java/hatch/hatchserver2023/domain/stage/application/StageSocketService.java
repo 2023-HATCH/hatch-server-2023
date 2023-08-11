@@ -31,9 +31,10 @@ public class StageSocketService {
             throw new StageException(StageStatusCode.STAGE_STATUS_NOT_PLAY);
         }
 
-        String setName = StageDataUtil.KEY_STAGE_PLAYER_SKELETONS_PREFIX +dto.getPlayerNum();
+        String setName = StageDataUtil.KEY_STAGE_PLAYER_SKELETONS_PREFIX + dto.getPlayerNum();
         String floatArrayString = Arrays.toString(dto.getSkeleton().toAIFloatArray());
 //        log.info("savePlaySkeleton floatArrayString : {}", floatArrayString);
+        log.info("savePlaySkeleton save frameNum : {}", dto.getFrameNum());
         redisDao.setValuesZSet(setName, floatArrayString, dto.getFrameNum());
 
     }
