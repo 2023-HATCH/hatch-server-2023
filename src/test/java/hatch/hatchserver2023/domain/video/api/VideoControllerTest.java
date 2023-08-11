@@ -310,35 +310,50 @@ public class VideoControllerTest {
 
                 resultActions
                         .andDo( //rest docs 문서 작성 시작
-                                docs.document(    //문서 조각 디렉토리 명
+                                docs.document(
                                         requestHeaders(
-                                                headerWithName("headerXAccessToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n liked의 차이").optional(),
-                                                headerWithName("headerXRefreshToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n liked의 차이").optional()
+                                                headerWithName("headerXAccessToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n\n liked의 차이").optional(),
+                                                headerWithName("headerXRefreshToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n\n liked의 차이").optional()
                                         ),
                                         requestParameters(
                                                 parameterWithName("page").description("페이지 번호(0부터 시작)"),
                                                 parameterWithName("size").description("페이지 크기")
                                         ),
-                                        //TODO: responseFields 두 개를 쓰면 바로 에러가 나는데... 이 출력이 최선이냐?
+                                        responseFields(
+                                                beneathPath("data.videoList").withSubsectionId("beneath-data-video-list"),
+                                                fieldWithPath("uuid").type(JsonFieldType.STRING).description("생성된 동영상 식별자 UUID"),
+                                                fieldWithPath("title").type(JsonFieldType.STRING).description("영상 제목"),
+                                                fieldWithPath("tag").type(JsonFieldType.STRING).description("해시태그"),
+                                                fieldWithPath("user.userId").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
+                                                fieldWithPath("user.email").type(JsonFieldType.STRING).description("사용자 이메일"),
+                                                fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
+                                                fieldWithPath("user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 경로"),
+                                                fieldWithPath("videoUrl").type(JsonFieldType.STRING).description("동영상 S3 경로"),
+                                                fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 이미지 S3 경로"),
+                                                fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
+                                                fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 개수"),
+                                                fieldWithPath("length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이"),
+                                                fieldWithPath("createdAt").type("DateTime").description("생성 시각"),
+                                                fieldWithPath("liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부")
+                                        ),
                                         responseFields(
                                                 beneathPath("data"),
                                                 fieldWithPath("isLast").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"),
-                                                fieldWithPath("videoList.[].uuid").type(JsonFieldType.STRING).description("생성된 동영상 식별자 UUID"),
-                                                fieldWithPath("videoList.[].title").type(JsonFieldType.STRING).description("영상 제목"),
-                                                fieldWithPath("videoList.[].tag").type(JsonFieldType.STRING).description("해시태그"),
-                                                fieldWithPath("videoList.[].user.userId").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
-                                                fieldWithPath("videoList.[].user.email").type(JsonFieldType.STRING).description("사용자 이메일"),
-                                                fieldWithPath("videoList.[].user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
-                                                fieldWithPath("videoList.[].user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 S3 경로"),
-                                                fieldWithPath("videoList.[].videoUrl").type(JsonFieldType.STRING).description("동영상 S3 경로"),
-                                                fieldWithPath("videoList.[].thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 이미지 S3 경로"),
-                                                fieldWithPath("videoList.[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
-                                                fieldWithPath("videoList.[].commentCount").type(JsonFieldType.NUMBER).description("댓글 개수"),
-                                                fieldWithPath("videoList.[].length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이"),
-                                                fieldWithPath("videoList.[].createdAt").type("DateTime").description("생성 시각"),
+                                                fieldWithPath("videoList.[].uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID").ignored(),
+                                                fieldWithPath("videoList.[].title").type(JsonFieldType.STRING).description("영상 제목").ignored(),
+                                                fieldWithPath("videoList.[].tag").type(JsonFieldType.STRING).description("해시태그").ignored(),
+                                                fieldWithPath("videoList.[].user.userId").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid").ignored(),
+                                                fieldWithPath("videoList.[].user.email").type(JsonFieldType.STRING).description("사용자 이메일").ignored(),
+                                                fieldWithPath("videoList.[].user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임").ignored(),
+                                                fieldWithPath("videoList.[].user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 S3 경로").ignored(),
+                                                fieldWithPath("videoList.[].videoUrl").type(JsonFieldType.STRING).description("동영상 S3 경로").ignored(),
+                                                fieldWithPath("videoList.[].thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 이미지 S3 경로").ignored(),
+                                                fieldWithPath("videoList.[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수").ignored(),
+                                                fieldWithPath("videoList.[].commentCount").type(JsonFieldType.NUMBER).description("댓글 개수").ignored(),
+                                                fieldWithPath("videoList.[].length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이").ignored(),
+                                                fieldWithPath("videoList.[].createdAt").type("DateTime").description("생성 시각").ignored(),
                                                 fieldWithPath("videoList.[].liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부").ignored()
                                         )
-
                                 )
                         );
             }
@@ -381,38 +396,52 @@ public class VideoControllerTest {
 
                 resultActions
                         .andDo( //rest docs 문서 작성 시작
-                                docs.document(    //문서 조각 디렉토리 명
+                                docs.document(
                                         requestHeaders(
-                                                headerWithName("headerXAccessToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n liked의 차이").optional(),
-                                                headerWithName("headerXRefreshToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n liked의 차이").optional()
+                                                headerWithName("headerXAccessToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n\n liked의 차이").optional(),
+                                                headerWithName("headerXRefreshToken").description("로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.\n\n liked의 차이").optional()
                                         ),
                                         requestParameters(
                                                 parameterWithName("page").description("페이지 번호(0부터 시작)"),
                                                 parameterWithName("size").description("페이지 크기")
                                         ),
-                                        //TODO: responseFields 두 개를 쓰면 바로 에러가 나는데... 이 출력이 최선이냐?
+                                        responseFields(
+                                                beneathPath("data.videoList").withSubsectionId("beneath-data-video-list"),
+                                                fieldWithPath("uuid").type(JsonFieldType.STRING).description("생성된 동영상 식별자 UUID"),
+                                                fieldWithPath("title").type(JsonFieldType.STRING).description("영상 제목"),
+                                                fieldWithPath("tag").type(JsonFieldType.STRING).description("해시태그"),
+                                                fieldWithPath("user.userId").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
+                                                fieldWithPath("user.email").type(JsonFieldType.STRING).description("사용자 이메일"),
+                                                fieldWithPath("user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
+                                                fieldWithPath("user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 경로"),
+                                                fieldWithPath("videoUrl").type(JsonFieldType.STRING).description("동영상 S3 경로"),
+                                                fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 이미지 S3 경로"),
+                                                fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
+                                                fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 개수"),
+                                                fieldWithPath("length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이"),
+                                                fieldWithPath("createdAt").type("DateTime").description("생성 시각"),
+                                                fieldWithPath("liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부")
+                                        ),
                                         responseFields(
                                                 beneathPath("data"),
                                                 fieldWithPath("isLast").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"),
-                                                fieldWithPath("videoList.[].uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID"),
-                                                fieldWithPath("videoList.[].title").type(JsonFieldType.STRING).description("영상 제목"),
-                                                fieldWithPath("videoList.[].tag").type(JsonFieldType.STRING).description("해시태그"),
-                                                fieldWithPath("videoList.[].user.userId").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid"),
-                                                fieldWithPath("videoList.[].user.email").type(JsonFieldType.STRING).description("사용자 이메일"),
-                                                fieldWithPath("videoList.[].user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
-                                                fieldWithPath("videoList.[].user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 S3 경로"),
-                                                fieldWithPath("videoList.[].videoUrl").type(JsonFieldType.STRING).description("동영상 S3 경로"),
-                                                fieldWithPath("videoList.[].thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 이미지 S3 경로"),
-                                                fieldWithPath("videoList.[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
-                                                fieldWithPath("videoList.[].commentCount").type(JsonFieldType.NUMBER).description("댓글 개수"),
-                                                fieldWithPath("videoList.[].length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이"),
-                                                fieldWithPath("videoList.[].createdAt").type("DateTime").description("생성 시각"),
+                                                fieldWithPath("videoList.[].uuid").type(JsonFieldType.STRING).description("동영상 식별자 UUID").ignored(),
+                                                fieldWithPath("videoList.[].title").type(JsonFieldType.STRING).description("영상 제목").ignored(),
+                                                fieldWithPath("videoList.[].tag").type(JsonFieldType.STRING).description("해시태그").ignored(),
+                                                fieldWithPath("videoList.[].user.userId").type(JsonFieldType.STRING).description("작성 사용자 식별자 uuid").ignored(),
+                                                fieldWithPath("videoList.[].user.email").type(JsonFieldType.STRING).description("사용자 이메일").ignored(),
+                                                fieldWithPath("videoList.[].user.nickname").type(JsonFieldType.STRING).description("사용자 닉네임").ignored(),
+                                                fieldWithPath("videoList.[].user.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 S3 경로").ignored(),
+                                                fieldWithPath("videoList.[].videoUrl").type(JsonFieldType.STRING).description("동영상 S3 경로").ignored(),
+                                                fieldWithPath("videoList.[].thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 이미지 S3 경로").ignored(),
+                                                fieldWithPath("videoList.[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수").ignored(),
+                                                fieldWithPath("videoList.[].commentCount").type(JsonFieldType.NUMBER).description("댓글 개수").ignored(),
+                                                fieldWithPath("videoList.[].length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이").ignored(),
+                                                fieldWithPath("videoList.[].createdAt").type("DateTime").description("생성 시각").ignored(),
                                                 fieldWithPath("videoList.[].liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부").ignored()
                                         )
-
                                 )
                         );
-
             }
 
 
