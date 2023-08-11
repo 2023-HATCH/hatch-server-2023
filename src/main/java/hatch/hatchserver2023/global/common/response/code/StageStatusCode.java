@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 public enum StageStatusCode implements StatusCode {
     // 2xx
     GET_STAGE_ENTER_SUCCESS(HttpStatus.OK, "2001", "스테이지 입장 성공"), //200
-    GET_STAGE_EXIT_SUCCESS(HttpStatus.OK, "2002", "스테이지 퇴장 성공"), //200 // TODO : 삭제 예정
     GET_STAGE_ENTER_USER_LIST_SUCCESS(HttpStatus.OK, "2003", "스테이지 내 사용자 목록 조회 성공"), //200
     GET_CATCH_SUCCESS(HttpStatus.OK, "2004", "캐치 요청 성공"), //200
 
