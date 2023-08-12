@@ -1,5 +1,6 @@
 package hatch.hatchserver2023.domain.stage.dto;
 
+import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import lombok.Builder;
@@ -22,14 +23,24 @@ public class StageSocketResponseDto {
     @ToString
     @Getter
     @Builder
+    public static class CatchStart {
+        private MusicResponseDto.BasicInfo music;
+
+        public static CatchStart toDto(Music music) {
+            return CatchStart.builder()
+                    .music(MusicResponseDto.BasicInfo.toDto(music))
+                    .build();
+        }
+    }
+    @ToString
+    @Getter
+    @Builder
     public static class CatchEnd {
         private List<Player> players;
-        private Object music; // TODO
 
-        public static CatchEnd toDto(List<Player> players, Object music) {
+        public static CatchEnd toDto(List<Player> players) {
             return CatchEnd.builder()
                     .players(players)
-                    .music(music)
                     .build();
         }
     }

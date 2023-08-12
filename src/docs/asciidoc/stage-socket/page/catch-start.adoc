@@ -19,10 +19,34 @@
 |`+String+`
 |true
 |소켓 통신 유형 설명
-|`+data.+`
+|`+data.music+`
 |`+-+`
 |true
-|개발중
+|스테이지 현재 음악 정보
+|`+data.music.musicId+`
+|`+UUID+`
+|true
+|음악 식별자
+|`+data.music.title+`
+|`+UUID+`
+|true
+|음악 제목
+|`+data.music.singer+`
+|`+UUID+`
+|true
+|음악 가수
+|`+data.music.length+`
+|`+UUID+`
+|true
+|음악 길이
+|`+data.music.musicUrl+`
+|`+UUID+`
+|true
+|음악 파일 url
+|`+data.music.concept+`
+|`+UUID+`
+|true
+|음악 컨셉
 |===
 
 
@@ -30,17 +54,26 @@
 [source,http,options="nowrap"]
 ----
 $ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length:114
-message-id:c7b84486-b761-c839-8f41-998629713a8b-2
+content-length:351
+message-id:b86bf8d0-1115-3a73-e3f9-b257c16d0c9b-56
 subscription:sub-0
 content-type:application/json
 destination:/topic/stage
-content-length:114
+content-length:351
 
 {
-    "timeStamp":"2023/07/26 23:29:40",
+    "timeStamp":"2023/08/08 23:47:32",
     "type":"CATCH_START",
     "message":"스테이지 캐치 시작",
-    "data":"개발중"
+    "data":{
+        "music":{
+            "musicId":"684b8052-b31d-421f-b1d8-9e8e72f287e9",
+            "title":"꿈빛 파티시엘",
+            "singer":"IU",
+            "length":28029,
+            "musicUrl":"https://d3fewllpeh9agi.cloudfront.net/music/M1-2.mp3",
+            "concept":"\uD83D\uDC97추억의 댄스 챌린지\uD83D\uDC97"
+        }
+    }
 }
 ----

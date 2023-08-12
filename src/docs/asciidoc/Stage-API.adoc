@@ -1,11 +1,11 @@
 // 도메인 명 : h1
 == *Stage*
 
-- link:stage/page/enter-stage.html[스테이지 입장, window=_blank]
+- link:stage/page/enter-stage.html[UPDATE 스테이지 입장, window=_blank]
 
 - link:stage/page/get-stage-enter-users.html[스테이지 입장 사용자 목록 조회, window=_blank]
 
 - link:stage/page/register-catch.html[캐치 등록, window=_blank]
 
-- link:stage/page/exit-stage.html[스테이지 퇴장, window=_blank]
+- link:stage/page/exit-stage.html[DON'T USE 스테이지 퇴장, window=_blank]
 

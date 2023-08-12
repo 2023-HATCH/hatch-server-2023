@@ -97,7 +97,17 @@ public class Video extends BaseTimeEntity {
     /**
      * 좋아요 수 증가
      */
-    public void addLikeCount() { this.likeCount += 1; }
+    public void increaseLikeCount() { this.likeCount += 1; }
+
+    /**
+     * 좋아요 수 감소
+     */
+    public void decreaseLikeCount() { this.likeCount -= 1; }
+
+    /**
+     * 좋아요 수 수정
+     */
+    public void updateLikeCount(int likeCount) { this.likeCount = likeCount; }
 
     /**
      * 댓글 수 증가

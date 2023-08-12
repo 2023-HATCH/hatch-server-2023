@@ -1,6 +1,8 @@
 package hatch.hatchserver2023.domain.stage.application;
 
+import hatch.hatchserver2023.domain.stage.StageModel;
 import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
+import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.StageException;
@@ -18,14 +20,16 @@ import java.util.stream.Collectors;
 public class StageService {
 
     private final StageRoutineService stageRoutineService;
+    private final StageDataUtil stageDataUtil;
 
     private final RedisDao redisDao;
 
     private final StageSocketResponser stageSocketResponser;
 
-    public StageService(RedisDao redisDao, StageRoutineService stageRoutineService, StageSocketResponser stageSocketResponser) {
+    public StageService(RedisDao redisDao, StageRoutineService stageRoutineService, StageDataUtil stageDataUtil, StageSocketResponser stageSocketResponser) {
         this.redisDao = redisDao;
         this.stageRoutineService = stageRoutineService;
+        this.stageDataUtil = stageDataUtil;
         this.stageSocketResponser = stageSocketResponser;
     }
 
@@ -39,7 +43,7 @@ public class StageService {
     public int addStageUser(User user) {
         log.info("[SERVICE] addAndGetStageUserCount");
 
-//        if(isExistUser(user)){
+//        if(stageDataService.isStageExistUser(user.getId())){
 //            throw new StageException(StageStatusCode.ALREADY_ENTERED_USER);
 //        }
 
@@ -54,14 +58,36 @@ public class StageService {
 
     private int addStageData(User user) {
         // 인원수 increase
-        int increasedCount = stageRoutineService.getStageUserCount() + 1;
-        redisDao.setValues(StageRoutineService.KEY_STAGE_ENTER_USER_COUNT, String.valueOf(increasedCount));
+        int increasedCount = stageDataUtil.getStageEnterUserCount() + 1;
+        stageDataUtil.setStageEnterUserCount(increasedCount);
         log.info("[SERVICE] increasedCount : {}", increasedCount);
 
         // redis 입장 목록에 입장한 사용자 PK 추가
-        redisDao.setValuesSet(StageRoutineService.KEY_STAGE_ENTER_USER_LIST, user.getId().toString());
+        stageDataUtil.addStageEnterUserSet(user.getId());
         return increasedCount;
     }
+
+    /**
+     * 스테이지 진행 상태 확인 로직
+     * @return
+     */
+    public StageModel.StageInfo getStageInfo() {
+        log.info("[SERVICE] getStageInfo");
+        String status = stageDataUtil.getStageStatus();
+
+        Long statusStartTime = stageDataUtil.getStageStatusStartTime(status);
+//        Long statusElapsedTime = null;
+//        if(statusStartTime != null) {
+//            statusElapsedTime = System.nanoTime() - statusStartTime;
+//        }
+        Long statusElapsedTime = (statusStartTime!=null) ? System.nanoTime() - statusStartTime : null; // 위에 주석이랑 같은 기능 코드
+
+        //음악 정보
+        Music music = stageDataUtil.getStageMusic();
+
+        return StageModel.StageInfo.toModel(status, statusElapsedTime, music);
+    }
+
 
     /**
      * 스테이지 입장 로직 2 : 중복 입장 불가. 8/9 이후 이걸로 변경
@@ -73,7 +99,7 @@ public class StageService {
 //
 //        int userCount = stageRoutineService.getStageUserCount();
 //
-//        if(isExistUser(user)){
+//        if(stageDataService.isStageExistUser(user.getId())){
 ////            throw new StageException(StageStatusCode.ALREADY_ENTERED_USER);
 //            log.info("already entered user in stage");
 //        }
@@ -91,7 +117,7 @@ public class StageService {
 
     // TODO : 스테이지가 진행 도중 멈춰버렸을 때 (왜?) 새로 누군가 입장 시 스테이지 처음부터 새로 run시키기.. how? 상태값이 아니면 진행중(Thread.sleep)인지 아닌지 어떻게 알지... 스레드..?
     private void runStageRoutine(int increasedCount) {
-        String stageStatus = getStageStatus();
+        String stageStatus = stageDataUtil.getStageStatus();
         switch (stageStatus) {
             case StageRoutineService.STAGE_STATUS_WAIT:
                 log.info("stage status : wait ");
@@ -111,20 +137,6 @@ public class StageService {
         }
     }
 
-    private boolean isExistUser(User user) {
-        return redisDao.isSetDataExist(StageRoutineService.KEY_STAGE_ENTER_USER_LIST, user.getId().toString());
-    }
-
-    /**
-     * 스테이지 상태 확인 로직
-     * @return
-     */
-    public String getStageStatus() {
-        log.info("[SERVICE] getStageStatus");
-        String stageStatus = stageRoutineService.getStageStatus();
-        return (stageStatus==null) ? StageRoutineService.STAGE_STATUS_WAIT : stageStatus;
-        //TODO : 상태에 따라 진행중인 정보 같이 보내줘야 함
-    }
 
     /**
      * 스테이지 참여자 고유값 목록 확인 로직
@@ -132,7 +144,7 @@ public class StageService {
      */
     public List<Long> getStageEnterUserIds() {
         log.info("[SERVICE] getStageEnterUserProfiles");
-        Set<String> userIdSet = redisDao.getValuesSet(StageRoutineService.KEY_STAGE_ENTER_USER_LIST);
+        Set<String> userIdSet = stageDataUtil.getStageEnterUsers();
         List<String> userIds = new ArrayList<>(userIdSet);
         return userIds.stream().map(Long::parseLong).collect(Collectors.toList());
     }
@@ -145,59 +157,14 @@ public class StageService {
     public void registerCatch(User user) {
         log.info("[SERVICE] registerCatch");
 
-        if(!stageRoutineService.getStageStatus().equals(StageRoutineService.STAGE_STATUS_CATCH)) {
+        if(!stageDataUtil.getStageStatus().equals(StageRoutineService.STAGE_STATUS_CATCH)) {
             throw new StageException(StageStatusCode.STAGE_STATUS_NOT_CATCH);
         }
 
         final long now = System.currentTimeMillis();
         log.info("registerCatch user id : {}, nickname : {}, time : {}", user.getId(), user.getNickname(), now);
-        redisDao.setValuesZSet(StageRoutineService.KEY_STAGE_CATCH_USER_LIST, user.getId().toString(), (int) now);
+        redisDao.setValuesZSet(StageDataUtil.KEY_STAGE_CATCH_USER_LIST, user.getId().toString(), (int) now);
 //        redisDao.setValuesHash(StageRoutineService.STAGE_CATCH_USER_LIST, (int) now, user);
-    }
-
-    /**
-     * 스테이지 퇴장 로직 (임시)
-     * @param user
-     */
-    public void deleteStageUser(User user) {
-        log.info("[SERVICE] deleteStageUser");
-
-        int count = stageRoutineService.getStageUserCount();
-        log.info("[SERVICE] count : {}", count);
-
-        if(count == 0){
-            throw new StageException(StageStatusCode.STAGE_ALREADY_EMPTY);
-        }
-
-        int decreasedCount = deleteStageData(user, count);
-
-        tempCheckStageEmpty();
-
-        stageSocketResponser.userCount(decreasedCount);
-    }
-
-    private int deleteStageData(User user, int count) {
-        // 인원수 decrease
-        int decreasedCount = count -1;
-        redisDao.setValues(StageRoutineService.KEY_STAGE_ENTER_USER_COUNT, String.valueOf(decreasedCount));
-        log.info("[SERVICE] decreasedCount : {}", decreasedCount);
-
-        // redis 입장 목록에서 입장한 사용자 PK 제거
-        redisDao.removeValuesSet(StageRoutineService.KEY_STAGE_ENTER_USER_LIST, user.getId().toString());
-        return decreasedCount;
-    }
-
-    /**
-     * 개발편의상 개발한 임시 로직 (한 사용자 여러번 count+1 가능한 환경 유지)
-     * 스테이지 exit 시 사용자 목록이 비어있으면 사용자수 0으로 변경
-     */
-    private void tempCheckStageEmpty() {
-        Long size = redisDao.getSetSize(StageRoutineService.KEY_STAGE_ENTER_USER_LIST);
-        log.info("tempCheckStageEmpty STAGE_ENTER_USER_LIST set size : {}", size);
-        if(size==0) {
-            log.info("tempCheckStageEmpty set STAGE_ENTER_USER_COUNT = 0");
-            redisDao.setValues(StageRoutineService.KEY_STAGE_ENTER_USER_COUNT, "0");
-        }
     }
 
 }

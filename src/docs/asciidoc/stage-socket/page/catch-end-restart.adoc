@@ -15,7 +15,7 @@ CAUTION: 캐치 시 캐치요청자가 없어 2초간 휴식 후 캐치를 다�
 |`+type+`
 |`+String+`
 |true
-|소켓 통신 유형. 고정값(PLAY_START)
+|소켓 통신 유형. 고정값(CATCH_END_RESTART)
 |`+message+`
 |`+String+`
 |true
