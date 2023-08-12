@@ -97,6 +97,12 @@ public class LikeCacheUtil {
         }
     }
 
+    /**
+     * 좋아요수 조회 메서드 (redis적용)
+     * >> 수빈님 이 메서드 써주시면 됩니다!
+     * @param video
+     * @return
+     */
     public int getLikeCount(Video video) {
         Object likeCountObject = redisDao.getValues(toLikeCountKey(video.getId()));
 
