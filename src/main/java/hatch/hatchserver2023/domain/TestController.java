@@ -1,11 +1,11 @@
 package hatch.hatchserver2023.domain;
 
+import hatch.hatchserver2023.domain.stage.application.StageDataUtil;
 import hatch.hatchserver2023.domain.user.application.AuthService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.KakaoDto;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.domain.video.application.HashtagService;
-import hatch.hatchserver2023.domain.video.domain.Hashtag;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
@@ -19,7 +19,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -30,13 +29,15 @@ public class TestController {
 
     private final AuthService authService;
     private final HashtagService hashtagService;
+    private final StageDataUtil stageDataUtil;
 
     private final RedisDao redisDao;
 
-    public TestController(JwtProvider jwtProvider, AuthService authService, HashtagService hashtagService, RedisDao redisDao) {
+    public TestController(JwtProvider jwtProvider, AuthService authService, HashtagService hashtagService, StageDataUtil stageDataUtil, RedisDao redisDao) {
         this.jwtProvider = jwtProvider;
         this.authService = authService;
         this.hashtagService = hashtagService;
+        this.stageDataUtil = stageDataUtil;
         this.redisDao = redisDao;
     }
 
@@ -69,6 +70,14 @@ public class TestController {
         redisDao.deleteAll();
         return ResponseEntity.ok()
                 .body(CommonResponse.toResponse(CommonCode.OK, "redis DB 초기화 완료. 데이터 전체 삭제"));
+    }
+
+    @GetMapping("/bd/stage-init")
+    public ResponseEntity<CommonResponse> redisStageDataInit() {
+        log.info("[API] GET /api/v1/bd/stage-init");
+        stageDataUtil.initStage();
+        return ResponseEntity.ok()
+                .body(CommonResponse.toResponse(CommonCode.OK, "stage 데이터 초기화 완료"));
     }
 
 

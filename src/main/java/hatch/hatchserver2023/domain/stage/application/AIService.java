@@ -44,6 +44,9 @@ public class AIService {
                 .seq2(sequence)
                 .build();
 
+//        log.info("calculateSimilarity : requestDto");
+//        log.info(requestDto.toString());
+
         // ai 서버로 계산 요청
         WebClient client = WebClient.create(AI_SERVER_URL);
 

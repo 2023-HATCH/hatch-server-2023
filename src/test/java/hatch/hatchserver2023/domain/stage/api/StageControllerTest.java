@@ -338,40 +338,42 @@ class StageControllerTest {
 
     }
 
-    @WithCustomAuth(nickname = "nicknameTest", profileImg = "http://testurl", role="ROLE_USER") // @AuthenticationPrincipal 처리
-    @Test
-    void exitStage() throws Exception {
-        //given
-        //when
-
-        //then
-        MockHttpServletRequestBuilder requestGet = get("/api/v1/stage/exit")
-                .header("x-access-token", "액세스 토큰 값")
-                .header("x-refresh-token", "리프레시 토큰 값")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(csrf().asHeader());
-
-        ResultActions resultActions = mockMvc.perform(requestGet);
-
-        StatusCode code = StageStatusCode.GET_STAGE_EXIT_SUCCESS;
-        resultActions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(code.getCode()))
-                .andExpect(jsonPath("$.message").value(code.getMessage()));
-
-        //docs
-        resultActions
-                .andDo(
-                        docs.document(
-                                requestHeaders(
-                                        headerWithName("x-access-token").description("액세스 토큰 값"),
-                                        headerWithName("x-refresh-token").description("리프레시 토큰 값").optional()
-                                )
-                        )
-                )
-        ;
-    }
-
+    // TODO : 퇴장 요청 삭제
+//
+//    @WithCustomAuth(nickname = "nicknameTest", profileImg = "http://testurl", role="ROLE_USER") // @AuthenticationPrincipal 처리
+//    @Test
+//    void exitStage() throws Exception {
+//        //given
+//        //when
+//
+//        //then
+//        MockHttpServletRequestBuilder requestGet = get("/api/v1/stage/exit")
+//                .header("x-access-token", "액세스 토큰 값")
+//                .header("x-refresh-token", "리프레시 토큰 값")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .with(csrf().asHeader());
+//
+//        ResultActions resultActions = mockMvc.perform(requestGet);
+//
+//        StatusCode code = StageStatusCode.GET_STAGE_EXIT_SUCCESS;
+//        resultActions
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.code").value(code.getCode()))
+//                .andExpect(jsonPath("$.message").value(code.getMessage()));
+//
+//        //docs
+//        resultActions
+//                .andDo(
+//                        docs.document(
+//                                requestHeaders(
+//                                        headerWithName("x-access-token").description("액세스 토큰 값"),
+//                                        headerWithName("x-refresh-token").description("리프레시 토큰 값").optional()
+//                                )
+//                        )
+//                )
+//        ;
+//    }
+//
 
 
     private User makeDummyUser(int num) {

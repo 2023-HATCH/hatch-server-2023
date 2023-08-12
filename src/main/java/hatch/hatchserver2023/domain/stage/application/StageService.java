@@ -20,16 +20,16 @@ import java.util.stream.Collectors;
 public class StageService {
 
     private final StageRoutineService stageRoutineService;
-    private final StageDataService stageDataService;
+    private final StageDataUtil stageDataUtil;
 
     private final RedisDao redisDao;
 
     private final StageSocketResponser stageSocketResponser;
 
-    public StageService(RedisDao redisDao, StageRoutineService stageRoutineService, StageDataService stageDataService, StageSocketResponser stageSocketResponser) {
+    public StageService(RedisDao redisDao, StageRoutineService stageRoutineService, StageDataUtil stageDataUtil, StageSocketResponser stageSocketResponser) {
         this.redisDao = redisDao;
         this.stageRoutineService = stageRoutineService;
-        this.stageDataService = stageDataService;
+        this.stageDataUtil = stageDataUtil;
         this.stageSocketResponser = stageSocketResponser;
     }
 
@@ -58,12 +58,12 @@ public class StageService {
 
     private int addStageData(User user) {
         // 인원수 increase
-        int increasedCount = stageDataService.getStageEnterUserCount() + 1;
-        stageDataService.setStageEnterUserCount(increasedCount);
+        int increasedCount = stageDataUtil.getStageEnterUserCount() + 1;
+        stageDataUtil.setStageEnterUserCount(increasedCount);
         log.info("[SERVICE] increasedCount : {}", increasedCount);
 
         // redis 입장 목록에 입장한 사용자 PK 추가
-        stageDataService.addStageEnterUserSet(user.getId());
+        stageDataUtil.addStageEnterUserSet(user.getId());
         return increasedCount;
     }
 
@@ -73,10 +73,9 @@ public class StageService {
      */
     public StageModel.StageInfo getStageInfo() {
         log.info("[SERVICE] getStageInfo");
-        String status = stageDataService.getStageStatus();
+        String status = stageDataUtil.getStageStatus();
 
-        //TODO : 상태에 따라 진행중인 정보 같이 보내줘야 함
-        Long statusStartTime = stageDataService.getStageStatusStartTime(status);
+        Long statusStartTime = stageDataUtil.getStageStatusStartTime(status);
 //        Long statusElapsedTime = null;
 //        if(statusStartTime != null) {
 //            statusElapsedTime = System.nanoTime() - statusStartTime;
@@ -84,7 +83,7 @@ public class StageService {
         Long statusElapsedTime = (statusStartTime!=null) ? System.nanoTime() - statusStartTime : null; // 위에 주석이랑 같은 기능 코드
 
         //음악 정보
-        Music music = stageDataService.getStageMusic();
+        Music music = stageDataUtil.getStageMusic();
 
         return StageModel.StageInfo.toModel(status, statusElapsedTime, music);
     }
@@ -118,7 +117,7 @@ public class StageService {
 
     // TODO : 스테이지가 진행 도중 멈춰버렸을 때 (왜?) 새로 누군가 입장 시 스테이지 처음부터 새로 run시키기.. how? 상태값이 아니면 진행중(Thread.sleep)인지 아닌지 어떻게 알지... 스레드..?
     private void runStageRoutine(int increasedCount) {
-        String stageStatus = stageDataService.getStageStatus();
+        String stageStatus = stageDataUtil.getStageStatus();
         switch (stageStatus) {
             case StageRoutineService.STAGE_STATUS_WAIT:
                 log.info("stage status : wait ");
@@ -145,7 +144,7 @@ public class StageService {
      */
     public List<Long> getStageEnterUserIds() {
         log.info("[SERVICE] getStageEnterUserProfiles");
-        Set<String> userIdSet = stageDataService.getStageEnterUsers();
+        Set<String> userIdSet = stageDataUtil.getStageEnterUsers();
         List<String> userIds = new ArrayList<>(userIdSet);
         return userIds.stream().map(Long::parseLong).collect(Collectors.toList());
     }
@@ -158,13 +157,13 @@ public class StageService {
     public void registerCatch(User user) {
         log.info("[SERVICE] registerCatch");
 
-        if(!stageDataService.getStageStatus().equals(StageRoutineService.STAGE_STATUS_CATCH)) {
+        if(!stageDataUtil.getStageStatus().equals(StageRoutineService.STAGE_STATUS_CATCH)) {
             throw new StageException(StageStatusCode.STAGE_STATUS_NOT_CATCH);
         }
 
         final long now = System.currentTimeMillis();
         log.info("registerCatch user id : {}, nickname : {}, time : {}", user.getId(), user.getNickname(), now);
-        redisDao.setValuesZSet(StageDataService.KEY_STAGE_CATCH_USER_LIST, user.getId().toString(), (int) now);
+        redisDao.setValuesZSet(StageDataUtil.KEY_STAGE_CATCH_USER_LIST, user.getId().toString(), (int) now);
 //        redisDao.setValuesHash(StageRoutineService.STAGE_CATCH_USER_LIST, (int) now, user);
     }
 
