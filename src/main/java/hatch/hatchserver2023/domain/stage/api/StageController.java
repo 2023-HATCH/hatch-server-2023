@@ -90,48 +90,6 @@ public class StageController {
                 StageStatusCode.GET_CATCH_SUCCESS));
     }
 
-    /**
-     * 스테이지 사용자 퇴장 api (임시) -> 삭제 예정
-     * @param user
-     * @return
-     */
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
-    @GetMapping("/exit")
-    public ResponseEntity<CommonResponse> exitStage(@AuthenticationPrincipal User user) {
-        log.info("[API] GET /stage/exit");
-//        stageService.deleteStageUser(user);
-
-        try {
-            stageSocketService.deleteStageUser(user); //TODO : 이 api 삭제
-        }catch (StageException stageException) {
-            if(stageException.getCode() != StageStatusCode.NOT_ENTERED_USER){
-                throw stageException;
-            }
-        }
-
-        return ResponseEntity.ok().body(CommonResponse.toResponse(
-                StageStatusCode.GET_STAGE_EXIT_SUCCESS));
-    }
-
-
-// 이거 두개 필요 없게 됨 - 플레이 스켈레톤 전송 시 스켈레톤 전장해두고 사용하므로
-
-//    /**
-//     * 플레이 종료 api
-//     *
-//     * @param requestDto
-//     * @return similarity
-//     */
-//    @PostMapping("/play/end")
-//    public ResponseEntity<Object> endPlay(@RequestBody @Valid StageRequestDto.EndPlay requestDto, @AuthenticationPrincipal @NotNull User user) {
-//        log.info("[API] POST /stage/play/end");
-//
-//        Float similarity = stageService.calculateSimilarity(requestDto.getTitle(), requestDto.getSkeletons());
-//        // TODO : redis 에 저장
-//
-//        return ResponseEntity.ok(CommonResponse.toResponse(CommonCode.OK));
-//    }
-
 //    /**
 //     * 안무 정확도 계산 API
 //     * 음악 제목과 안무 스켈레톤 배열을 입력하면 AI 서버와 통신하여 해당 곡 안무 정답과의 유사도 계산
