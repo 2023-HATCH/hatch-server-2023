@@ -8,6 +8,7 @@ import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserModel;
 import hatch.hatchserver2023.domain.user.dto.UserRequestDto;
 import hatch.hatchserver2023.domain.video.domain.Video;
+import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
@@ -230,10 +231,12 @@ public class UserControllerTest {
                 .length(9999)
                 .build();
 
-        List<Video> videoList = Arrays.asList(video1, video2);
-        Slice<Video> slice = new SliceImpl<>(videoList, PageRequest.of(0, 2), false);
+        VideoModel.VideoInfo videoInfo1 = VideoModel.VideoInfo.toModel(video1, true);
+        VideoModel.VideoInfo videoInfo2 = VideoModel.VideoInfo.toModel(video2, false);
+        List<VideoModel.VideoInfo> videoList = Arrays.asList(videoInfo1, videoInfo2);
+        Slice<VideoModel.VideoInfo> slice = new SliceImpl<>(videoList, PageRequest.of(0, 2), false);
 
-        given(userUtilService.getUsersVideoList(eq(user1.getUuid()), any(Pageable.class)))
+        given(userUtilService.getUsersVideoList(eq(user1.getUuid()), any(), any(Pageable.class)))
                 .willReturn(slice);
 
         //when

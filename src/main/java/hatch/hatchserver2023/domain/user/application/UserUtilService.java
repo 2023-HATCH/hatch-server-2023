@@ -1,12 +1,13 @@
 package hatch.hatchserver2023.domain.user.application;
 
+import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.user.domain.Follow;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserModel;
-import hatch.hatchserver2023.domain.user.dto.UserRequestDto;
 import hatch.hatchserver2023.domain.user.repository.FollowRepository;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.domain.video.domain.Video;
+import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.UserException;
@@ -30,11 +31,13 @@ public class UserUtilService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
     private final VideoRepository videoRepository;
+    private final LikeService likeService;
 
-    public UserUtilService(UserRepository userRepository, FollowRepository followRepository, VideoRepository videoRepository) {
+    public UserUtilService(UserRepository userRepository, FollowRepository followRepository, VideoRepository videoRepository, LikeService likeService) {
         this.userRepository = userRepository;
         this.followRepository = followRepository;
         this.videoRepository = videoRepository;
+        this.likeService = likeService;
     }
 
 
@@ -75,12 +78,17 @@ public class UserUtilService {
      * @param pageable
      * @return
      */
-    public Slice<Video> getUsersVideoList(UUID userId, Pageable pageable) {
+    public Slice<VideoModel.VideoInfo> getUsersVideoList(UUID userId, User loginUser, Pageable pageable) {
         User user = findOneByUuid(userId);
 
         Slice<Video> videoSlice = videoRepository.findAllByUserId(user, pageable);
 
-        return videoSlice;
+        List<VideoModel.VideoInfo> videoInfoList =  videoSlice.stream()
+                .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, loginUser)))
+                .collect(Collectors.toList());
+
+        Slice<VideoModel.VideoInfo> videoInfoSlice = new SliceImpl<>(videoInfoList, pageable, videoSlice.hasNext());
+        return videoInfoSlice;
     }
 
 

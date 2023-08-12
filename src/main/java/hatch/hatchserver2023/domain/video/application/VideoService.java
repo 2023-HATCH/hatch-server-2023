@@ -1,11 +1,10 @@
 package hatch.hatchserver2023.domain.video.application;
 
 
+import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.video.domain.Video;
-import hatch.hatchserver2023.domain.comment.repository.CommentRepository;
-import hatch.hatchserver2023.domain.like.repository.LikeRepository;
-import hatch.hatchserver2023.domain.video.repository.VideoHashtagRepository;
+import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.VideoException;
@@ -20,6 +19,7 @@ import org.jcodec.scale.AWTUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -29,7 +29,10 @@ import org.apache.commons.fileupload.FileItem;
 import javax.imageio.ImageIO;
 import java.io.*;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -37,16 +40,12 @@ public class VideoService {
 
     private final VideoRepository videoRepository;
     private final S3Service s3Service;
-    private final VideoHashtagRepository videoHashtagRepository;
-    private final LikeRepository likeRepository;
-    private final CommentRepository commentRepository;
+    private final LikeService likeService;
 
-    public VideoService(VideoRepository videoRepository, S3Service s3Service, VideoHashtagRepository videoHashtagRepository, LikeRepository likeRepository, CommentRepository commentRepository) {
+    public VideoService(VideoRepository videoRepository, S3Service s3Service, LikeService likeService) {
         this.videoRepository = videoRepository;
         this.s3Service = s3Service;
-        this.videoHashtagRepository = videoHashtagRepository;
-        this.likeRepository = likeRepository;
-        this.commentRepository = commentRepository;
+        this.likeService = likeService;
     }
 
     @Value("${DEFAULT_THUMBNAIL_URL}")
@@ -96,12 +95,18 @@ public class VideoService {
      * - pagination 적용
      *
      * @param pageable
-     * @return Slice<Video>
+     * @return Slice<VideoInfo>
      */
-    public Slice<Video> findByRandom(Pageable pageable) {
-        Slice<Video> slice = videoRepository.findAllOrderByRandom(pageable);
+    public Slice<VideoModel.VideoInfo> findByRandom(User loginUser, Pageable pageable) {
+        Slice<Video> videoSlice = videoRepository.findAllOrderByRandom(pageable);
 
-        return slice;
+        List<VideoModel.VideoInfo> videoInfoList = videoSlice.stream()
+                .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, loginUser)))
+                .collect(Collectors.toList());
+
+        Slice<VideoModel.VideoInfo> videoInfoSlice = new SliceImpl<>(videoInfoList, pageable, videoSlice.hasNext());
+
+        return videoInfoSlice;
     }
 
     /**
@@ -109,11 +114,18 @@ public class VideoService {
      * - pagination 적용
      *
      * @param pageable
-     * @return Slice<Video>
+     * @return Slice<VideoInfo>
      */
-    public Slice<Video> findByCreatedAt(Pageable pageable) {
-        Slice<Video> slice = videoRepository.findAllByOrderByCreatedAtDesc(pageable);
-        return slice;
+    public Slice<VideoModel.VideoInfo> findByCreatedAt(User loginUser, Pageable pageable) {
+        Slice<Video> videoSlice = videoRepository.findAllByOrderByCreatedAtDesc(pageable);
+
+        List<VideoModel.VideoInfo> videoInfoList = videoSlice.stream()
+                .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, loginUser)))
+                .collect(Collectors.toList());
+
+        Slice<VideoModel.VideoInfo> videoInfoSlice = new SliceImpl<>(videoInfoList, pageable, videoSlice.hasNext());
+
+        return videoInfoSlice;
     }
 
     /**

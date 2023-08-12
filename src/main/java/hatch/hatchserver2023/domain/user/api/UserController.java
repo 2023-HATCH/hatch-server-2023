@@ -7,7 +7,7 @@ import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserModel;
 import hatch.hatchserver2023.domain.user.dto.UserRequestDto;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
-import hatch.hatchserver2023.domain.video.domain.Video;
+import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.domain.video.dto.VideoResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
@@ -15,17 +15,14 @@ import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -56,10 +53,7 @@ public class UserController {
         User user = userUtilService.findOneByUuid(userId);
 
         // 프로필 조회하는 주체가 자기자신의 프로필을 보는지 여부
-        Boolean isMe = false;
-        if(loginUser != null){
-            isMe = loginUser.getUuid().equals(user.getUuid());
-        }
+        boolean isMe = loginUser != null && loginUser.getUuid().equals(user.getUuid());
 
         //팔로워 수, 팔로잉 수
         //TODO: 팔로워, 팔로잉 count를 조회할 때 마다 하는 방식으로 하는데, redis를 쓰던지, db에 저장하던지 다른 방식을 생각해봐야함
@@ -89,30 +83,14 @@ public class UserController {
                                                             @PathVariable @NotBlank UUID userId,
                                                             Pageable pageable) {
 
-        Slice<Video> videoSlice = userUtilService.getUsersVideoList(userId, pageable);
+        Slice<VideoModel.VideoInfo> videoSlice = userUtilService.getUsersVideoList(userId, loginUser, pageable);
 
-        //회원: 영상 좋아요 여부 liked 지정
-        if(loginUser != null){
+        StatusCode statusCode = loginUser == null ? UserStatusCode.GET_USERS_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS : UserStatusCode.GET_USERS_VIDEO_LIST_SUCCESS_FOR_USER;
 
-            List<VideoResponseDto.GetVideo> videoList = videoSlice.stream()
-                    .map(video -> VideoResponseDto.GetVideo.toDto(video, likeService.isAlreadyLiked(video, loginUser)))
-                    .collect(Collectors.toList());
-
-            return ResponseEntity.ok(CommonResponse.toResponse(
-                    UserStatusCode.GET_USERS_VIDEO_LIST_SUCCESS_FOR_USER,
-                    VideoResponseDto.GetVideoList.toDto(videoList, videoSlice.isLast())
-            ));
-        } else {
-            //비회원: liked는 모두 false
-            List<VideoResponseDto.GetVideo> videoList = videoSlice.stream()
-                    .map(video -> VideoResponseDto.GetVideo.toDto(video, false))
-                    .collect(Collectors.toList());
-
-            return ResponseEntity.ok(CommonResponse.toResponse(
-                    UserStatusCode.GET_USERS_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS,
-                    VideoResponseDto.GetVideoList.toDto(videoList, videoSlice.isLast())
-            ));
-        }
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                statusCode,
+                VideoResponseDto.GetVideoList.toDto(VideoResponseDto.GetVideo.toDtos(videoSlice.getContent()), videoSlice.isLast())
+        ));
     }
 
 

@@ -10,6 +10,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class VideoResponseDto {
 
@@ -42,25 +43,6 @@ public class VideoResponseDto {
         private Integer length;
         private ZonedDateTime createdAt;
 
-        //isLike가 없는 버전
-        public static GetVideo toDto(Video video){
-            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(video.getUserId());
-
-            return GetVideo.builder()
-                    .uuid(video.getUuid())
-                    .title(video.getTitle())
-                    .tag(video.getTag())
-                    .user(userInfo)
-                    .videoUrl(video.getVideoUrl())
-                    .thumbnailUrl(video.getThumbnailUrl())
-                    .likeCount(video.getLikeCount())
-                    .commentCount(video.getCommentCount())
-                    .length(video.getLength())
-                    .createdAt(video.getCreatedAt())
-                    .build();
-        }
-
-        //isLike가 있는 버전
         public static GetVideo toDto(Video video, boolean isLiked){
             UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(video.getUserId());
 
@@ -77,6 +59,12 @@ public class VideoResponseDto {
                     .length(video.getLength())
                     .createdAt(video.getCreatedAt())
                     .build();
+        }
+
+        public static List<GetVideo> toDtos(List<VideoModel.VideoInfo> videoInfoList){
+            return videoInfoList.stream()
+                    .map(videoInfo -> GetVideo.toDto(videoInfo.getVideo(), videoInfo.isLiked()))
+                    .collect(Collectors.toList());
         }
     }
 

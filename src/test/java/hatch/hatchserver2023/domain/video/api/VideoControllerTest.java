@@ -5,6 +5,7 @@ import hatch.hatchserver2023.domain.video.application.HashtagService;
 import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.video.application.VideoService;
 import hatch.hatchserver2023.domain.video.domain.Video;
+import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;
@@ -278,10 +279,13 @@ public class VideoControllerTest {
             @DisplayName("By createdAt desc")
             void getVideoListByCreatedAt() throws Exception {
                 //given
-                List<Video> videoList = Arrays.asList(video1, video2);
-                Slice<Video> slice = new SliceImpl<>(videoList, PageRequest.of(0, 2), false);
+                VideoModel.VideoInfo videoInfo1 = VideoModel.VideoInfo.toModel(video1, false);
+                VideoModel.VideoInfo videoInfo2 = VideoModel.VideoInfo.toModel(video2, true);
 
-                given(videoService.findByCreatedAt(any()))
+                List<VideoModel.VideoInfo> videoInfoList = Arrays.asList(videoInfo1, videoInfo2);
+                Slice<VideoModel.VideoInfo> slice = new SliceImpl<>(videoInfoList, PageRequest.of(0, 2), false);
+
+                given(videoService.findByCreatedAt(any(), any()))
                         .willReturn(slice);
 
                 //when & then
@@ -363,10 +367,13 @@ public class VideoControllerTest {
             @DisplayName("By Random")
             void getVideoListByRandom() throws Exception {
                 //given
-                List<Video> videoList = Arrays.asList(video1, video2);
-                Slice<Video> slice = new SliceImpl<>(videoList, PageRequest.of(0, 2), false);
+                VideoModel.VideoInfo videoInfo1 = VideoModel.VideoInfo.toModel(video1, false);
+                VideoModel.VideoInfo videoInfo2 = VideoModel.VideoInfo.toModel(video2, true);
 
-                given(videoService.findByRandom(any()))
+                List<VideoModel.VideoInfo> videoInfoList = Arrays.asList(videoInfo1, videoInfo2);
+                Slice<VideoModel.VideoInfo> slice = new SliceImpl<>(videoInfoList, PageRequest.of(0, 2), false);
+
+                given(videoService.findByRandom(any(), any()))
                         .willReturn(slice);
 
                 //when
@@ -540,10 +547,13 @@ public class VideoControllerTest {
             @DisplayName("Search Success")
             void searchVideoListByHashtag() throws Exception {
                 //given
-                List<Video> videoList = Arrays.asList(video1, video2);
-                Slice<Video> slice = new SliceImpl<>(videoList, PageRequest.of(0, 2), false);
+                VideoModel.VideoInfo videoInfo1 = VideoModel.VideoInfo.toModel(video1, false);
+                VideoModel.VideoInfo videoInfo2 = VideoModel.VideoInfo.toModel(video2, true);
 
-                given(hashtagService.searchHashtag(eq(tag), any(Pageable.class)))
+                List<VideoModel.VideoInfo> videoInfoList = Arrays.asList(videoInfo1, videoInfo2);
+                Slice<VideoModel.VideoInfo> slice = new SliceImpl<>(videoInfoList, PageRequest.of(0, 2), false);
+
+                given(hashtagService.searchHashtag(eq(tag), any(), any(Pageable.class)))
                         .willReturn(slice);
 
                 //when
