@@ -97,6 +97,18 @@ public class LikeCacheUtil {
         }
     }
 
+    public int getLikeCount(Video video) {
+        Object likeCountObject = redisDao.getValues(toLikeCountKey(video.getId()));
+
+        // 레디스에 없으면 RDB 에서 가져온 데이터 반환
+        if(likeCountObject == null) {
+            return video.getLikeCount();
+        }
+        else{
+            // 레디스에 있으면 그거 반환
+            return Integer.parseInt(likeCountObject.toString());
+        }
+    }
 
 
     //////////// move to RDB ///////////
