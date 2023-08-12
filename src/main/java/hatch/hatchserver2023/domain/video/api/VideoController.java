@@ -5,8 +5,10 @@ import hatch.hatchserver2023.domain.video.application.HashtagService;
 import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.video.application.VideoService;
 import hatch.hatchserver2023.domain.video.domain.Video;
+import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.domain.video.dto.VideoResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
+import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +19,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,14 +51,11 @@ public class VideoController {
     public ResponseEntity<CommonResponse> getOneVideoForUser(@AuthenticationPrincipal User user,
                                                 @PathVariable UUID videoId) {
         Video video = videoService.findOne(videoId);
-        boolean isLiked = false;
+
 
         // 로그인한 유저이면, 영상에 좋아요를 눌렀는지 확인
         // 비회원이면, isLike는 언제나 false
-        if(user != null) {
-            isLiked = likeService.isAlreadyLiked(video, user);
-
-        }
+        boolean isLiked = user != null && likeService.isAlreadyLiked(video, user);
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.GET_VIDEO_DETAIL_SUCCESS,
@@ -88,34 +86,20 @@ public class VideoController {
      * - 최신순 조회
      *
      * @param user, pageable
-     * @return
+     * @return videoList
      */
     @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
     @GetMapping
     public ResponseEntity<CommonResponse> getVideoList(@AuthenticationPrincipal User user,
                                                        Pageable pageable){
-        Slice<Video> slice = videoService.findByCreatedAt(pageable);
 
-        //회원이면 좋아요를 눌렀는지 확인
-        if(user != null) {
-            // 각 인덱스에서 좋아요를 눌렀는지 아닌지를 가지고 있는 리스트
-            List<Boolean> likeList = new ArrayList<>();
+        Slice<VideoModel.VideoInfo> slice = videoService.findByCreatedAt(user, pageable);
 
-            for (Video video : slice) {
-                likeList.add(likeService.isAlreadyLiked(video, user));
-            }
+        StatusCode statusCode = user == null ? VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS : VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_USER;
 
-            //좋아요 여부 리스트와 함께 DTO로 만듦
-            return ResponseEntity.ok(CommonResponse.toResponse(
-                    VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_USER,
-                    VideoResponseDto.GetVideoList.toDto(slice, likeList)
-            ));
-        }
-
-        //비회원이면, liked가 모두 false
         return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS,
-                VideoResponseDto.GetVideoList.toDto(slice)
+                statusCode,
+                VideoResponseDto.GetVideoList.toDto(VideoResponseDto.GetVideo.toDtos(slice.getContent()), slice.isLast())
         ));
     }
 
@@ -131,28 +115,13 @@ public class VideoController {
     public ResponseEntity<CommonResponse> getRandomVideoList(@AuthenticationPrincipal User user,
                                                              Pageable pageable) {
 
-        Slice<Video> slice = videoService.findByRandom(pageable);
+        Slice<VideoModel.VideoInfo> slice = videoService.findByRandom(user, pageable);
 
-        //회원이면 좋아요를 눌렀는지 확인
-        if (user != null) {
-            // 각 인덱스에서 좋아요를 눌렀는지 아닌지를 가지고 있는 리스트
-            List<Boolean> likeList = new ArrayList<>();
+        StatusCode statusCode = user == null ? VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS : VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_USER;
 
-            for (Video video : slice) {
-                likeList.add(likeService.isAlreadyLiked(video, user));
-            }
-
-            //좋아요 여부 리스트와 함께 DTO로 만듦
-            return ResponseEntity.ok(CommonResponse.toResponse(
-                    VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_USER,
-                    VideoResponseDto.GetVideoList.toDto(slice, likeList)
-            ));
-        }
-
-        //비회원이면, liked가 모두 false
         return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.GET_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS,
-                VideoResponseDto.GetVideoList.toDto(slice)
+                statusCode,
+                VideoResponseDto.GetVideoList.toDto(VideoResponseDto.GetVideo.toDtos(slice.getContent()), slice.isLast())
         ));
     }
 
@@ -260,28 +229,13 @@ public class VideoController {
                                                           @RequestParam String tag,
                                                           Pageable pageable) {
 
-        Slice<Video> slice = hashtagService.searchHashtag(tag, pageable);
+        Slice<VideoModel.VideoInfo> slice = hashtagService.searchHashtag(tag, user, pageable);
 
-        //회원이면 좋아요를 눌렀는지 확인
-        if (user != null) {
-            // 각 인덱스에서 좋아요를 눌렀는지 아닌지를 가지고 있는 리스트
-            List<Boolean> likeList = new ArrayList<>();
+        StatusCode statusCode = user == null ? VideoStatusCode.HASHTAG_SEARCH_SUCCESS_FOR_ANONYMOUS : VideoStatusCode.HASHTAG_SEARCH_SUCCESS_FOR_USER;
 
-            for (Video video : slice) {
-                likeList.add(likeService.isAlreadyLiked(video, user));
-            }
-
-            //좋아요 여부 리스트와 함께 DTO로 만듦
-            return ResponseEntity.ok(CommonResponse.toResponse(
-                    VideoStatusCode.HASHTAG_SEARCH_SUCCESS_FOR_USER,
-                    VideoResponseDto.GetVideoList.toDto(slice, likeList)
-            ));
-        }
-
-        //비회원이면, liked가 모두 false
         return ResponseEntity.ok(CommonResponse.toResponse(
-                VideoStatusCode.HASHTAG_SEARCH_SUCCESS_FOR_ANONYMOUS,
-                VideoResponseDto.GetVideoList.toDto(slice)
+                statusCode,
+                VideoResponseDto.GetVideoList.toDto(VideoResponseDto.GetVideo.toDtos(slice.getContent()), slice.isLast())
         ));
     }
 

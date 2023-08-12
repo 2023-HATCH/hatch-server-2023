@@ -1,0 +1,5 @@
+== 팔로워/팔로잉 목록 조회
+
+- 회원/비회원의 상태코드가 다릅니다
+
+operation::get-follow-list[snippets='http-request,request-headers,path-parameters,response-fields-beneath-data-follower-list,response-fields-beneath-data-following-list,http-response']

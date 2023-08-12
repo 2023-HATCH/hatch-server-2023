@@ -20,4 +20,24 @@ public class UserRequestDto {
         }
     }
 
+
+    @ToString
+    @Getter
+    @Builder
+    public static class UpdateProfile {
+
+//        private String nickname;
+//        private String email;
+        private String introduce;
+        private String instagramId;
+        private String twitterId;
+
+        public UpdateProfile () {}
+        public UpdateProfile(String introduce, String instagramId, String twitterId) {
+            this.introduce = introduce;
+            this.instagramId = instagramId;
+            this.twitterId = twitterId;
+        }
+    }
+
 }

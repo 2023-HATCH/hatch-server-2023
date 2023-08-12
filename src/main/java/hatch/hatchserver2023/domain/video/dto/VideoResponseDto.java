@@ -10,6 +10,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class VideoResponseDto {
 
@@ -42,25 +43,6 @@ public class VideoResponseDto {
         private Integer length;
         private ZonedDateTime createdAt;
 
-        //isLike가 없는 버전
-        public static GetVideo toDto(Video video){
-            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(video.getUserId());
-
-            return GetVideo.builder()
-                    .uuid(video.getUuid())
-                    .title(video.getTitle())
-                    .tag(video.getTag())
-                    .user(userInfo)
-                    .videoUrl(video.getVideoUrl())
-                    .thumbnailUrl(video.getThumbnailUrl())
-                    .likeCount(video.getLikeCount())
-                    .commentCount(video.getCommentCount())
-                    .length(video.getLength())
-                    .createdAt(video.getCreatedAt())
-                    .build();
-        }
-
-        //isLike가 있는 버전
         public static GetVideo toDto(Video video, boolean isLiked){
             UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(video.getUserId());
 
@@ -78,6 +60,12 @@ public class VideoResponseDto {
                     .createdAt(video.getCreatedAt())
                     .build();
         }
+
+        public static List<GetVideo> toDtos(List<VideoModel.VideoInfo> videoInfoList){
+            return videoInfoList.stream()
+                    .map(videoInfo -> GetVideo.toDto(videoInfo.getVideo(), videoInfo.isLiked()))
+                    .collect(Collectors.toList());
+        }
     }
 
     @Builder
@@ -88,49 +76,13 @@ public class VideoResponseDto {
 
         private Boolean isLast;
 
-        // 비회원 조회
-        public static GetVideoList toDto(Slice<Video> slice){
 
-            List<GetVideo> getVideos = new ArrayList<>();
-
-            for (Video video : slice.getContent()) {
-                //dto로 만들어 add
-                getVideos.add(GetVideo.toDto(video));
-            }
-            return GetVideoList.builder()
-                    .videoList(getVideos)
-                    .isLast(slice.isLast())
-                    .build();
-        }
-
-        // 회원 조회: 좋아요 리스트를 함께 받는 경우
-        public static GetVideoList toDto(Slice<Video> slice, List<Boolean> likeList){
-
-            List<GetVideo> getVideos = new ArrayList<>();
-            List<Video> videoList = slice.getContent();
-
-            for(int idx = 0; idx < slice.getSize(); idx++){
-
-                //dto로 만들어 add
-                getVideos.add(GetVideo.toDto(videoList.get(idx), likeList.get(idx)));
-            }
+        //인자로 List<GetVideo>를 받고 isLast도 직접 받음
+        public static GetVideoList toDto(List<GetVideo> videoList, Boolean isLast){
 
             return GetVideoList.builder()
-                    .videoList(getVideos)
-                    .isLast(slice.isLast())
-                    .build();
-        }
-
-        //인자로 List<Video>를 받고 isLast가 null인 버전
-        public static GetVideoList toDto(List<Video> videoList){
-
-            List<GetVideo> getVideos = new ArrayList<>();
-
-            for(Video video : videoList) {
-                getVideos.add(GetVideo.toDto(video));
-            }
-            return GetVideoList.builder()
-                    .videoList(getVideos)
+                    .videoList(videoList)
+                    .isLast(isLast)
                     .build();
         }
     }
