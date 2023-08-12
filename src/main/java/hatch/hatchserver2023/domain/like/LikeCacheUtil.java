@@ -1,4 +1,4 @@
-package hatch.hatchserver2023.global.config.redis;
+package hatch.hatchserver2023.domain.like;
 
 import hatch.hatchserver2023.domain.like.domain.Like;
 import hatch.hatchserver2023.domain.like.repository.LikeRepository;
@@ -9,6 +9,7 @@ import hatch.hatchserver2023.domain.video.repository.VideoRepository;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.VideoException;
+import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,10 +22,10 @@ import java.util.Set;
 
 @Slf4j
 @Component
-public class RedisCacheUtil {
+public class LikeCacheUtil {
     private final String KEY_CACHE_LIKE_INFO = "like:updated:"; //Hash. hashKey는 userId, value는 add또는 delete
     private final String KEY_CACHE_LIKE_COUNT = "like:count:"; //String
-    private final String KEY_CACHE_VIDEO_VIEW_COUNT = "video:viewCount:"; // String
+//    private final String KEY_CACHE_VIDEO_VIEW_COUNT = "video:viewCount:"; // String
 
     private final String CACHE_LIKE_INFO_ADD = "add";
     private final String CACHE_LIKE_INFO_DELETE = "delete";
@@ -34,7 +35,7 @@ public class RedisCacheUtil {
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
 
-    public RedisCacheUtil(RedisDao redisDao, VideoRepository videoRepository, LikeRepository likeRepository, UserRepository userRepository) {
+    public LikeCacheUtil(RedisDao redisDao, VideoRepository videoRepository, LikeRepository likeRepository, UserRepository userRepository) {
         this.redisDao = redisDao;
         this.videoRepository = videoRepository;
         this.likeRepository = likeRepository;
@@ -66,12 +67,29 @@ public class RedisCacheUtil {
         }
     }
 
-    public void addLike(long videoId, long userId) {
+    /**
+     * 좋아요 추가
+     * @param video
+     * @param user
+     */
+    public void addLike(Video video, User user) {
         log.info("[REDIS] addLike");
-        saveLike(videoId, userId, CACHE_LIKE_INFO_ADD);
-        updateLikeCount(videoId, 1);
+
+        //이미 좋아요를 눌렀다면
+        if(isLiked(video, user)){
+            // 새로운 좋아요를 만들지 않고 에러 발생
+            throw new VideoException(VideoStatusCode.ALREADY_LIKED);
+        }
+
+        saveLike(video.getId(), user.getId(), CACHE_LIKE_INFO_ADD);
+        updateLikeCount(video.getId(), 1);
     }
 
+    /**
+     * 좋아요 삭제
+     * @param video
+     * @param user
+     */
     public void deleteLike(Video video, User user) {
         log.info("[REDIS] deleteLike");
 

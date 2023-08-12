@@ -133,8 +133,8 @@ public class LikeControllerTest {
     void addLike() throws Exception {
 
         //given
-        given(likeService.addLike(eq(video1.getUuid()), any()))
-                .willReturn(video1.getUuid());
+//        given(likeService.addLike(eq(video1.getUuid()), any()))
+//                .willReturn(video1.getUuid());
 
         //when
         StatusCode code = VideoStatusCode.LIKE_ADD_SUCCESS;
