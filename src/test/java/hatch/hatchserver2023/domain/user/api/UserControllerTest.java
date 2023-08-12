@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.user.dto.UserModel;
 import hatch.hatchserver2023.domain.user.dto.UserRequestDto;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
@@ -530,14 +531,17 @@ public class UserControllerTest {
     @DisplayName("Get Follow List")
     void getFollowList() throws Exception {
         //given
-        List<User> followerList = Arrays.asList(user1, user3);
-        List<User> followingList = Arrays.asList(user3);
+        UserModel.FollowInfo follow1 =  UserModel.FollowInfo.toModel(user1, false);
+        UserModel.FollowInfo follow3 =  UserModel.FollowInfo.toModel(user3, true);
+
+        List<UserModel.FollowInfo> followerList = Arrays.asList(follow1, follow3);
+        List<UserModel.FollowInfo> followingList = Arrays.asList(follow3);
 
         given(userUtilService.findOneByUuid(user2.getUuid()))
                 .willReturn(user2);
-        given(userUtilService.getFollowerList(user2))
+        given(userUtilService.getFollowerList(user2, null))
                 .willReturn(followerList);
-        given(userUtilService.getFollowingList(user2))
+        given(userUtilService.getFollowingList(user2, null))
                 .willReturn(followingList);
 
         //when

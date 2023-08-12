@@ -4,11 +4,13 @@ package hatch.hatchserver2023.domain.user.api;
 import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.user.dto.UserModel;
 import hatch.hatchserver2023.domain.user.dto.UserRequestDto;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.dto.VideoResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
+import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -211,42 +213,18 @@ public class UserController {
      */
     @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
     @GetMapping("/follow/{userId}")
-    //TODO: dto로 만드는 과정 리팩토링 필요한듯. service.isFollowing()을 responseDto에 넣을 수 없어서 이렇게 됨
     public ResponseEntity<CommonResponse> getFollowList(@AuthenticationPrincipal User loginUser,
                                                         @PathVariable @NotBlank UUID userId) {
 
         User user = userUtilService.findOneByUuid(userId);
-        List<User> follower = userUtilService.getFollowerList(user);
-        List<User> following = userUtilService.getFollowingList(user);
+        List<UserModel.FollowInfo> follower = userUtilService.getFollowerList(user, loginUser);
+        List<UserModel.FollowInfo> following = userUtilService.getFollowingList(user, loginUser);
 
-        //비회원: isFollowing 모두 false
-        if (loginUser == null) {
-            List<UserResponseDto.FollowUserInfo> followerList = follower.stream()
-                    .map(one -> UserResponseDto.FollowUserInfo.toDto(one, false))
-                    .collect(Collectors.toList());
-
-            List<UserResponseDto.FollowUserInfo> followingList = following.stream()
-                    .map(one -> UserResponseDto.FollowUserInfo.toDto(one, false))
-                    .collect(Collectors.toList());
-
-            return ResponseEntity.ok(CommonResponse.toResponse(
-                    UserStatusCode.GET_FOLLOW_LIST_SUCCESS_FOR_ANONYMOUS,
-                    UserResponseDto.FollowList.toDto(followerList, followingList)
-            ));
-        }
-
-        //회원: isFollowing 여부 함께 제공
-        List<UserResponseDto.FollowUserInfo> followerList = follower.stream()
-                .map(one -> UserResponseDto.FollowUserInfo.toDto(one, userUtilService.isFollowing(loginUser, one)))
-                .collect(Collectors.toList());
-
-        List<UserResponseDto.FollowUserInfo> followingList = following.stream()
-                .map(one -> UserResponseDto.FollowUserInfo.toDto(one, userUtilService.isFollowing(loginUser, one)))
-                .collect(Collectors.toList());
+        StatusCode statusCode = loginUser == null ? UserStatusCode.GET_FOLLOW_LIST_SUCCESS_FOR_ANONYMOUS : UserStatusCode.GET_FOLLOW_LIST_SUCCESS_FOR_USER;
 
         return ResponseEntity.ok(CommonResponse.toResponse(
-                UserStatusCode.GET_FOLLOW_LIST_SUCCESS_FOR_USER,
-                UserResponseDto.FollowList.toDto(followerList, followingList)
+                statusCode,
+                UserResponseDto.FollowList.toDto(UserResponseDto.FollowUserInfo.toDtos(follower), UserResponseDto.FollowUserInfo.toDtos(following))
         ));
     }
 }

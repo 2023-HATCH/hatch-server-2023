@@ -2,6 +2,7 @@ package hatch.hatchserver2023.domain.user.application;
 
 import hatch.hatchserver2023.domain.user.domain.Follow;
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.user.dto.UserModel;
 import hatch.hatchserver2023.domain.user.dto.UserRequestDto;
 import hatch.hatchserver2023.domain.user.repository.FollowRepository;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
@@ -125,7 +126,7 @@ public class UserUtilService {
      * @param toUser
      */
     public void addFollow(User fromUser, User toUser) {
-        if (fromUser.equals(toUser)) {
+        if (fromUser.getUuid().equals(toUser.getUuid())) {
             throw new UserException(UserStatusCode.CANT_FOLLOW_YOURSELF);
         }
 
@@ -154,38 +155,44 @@ public class UserUtilService {
 
 
 
+
     // 팔로워 목록 조회
-    public List<User> getFollowerList(User user){
+    public List<UserModel.FollowInfo> getFollowerList(User user, User loginUser){
         List<Follow> followList = followRepository.findAllByToUser(user);
-        List<User> followerList = transferFollowListToUserList(followList, "fromUser");
+        List<UserModel.FollowInfo> followerList = transferFollowListToFollowInfoList(followList, loginUser, "fromUser");
         return followerList;
     }
 
     // 팔로잉 목록 조회
-    public List<User> getFollowingList(User user){
+    public List<UserModel.FollowInfo> getFollowingList(User user, User loginUser){
         List<Follow> followList = followRepository.findAllByFromUser(user);
-        List<User> followingList = transferFollowListToUserList(followList, "toUser");
+        List<UserModel.FollowInfo> followingList = transferFollowListToFollowInfoList(followList, loginUser, "toUser");
         return followingList;
     }
 
-    private List<User> transferFollowListToUserList(List<Follow> followList, String option) {
-        List<User> userList = new ArrayList<>();
+    private List<UserModel.FollowInfo> transferFollowListToFollowInfoList(List<Follow> followList, User loginUser, String option) {
+        List<UserModel.FollowInfo> followInfoList = new ArrayList<>();
 
         if(Objects.equals(option, "fromUser")){
             for(Follow follow : followList) {
-                userList.add(follow.getFromUser());
+                User user = follow.getFromUser();
+                followInfoList.add(UserModel.FollowInfo.toModel(user, isFollowing(loginUser, user)));
             }
         } else {    //toUser
             for(Follow follow : followList) {
-                userList.add(follow.getToUser());
+                User user = follow.getToUser();
+                followInfoList.add(UserModel.FollowInfo.toModel(user, isFollowing(loginUser, user)));
             }
         }
-        return userList;
+        return followInfoList;
     }
 
 
     //팔로우 여부
     public Boolean isFollowing(User fromUser, User toUser) {
+//        if(fromUser == null) {
+//            return false;
+//        }
         return followRepository.findByFromUserAndToUser(fromUser, toUser).isPresent();
     }
 

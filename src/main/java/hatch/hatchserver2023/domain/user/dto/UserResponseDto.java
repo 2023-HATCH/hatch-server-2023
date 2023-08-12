@@ -191,5 +191,12 @@ public class UserResponseDto {
                     .isFollowing(isFollowing)
                     .build();
         }
+
+        //FollowInfo Model -> ResponseDto
+        public static List<FollowUserInfo> toDtos(List<UserModel.FollowInfo> followInfoList) {
+            return followInfoList.stream()
+                            .map(one -> FollowUserInfo.toDto(one.getUser(), one.isFollowing()))
+                            .collect(Collectors.toList());
+        }
     }
 }
