@@ -1,0 +1,3 @@
+== 업로드 영상 목록 조회
+
+operation::get-users-video-list[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data,response-fields-beneath-data-video-list,http-response']

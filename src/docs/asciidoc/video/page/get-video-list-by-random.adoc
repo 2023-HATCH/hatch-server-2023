@@ -1,3 +1,5 @@
 == 랜덤 영상 목록 조회 (검색 화면)
 
-operation::get-video-list-by-random[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data,http-response']
+회원/비회원 다른 상태코드를 갖습니다
+
+operation::get-video-list-by-random[snippets='http-request,request-headers,request-parameters,response-fields-beneath-data,response-fields-beneath-data-video-list,http-response']

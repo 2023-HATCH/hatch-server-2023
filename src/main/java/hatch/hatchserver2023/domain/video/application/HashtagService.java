@@ -1,8 +1,11 @@
 package hatch.hatchserver2023.domain.video.application;
 
+import hatch.hatchserver2023.domain.like.application.LikeService;
+import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.video.domain.Hashtag;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.domain.VideoHashtag;
+import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.domain.video.repository.HashtagRepository;
 import hatch.hatchserver2023.domain.video.repository.VideoHashtagRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -21,10 +25,12 @@ public class HashtagService {
 
     private final HashtagRepository hashtagRepository;
     private final VideoHashtagRepository videoHashtagRepository;
+    private final LikeService likeService;
 
-    public HashtagService(HashtagRepository hashtagRepository, VideoHashtagRepository videoHashtagRepository){
+    public HashtagService(HashtagRepository hashtagRepository, VideoHashtagRepository videoHashtagRepository, LikeService likeService){
         this.hashtagRepository = hashtagRepository;
         this.videoHashtagRepository = videoHashtagRepository;
+        this.likeService = likeService;
     }
 
 
@@ -51,7 +57,7 @@ public class HashtagService {
      * @param pageable
      * @return videoList
      */
-    public Slice<Video> searchHashtag(String tag, Pageable pageable){
+    public Slice<VideoModel.VideoInfo> searchHashtag(String tag, User user, Pageable pageable){
 
         List<Video> videoList = new ArrayList<>();
 
@@ -70,9 +76,13 @@ public class HashtagService {
             }
         }  // 검색한 해시태그가 없다면 videoList는 빈 배열
 
+        List<VideoModel.VideoInfo> videoInfoList =  videoList.stream()
+                .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, user)))
+                .collect(Collectors.toList());
+
         //paginaton 적용
         //no-offset
-        Slice<Video> videoSlice = new SliceImpl<>(videoList, pageable, hasNext);
+        Slice<VideoModel.VideoInfo> videoSlice = new SliceImpl<>(videoInfoList, pageable, hasNext);
 
         return videoSlice;
     }

@@ -1,0 +1,4 @@
+== 내 프로필 수정
+
+
+operation::update-profile[snippets='http-request,request-headers,request-fields,response-fields-beneath-data,http-response']

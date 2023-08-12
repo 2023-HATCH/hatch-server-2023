@@ -125,4 +125,12 @@ public class User extends BaseTimeEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+    //==서비스 메서드==//
+    public void updateProfile(String introduce, String instagramAccount, String twitterAccount){
+        this.introduce = introduce;
+        this.instagramAccount = instagramAccount;
+        this.twitterAccount = twitterAccount;
+    }
 }
