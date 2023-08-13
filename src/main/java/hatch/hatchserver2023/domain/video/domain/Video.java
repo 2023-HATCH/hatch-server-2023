@@ -121,6 +121,12 @@ public class Video extends BaseTimeEntity {
     public void addViewCount(int views) { this.viewCount += views; }
 
 
+    /**
+     * 조회수 수 수정
+     */
+    public void updateViewCount(int viewCount) { this.viewCount = viewCount; }
+
+
     //==생성 메서드==//
 //    @Builder
 //    public static Video createVideo() {

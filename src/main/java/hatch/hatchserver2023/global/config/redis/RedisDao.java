@@ -25,6 +25,10 @@ public class RedisDao {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
         values.set(key, data);
     }
+    public void setValues(String key, Integer data) {
+        ValueOperations<String, String> values = redisTemplate.opsForValue();
+        values.set(key, String.valueOf(data));
+    }
 
     /**
      * String 데이터를 일정 시간 동안만 저장하는 메서드
