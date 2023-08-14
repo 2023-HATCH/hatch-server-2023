@@ -100,10 +100,20 @@ public class VideoService {
     public Slice<VideoModel.VideoInfo> findByRandom(User loginUser, Pageable pageable) {
         Slice<Video> videoSlice = videoRepository.findAllOrderByRandom(pageable);
 
-        List<VideoModel.VideoInfo> videoInfoList = videoSlice.stream()
-                .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, loginUser)))
-                .collect(Collectors.toList());
+        List<VideoModel.VideoInfo> videoInfoList;
 
+        // 비회원: isLiked가 모두 false
+        if(loginUser == null) {
+            videoInfoList = videoSlice.stream()
+                    .map(one -> VideoModel.VideoInfo.toModel(one, false))
+                    .collect(Collectors.toList());
+        }
+        //회원: isLiked 여부 확인
+        else {
+            videoInfoList = videoSlice.stream()
+                    .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, loginUser)))
+                    .collect(Collectors.toList());
+        }
         Slice<VideoModel.VideoInfo> videoInfoSlice = new SliceImpl<>(videoInfoList, pageable, videoSlice.hasNext());
 
         return videoInfoSlice;
@@ -119,10 +129,20 @@ public class VideoService {
     public Slice<VideoModel.VideoInfo> findByCreatedAt(User loginUser, Pageable pageable) {
         Slice<Video> videoSlice = videoRepository.findAllByOrderByCreatedAtDesc(pageable);
 
-        List<VideoModel.VideoInfo> videoInfoList = videoSlice.stream()
-                .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, loginUser)))
-                .collect(Collectors.toList());
+        List<VideoModel.VideoInfo> videoInfoList;
 
+        //비회원: isLiked가 모두 false
+        if(loginUser == null) {
+            videoInfoList = videoSlice.stream()
+                    .map(one -> VideoModel.VideoInfo.toModel(one, false))
+                    .collect(Collectors.toList());
+        }
+        //회원: 좋아요 누른 여부 isLiked 확인
+        else{
+            videoInfoList = videoSlice.stream()
+                    .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, loginUser)))
+                    .collect(Collectors.toList());
+        }
         Slice<VideoModel.VideoInfo> videoInfoSlice = new SliceImpl<>(videoInfoList, pageable, videoSlice.hasNext());
 
         return videoInfoSlice;

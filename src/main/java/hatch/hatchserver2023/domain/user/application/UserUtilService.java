@@ -83,9 +83,20 @@ public class UserUtilService {
 
         Slice<Video> videoSlice = videoRepository.findAllByUserId(user, pageable);
 
-        List<VideoModel.VideoInfo> videoInfoList =  videoSlice.stream()
-                .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, loginUser)))
-                .collect(Collectors.toList());
+        List<VideoModel.VideoInfo> videoInfoList;
+
+        //비회원: liked는 모두 false
+        if (loginUser == null) {
+            videoInfoList = videoSlice.stream()
+                    .map(one -> VideoModel.VideoInfo.toModel(one, false))
+                    .collect(Collectors.toList());
+        }
+        //회원: 영상 좋아요 여부 liked 지정
+        else{
+            videoInfoList = videoSlice.stream()
+                    .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, loginUser)))
+                    .collect(Collectors.toList());
+        }
 
         Slice<VideoModel.VideoInfo> videoInfoSlice = new SliceImpl<>(videoInfoList, pageable, videoSlice.hasNext());
         return videoInfoSlice;

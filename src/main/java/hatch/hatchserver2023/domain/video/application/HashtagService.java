@@ -57,7 +57,7 @@ public class HashtagService {
      * @param pageable
      * @return videoList
      */
-    public Slice<VideoModel.VideoInfo> searchHashtag(String tag, User user, Pageable pageable){
+    public Slice<VideoModel.VideoInfo> searchHashtag(String tag, User loginUser, Pageable pageable){
 
         List<Video> videoList = new ArrayList<>();
 
@@ -76,9 +76,20 @@ public class HashtagService {
             }
         }  // 검색한 해시태그가 없다면 videoList는 빈 배열
 
-        List<VideoModel.VideoInfo> videoInfoList =  videoList.stream()
-                .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, user)))
-                .collect(Collectors.toList());
+        List<VideoModel.VideoInfo> videoInfoList;
+
+        // 비회원: isLiked가 모두 false
+        if(loginUser == null) {
+            videoInfoList = videoList.stream()
+                    .map(one -> VideoModel.VideoInfo.toModel(one, false))
+                    .collect(Collectors.toList());
+        }
+        //회원: isLiked 여부 확인
+        else {
+            videoInfoList = videoList.stream()
+                    .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, loginUser)))
+                    .collect(Collectors.toList());
+        }
 
         //paginaton 적용
         //no-offset

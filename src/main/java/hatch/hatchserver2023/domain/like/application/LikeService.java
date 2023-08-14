@@ -6,6 +6,8 @@ import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.domain.like.domain.Like;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.like.repository.LikeRepository;
+import hatch.hatchserver2023.domain.video.dto.VideoModel;
+import hatch.hatchserver2023.domain.video.dto.VideoResponseDto;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -80,34 +83,40 @@ public class LikeService {
      * 어느 사용자의 좋아요 누른 영상 목록 조회
      *
      * @param userId
+     * @param loginUser
      * @param pageable
-     * @return videoList
+     * @return likedVideoList
      */
-    public Slice<Video> getLikedVideoList(UUID userId, Pageable pageable){
+    public Slice<VideoModel.VideoInfo> getLikedVideoList(UUID userId, User loginUser, Pageable pageable){
 
         User user = userRepository.findByUuid(userId)
                 .orElseThrow(() -> new AuthException(UserStatusCode.UUID_NOT_FOUND));
 
         Slice<Like> likeSlice = likeRepository.findAllByUserId(user, pageable);
-        List<Like> likeList = likeSlice.getContent();
 
         //각 좋아요에서 영상 얻어오기
-        List<Video> videoList = new ArrayList<>();
+        List<VideoModel.VideoInfo> videoInfoList;
 
-        for(Like like : likeList){
-            videoList.add(like.getVideoId());
+        //비회원: liked는 모두 false
+        if (loginUser == null) {
+            videoInfoList = likeSlice.stream()
+                    .map(like -> VideoModel.VideoInfo.toModel(like.getVideoId(), false))
+                    .collect(Collectors.toList());
+        }
+        //회원: 영상 좋아요 여부 liked 지정
+        else{
+            videoInfoList = likeSlice.stream()
+                    .map(like -> VideoModel.VideoInfo.toModel(like.getVideoId(), isAlreadyLiked(like.getVideoId(), loginUser)))
+                    .collect(Collectors.toList());
         }
 
         //paginaton 적용
         //no-offset
-        Slice<Video> videoSlice = new SliceImpl<>(videoList, pageable, likeSlice.hasNext());
+        Slice<VideoModel.VideoInfo> videoInfoSlice = new SliceImpl<>(videoInfoList, pageable, likeSlice.hasNext());
 
-        return videoSlice;
+        return videoInfoSlice;
     }
 
-
-    //TODO: 최적화 방법 고민
-    //TODO: 혹은 Video Entity에 likeCount 자체에 Formula로 쿼리 매핑해두기
 
     /**
      * 한 동영상의 좋아요 갯수 세기
