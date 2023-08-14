@@ -1,6 +1,7 @@
 package hatch.hatchserver2023.domain.video.api;
 
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.video.VideoCacheUtil;
 import hatch.hatchserver2023.domain.video.application.HashtagService;
 import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.video.application.VideoService;
@@ -32,10 +33,28 @@ public class VideoController {
     private final HashtagService hashtagService;
     private final LikeService likeService;
 
-    public VideoController(VideoService videoService, HashtagService hashtagService, LikeService likeService){
+    private final VideoCacheUtil videoCacheUtil;
+
+    public VideoController(VideoService videoService, HashtagService hashtagService, LikeService likeService, VideoCacheUtil videoCacheUtil){
         this.videoService = videoService;
         this.hashtagService = hashtagService;
         this.likeService = likeService;
+        this.videoCacheUtil = videoCacheUtil;
+    }
+
+    /**
+     * 조회수 증가 api
+     * @param videoId
+     * @return
+     */
+    @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
+    @GetMapping("/{videoId}/view")
+    public ResponseEntity<CommonResponse> addViewCount(@PathVariable UUID videoId) {
+        Video video = videoService.findOne(videoId);
+        videoCacheUtil.addViewCount(video);
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                VideoStatusCode.ADD_VIEW_COUNT_SUCCESS
+        ));
     }
 
 

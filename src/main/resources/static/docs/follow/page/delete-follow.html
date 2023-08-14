@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>검색 - 태그 검색</title>
+<title>팔로우 삭제</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -441,13 +441,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_검색_태그_검색">검색 - 태그 검색</h2>
+<h2 id="_팔로우_삭제">팔로우 삭제</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_검색_태그_검색_http_request">HTTP request</h3>
+<h3 id="_팔로우_삭제_http_request">HTTP request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/videos/search?tag=%ED%83%9C%EA%B7%B8&amp;page=0&amp;size=2 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/v1/users/follow/e276ea3a-3eb1-413e-82cf-ac54dacef661?_csrf=361b2de9-df70-46a9-a8af-19abe2f48ec9 HTTP/1.1
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
 Host: localhost:8080</code></pre>
@@ -455,7 +455,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_검색_태그_검색_request_headers">Request headers</h3>
+<h3 id="_팔로우_삭제_request_headers">Request headers</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -470,51 +470,39 @@ Host: localhost:8080</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>headerXAccessToken</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.
- liked의 차이</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자 (FromUser)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>headerXRefreshToken</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자면 같이 보내주시고, 비회원이라면 보내지 않으면 됩니다.
- liked의 차이</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자 (FromUser)</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_검색_태그_검색_request_parameters">Request parameters</h3>
+<h3 id="_팔로우_삭제_path_parameters">Path parameters</h3>
 <table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/v1/users/follow/{userId}</caption>
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">파라미터</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tag</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">검색하고자 하는 해시태그</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 번호(0부터 시작)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">팔로우 지우고자 하는 사용자 UUID (ToUser)</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_검색_태그_검색_response_fields-beneath-data-video-list">Response fields-beneath-data-video-list</h3>
+<h3 id="_팔로우_삭제_response_fields-beneath-data">Response fields-beneath-data</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -530,135 +518,28 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uuid</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>success</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">동영상 식별자 UUID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">영상 제목</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tag</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">해시태그</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>user.userId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">작성 사용자 식별자 uuid</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>user.email</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 이메일</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>user.nickname</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 닉네임</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>user.profileImg</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 프로필 사진 S3 경로</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>videoUrl</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">동영상 S3 경로</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>thumbnailUrl</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">썸네일 이미지 S3 경로</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>likeCount</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">좋아요 개수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>commentCount</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 개수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>length</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">milliseconds 단위 동영상 길이</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdAt</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">생성 시각</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">팔로우 삭제 성공 여부 (default: true)</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_검색_태그_검색_http_response">HTTP response</h3>
+<h3 id="_팔로우_삭제_http_response">HTTP response</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1337
+Content-Length: 164
 
 {
-  "timeStamp" : "2023/08/14 13:33:29",
-  "code" : "VIDEO-2011",
-  "message" : "VIDEO-비회원 해시태그 검색 성공",
+  "timeStamp" : "2023/08/14 13:33:27",
+  "code" : "USER-2022",
+  "message" : "[사용자] 팔로우 삭제 성공",
   "data" : {
-    "videoList" : [ {
-      "uuid" : "8ff619ef-3e77-41ae-9f25-5251cbb2c2eb",
-      "title" : "타이틀",
-      "tag" : "#해시 #태그",
-      "user" : {
-        "userId" : "1c9ca0e5-3ce5-4f80-a7a1-f8c82dcaa200",
-        "nickname" : "닉네임",
-        "email" : "이메일",
-        "profileImg" : "프로필 이미지 s3 경로"
-      },
-      "videoUrl" : "동영상 s3 경로",
-      "thumbnailUrl" : "썸네일 이미지 s3 경로",
-      "likeCount" : 3,
-      "commentCount" : 11,
-      "length" : 107800,
-      "createdAt" : null,
-      "liked" : false
-    }, {
-      "uuid" : "7816feee-0bfa-4b66-b836-afb0e1d97e61",
-      "title" : "타이틀 1",
-      "tag" : "#해시 #태그 #1",
-      "user" : {
-        "userId" : "1c9ca0e5-3ce5-4f80-a7a1-f8c82dcaa200",
-        "nickname" : "닉네임",
-        "email" : "이메일",
-        "profileImg" : "프로필 이미지 s3 경로"
-      },
-      "videoUrl" : "동영상 s3 경로 1",
-      "thumbnailUrl" : "썸네일 이미지 s3 경로 1",
-      "likeCount" : 5,
-      "commentCount" : 2,
-      "length" : 9999,
-      "createdAt" : null,
-      "liked" : true
-    } ],
-    "isLast" : true
+    "success" : true
   }
 }</code></pre>
 </div>
@@ -670,7 +551,7 @@ Content-Length: 1337
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-06 15:29:44 +0900
+Last updated 2023-08-12 21:55:39 +0900
 </div>
 </div>
 </body>

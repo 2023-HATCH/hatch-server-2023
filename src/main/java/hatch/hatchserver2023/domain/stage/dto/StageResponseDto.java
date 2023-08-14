@@ -1,5 +1,6 @@
 package hatch.hatchserver2023.domain.stage.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import hatch.hatchserver2023.domain.stage.StageModel;
 import hatch.hatchserver2023.domain.talk.domain.TalkMessage;
 import hatch.hatchserver2023.domain.talk.dto.TalkResponseDto;
@@ -27,6 +28,7 @@ public class StageResponseDto {
     @ToString
     @Getter
     @Builder
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Enter {
         private String stageStatus;
         private Integer userCount;

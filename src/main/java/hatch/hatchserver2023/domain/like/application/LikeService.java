@@ -11,7 +11,7 @@ import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.AuthException;
 import hatch.hatchserver2023.global.common.response.exception.VideoException;
-import hatch.hatchserver2023.global.config.redis.RedisCacheUtil;
+import hatch.hatchserver2023.domain.like.LikeCacheUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -29,13 +29,13 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final VideoRepository videoRepository;
     private final UserRepository userRepository;
-    private final RedisCacheUtil redisCacheUtil;
+    private final LikeCacheUtil likeCacheUtil;
 
-    public LikeService(LikeRepository likeRepository, VideoRepository videoRepository, UserRepository userRepository, RedisCacheUtil redisCacheUtil){
+    public LikeService(LikeRepository likeRepository, VideoRepository videoRepository, UserRepository userRepository, LikeCacheUtil likeCacheUtil){
         this.likeRepository = likeRepository;
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
-        this.redisCacheUtil = redisCacheUtil;
+        this.likeCacheUtil = likeCacheUtil;
     }
 
 
@@ -47,29 +47,13 @@ public class LikeService {
      * @param user
      * @return likeUuid
      */
-    public UUID addLike(UUID videoId, User user){
+    public void addLike(UUID videoId, User user){
         // 비디오 존재 유무 확인
         Video video = videoRepository.findByUuid(videoId)
                 .orElseThrow(() -> new VideoException(VideoStatusCode.VIDEO_NOT_FOUND));
 
-        //이미 좋아요를 눌렀다면
-        if(isAlreadyLiked(video, user)){
-            // 새로운 좋아요를 만들지 않고 에러 발생
-            throw new VideoException(VideoStatusCode.ALREADY_LIKED);
-
-        } else{
-            // 좋아요를 누르지 않은 상태면, 새로운 좋아요 생성
-            Like like = Like.builder()
-                    .videoId(video)
-                    .userId(user)
-                    .build();
-
-//            likeRepository.save(like);
-            // redis 에 좋아요 데이터 저장, 좋아요 수 저장
-            redisCacheUtil.addLike(video.getId(), user.getId());
-
-            return like.getUuid();
-        }
+        // redis 에 좋아요 데이터 저장, 좋아요 수 저장
+        likeCacheUtil.addLike(video, user);
     }
 
 
@@ -88,7 +72,7 @@ public class LikeService {
 //                .orElseThrow(() -> new VideoException(VideoStatusCode.LIKE_NOT_FOUND));
 
 //        likeRepository.delete(like);
-        redisCacheUtil.deleteLike(video, user);
+        likeCacheUtil.deleteLike(video, user);
     }
 
 
@@ -150,7 +134,7 @@ public class LikeService {
      */
     public boolean isAlreadyLiked(Video video, User user){
         log.info("isAlreadyLiked");
-        return redisCacheUtil.isLiked(video, user);
+        return likeCacheUtil.isLiked(video, user);
     }
 
 

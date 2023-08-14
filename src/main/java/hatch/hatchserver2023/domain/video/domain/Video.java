@@ -115,10 +115,21 @@ public class Video extends BaseTimeEntity {
     public void addCommentCount() { this.commentCount += 1; }
 
     /**
+     * 댓글 수 수정
+     */
+    public void updateCommentCount(int commentCount) { this.commentCount = commentCount; }
+
+    /**
      * 조회수 증가 (Todo: 여기있어도 사용할 수 있을지는 미지수)
      * @param views
      */
     public void addViewCount(int views) { this.viewCount += views; }
+
+
+    /**
+     * 조회수 수 수정
+     */
+    public void updateViewCount(int viewCount) { this.viewCount = viewCount; }
 
 
     //==생성 메서드==//
