@@ -18,6 +18,7 @@ import java.util.List;
 @Component
 public class VideoCacheUtil {
     private final String KEY_CACHE_VIDEO_VIEW_COUNT = "video:viewCount:"; // String
+    private final String KEY_CACHE_VIDEO_COMMENT_COUNT = "video:commentCount:"; // String
 
     private final RedisDao redisDao;
     private final VideoRepository videoRepository;
@@ -50,19 +51,48 @@ public class VideoCacheUtil {
 
         // redis 조회
         String key = toViewCountKey(video.getId());
-        Object countObject = redisDao.getValues(key);
-
-        int view;
-        if(countObject == null) {
-            // redis 에 없으면 RDB에서 가져온 데이터 사용
-            view = video.getViewCount();
-        } else {
-            // redis 에 있으면 그걸로 사용
-            view = Integer.parseInt(countObject.toString());
-        }
+        int view = getStringCacheData(key, video);
 
         log.info("getViewCount view : {}", view);
         return view;
+    }
+
+    /**
+     * 댓글수 증가 (redis)
+     * @param video
+     */
+    public void increaseCommentCount(Video video) {
+        log.info("[REDIS] increaseCommentCount");
+
+        int increasedCount = saveCommentCount(video, +1);
+        log.info("increaseCommentCount increasedCount : {}", increasedCount);
+    }
+
+    /**
+     * 댓글수 감소 (redis)
+     * @param video
+     */
+    public void decreseCommentCount(Video video) {
+        log.info("[REDIS] addCommentCount");
+
+        int decreaseCount = saveCommentCount(video, -1);
+        log.info("addCommentCount decreaseCount : {}", decreaseCount);
+    }
+
+    /**
+     * 댓글수 조회 (redis) : 수빈님 연결 부탁하기
+     * @param video
+     * @return
+     */
+    public int getCommentCount(Video video) { // TODO : 모든 영상 조회 부분에 적용
+        log.info("[REDIS] getCommentCount");
+
+        // redis 조회
+        String key = toCommentCountKey(video.getId());
+        int commentCount = getStringCacheData(key, video);
+
+        log.info("getCommentCount commentCount : {}", commentCount);
+        return commentCount;
     }
 
 
@@ -72,15 +102,17 @@ public class VideoCacheUtil {
      */
     @Scheduled(fixedRate = 1000 * 60 * 60 * 6) // 6시간마다 실행
 //    @Scheduled(fixedRate = 1000 * 10) // 10초 마다 실행(테스트용)
-    private void moveViewCountDataToRDB() {
-        log.info("[SCHEDULED] moveLikeDataToRDB : start at {}", ZonedDateTime.now());
+    private void moveCountDataOfVideoToRDB() {
+        log.info("[SCHEDULED] moveCountDataOfVideoToRDB : start at {}", ZonedDateTime.now());
 
         // 조회수 데이터 String
         Cursor<String> viewKeyCursor = redisDao.getKeys(KEY_CACHE_VIDEO_VIEW_COUNT+"*"); // 조회수 데이터 key값 목록
+        Cursor<String> commentCountKeyCursor = redisDao.getKeys(KEY_CACHE_VIDEO_COMMENT_COUNT+"*"); // 댓글수 데이터 key값 목록
 
         List<Video> videos = new ArrayList<>();
         List<String> viewKeys = new ArrayList<>();
-        makeViewCountedVideos(viewKeyCursor, videos, viewKeys);
+        List<String> commentCountKeys = new ArrayList<>();
+        makeCountedVideos(viewKeyCursor, commentCountKeyCursor, videos, viewKeys, commentCountKeys);
 
         log.info("[SCHEDULED] get viewCount END");
         log.info("[SCHEDULED] viewCount list size : {}", videos.size());
@@ -91,10 +123,10 @@ public class VideoCacheUtil {
 
         videoRepository.saveAll(videos);
         redisDao.deleteValues(viewKeys);
-        log.info("[SCHEDULED] moveLikeDataToRDB : finish at {}", ZonedDateTime.now());
+        log.info("[SCHEDULED] moveCountDataOfVideoToRDB : finish at {}", ZonedDateTime.now());
     }
 
-    private void makeViewCountedVideos(Cursor<String> viewKeyCursor, List<Video> videos, List<String> viewKeys) {
+    private void makeCountedVideos(Cursor<String> viewKeyCursor, Cursor<String> commentCountKeyCursor, List<Video> videos, List<String> viewKeys, List<String> commentCountKeys) {
         while (viewKeyCursor.hasNext()) {
             // 이번 키값
             String key = viewKeyCursor.next();
@@ -110,11 +142,50 @@ public class VideoCacheUtil {
             videos.add(video);
             log.info("[SCHEDULED] viewCount : {}, video : {}", video.getViewCount(), video.getTitle());
         }
+
+        // TODO : 댓글수 데이터 동기화 로직 추가
     }
 
 
     private String toViewCountKey(long videoId) {
         return KEY_CACHE_VIDEO_VIEW_COUNT+videoId;
+    }
+
+    private String toCommentCountKey(long videoId) {
+        return KEY_CACHE_VIDEO_COMMENT_COUNT+videoId;
+    }
+
+    /**
+     * 댓글수 증감하여 Redis에 저장하는 메서드
+     * @param video
+     * @param diff
+     * @return
+     */
+    private int saveCommentCount(Video video, int diff) {
+        int commentCount = getCommentCount(video);
+
+        redisDao.setValues(toCommentCountKey(video.getId()), commentCount+diff);
+        return commentCount;
+    }
+
+    /**
+     * Redis 에서 String자료형의 데이터 존재여부 확인 후 Redis또는 RDB에서 가져옴
+     * @param key
+     * @param video
+     * @return
+     */
+    private int getStringCacheData(String key, Video video) {
+        Object countObject = redisDao.getValues(key);
+
+        int commentCount;
+        if(countObject == null) {
+            // redis 에 없으면 RDB에서 가져온 데이터 사용
+            commentCount = video.getViewCount();
+        } else {
+            // redis 에 있으면 그걸로 사용
+            commentCount = Integer.parseInt(countObject.toString());
+        }
+        return commentCount;
     }
 
     // TODO : LikeCacheUtil 과 중복
