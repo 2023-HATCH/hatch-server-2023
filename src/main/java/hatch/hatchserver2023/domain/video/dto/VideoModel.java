@@ -14,12 +14,9 @@ public class VideoModel {
 
         private Video video;
         private boolean isLiked;
+        private int likeCount;
+        private int commentCount;
+        private int viewCount;
 
-        public static VideoInfo toModel(Video video, boolean isLiked) {
-            return VideoInfo.builder()
-                    .video(video)
-                    .isLiked(isLiked)
-                    .build();
-        }
     }
 }

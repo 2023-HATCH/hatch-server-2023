@@ -3,6 +3,7 @@ package hatch.hatchserver2023.domain.video.application;
 
 import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.video.VideoCacheUtil;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
@@ -41,11 +42,13 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final S3Service s3Service;
     private final LikeService likeService;
+    private final VideoCacheUtil videoCacheUtil;
 
-    public VideoService(VideoRepository videoRepository, S3Service s3Service, LikeService likeService) {
+    public VideoService(VideoRepository videoRepository, S3Service s3Service, LikeService likeService, VideoCacheUtil videoCacheUtil) {
         this.videoRepository = videoRepository;
         this.s3Service = s3Service;
         this.likeService = likeService;
+        this.videoCacheUtil = videoCacheUtil;
     }
 
     @Value("${DEFAULT_THUMBNAIL_URL}")
@@ -105,13 +108,25 @@ public class VideoService {
         // 비회원: isLiked가 모두 false
         if(loginUser == null) {
             videoInfoList = videoSlice.stream()
-                    .map(one -> VideoModel.VideoInfo.toModel(one, false))
+                    .map(one -> VideoModel.VideoInfo.builder()
+                            .video(one)
+                            .isLiked(false)
+                            .viewCount(videoCacheUtil.getViewCount(one))
+                            .likeCount(videoCacheUtil.getLikeCount(one))
+                            .commentCount(videoCacheUtil.getCommentCount(one))
+                            .build())
                     .collect(Collectors.toList());
         }
         //회원: isLiked 여부 확인
         else {
             videoInfoList = videoSlice.stream()
-                    .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, loginUser)))
+                    .map(one -> VideoModel.VideoInfo.builder()
+                            .video(one)
+                            .isLiked(likeService.isAlreadyLiked(one, loginUser))
+                            .viewCount(videoCacheUtil.getViewCount(one))
+                            .likeCount(videoCacheUtil.getLikeCount(one))
+                            .commentCount(videoCacheUtil.getCommentCount(one))
+                            .build())
                     .collect(Collectors.toList());
         }
         Slice<VideoModel.VideoInfo> videoInfoSlice = new SliceImpl<>(videoInfoList, pageable, videoSlice.hasNext());
@@ -134,13 +149,25 @@ public class VideoService {
         //비회원: isLiked가 모두 false
         if(loginUser == null) {
             videoInfoList = videoSlice.stream()
-                    .map(one -> VideoModel.VideoInfo.toModel(one, false))
+                    .map(one -> VideoModel.VideoInfo.builder()
+                            .video(one)
+                            .isLiked(false)
+                            .viewCount(videoCacheUtil.getViewCount(one))
+                            .likeCount(videoCacheUtil.getLikeCount(one))
+                            .commentCount(videoCacheUtil.getCommentCount(one))
+                            .build())
                     .collect(Collectors.toList());
         }
         //회원: 좋아요 누른 여부 isLiked 확인
         else{
             videoInfoList = videoSlice.stream()
-                    .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, loginUser)))
+                    .map(one -> VideoModel.VideoInfo.builder()
+                            .video(one)
+                            .isLiked(likeService.isAlreadyLiked(one, loginUser))
+                            .viewCount(videoCacheUtil.getViewCount(one))
+                            .likeCount(videoCacheUtil.getLikeCount(one))
+                            .commentCount(videoCacheUtil.getCommentCount(one))
+                            .build())
                     .collect(Collectors.toList());
         }
         Slice<VideoModel.VideoInfo> videoInfoSlice = new SliceImpl<>(videoInfoList, pageable, videoSlice.hasNext());

@@ -4,10 +4,10 @@ package hatch.hatchserver2023.domain.like.application;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.domain.like.domain.Like;
+import hatch.hatchserver2023.domain.video.VideoCacheUtil;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.like.repository.LikeRepository;
 import hatch.hatchserver2023.domain.video.dto.VideoModel;
-import hatch.hatchserver2023.domain.video.dto.VideoResponseDto;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
@@ -20,7 +20,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -32,12 +31,14 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final VideoRepository videoRepository;
     private final UserRepository userRepository;
+    private final VideoCacheUtil videoCacheUtil;
     private final LikeCacheUtil likeCacheUtil;
 
-    public LikeService(LikeRepository likeRepository, VideoRepository videoRepository, UserRepository userRepository, LikeCacheUtil likeCacheUtil){
+    public LikeService(LikeRepository likeRepository, VideoRepository videoRepository, UserRepository userRepository, VideoCacheUtil videoCacheUtil, LikeCacheUtil likeCacheUtil){
         this.likeRepository = likeRepository;
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
+        this.videoCacheUtil = videoCacheUtil;
         this.likeCacheUtil = likeCacheUtil;
     }
 
@@ -74,7 +75,6 @@ public class LikeService {
 //        Like like = likeRepository.findByVideoIdAndUserId(video, user)
 //                .orElseThrow(() -> new VideoException(VideoStatusCode.LIKE_NOT_FOUND));
 
-//        likeRepository.delete(like);
         likeCacheUtil.deleteLike(video, user);
     }
 
@@ -100,13 +100,25 @@ public class LikeService {
         //비회원: liked는 모두 false
         if (loginUser == null) {
             videoInfoList = likeSlice.stream()
-                    .map(like -> VideoModel.VideoInfo.toModel(like.getVideoId(), false))
+                    .map(like -> VideoModel.VideoInfo.builder()
+                            .video(like.getVideoId())
+                            .isLiked(false)
+                            .viewCount(videoCacheUtil.getViewCount(like.getVideoId()))
+                            .likeCount(videoCacheUtil.getLikeCount(like.getVideoId()))
+                            .commentCount(videoCacheUtil.getCommentCount(like.getVideoId()))
+                            .build())
                     .collect(Collectors.toList());
         }
         //회원: 영상 좋아요 여부 liked 지정
         else{
             videoInfoList = likeSlice.stream()
-                    .map(like -> VideoModel.VideoInfo.toModel(like.getVideoId(), isAlreadyLiked(like.getVideoId(), loginUser)))
+                    .map(like -> VideoModel.VideoInfo.builder()
+                            .video(like.getVideoId())
+                            .isLiked(isAlreadyLiked(like.getVideoId(), loginUser))
+                            .viewCount(videoCacheUtil.getViewCount(like.getVideoId()))
+                            .likeCount(videoCacheUtil.getLikeCount(like.getVideoId()))
+                            .commentCount(videoCacheUtil.getCommentCount(like.getVideoId()))
+                            .build())
                     .collect(Collectors.toList());
         }
 
