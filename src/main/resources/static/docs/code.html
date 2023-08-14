@@ -437,11 +437,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="book">
+<body class="book toc2 toc-left">
 <div id="header">
 <h1>Status Code</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_common">COMMON</a></li>
+<li><a href="#_user">USER</a></li>
+<li><a href="#_stage">STAGE</a></li>
+<li><a href="#_talk">TALK</a></li>
+<li><a href="#_video">VIDEO</a></li>
+<li><a href="#_s3">S3</a></li>
+<li><a href="#_socket_response">SOCKET_RESPONSE</a></li>
+</ul>
 </div>
 </div>
 <div id="content">
@@ -450,16 +462,505 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>상태 코드 명세서</p>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_common"><a class="link" href="#_common">COMMON</a></h3>
 <div class="paragraph">
-<p>Unresolved directive in code.adoc - include::etc/StatusCode.adoc[]</p>
+<p>공통 상태 코드</p>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">코드</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-200</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 정상 처리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-201</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 새로운 리소스 생성</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-400</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 잘못된 요청</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-401</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 인증되지 않음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-403</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 권한 부족</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-404</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 요청 리소스를 찾을 수 없음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>COMMON-500</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[공통] 서버 내부 오류</p></td>
+</tr>
+</tbody>
+</table>
 </div>
+<div class="sect2">
+<h3 id="_user"><a class="link" href="#_user">USER</a></h3>
+<div class="paragraph">
+<p>사용자 상태 코드</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">코드</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2000</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 카카오 회원가입 및 로그인 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2011</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 사용자 프로필 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2012</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 회원: 사용자가 업로드한 영상 목록 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2013</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 비회원: 사용자가 업로드한 영상 목록 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2014</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 프로필 수정 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2015</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 계정 검색 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2021</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 팔로우 등록 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2022</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 팔로우 삭제 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2023</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 회원: 팔로잉/팔로워 목록 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-2024</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 비회원: 팔로잉/팔로워 목록 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4101</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 로그인 아이디 존재하지 않음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4102</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 토큰에서 사용자 정보를 가져올 수 없음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4103</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 이 UUID 에 해당하는 사용자 없음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4104</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] UUID 값이 비었음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4105</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 쿠키 목록이 비었음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4306</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 사용자 권한 부족 (api 메서드 단위)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4401</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] PK에 해당하는 사용자를 찾을 수 없음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-4402</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 해당 Follow를 찾을 수 없음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-5001</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] type 값이 kakao가 아님. 카카오로그인 방식만 사용 가능함</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-5002</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 해당 카카오 계정으로 회원가입된 사용자 이미 존재함</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-5003</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 카카오 사용자 정보 가져오기 실패</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-5004</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 카카오 사용자 정보에 닉네임 값이 없음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER-5011</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[사용자] 자기 자신을 팔로우할 수 없음</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_stage"><a class="link" href="#_stage">STAGE</a></h3>
+<div class="paragraph">
+<p>스테이지 상태 코드</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">코드</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-2001</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 스테이지 입장 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-2003</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 스테이지 내 사용자 목록 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-2004</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 캐치 요청 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-4401</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 음악 제목에 해당하는 스테이지 음악을 찾을 수 없음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-5001</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 스테이지에 이미 입장되어있는 사용자임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-5002</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 입장한 인원수가 0임. 퇴장 불가</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-5003</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 스테이지 상태가 캐치가 아님</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-5004</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 스테이지 상태가 플레이가 아님</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-5006</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 스테이지 플레이어 사용자 정보 json 변환 저장 실패</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-5007</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 스테이지 mvp 사용자 정보 json 맵핑 실패</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-5008</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 스테이지 상태가 캐치가 아님</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-5009</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 스테이지에 입장했던 사용자가 아니기에 퇴장할 수 없음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-5011</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 스테이지 음악 정보 json 맵핑 실패</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE-5012</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[스테이지] 스테이지 플레이어 데이터 중 MVP 사용자 가져오기 실패</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_talk"><a class="link" href="#_talk">TALK</a></h3>
+<div class="paragraph">
+<p>라이브톡 상태 코드</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">코드</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TALK-2001</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[라이브톡] 라이브톡 메세지 목록 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TALK-5001</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[라이브톡] 라이브톡 메세지의 생성 시각값이 존재하지 않음</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_video"><a class="link" href="#_video">VIDEO</a></h3>
+<div class="paragraph">
+<p>동영상 상태 코드</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">코드</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2001</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-동영상 업로드 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2002</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-동영상 삭제 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2003</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-동영상 상세 정보 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2004</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-회원 동영상 목록 정보 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2005</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-비회원 동영상 목록 정보 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2010</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-회원 해시태그 검색 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2011</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-비회원 해시태그 검색 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2012</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-해시태그 목록 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2020</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-댓글 등록 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2021</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-댓글 삭제 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2022</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-댓글 목록 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2030</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-좋아요 등록 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2031</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-좋아요 삭제 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2032</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-회원 좋아요 누른 영상 목록 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2033</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-비회원 좋아요 누른 영상 목록 조회 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-2034</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-조회수 증가 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-4401</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-해당 동영상을 찾을 수 없음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-4420</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-해당 댓글을 찾을 수 없음</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-4121</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-댓글 작성자가 아닌 사용자가 댓글을 삭제할 수 없습니다.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-4430</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-해당 좋아요를 찾을 수 없습니다</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-4031</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-이미 좋아요를 눌러서 새로운 좋아요를 추가할 수 없습니다</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-5001</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-썸네일 추출 과정 중 multipartfile을 file로 전환 실패</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>VIDEO-5002</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VIDEO-썸네일 추출 과정 중 file을 multipartfile로 전환 실패</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_s3"><a class="link" href="#_s3">S3</a></h3>
+<div class="paragraph">
+<p>S3 상태 코드</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">코드</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>S3-2000</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3-파일 업로드 성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>S3-5001</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3-파일 업로드 실패</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>S3-5002</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3-임시 파일로 전환 실패</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>S3-5003</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3-임시 파일 삭제 실패</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>S3-5004</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3-S3 파일 삭제 실패</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_socket_response"><a class="link" href="#_socket_response">SOCKET_RESPONSE</a></h3>
+<div class="paragraph">
+<p>소켓통신 응답 타입</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">코드</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TALK_MESSAGE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">라이브톡 메세지 전송</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TALK_REACTION</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">라이브톡 반응 전송</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>USER_COUNT</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 인원수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CATCH_START</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 캐치 시작</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CATCH_END</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 캐치 끝</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CATCH_END_RESTART</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 캐치 끝, 캐치 다시 시작</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PLAY_START</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 플레이 시작</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PLAY_SKELETON</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 플레이 스켈레톤 전달</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PLAY_END</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 플레이 끝</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MVP_START</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 MVP세리머니 시작</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MVP_SKELETON</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 MVP세리머니 스켈레톤 전달</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MVP_END</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 MVP세리머니 끝</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE_EXIT</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 퇴장</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STAGE_ROUTINE_STOP</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 진행 멈춤</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-04 15:26:15 +0900
+Last updated 2023-08-14 13:30:59 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

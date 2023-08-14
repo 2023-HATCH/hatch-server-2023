@@ -1,0 +1,6 @@
+== 영상 조회수 증가
+
+operation::add-view-count[snippets='http-request,request-headers,http-response']
+
+
+

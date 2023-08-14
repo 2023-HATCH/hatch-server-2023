@@ -48,7 +48,7 @@ public class VideoController {
      * @return
      */
     @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
-    @GetMapping("/view/{videoId}")
+    @GetMapping("/{videoId}/view")
     public ResponseEntity<CommonResponse> addViewCount(@PathVariable UUID videoId) {
         Video video = videoService.findOne(videoId);
         videoCacheUtil.addViewCount(video);
