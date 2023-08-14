@@ -34,7 +34,6 @@ public class StageService {
     }
 
 
-    // TODO : 8/9 이후 주석코드로 변경할 것
     /**
      * 스테이지 입장 로직
      * @param user
@@ -90,7 +89,7 @@ public class StageService {
 
 
     /**
-     * 스테이지 입장 로직 2 : 중복 입장 불가. 8/9 이후 이걸로 변경
+     * 스테이지 입장 로직 2 : 중복 입장 불가 버전
      * @param user
      * @return
      */
