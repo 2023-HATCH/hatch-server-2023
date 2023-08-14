@@ -80,10 +80,6 @@ public class VideoCacheUtil {
         int updatedView = view + 1;
         saveVideoCountData(video.getId(), HASH_KEY_CACHE_VIDEO_VIEW_COUNT, updatedView);
         log.info("updatedView : {}", updatedView);
-
-
-//        redisDao.setValues(toViewCountKey(video.getId()), view+1);
-//        log.info("addViewCount view+1 : {}", view+1);
     }
 
     /**
@@ -104,13 +100,6 @@ public class VideoCacheUtil {
             // 레디스에 있으면 그거 반환
             return Integer.parseInt(commentCountObject.toString());
         }
-
-//        // redis 조회
-//        String key = toViewCountKey(video.getId());
-//        int view = getStringCacheData(key, video);
-//
-//        log.info("getViewCount view : {}", view);
-//        return view;
     }
 
     /**
@@ -154,13 +143,6 @@ public class VideoCacheUtil {
             // 레디스에 있으면 그거 반환
             return Integer.parseInt(commentCountObject.toString());
         }
-
-//        // redis 조회
-//        String key = toCommentCountKey(video.getId());
-//        int commentCount = getStringCacheData(key, video);
-//
-//        log.info("getCommentCount commentCount : {}", commentCount);
-//        return commentCount;
     }
 
     // TODO : 코드 중복 - like count 좋아요수 로직이랑 99% 똑같음
@@ -223,128 +205,9 @@ public class VideoCacheUtil {
             // 데이터 반영 완료된 video 모음
             videos.add(video);
         }
-//            Set<String> countTypes = redisDao.getHashKeys(key);
-//            for(String countType : countTypes) {
-//                log.info("[SCHEDULED] hashKey countType : {}", countType);
-//
-//            }
-
-//                // 조회수 데이터 redis에서, video 데이터 RDB에서 가져옴
-//            String view = redisDao.getValues(key);
-//            Video video = getVideo(key);
-//
-//            // video 데이터에 조회수 반영하여 모음
-//            video.updateViewCount(Integer.parseInt(view));
-//            videos.add(video);
-//            log.info("[SCHEDULED] viewCount : {}, video : {}", video.getViewCount(), video.getTitle());
     }
 
 
-
-/*
-    @Scheduled(fixedRate = 1000 * 60 * 60 * 6) // 6시간마다 실행
-//    @Scheduled(fixedRate = 1000 * 10) // 10초 마다 실행(테스트용)
-    private void moveLikeCountDataToRDB() {
-        log.info("[SCHEDULED] moveLikeCountDataToRDB : start at {}", ZonedDateTime.now());
-        // 좋아요 수 LikeCount String
-        Cursor<String> countKeyCursor = redisDao.getKeys(KEY_CACHE_LIKE_COUNT+"*"); // 좋아요 수 키값 목록
-        moveLikeCount(countKeyCursor);
-
-        log.info("[SCHEDULED] moveLikeCountDataToRDB : finish at {}", ZonedDateTime.now());
-    }
-
-
-    *//**
-     * 좋아요 수 데이터를 RDB로 옮기는 메서드
-     * @param countKeyCursor
-     *//*
-    private void moveLikeCount(Cursor<String> countKeyCursor) {
-        List<Video> videos = new ArrayList<>();
-        List<String> countKeys = new ArrayList<>();
-        makeLikeCountedVideos(countKeyCursor, videos, countKeys);
-
-        log.info("[SCHEDULED] get like count END");
-        log.info("[SCHEDULED] like count list size : {}", videos.size());
-
-        //로그
-//        Integer count = (videos.size()==0) ? null : videos.get(0).getLikeCount();
-//        log.info("[SCHEDULED] like count fist item likeCount : {}", count);
-
-        videoRepository.saveAll(videos);
-        redisDao.deleteValues(countKeys);
-        log.info("[SCHEDULED] redis like count saved and deleted");
-    }
-
-    *//**
-     * RDB에 저장할 좋아요 수 데이터가 새로 반영된 영상 목록을 만드는 메서드
-     * @param countKeyCursor
-     * @param videos
-     * @param countKeys
-     *//*
-    private void makeLikeCountedVideos(Cursor<String> countKeyCursor, List<Video> videos, List<String> countKeys) {
-        while (countKeyCursor.hasNext()) {
-            String key = countKeyCursor.next();
-            countKeys.add(key);
-            log.info("[SCHEDULED] key : {}", key);
-
-            String likeCount = redisDao.getValues(key);
-            Video video = getVideo(key);
-
-            video.updateLikeCount(Integer.parseInt(likeCount));
-            videos.add(video);
-            log.info("[SCHEDULED] like count likeCount : {}, video : {}", video.getLikeCount(), video.getTitle());
-        }
-    }
-
-    // TODO : 코드 중복 - like count 좋아요수 로직이랑 99% 똑같음
-    *//**
-     * 주기적으로 redis의 조회수 데이터를 RDB에 저장하고 redis 에서 삭제
-     *//*
-    @Scheduled(fixedRate = 1000 * 60 * 60 * 6) // 6시간마다 실행
-//    @Scheduled(fixedRate = 1000 * 10) // 10초 마다 실행(테스트용)
-    private void moveCountDataOfVideoToRDB() {
-        log.info("[SCHEDULED] moveCountDataOfVideoToRDB : start at {}", ZonedDateTime.now());
-
-        // 조회수 데이터 String
-        Cursor<String> videoCountKeyCursor = redisDao.getKeys(KEY_CACHE_VIDEO_VIEW_COUNT+"*"); // 조회수 데이터 key값 목록
-        Cursor<String> commentCountKeyCursor = redisDao.getKeys(KEY_CACHE_VIDEO_COMMENT_COUNT+"*"); // 댓글수 데이터 key값 목록
-
-        List<Video> videos = new ArrayList<>();
-        List<String> videoCountKeys = new ArrayList<>();
-        List<String> commentCountKeys = new ArrayList<>();
-        makeCountedVideos(videoCountKeyCursor, commentCountKeyCursor, videos, videoCountKeys, commentCountKeys);
-
-        log.info("[SCHEDULED] get viewCount END");
-        log.info("[SCHEDULED] viewCount list size : {}", videos.size());
-
-        //로그
-//        Integer count = (videos.size()==0) ? null : videos.get(0).getViewCount();
-//        log.info("[SCHEDULED] viewCount fist item viewCount : {}", view);
-
-        videoRepository.saveAll(videos);
-        redisDao.deleteValues(videoCountKeys);
-        log.info("[SCHEDULED] moveCountDataOfVideoToRDB : finish at {}", ZonedDateTime.now());
-    }
-
-    private void makeCountedVideos(Cursor<String> videoCountKeyCursor, Cursor<String> commentCountKeyCursor, List<Video> videos, List<String> videoCountKeys, List<String> commentCountKeys) {
-        while (videoCountKeyCursor.hasNext()) {
-            // 이번 키값
-            String key = videoCountKeyCursor.next();
-            videoCountKeys.add(key);
-            log.info("[SCHEDULED] key : {}", key);
-
-            // 조회수 데이터 redis에서, video 데이터 RDB에서 가져옴
-            String view = redisDao.getValues(key);
-            Video video = getVideo(key);
-
-            // video 데이터에 조회수 반영하여 모음
-            video.updateViewCount(Integer.parseInt(view));
-            videos.add(video);
-            log.info("[SCHEDULED] viewCount : {}, video : {}", video.getViewCount(), video.getTitle());
-        }
-
-        // TODO : 댓글수 데이터 동기화 로직 추가
-    }*/
 
     /**
      * 댓글수 증감하여 Redis에 저장하는 메서드
