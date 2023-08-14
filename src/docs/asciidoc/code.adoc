@@ -8,4 +8,4 @@
 
 상태 코드 명세서
 
-include::etc/StatusCode.adoc[]
+include::StatusCode.adoc[]

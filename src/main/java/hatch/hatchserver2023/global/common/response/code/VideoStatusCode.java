@@ -21,6 +21,7 @@ public enum VideoStatusCode implements StatusCode {
     LIKE_DELETE_SUCCESS(HttpStatus.OK, "2031", "좋아요 삭제 성공"),    //200
     GET_LIKE_VIDEO_LIST_SUCCESS_FOR_USER(HttpStatus.OK, "2032", "회원 좋아요 누른 영상 목록 조회 성공"),    //200
     GET_LIKE_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS(HttpStatus.OK, "2033", "비회원 좋아요 누른 영상 목록 조회 성공"),    //200
+    ADD_VIEW_COUNT_SUCCESS(HttpStatus.OK, "2034", "조회수 증가 성공"), //200
 
 
     //4xx
@@ -35,7 +36,6 @@ public enum VideoStatusCode implements StatusCode {
     //5xx
     CONVERT_MULTIPARTFILE_TO_FILE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "5001", "썸네일 추출 과정 중 multipartfile을 file로 전환 실패"), //500
     CONVERT_FILE_TO_MULTIPARTFILE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "5002", "썸네일 추출 과정 중 file을 multipartfile로 전환 실패"), //500
-
     ;
 
     private final HttpStatus status;

@@ -1,6 +1,8 @@
 package hatch.hatchserver2023.domain.video.api;
 
+import hatch.hatchserver2023.domain.like.LikeCacheUtil;
 import hatch.hatchserver2023.domain.user.domain.User;
+import hatch.hatchserver2023.domain.video.VideoCacheUtil;
 import hatch.hatchserver2023.domain.video.application.HashtagService;
 import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.video.application.VideoService;
@@ -32,10 +34,28 @@ public class VideoController {
     private final HashtagService hashtagService;
     private final LikeService likeService;
 
-    public VideoController(VideoService videoService, HashtagService hashtagService, LikeService likeService){
+    private final VideoCacheUtil videoCacheUtil;
+
+    public VideoController(VideoService videoService, HashtagService hashtagService, LikeService likeService, VideoCacheUtil videoCacheUtil){
         this.videoService = videoService;
         this.hashtagService = hashtagService;
         this.likeService = likeService;
+        this.videoCacheUtil = videoCacheUtil;
+    }
+
+    /**
+     * 조회수 증가 api
+     * @param videoId
+     * @return
+     */
+    @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
+    @GetMapping("/{videoId}/view")
+    public ResponseEntity<CommonResponse> addViewCount(@PathVariable UUID videoId) {
+        Video video = videoService.findOne(videoId);
+        videoCacheUtil.addViewCount(video);
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                VideoStatusCode.ADD_VIEW_COUNT_SUCCESS
+        ));
     }
 
 
@@ -48,7 +68,7 @@ public class VideoController {
      */
     @PreAuthorize("hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')")
     @GetMapping("/{videoId}")
-    public ResponseEntity<CommonResponse> getOneVideoForUser(@AuthenticationPrincipal User user,
+    public ResponseEntity<CommonResponse> getOneVideo(@AuthenticationPrincipal User user,
                                                 @PathVariable UUID videoId) {
         Video video = videoService.findOne(videoId);
 
@@ -57,9 +77,21 @@ public class VideoController {
         // 비회원이면, isLike는 언제나 false
         boolean isLiked = user != null && likeService.isAlreadyLiked(video, user);
 
+        int likeCount = videoCacheUtil.getLikeCount(video);
+        int commentCount = videoCacheUtil.getCommentCount(video);
+        int viewCount = videoCacheUtil.getViewCount(video);
+
+        VideoModel.VideoInfo videoInfo = VideoModel.VideoInfo.builder()
+                                                            .likeCount(likeCount)
+                                                            .isLiked(isLiked)
+                                                            .commentCount(commentCount)
+                                                            .video(video)
+                                                            .viewCount(viewCount)
+                                                            .build();
+
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.GET_VIDEO_DETAIL_SUCCESS,
-                VideoResponseDto.GetVideo.toDto(video, isLiked)
+                VideoResponseDto.GetVideo.toDto(videoInfo)
         ));
     }
 

@@ -3,8 +3,10 @@ package hatch.hatchserver2023.domain.like.api;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.video.domain.Video;
+import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.domain.video.dto.VideoResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
+import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import lombok.extern.slf4j.Slf4j;
@@ -89,30 +91,14 @@ public class LikeController {
                                                             @PathVariable UUID userId,
                                                             Pageable pageable) {
 
-        Slice<Video> slice = likeService.getLikedVideoList(userId, pageable);
+        Slice<VideoModel.VideoInfo> slice = likeService.getLikedVideoList(userId, user, pageable);
 
-        //회원: 영상 좋아요 여부 liked 지정
-        if (user != null) {
+        StatusCode statusCode = user == null ? VideoStatusCode.GET_LIKE_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS : VideoStatusCode.GET_LIKE_VIDEO_LIST_SUCCESS_FOR_USER;
 
-            List<VideoResponseDto.GetVideo> videoList = slice.stream()
-                    .map(video -> VideoResponseDto.GetVideo.toDto(video, likeService.isAlreadyLiked(video, user)))
-                    .collect(Collectors.toList());
-
-            return ResponseEntity.ok(CommonResponse.toResponse(
-                    VideoStatusCode.GET_LIKE_VIDEO_LIST_SUCCESS_FOR_USER,
-                    VideoResponseDto.GetVideoList.toDto(videoList, slice.isLast())
-            ));
-        } else {
-            //비회원: liked는 모두 false
-            List<VideoResponseDto.GetVideo> videoList = slice.stream()
-                    .map(video -> VideoResponseDto.GetVideo.toDto(video, false))
-                    .collect(Collectors.toList());
-
-            return ResponseEntity.ok(CommonResponse.toResponse(
-                    VideoStatusCode.GET_LIKE_VIDEO_LIST_SUCCESS_FOR_ANONYMOUS,
-                    VideoResponseDto.GetVideoList.toDto(videoList, slice.isLast())
-            ));
-        }
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                statusCode,
+                VideoResponseDto.GetVideoList.toDto(VideoResponseDto.GetVideo.toDtos(slice.getContent()), slice.isLast())
+        ));
     }
 
 }
