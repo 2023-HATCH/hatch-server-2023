@@ -92,7 +92,7 @@ public class RedisDao {
      */
     public void setValuesHash(String key, Object hashKey, Object data) {
         HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
-        values.put(key, String.valueOf(hashKey), data);
+        values.put(key, String.valueOf(hashKey), String.valueOf(data));
     }
 
 

@@ -4,6 +4,7 @@ import hatch.hatchserver2023.domain.like.domain.Like;
 import hatch.hatchserver2023.domain.like.repository.LikeRepository;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
+import hatch.hatchserver2023.domain.video.VideoCacheUtil;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
@@ -24,19 +25,19 @@ import java.util.Set;
 @Component
 public class LikeCacheUtil {
     private final String KEY_CACHE_LIKE_INFO = "like:updated:"; //Hash. hashKey는 userId, value는 add또는 delete
-    private final String KEY_CACHE_LIKE_COUNT = "like:count:"; //String
-//    private final String KEY_CACHE_VIDEO_VIEW_COUNT = "video:viewCount:"; // String
 
     private final String CACHE_LIKE_INFO_ADD = "add";
     private final String CACHE_LIKE_INFO_DELETE = "delete";
 
     private final RedisDao redisDao;
+    private final VideoCacheUtil videoCacheUtil;
     private final VideoRepository videoRepository;
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
 
-    public LikeCacheUtil(RedisDao redisDao, VideoRepository videoRepository, LikeRepository likeRepository, UserRepository userRepository) {
+    public LikeCacheUtil(RedisDao redisDao, VideoCacheUtil videoCacheUtil, VideoRepository videoRepository, LikeRepository likeRepository, UserRepository userRepository) {
         this.redisDao = redisDao;
+        this.videoCacheUtil = videoCacheUtil;
         this.videoRepository = videoRepository;
         this.likeRepository = likeRepository;
         this.userRepository = userRepository;
@@ -57,7 +58,7 @@ public class LikeCacheUtil {
         }
 
         saveLike(video.getId(), user.getId(), CACHE_LIKE_INFO_ADD);
-        updateLikeCount(video.getId(), 1);
+        videoCacheUtil.updateLikeCount(video, 1);
     }
 
     /**
@@ -70,7 +71,7 @@ public class LikeCacheUtil {
 
         if(isLiked(video, user)) {
             saveLike(video.getId(), user.getId(), CACHE_LIKE_INFO_DELETE);
-            updateLikeCount(video.getId(), -1);
+            videoCacheUtil.updateLikeCount(video, -1);
         }
         else{
             log.info("deleteLike : never liked or already deleted like");
@@ -97,25 +98,6 @@ public class LikeCacheUtil {
         }
     }
 
-    /**
-     * 좋아요수 조회 메서드 (redis적용)
-     * >> 수빈님 이 메서드 써주시면 됩니다!
-     * @param video
-     * @return
-     */
-    public int getLikeCount(Video video) {
-        Object likeCountObject = redisDao.getValues(toLikeCountKey(video.getId()));
-
-        // 레디스에 없으면 RDB 에서 가져온 데이터 반환
-        if(likeCountObject == null) {
-            return video.getLikeCount();
-        }
-        else{
-            // 레디스에 있으면 그거 반환
-            return Integer.parseInt(likeCountObject.toString());
-        }
-    }
-
 
     //////////// move to RDB ///////////
 
@@ -123,18 +105,14 @@ public class LikeCacheUtil {
      * 주기적으로 redis의 좋아요 관련 데이터를 RDB에 저장하고 redis 데이터 삭제
      */
     // @Scheduled 로 주기적으로 DB에 업데이트
-    @Scheduled(fixedRate = 1000 * 60 * 60 * 6) // 6시간마다 실행
-//    @Scheduled(fixedRate = 1000 * 10) // 10초 마다 실행(테스트용)
+//    @Scheduled(fixedRate = 1000 * 60 * 60 * 6) // 6시간마다 실행
+    @Scheduled(fixedRate = 1000 * 10) // 10초 마다 실행(테스트용)
     private void moveLikeDataToRDB() {
         log.info("[SCHEDULED] moveLikeDataToRDB : start at {}", ZonedDateTime.now());
 
         // 좋아요 데이터 Likeinfo Hash
         Cursor<String> likeKeyCursor = redisDao.getKeys(KEY_CACHE_LIKE_INFO+"*"); // 좋아요 데이터 key값 목록
         moveLikeInfo(likeKeyCursor);
-
-        // 좋아요 수 LikeCount String
-        Cursor<String> countKeyCursor = redisDao.getKeys(KEY_CACHE_LIKE_COUNT+"*"); // 좋아요 수 키값 목록
-        moveLikeCount(countKeyCursor);
 
         log.info("[SCHEDULED] moveLikeDataToRDB : finish at {}", ZonedDateTime.now());
     }
@@ -157,7 +135,7 @@ public class LikeCacheUtil {
             // video 가져옴
             Video video;
             try{
-                video = getVideo(key);
+                video = videoCacheUtil.getVideoFromRDB(key);
             } catch (VideoException e){
                 log.info("moveLikeDataToRDB {}", e.getCode().getMessage());
                 continue;
@@ -231,57 +209,15 @@ public class LikeCacheUtil {
             }
         }
     }
-
-    /**
-     * 좋아요 수 데이터를 RDB로 옮기는 메서드
-     * @param countKeyCursor
-     */
-    private void moveLikeCount(Cursor<String> countKeyCursor) {
-        List<Video> videos = new ArrayList<>();
-        List<String> countKeys = new ArrayList<>();
-        makeLikeCountedVideos(countKeyCursor, videos, countKeys);
-
-        log.info("[SCHEDULED] get like count END");
-        log.info("[SCHEDULED] like count list size : {}", videos.size());
-
-        //로그
-//        Integer count = (videos.size()==0) ? null : videos.get(0).getLikeCount();
-//        log.info("[SCHEDULED] like count fist item likeCount : {}", count);
-
-        videoRepository.saveAll(videos);
-        redisDao.deleteValues(countKeys);
-        log.info("[SCHEDULED] redis like count saved and deleted");
-    }
-
-    /**
-     * RDB에 저장할 좋아요 수 데이터가 새로 반영된 영상 목록을 만드는 메서드
-     * @param countKeyCursor
-     * @param videos
-     * @param countKeys
-     */
-    private void makeLikeCountedVideos(Cursor<String> countKeyCursor, List<Video> videos, List<String> countKeys) {
-        while (countKeyCursor.hasNext()) {
-            String key = countKeyCursor.next();
-            countKeys.add(key);
-            log.info("[SCHEDULED] key : {}", key);
-
-            String likeCount = redisDao.getValues(key);
-            Video video = getVideo(key);
-
-            video.updateLikeCount(Integer.parseInt(likeCount));
-            videos.add(video);
-            log.info("[SCHEDULED] like count likeCount : {}, video : {}", video.getLikeCount(), video.getTitle());
-        }
-    }
-
-    private Video getVideo(String key) throws VideoException {
-        // 키값에서 videoId 추출
-        long videoId = getIdFromKey(key);
-
-        // video 데이터
-        return videoRepository.findById(videoId)
-                .orElseThrow(() -> new VideoException(VideoStatusCode.VIDEO_NOT_FOUND));
-    }
+//
+//    private Video getVideo(String key) throws VideoException {
+//        // 키값에서 videoId 추출
+//        long videoId = getIdFromKey(key);
+//
+//        // video 데이터
+//        return videoRepository.findById(videoId)
+//                .orElseThrow(() -> new VideoException(VideoStatusCode.VIDEO_NOT_FOUND));
+//    }
 
     private User getUser(long userId) throws VideoException {
         return userRepository.findById(userId)
@@ -303,30 +239,6 @@ public class LikeCacheUtil {
         return KEY_CACHE_LIKE_INFO +videoId;
     }
 
-    private boolean isLikeCountExist(long videoId) {
-        return redisDao.isKeyExist(toLikeCountKey(videoId));
-    }
-
-    private String toLikeCountKey(long videoId) {
-        return KEY_CACHE_LIKE_COUNT+videoId;
-    }
-
-    private void updateLikeCount(long videoId, int diff) {
-        log.info("[REDIS] updateLikeCount");
-        String key = toLikeCountKey(videoId);
-        Integer count;
-        if(isLikeCountExist(videoId)){
-            count = Integer.parseInt(redisDao.getValues(key))+diff;
-        }
-        else {
-            Video video = videoRepository.findById(videoId).orElseThrow(() ->
-                    new VideoException(VideoStatusCode.VIDEO_NOT_FOUND)
-            );
-            count = video.getLikeCount()+diff;
-        }
-
-        redisDao.setValues(key, String.valueOf(count)); // TODO : String.valueOf 이거 redisDao에 setValues 오버로딩해서 다 숨길까?
-    }
 
     private long getIdFromKey(String key) {
         String[] keySplit = key.split(":");
