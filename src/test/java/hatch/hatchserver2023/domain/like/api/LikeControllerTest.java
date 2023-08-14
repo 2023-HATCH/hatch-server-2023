@@ -4,6 +4,7 @@ import hatch.hatchserver2023.domain.like.api.LikeController;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.video.domain.Video;
+import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;
@@ -235,11 +236,24 @@ public class LikeControllerTest {
     @DisplayName("Get Liked Video List")
     void getLikedVideoList() throws Exception {
         //given
-        List<Video> videoList = Arrays.asList(video1, video2);
-        Slice<Video> slice = new SliceImpl<>(videoList, PageRequest.of(0, 2), false);
+        VideoModel.VideoInfo videoInfo1 = VideoModel.VideoInfo.builder()
+                                                                .video(video1)
+                                                                .isLiked(false)
+                                                                .viewCount(2)
+                                                                .commentCount(3)
+                                                                .viewCount(4)
+                                                                .build();
+        VideoModel.VideoInfo videoInfo2 = VideoModel.VideoInfo.builder()
+                                                                .video(video2)
+                                                                .isLiked(true)
+                                                                .viewCount(5)
+                                                                .commentCount(6)
+                                                                .viewCount(7)
+                                                                .build();
+        List<VideoModel.VideoInfo> videoInfoList = Arrays.asList(videoInfo1, videoInfo2);
+        Slice<VideoModel.VideoInfo> slice = new SliceImpl<>(videoInfoList, PageRequest.of(0, 2), false);
 
-
-        given(likeService.getLikedVideoList(any(), any(Pageable.class)))
+        given(likeService.getLikedVideoList(any(), any(), any(Pageable.class)))
                 .willReturn(slice);
 
         //when
@@ -294,6 +308,7 @@ public class LikeControllerTest {
                                         fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 이미지 S3 경로"),
                                         fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
                                         fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("댓글 개수"),
+                                        fieldWithPath("viewCount").type(JsonFieldType.NUMBER).description("조회수"),
                                         fieldWithPath("length").type(JsonFieldType.NUMBER).description("milliseconds 단위 동영상 길이"),
                                         fieldWithPath("createdAt").type("DateTime").description("생성 시각"),
                                         fieldWithPath("liked").type(JsonFieldType.BOOLEAN).description("좋아요 눌렀는지 여부").ignored()

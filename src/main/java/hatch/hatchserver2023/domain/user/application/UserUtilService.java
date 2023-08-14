@@ -6,6 +6,7 @@ import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserModel;
 import hatch.hatchserver2023.domain.user.repository.FollowRepository;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
+import hatch.hatchserver2023.domain.video.VideoCacheUtil;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
@@ -32,12 +33,14 @@ public class UserUtilService {
     private final FollowRepository followRepository;
     private final VideoRepository videoRepository;
     private final LikeService likeService;
+    private final VideoCacheUtil videoCacheUtil;
 
-    public UserUtilService(UserRepository userRepository, FollowRepository followRepository, VideoRepository videoRepository, LikeService likeService) {
+    public UserUtilService(UserRepository userRepository, FollowRepository followRepository, VideoRepository videoRepository, LikeService likeService, VideoCacheUtil videoCacheUtil) {
         this.userRepository = userRepository;
         this.followRepository = followRepository;
         this.videoRepository = videoRepository;
         this.likeService = likeService;
+        this.videoCacheUtil = videoCacheUtil;
     }
 
 
@@ -83,9 +86,32 @@ public class UserUtilService {
 
         Slice<Video> videoSlice = videoRepository.findAllByUserId(user, pageable);
 
-        List<VideoModel.VideoInfo> videoInfoList =  videoSlice.stream()
-                .map(one -> VideoModel.VideoInfo.toModel(one, likeService.isAlreadyLiked(one, loginUser)))
-                .collect(Collectors.toList());
+        List<VideoModel.VideoInfo> videoInfoList;
+
+        //비회원: liked는 모두 false
+        if (loginUser == null) {
+            videoInfoList = videoSlice.stream()
+                    .map(one -> VideoModel.VideoInfo.builder()
+                            .video(one)
+                            .isLiked(false)
+                            .viewCount(videoCacheUtil.getViewCount(one))
+                            .likeCount(videoCacheUtil.getLikeCount(one))
+                            .commentCount(videoCacheUtil.getCommentCount(one))
+                            .build())
+                    .collect(Collectors.toList());
+        }
+        //회원: 영상 좋아요 여부 liked 지정
+        else{
+            videoInfoList = videoSlice.stream()
+                    .map(one -> VideoModel.VideoInfo.builder()
+                            .video(one)
+                            .isLiked(likeService.isAlreadyLiked(one, loginUser))
+                            .viewCount(videoCacheUtil.getViewCount(one))
+                            .likeCount(videoCacheUtil.getLikeCount(one))
+                            .commentCount(videoCacheUtil.getCommentCount(one))
+                            .build())
+                    .collect(Collectors.toList());
+        }
 
         Slice<VideoModel.VideoInfo> videoInfoSlice = new SliceImpl<>(videoInfoList, pageable, videoSlice.hasNext());
         return videoInfoSlice;
@@ -198,9 +224,6 @@ public class UserUtilService {
 
     //팔로우 여부
     public Boolean isFollowing(User fromUser, User toUser) {
-//        if(fromUser == null) {
-//            return false;
-//        }
         return followRepository.findByFromUserAndToUser(fromUser, toUser).isPresent();
     }
 

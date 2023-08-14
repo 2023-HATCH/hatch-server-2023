@@ -105,8 +105,8 @@ public class LikeCacheUtil {
      * 주기적으로 redis의 좋아요 관련 데이터를 RDB에 저장하고 redis 데이터 삭제
      */
     // @Scheduled 로 주기적으로 DB에 업데이트
-//    @Scheduled(fixedRate = 1000 * 60 * 60 * 6) // 6시간마다 실행
-    @Scheduled(fixedRate = 1000 * 10) // 10초 마다 실행(테스트용)
+    @Scheduled(fixedRate = 1000 * 60 * 60 * 6) // 6시간마다 실행
+//    @Scheduled(fixedRate = 1000 * 10) // 10초 마다 실행(테스트용)
     private void moveLikeDataToRDB() {
         log.info("[SCHEDULED] moveLikeDataToRDB : start at {}", ZonedDateTime.now());
 

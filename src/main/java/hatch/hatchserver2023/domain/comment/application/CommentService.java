@@ -2,6 +2,7 @@ package hatch.hatchserver2023.domain.comment.application;
 
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.comment.domain.Comment;
+import hatch.hatchserver2023.domain.video.VideoCacheUtil;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.comment.repository.CommentRepository;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
@@ -19,10 +20,12 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final VideoRepository videoRepository;
+    private final VideoCacheUtil videoCacheUtil;
 
-    public CommentService(CommentRepository commentRepository, VideoRepository videoRepository){
+    public CommentService(CommentRepository commentRepository, VideoRepository videoRepository, VideoCacheUtil videoCacheUtil){
         this.commentRepository = commentRepository;
         this.videoRepository = videoRepository;
+        this.videoCacheUtil = videoCacheUtil;
     }
 
 
@@ -46,6 +49,9 @@ public class CommentService {
 
         commentRepository.save(comment);
 
+        // redis 에 댓글 수 저장 (증가)
+        videoCacheUtil.increaseCommentCount(video);
+
         return comment;
     }
 
@@ -67,6 +73,9 @@ public class CommentService {
         }
 
         commentRepository.delete(comment);
+
+        // redis 에 댓글 수 저장 (감소)
+        videoCacheUtil.decreaseCommentCount(comment.getVideoId());
     }
 
 

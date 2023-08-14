@@ -49,7 +49,6 @@ public class VideoCacheUtil {
 
     /**
      * 좋아요수 조회 메서드 (redis적용)
-     * >> 수빈님 이 메서드 써주시면 됩니다!
      * @param video
      * @return
      */
@@ -83,11 +82,11 @@ public class VideoCacheUtil {
     }
 
     /**
-     * 조회수 조회 (redis) : 수빈님 연결 부탁하기
+     * 조회수 조회 (redis)
      * @param video
      * @return
      */
-    public int getViewCount(Video video) { // TODO : 모든 영상 조회 부분에 적용
+    public int getViewCount(Video video) {
         log.info("[REDIS] getViewCount");
         // 레디스에 존재하는지 확인
         Object commentCountObject = getVideoCountData(video.getId(), HASH_KEY_CACHE_VIDEO_VIEW_COUNT);
@@ -103,7 +102,7 @@ public class VideoCacheUtil {
     }
 
     /**
-     * 댓글수 증가 (redis) : 수빈님 연결 부탁하기
+     * 댓글수 증가 (redis)
      * @param video
      */
     public void increaseCommentCount(Video video) {
@@ -114,7 +113,7 @@ public class VideoCacheUtil {
     }
 
     /**
-     * 댓글수 감소 (redis) : 수빈님 연결 부탁하기
+     * 댓글수 감소 (redis)
      * @param video
      */
     public void decreaseCommentCount(Video video) {
@@ -125,11 +124,11 @@ public class VideoCacheUtil {
     }
 
     /**
-     * 댓글수 조회 (redis) : 수빈님 연결 부탁하기
+     * 댓글수 조회 (redis)
      * @param video
      * @return
      */
-    public int getCommentCount(Video video) { // TODO : 모든 영상 조회 부분에 적용
+    public int getCommentCount(Video video) {
         log.info("[REDIS] getCommentCount");
 
         // 레디스에 존재하는지 확인

@@ -4,10 +4,8 @@ import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.domain.Slice;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,32 +36,35 @@ public class VideoResponseDto {
         private boolean isLiked;
         private String videoUrl;
         private String thumbnailUrl;
-        private Integer likeCount;
-        private Integer commentCount;
-        private Integer length;
+        private int likeCount;
+        private int commentCount;
+        private int viewCount;
+        private int length;
         private ZonedDateTime createdAt;
 
-        public static GetVideo toDto(Video video, boolean isLiked){
-            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(video.getUserId());
+        // redis cache 에서 likeCount, commentCount, viewCount 가져옴
+        public static GetVideo toDto(VideoModel.VideoInfo videoInfo){
+            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(videoInfo.getVideo().getUserId());
 
             return GetVideo.builder()
-                    .uuid(video.getUuid())
-                    .title(video.getTitle())
-                    .tag(video.getTag())
+                    .uuid(videoInfo.getVideo().getUuid())
+                    .title(videoInfo.getVideo().getTitle())
+                    .tag(videoInfo.getVideo().getTag())
                     .user(userInfo)
-                    .isLiked(isLiked)
-                    .videoUrl(video.getVideoUrl())
-                    .thumbnailUrl(video.getThumbnailUrl())
-                    .likeCount(video.getLikeCount())
-                    .commentCount(video.getCommentCount())
-                    .length(video.getLength())
-                    .createdAt(video.getCreatedAt())
+                    .isLiked(videoInfo.isLiked())
+                    .videoUrl(videoInfo.getVideo().getVideoUrl())
+                    .thumbnailUrl(videoInfo.getVideo().getThumbnailUrl())
+                    .likeCount(videoInfo.getLikeCount())
+                    .commentCount(videoInfo.getCommentCount())
+                    .viewCount(videoInfo.getViewCount())
+                    .length(videoInfo.getVideo().getLength())
+                    .createdAt(videoInfo.getVideo().getCreatedAt())
                     .build();
         }
 
         public static List<GetVideo> toDtos(List<VideoModel.VideoInfo> videoInfoList){
             return videoInfoList.stream()
-                    .map(videoInfo -> GetVideo.toDto(videoInfo.getVideo(), videoInfo.isLiked()))
+                    .map(videoInfo -> GetVideo.toDto(videoInfo))
                     .collect(Collectors.toList());
         }
     }

@@ -59,7 +59,7 @@ public class Video extends BaseTimeEntity {
     @ColumnDefault("0")
     private int commentCount;
 
-    //조회수 (미정)
+    //조회수
     @Column(name = "view_count", nullable = false)
     @ColumnDefault("0")
     private int viewCount;
