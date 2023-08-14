@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Getter
@@ -26,7 +27,17 @@ public class ChatRoom extends BaseTimeEntity {
     @Column(length = 200)
     private String recentContent;
 
-    private ZonedDateTime recentSendTime;
+    private ZonedDateTime recentSendAt;
+
+    public ChatRoom() {
+    }
+
+    public ChatRoom(Long id, UUID uuid, String recentContent, ZonedDateTime recentSendAt) {
+        this.id = id;
+        this.uuid = uuid;
+        this.recentContent = recentContent;
+        this.recentSendAt = recentSendAt;
+    }
 
     @Override
     public void prePersist() {
@@ -35,4 +46,7 @@ public class ChatRoom extends BaseTimeEntity {
     }
 
 
+    public String getRecentSendAtString() {
+        return recentSendAt.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+    }
 }

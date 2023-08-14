@@ -37,6 +37,17 @@ public class ChatMessage extends BaseTimeEntity {
     @JoinColumn(name = "chat_room_id", nullable = false)
     private ChatRoom chatRoom; // 속해있는 채팅방
 
+    public ChatMessage() {
+    }
+
+    public ChatMessage(Long id, UUID uuid, String content, User sender, ChatRoom chatRoom) {
+        this.id = id;
+        this.uuid = uuid;
+        this.content = content;
+        this.sender = sender;
+        this.chatRoom = chatRoom;
+    }
+
     @Override
     public void prePersist() {
         this.uuid = UUID.randomUUID();

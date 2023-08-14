@@ -35,6 +35,16 @@ public class UserChatRoom extends BaseTimeEntity {
     @JoinColumn(name = "chat_room_id", nullable = false)
     private ChatRoom chatRoom;
 
+    public UserChatRoom() {
+    }
+
+    public UserChatRoom(Long id, UUID uuid, User user, ChatRoom chatRoom) {
+        this.id = id;
+        this.uuid = uuid;
+        this.user = user;
+        this.chatRoom = chatRoom;
+    }
+
 
     @Override
     public void prePersist() {

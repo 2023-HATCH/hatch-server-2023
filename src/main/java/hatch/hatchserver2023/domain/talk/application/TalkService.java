@@ -40,7 +40,7 @@ public class TalkService {
      */
     public Slice<TalkMessage> getTalkMessages(int page, int size) {
         log.info("[SERVICE] getTalkMessages");
-        Pageable pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending()); //service 로?
+        Pageable pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending());
         return talkRepository.findAll(pageRequest);
     }
 }
