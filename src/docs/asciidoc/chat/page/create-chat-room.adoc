@@ -1,0 +1,6 @@
+
+// api 명 : h3
+== *Create Chat Room*
+채팅방 생성 api
+
+operation::create-chat-room[snippets='http-request,request-headers,response-fields-beneath-data,http-response']
