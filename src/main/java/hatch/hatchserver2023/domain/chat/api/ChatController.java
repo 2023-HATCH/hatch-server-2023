@@ -36,17 +36,16 @@ public class ChatController {
 
     /**
      * 채딩방 생성 api
-     *
-     * @param user
      * @param requestDto
+     * @param user
      * @return
      */
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @PostMapping("/rooms")
-    public ResponseEntity<CommonResponse> createChatRoom(@Valid ChatRequestDto.CreateChatRoom requestDto,
+    public ResponseEntity<CommonResponse> createChatRoom(@RequestBody @Valid ChatRequestDto.CreateChatRoom requestDto, //@RequestParam @NotNull UUID opponentUserId,
                                                          @AuthenticationPrincipal @NotNull User user) {
         log.info("[API] POST /chats/rooms");
-        UUID chatRoomId = chatService.createChatRoom(user, requestDto.getOpponentUserId());
+        UUID chatRoomId = chatService.createChatRoom(user, UUID.fromString(requestDto.getOpponentUserId()));
         return ResponseEntity.ok().body(CommonResponse.toResponse(ChatStatusCode.POST_CREATE_CHAT_ROOM_SUCCESS,
                 ChatResponseDto.CreateChatRoom.toDto(chatRoomId)));
     }

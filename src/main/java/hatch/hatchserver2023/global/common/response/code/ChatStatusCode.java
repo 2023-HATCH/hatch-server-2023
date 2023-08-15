@@ -46,11 +46,11 @@ public enum ChatStatusCode implements StatusCode {
 
     @Override
     public String getCode() {
-        return StatusCodeDoc.COMMON.getInitialWithConnector() + code;
+        return StatusCodeDoc.CHAT.getInitialWithConnector() + code;
     }
 
     @Override
     public String getMessage() {
-        return StatusCodeDoc.COMMON.getLabelWithBrackets() + message;
+        return StatusCodeDoc.CHAT.getLabelWithBrackets() + message;
     }
 }

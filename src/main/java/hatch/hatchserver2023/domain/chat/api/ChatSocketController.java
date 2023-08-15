@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @Slf4j
 @Controller
 public class ChatSocketController {
-    private final String CHAT_WS_SEND_URL_PREFIX = "/topic/chat-room/"; // + chatRoomId
+    private final String CHAT_WS_SEND_URL_PREFIX = "/topic/chats/rooms/"; // + chatRoomId
 
     private final ChatService chatService;
     private final SimpMessagingTemplate simpMessagingTemplate;

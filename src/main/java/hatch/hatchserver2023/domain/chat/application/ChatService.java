@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,6 +43,7 @@ public class ChatService {
     @Transactional //TODO : 사용법...
     public UUID createChatRoom(User user, UUID opponentUserId) {
         log.info("[SERVICE] createChatRoom");
+        // TODO : 이미 이 사용자와 방이 존재할 경우 예외처리
 
         User opponentUser = userRepository.findByUuid(opponentUserId)
                 .orElseThrow(() -> new UserException(UserStatusCode.UUID_NOT_FOUND));
@@ -64,16 +66,19 @@ public class ChatService {
 
     public List<ChatModel.ChatRoomInfo> getChatRoomInfos(User user) {
         log.info("[SERVICE] getChatRoomInfos");
-        List<UserChatRoom> userChatRooms = userChatRoomRepository.findAllByUser(user);
+        List<UserChatRoom> myUserChatRooms = userChatRoomRepository.findAllByUser(user); //내가 참여중인 채팅방 목록 가져옴
 
-        return ChatModel.ChatRoomInfo.toModels(userChatRooms); //fetch lazy 에러 안생기나?
+        // 채팅방 참여 정보 중 내가 참여중인 채팅방이면서 참여자가 내가 아닌 채팅방 목록을 가녀옴
+        List<UserChatRoom> userChatRooms = new ArrayList<>();
+        for(UserChatRoom myUserChatRoom : myUserChatRooms){
+            ChatRoom myChatRoom = myUserChatRoom.getChatRoom();
+            UserChatRoom userChatRoom = userChatRoomRepository.findByChatRoomNotMeOne(myChatRoom.getId(), user.getId());
+            if(userChatRoom != null){
+                userChatRooms.add(userChatRoom);
+            }
+        }
 
-//        List<ChatRoom> chatRooms = chatRoomRepository.findAllByUser(user);
-//
-//        List<ChatModel.ChatRoomInfo> chatRoomInfos = new ArrayList<>();
-//        for (ChatRoom chatRoom : chatRooms) {
-//
-//        }
+        return ChatModel.ChatRoomInfo.toModels(userChatRooms); //fetch lazy 에러 안생김
     }
 
     public Slice<ChatMessage> getChatMessages(UUID chatRoomId, Integer page, Integer size) {

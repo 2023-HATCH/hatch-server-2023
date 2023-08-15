@@ -47,6 +47,6 @@ public class ChatRoom extends BaseTimeEntity {
 
 
     public String getRecentSendAtString() {
-        return recentSendAt.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+        return (recentSendAt==null) ? null : recentSendAt.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
     }
 }

@@ -74,13 +74,13 @@ public class ChatResponseDto {
     public static class GetChatMessages {
         private int page;
         private int size;
-        private List<BasicChatMessage> chatMessages;
+        private List<BasicChatMessage> messages;
 
         public static GetChatMessages toDto(Slice<ChatMessage> chatMessages) {
             return GetChatMessages.builder()
                     .page(chatMessages.getNumber())
                     .size(chatMessages.getSize())
-                    .chatMessages(BasicChatMessage.toDtos(chatMessages))
+                    .messages(BasicChatMessage.toDtos(chatMessages))
                     .build();
         }
     }

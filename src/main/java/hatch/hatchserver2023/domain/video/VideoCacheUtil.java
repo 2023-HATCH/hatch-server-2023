@@ -184,6 +184,7 @@ public class VideoCacheUtil {
             try{
                 video = getVideoFromRDB(key);
             }catch (VideoException e) {
+                log.info("{} : {}", key, e.getMessage());
                 continue;
             }
 
