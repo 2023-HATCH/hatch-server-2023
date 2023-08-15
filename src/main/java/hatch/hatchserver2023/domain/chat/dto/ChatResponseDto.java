@@ -107,4 +107,21 @@ public class ChatResponseDto {
             return chatMessages.stream().map(BasicChatMessage::toDto).collect(Collectors.toList());
         }
     }
+
+    @ToString
+    @Getter
+    @Builder
+    public static class SendChatMessage {
+        private String createdAt;
+        private UserResponseDto.SimpleUserProfile sender;
+        private String content;
+
+        public static SendChatMessage toDto(ChatMessage chatMessage) {
+            return SendChatMessage.builder()
+                    .createdAt(chatMessage.getCreatedAtString())
+                    .sender(UserResponseDto.SimpleUserProfile.toDto(chatMessage.getSender()))
+                    .content(chatMessage.getContent())
+                    .build();
+        }
+    }
 }

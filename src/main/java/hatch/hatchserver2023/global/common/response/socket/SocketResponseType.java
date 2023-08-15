@@ -4,6 +4,7 @@ import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import org.springframework.http.HttpStatus;
 
 public enum SocketResponseType implements StatusCode {
+    CHAT_MESSAGE("CHAT_MESSAGE", "채팅 메세지 전송"),
     TALK_MESSAGE( "TALK_MESSAGE", "라이브톡 메세지 전송"),
     TALK_REACTION( "TALK_REACTION", "라이브톡 반응 전송"),
 

@@ -2,7 +2,6 @@ package hatch.hatchserver2023.domain.chat.api;
 
 import hatch.hatchserver2023.domain.chat.application.ChatService;
 import hatch.hatchserver2023.domain.chat.domain.ChatMessage;
-import hatch.hatchserver2023.domain.chat.domain.ChatRoom;
 import hatch.hatchserver2023.domain.chat.dto.ChatModel;
 import hatch.hatchserver2023.domain.chat.dto.ChatRequestDto;
 import hatch.hatchserver2023.domain.chat.dto.ChatResponseDto;
@@ -37,6 +36,7 @@ public class ChatController {
 
     /**
      * 채딩방 생성 api
+     *
      * @param user
      * @param requestDto
      * @return
@@ -45,6 +45,7 @@ public class ChatController {
     @PostMapping("/rooms")
     public ResponseEntity<CommonResponse> createChatRoom(@Valid ChatRequestDto.CreateChatRoom requestDto,
                                                          @AuthenticationPrincipal @NotNull User user) {
+        log.info("[API] POST /chats/rooms");
         UUID chatRoomId = chatService.createChatRoom(user, requestDto.getOpponentUserId());
         return ResponseEntity.ok().body(CommonResponse.toResponse(ChatStatusCode.POST_CREATE_CHAT_ROOM_SUCCESS,
                 ChatResponseDto.CreateChatRoom.toDto(chatRoomId)));
@@ -52,12 +53,14 @@ public class ChatController {
 
     /**
      * 채팅방 목록 조회 api
+     *
      * @param user
      * @return
      */
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GetMapping("/rooms")
     public ResponseEntity<CommonResponse> getChatRooms(@AuthenticationPrincipal @NotNull User user) {
+        log.info("[API] GET /chats/rooms");
         List<ChatModel.ChatRoomInfo> chatRoomInfos = chatService.getChatRoomInfos(user);
         return ResponseEntity.ok().body(CommonResponse.toResponse(ChatStatusCode.GET_CHAT_ROOMS_SUCCESS,
                 ChatResponseDto.GetChatRooms.toDto(chatRoomInfos)));
@@ -66,6 +69,7 @@ public class ChatController {
 
     /**
      * 채팅 메세지 목록 조회 api
+     *
      * @param chatRoomId
      * @param page
      * @param size
@@ -75,6 +79,7 @@ public class ChatController {
     @GetMapping("/rooms/{chatRoomId}/messages")
     public ResponseEntity<CommonResponse> getChatMessages(@PathVariable @NotNull UUID chatRoomId,
                                                           @RequestParam @NotNull @Min(0) Integer page, @RequestParam @NotNull Integer size) {
+        log.info("[API] GET /chats/rooms/{chatRoomId}/messages");
         Slice<ChatMessage> chatMessages = chatService.getChatMessages(chatRoomId, page, size);
         return ResponseEntity.ok().body(CommonResponse.toResponse(ChatStatusCode.GET_CHAT_MESSAGES_SUCCESS,
                 ChatResponseDto.GetChatMessages.toDto(chatMessages)));

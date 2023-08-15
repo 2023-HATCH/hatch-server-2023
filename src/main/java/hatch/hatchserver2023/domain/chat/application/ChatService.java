@@ -41,6 +41,8 @@ public class ChatService {
 
     @Transactional //TODO : 사용법...
     public UUID createChatRoom(User user, UUID opponentUserId) {
+        log.info("[SERVICE] createChatRoom");
+
         User opponentUser = userRepository.findByUuid(opponentUserId)
                 .orElseThrow(() -> new UserException(UserStatusCode.UUID_NOT_FOUND));
 
@@ -61,6 +63,7 @@ public class ChatService {
     }
 
     public List<ChatModel.ChatRoomInfo> getChatRoomInfos(User user) {
+        log.info("[SERVICE] getChatRoomInfos");
         List<UserChatRoom> userChatRooms = userChatRoomRepository.findAllByUser(user);
 
         return ChatModel.ChatRoomInfo.toModels(userChatRooms); //fetch lazy 에러 안생기나?
@@ -74,10 +77,30 @@ public class ChatService {
     }
 
     public Slice<ChatMessage> getChatMessages(UUID chatRoomId, Integer page, Integer size) {
-        ChatRoom chatRoom = chatRoomRepository.findByUuid(chatRoomId)
-                .orElseThrow(() -> new ChatException(ChatStatusCode.CHAT_ROOM_UUID_NOT_FOUND));
+        log.info("[SERVICE] getChatMessages");
+        ChatRoom chatRoom = getChatRoom(chatRoomId);
 
         Pageable pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending());
         return chatMessageRepository.findAllByChatRoom(chatRoom, pageRequest);
+    }
+
+
+    public ChatMessage sendChatMessage(UUID chatRoomId, String content, User user) {
+        log.info("[SERVICE] sendChatMessage");
+        ChatRoom chatRoom = getChatRoom(chatRoomId);
+
+        ChatMessage chatMessage = ChatMessage.builder()
+                        .chatRoom(chatRoom)
+                        .sender(user)
+                        .content(content)
+                        .build();
+
+        return chatMessageRepository.save(chatMessage);
+    }
+
+    private ChatRoom getChatRoom(UUID chatRoomId) {
+        ChatRoom chatRoom = chatRoomRepository.findByUuid(chatRoomId)
+                .orElseThrow(() -> new ChatException(ChatStatusCode.CHAT_ROOM_UUID_NOT_FOUND));
+        return chatRoom;
     }
 }

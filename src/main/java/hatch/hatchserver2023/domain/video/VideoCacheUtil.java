@@ -181,7 +181,12 @@ public class VideoCacheUtil {
             log.info("[SCHEDULED] key : {}", key);
 
             // 키값에 해당하는 video 객체
-            Video video = getVideoFromRDB(key);
+            Video video;
+            try{
+                video = getVideoFromRDB(key);
+            }catch (VideoException e) {
+                continue;
+            }
 
             // 각 필드에 대해 값 가져와서 video 에 반영
             // 좋아요수
