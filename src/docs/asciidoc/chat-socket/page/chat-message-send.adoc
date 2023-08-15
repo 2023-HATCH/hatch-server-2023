@@ -77,26 +77,26 @@ header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyL
 ==== Response body
 [source,http,options="nowrap"]
 ----
-$ _INFO_:Receive subscribed message from destination /topic/chats/rooms/9eb7a465-2c3d-4ceb-89a8-1f037da5a6a0, content = MESSAGE
-content-length:254
-message-id:3daff5de-a07c-ee69-4844-824bfcd79456-0
-subscription:sub-1
+$ _INFO_:Receive subscribed message from destination /topic/chats/rooms/127e3afb-a0da-4082-8efe-af7c68ec92d4, content = MESSAGE
+content-length:274
+message-id:4675cccd-600d-320b-53d5-9ba5505fcd09-1
+subscription:sub-0
 content-type:application/json
-destination:/topic/chats/rooms/9eb7a465-2c3d-4ceb-89a8-1f037da5a6a0
-content-length:254
+destination:/topic/chats/rooms/127e3afb-a0da-4082-8efe-af7c68ec92d4
+content-length:274
 
 {
-    "timeStamp":"2023/08/15 16:13:52",
+    "timeStamp":"2023/08/15 17:04:51",
     "type":"CHAT_MESSAGE",
     "message":"채팅 메세지 전송",
     "data":{
-        "createdAt":"2023/08/15 16:13:52",
+        "createdAt":"2023/08/15 17:04:51",
         "sender":{
             "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
             "nickname":"user_1",
             "profileImg":null
         },
-        "content":"출발~~"
+        "content":"아이스크림 좋아좋아"
     }
 }
 

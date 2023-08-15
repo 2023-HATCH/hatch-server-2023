@@ -31,6 +31,6 @@ $ _INFO_:Connect STOMP server success, url = ws://localhost:8080/ws-popo, connec
 ==== Subscribe log
 [source,http,options="nowrap"]
 ----
-_INFO_:subscribe destination /topic/chats/rooms/9eb7a465-2c3d-4ceb-89a8-1f037da5a6a0 success
+_INFO_:subscribe destination /topic/chats/rooms/127e3afb-a0da-4082-8efe-af7c68ec92d4 success
 ----
 
