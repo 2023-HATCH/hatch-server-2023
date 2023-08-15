@@ -14,6 +14,4 @@
 - link:user/page/search-user.html[ (NEW) 계정 검색,window=_blank]
 
 
-include::Follow-API.adoc[]
 
-'''

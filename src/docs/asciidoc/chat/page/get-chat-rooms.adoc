@@ -1,0 +1,6 @@
+
+// api 명 : h3
+== *Get Chat Rooms*
+채팅방 목록 조회 api
+
+operation::get-chat-rooms[snippets='http-request,request-headers,response-fields-beneath-data,http-response']

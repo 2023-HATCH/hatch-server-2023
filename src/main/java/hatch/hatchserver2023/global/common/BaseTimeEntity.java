@@ -11,6 +11,7 @@ import javax.persistence.PreUpdate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Getter //mapper 사용을 위해 필요
@@ -41,5 +42,9 @@ public abstract class BaseTimeEntity {
      */
     public void updateForTestCode(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getCreatedAtString() {
+        return createdAt.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
     }
 }
