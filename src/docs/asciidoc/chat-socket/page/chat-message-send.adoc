@@ -1,0 +1,103 @@
+
+// api 명 : h3
+== *Send Chat Message*
+채팅 메세지 전송
+
+- URL : `/app/chats/messages`
+
+==== Request header
+|===
+|필드명|타입|필수여부|제약조건|설명
+|`+x-access-token+`
+|`+String+`
+|true
+|JWT 형식
+|액세스 토큰
+|===
+
+==== Request fields
+|===
+|필드명|타입|필수여부|제약조건|설명
+|`+chatRoomId+`
+|`+UUID+`
+|true
+|공백 불가
+|메세지를 전송할 체팅방 식별자
+|`+content+`
+|`+String+`
+|true
+|공백 불가
+|전송 메세지 내용
+|===
+
+==== Request body
+[source,options="wrap"]
+----
+$ _INFO_:send STOMP message, destination = /app/chats/messages, content =
+{
+    "chatRoomId" : "9eb7a465-2c3d-4ceb-89a8-1f037da5a6a0",
+    "content" : "출발~~"
+},
+header = {"x-access-token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNmIwMjNhOC1mNTAyLTRmMWYtYWU2Yy1hODM4M2VjNmUyYTEiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjkyMDgxMDQ3LCJleHAiOjE2OTIwODQ2NDd9.pyS-tTkjsIQh0c6NMyBBrnGEVCqZVN-5CceziaoppC4"}
+----
+
+==== Response fields
+|===
+|필드명|타입|필수여부|설명
+|`+timeStamp+`
+|`+LocalDateTime+`
+|true
+|응답 시각
+|`+type+`
+|`+String+`
+|true
+|소켓 통신 유형. 고정값(CHAT_MESSAGE)
+|`+data.createdAt+`
+|`+LocalDateTime+`
+|true
+|메세지 전송 시각
+|`+data.sender.userId+`
+|`+String+`
+|true
+|보낸 사용자 고유값
+|`+data.sender.nickname+`
+|`+String+`
+|true
+|보낸 사용자 닉네임
+|`+data.sender.profileImg+`
+|`+String+`
+|false
+|보낸 사용자 프로필 사진
+|`+data.content+`
+|`+String+`
+|true
+|메세지 내용
+|===
+
+==== Response body
+[source,http,options="nowrap"]
+----
+$ _INFO_:Receive subscribed message from destination /topic/chats/rooms/9eb7a465-2c3d-4ceb-89a8-1f037da5a6a0, content = MESSAGE
+content-length:254
+message-id:3daff5de-a07c-ee69-4844-824bfcd79456-0
+subscription:sub-1
+content-type:application/json
+destination:/topic/chats/rooms/9eb7a465-2c3d-4ceb-89a8-1f037da5a6a0
+content-length:254
+
+{
+    "timeStamp":"2023/08/15 16:13:52",
+    "type":"CHAT_MESSAGE",
+    "message":"채팅 메세지 전송",
+    "data":{
+        "createdAt":"2023/08/15 16:13:52",
+        "sender":{
+            "userId":"d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+            "nickname":"user_1",
+            "profileImg":null
+        },
+        "content":"출발~~"
+    }
+}
+
+----

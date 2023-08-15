@@ -6,8 +6,13 @@
 :toclevels: 2
 :sectlinks:
 
+// = USER
+
+'''
 include::User-API.adoc[]
+include::Follow-API.adoc[]
 include::Chat-API.adoc[]
+include::Chat-SOCKET.adoc[]
 
 = COMMUNITY
 

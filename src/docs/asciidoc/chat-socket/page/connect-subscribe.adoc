@@ -1,0 +1,36 @@
+
+// api 명 : h3
+== *Connect*
+웹소켓 통신 연결 요청 (스테이지 연결 요청과 동일)
+
+==== Connect Request URL
+[source,http,options="nowrap"]
+----
+ws://(api서버주소):8080/ws-popo
+----
+
+==== Connect Response body
+[source,http,options="wrap"]
+----
+$ _INFO_:Connect STOMP server success, url = ws://localhost:8080/ws-popo, connectHeader = {"x-access-token" : "액세스 토큰 값"}
+----
+
+
+== *Subscribe Chat Room*
+채팅방 구독 요청 (채팅 메세지 수신)
+
+- chatRoomId : 채팅방 식별자
+
+
+==== Subscribe Stage Request URL Path
+[source,http,options="nowrap"]
+----
+/topic/chats/messages/{chatRoomId}
+----
+
+==== Subscribe log
+[source,http,options="nowrap"]
+----
+_INFO_:subscribe destination /topic/chats/rooms/9eb7a465-2c3d-4ceb-89a8-1f037da5a6a0 success
+----
+

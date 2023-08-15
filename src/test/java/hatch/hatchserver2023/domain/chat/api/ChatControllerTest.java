@@ -43,6 +43,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static hatch.hatchserver2023.global.config.restdocs.RestDocsConfig.field;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -166,7 +167,7 @@ class ChatControllerTest {
                                         headerWithName("x-refresh-token").description("리프레시 토큰 값")
                                 ),
                                 requestFields(
-                                        fieldWithPath("opponentUserId").type("UUID").description("채팅 상대방 유저 식별자")
+                                        fieldWithPath("opponentUserId").type("UUID").description("채팅 상대방 유저 식별자").attributes(field("constraints", "공백 불가"))
                                 ),
                                 responseFields(
                                         beneathPath("data"),
@@ -248,12 +249,12 @@ class ChatControllerTest {
                                 responseFields(
                                         beneathPath("data"),
                                         fieldWithPath("chatRooms[].chatRoomId").type("UUID").description("채팅방 식별자"),
-                                        fieldWithPath("chatRooms[].opponentUser").type("UUID").description("채팅 상대 사용자 정보"),
+                                        fieldWithPath("chatRooms[].opponentUser").type("-").description("채팅 상대 사용자 정보"),
                                         fieldWithPath("chatRooms[].opponentUser.userId").type("UUID").description("사용자 식별자"),
                                         fieldWithPath("chatRooms[].opponentUser.nickname").type(JsonFieldType.STRING).description("사용자 닉네임"),
                                         fieldWithPath("chatRooms[].opponentUser.profileImg").type(JsonFieldType.STRING).description("사용자 프로필 사진 url").optional(),
                                         fieldWithPath("chatRooms[].recentContent").type(JsonFieldType.STRING).description("최근 전송된 메세지 내용").optional(),
-                                        fieldWithPath("chatRooms[].recentSendAt").type(JsonFieldType.STRING).description("최근 메세지 전송 시각").optional()
+                                        fieldWithPath("chatRooms[].recentSendAt").type("LocalDateTime").description("최근 메세지 전송 시각").optional()
                                 )
                         )
                 )

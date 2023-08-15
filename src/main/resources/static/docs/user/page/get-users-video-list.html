@@ -447,7 +447,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_업로드_영상_목록_조회_http_request">HTTP request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/users/videos/268e77dc-940e-46b3-9cd9-ee93cd67afc0?page=0&amp;size=2 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/users/videos/7bed48ef-7ee4-44ef-bada-fc70e38f1cf4?page=0&amp;size=2 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -614,6 +614,12 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 개수</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>viewCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회수</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>length</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
@@ -640,47 +646,49 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1374
+Content-Length: 1421
 
 {
-  "timeStamp" : "2023/08/14 13:33:27",
+  "timeStamp" : "2023/08/15 16:58:26",
   "code" : "USER-2013",
   "message" : "[사용자] 비회원: 사용자가 업로드한 영상 목록 조회 성공",
   "data" : {
     "videoList" : [ {
-      "uuid" : "77da515c-2c95-4bac-bf88-34aaec9bf3b0",
+      "uuid" : "0d109c30-7bbd-416c-b89d-7761c14c917a",
       "title" : "타이틀 1",
       "tag" : "#해시 #태그",
       "user" : {
-        "userId" : "268e77dc-940e-46b3-9cd9-ee93cd67afc0",
+        "userId" : "7bed48ef-7ee4-44ef-bada-fc70e38f1cf4",
         "nickname" : "user1",
         "email" : "user1@gmail.com",
         "profileImg" : "프로필 이미지 경로"
       },
       "videoUrl" : "동영상 s3 경로 1",
       "thumbnailUrl" : "썸네일 이미지 s3 경로 1",
-      "likeCount" : 3,
-      "commentCount" : 11,
+      "likeCount" : 0,
+      "commentCount" : 3,
+      "viewCount" : 4,
       "length" : 107800,
       "createdAt" : null,
-      "liked" : true
+      "liked" : false
     }, {
-      "uuid" : "0d85c404-6e8e-4026-869f-598ba0262268",
+      "uuid" : "197203ae-f9e9-42c5-9397-4f4727042f03",
       "title" : "타이틀 2",
       "tag" : "#해시 #태그 #2",
       "user" : {
-        "userId" : "268e77dc-940e-46b3-9cd9-ee93cd67afc0",
+        "userId" : "7bed48ef-7ee4-44ef-bada-fc70e38f1cf4",
         "nickname" : "user1",
         "email" : "user1@gmail.com",
         "profileImg" : "프로필 이미지 경로"
       },
       "videoUrl" : "동영상 s3 경로 2",
       "thumbnailUrl" : "썸네일 이미지 s3 경로 2",
-      "likeCount" : 5,
-      "commentCount" : 2,
+      "likeCount" : 0,
+      "commentCount" : 6,
+      "viewCount" : 7,
       "length" : 9999,
       "createdAt" : null,
-      "liked" : false
+      "liked" : true
     } ],
     "isLast" : true
   }

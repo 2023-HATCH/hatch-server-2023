@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Enter Stage</title>
+<title>Create Chat Room</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -441,33 +441,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_enter_stage"><strong>Enter Stage</strong></h2>
+<h2 id="_create_chat_room"><strong>Create Chat Room</strong></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>스테이지 입장 api</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>이 요청 전에 반드시 웹소켓 connect 요청과 스테이지 구독 요청을 해주세요! - Stage (Web Socket) 명세 참고</p>
-</li>
-</ul>
+<p>채팅방 생성 api</p>
 </div>
 <div class="sect2">
-<h3 id="_enter_stage_http_request">HTTP request</h3>
+<h3 id="_create_chat_room_http_request">HTTP request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/stage/enter?page=0&amp;size=3 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/chats/rooms HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 x-access-token: 액세스 토큰 값
 x-refresh-token: 리프레시 토큰 값
-X-CSRF-TOKEN: e0577e18-49d8-4350-ab58-b654a8d67c42
-Host: localhost:8080</code></pre>
+Content-Length: 65
+X-CSRF-TOKEN: 605d2a01-cb67-4902-baef-137172b8cdd4
+Host: localhost:8080
+
+{
+  "opponentUserId" : "84e3fffd-9d5f-4c4c-85a9-9042093d35be"
+}</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_enter_stage_request_headers">Request headers</h3>
+<h3 id="_create_chat_room_request_headers">Request headers</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -492,34 +490,37 @@ Host: localhost:8080</code></pre>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_enter_stage_request_parameters">Request parameters</h3>
+<h3 id="_create_chat_room_request_fields">Request fields</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">필드명</th>
+<th class="tableblock halign-left valign-top">타입</th>
+<th class="tableblock halign-left valign-top">필수여부</th>
+<th class="tableblock halign-left valign-top">제약조건</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">파라미터</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>opponentUserId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UUID</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">조회할 라이브톡 메세지 목록 페이지 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">조회할 라이브톡 메세지 목록 한 페이지 크기</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">공백 불가</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">채팅 상대방 유저 식별자</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_enter_stage_response_fields-beneath-data">Response fields-beneath-data</h3>
+<h3 id="_create_chat_room_response_fields-beneath-data">Response fields-beneath-data</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -535,163 +536,28 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userCount</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 내 사용자 수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stageStatus</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 현재 상태. WAIT, CATCH, CATCH_END, PLAY, PLAY_END, MVP MVP_END 중 하나</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusElapsedTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Long</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 현재 상태 진행 시간(나노초)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 현재 음악</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic.musicId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UUID</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">음악 식별자</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic.title</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">음악 제목</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic.singer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">음악 가수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic.length</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">음악 길이(밀리초)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic.musicUrl</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">음악 파일 url</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentMusic.concept</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">음악 컨셉</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>talkMessageData.page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">조회된 라이브톡 메세지 목록 페이지 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>talkMessageData.size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">조회된 라이브톡 메세지 목록 한 페이지 크기</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>talkMessageData.messages[].messageId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>chatRoomId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>UUID</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 식별자</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>talkMessageData.messages[].createdAt</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 전송 시각</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>talkMessageData.messages[].content</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 내용</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>talkMessageData.messages[].sender.userId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UUID</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 전송자 식별자</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>talkMessageData.messages[].sender.nickname</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 전송자 닉네임</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>talkMessageData.messages[].sender.profileImg</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 전송자 프로필사진</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성된 채팅방 식별자</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_enter_stage_http_response">HTTP response</h3>
+<h3 id="_create_chat_room_http_response">HTTP response</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1325
+Content-Length: 198
 
 {
-  "timeStamp" : "2023/08/15 16:58:20",
-  "code" : "STAGE-2001",
-  "message" : "[스테이지] 스테이지 입장 성공",
+  "timeStamp" : "2023/08/15 16:58:12",
+  "code" : "CHAT-2100",
+  "message" : "[채팅] 채팅방 생성 성공",
   "data" : {
-    "stageStatus" : "WAIT",
-    "userCount" : 1,
-    "statusElapsedTime" : 99,
-    "currentMusic" : {
-      "musicId" : "da62165e-6910-4446-bb82-b2b0faa5bc8c",
-      "title" : "해치짱",
-      "singer" : "지혜",
-      "length" : 11111,
-      "musicUrl" : "http://tempMusicUrl",
-      "concept" : "최고컨셉"
-    },
-    "talkMessageData" : {
-      "page" : 0,
-      "size" : 3,
-      "messages" : [ {
-        "messageId" : "f247d856-d8b9-4dfb-94eb-9b1517a9ccb8",
-        "content" : "1 메세지내용 test",
-        "createdAt" : "2023-08-15T16:58:20.539613600+09:00[Asia/Seoul]",
-        "sender" : {
-          "userId" : "e7a1c75e-f2d6-41c2-918a-3fe2bf0c2b84",
-          "nickname" : "nicknameTest",
-          "profileImg" : "http://testurl"
-        }
-      }, {
-        "messageId" : "f006a0d7-04ca-4a1d-91b9-14d735fa9ea1",
-        "content" : "2 메세지내용 test",
-        "createdAt" : "2023-08-15T16:58:20.542614900+09:00[Asia/Seoul]",
-        "sender" : {
-          "userId" : "e7a1c75e-f2d6-41c2-918a-3fe2bf0c2b84",
-          "nickname" : "nicknameTest",
-          "profileImg" : "http://testurl"
-        }
-      } ]
-    }
+    "chatRoomId" : "f318baa6-4018-4620-b7ee-5e6719e3a64c"
   }
 }</code></pre>
 </div>
@@ -703,7 +569,7 @@ Content-Length: 1325
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-04 15:26:15 +0900
+Last updated 2023-08-15 16:40:22 +0900
 </div>
 </div>
 </body>

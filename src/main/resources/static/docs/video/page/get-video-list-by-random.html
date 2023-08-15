@@ -619,6 +619,12 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 개수</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>viewCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회수</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>length</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
@@ -645,44 +651,46 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1348
+Content-Length: 1395
 
 {
-  "timeStamp" : "2023/08/14 13:33:29",
+  "timeStamp" : "2023/08/15 16:58:28",
   "code" : "VIDEO-2005",
   "message" : "VIDEO-비회원 동영상 목록 정보 조회 성공",
   "data" : {
     "videoList" : [ {
-      "uuid" : "57eec7d0-3859-49e3-8d37-c728dd8f268d",
+      "uuid" : "412ace56-5d6e-4c26-bb90-ce58e4ac8ff5",
       "title" : "타이틀",
       "tag" : "#해시 #태그",
       "user" : {
-        "userId" : "cfdf062e-b9b1-40bf-854e-37e1ed5ec7a3",
+        "userId" : "9d718e16-99ba-400d-979c-bb7de39f59fb",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
       },
       "videoUrl" : "동영상 s3 경로",
       "thumbnailUrl" : "썸네일 이미지 s3 경로",
-      "likeCount" : 3,
-      "commentCount" : 11,
+      "likeCount" : 0,
+      "commentCount" : 3,
+      "viewCount" : 4,
       "length" : 107800,
       "createdAt" : null,
       "liked" : false
     }, {
-      "uuid" : "7bc53feb-0c15-40b9-8d25-05d0e5a79d94",
+      "uuid" : "4c23bd23-5a77-433f-bef5-8a8422f493f1",
       "title" : "타이틀 1",
       "tag" : "#해시 #태그 #1",
       "user" : {
-        "userId" : "cfdf062e-b9b1-40bf-854e-37e1ed5ec7a3",
+        "userId" : "9d718e16-99ba-400d-979c-bb7de39f59fb",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
       },
       "videoUrl" : "동영상 s3 경로 1",
       "thumbnailUrl" : "썸네일 이미지 s3 경로 1",
-      "likeCount" : 5,
-      "commentCount" : 2,
+      "likeCount" : 0,
+      "commentCount" : 6,
+      "viewCount" : 7,
       "length" : 9999,
       "createdAt" : null,
       "liked" : true
