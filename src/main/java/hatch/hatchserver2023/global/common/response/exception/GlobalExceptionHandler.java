@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -69,6 +70,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     //@Valid 로 발생하는 에러
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        CommonCode code = CommonCode.BAD_REQUEST;
+        List<ObjectError> errorList = ex.getBindingResult().getAllErrors();
+
+        StringBuilder builder = new StringBuilder();
+        errorList.forEach(error -> {
+            String field = ( (FieldError) error).getField();
+            String msg = error.getDefaultMessage();
+            builder.append(field).append(" : ").append(msg).append(". ");
+        });
+        String message = builder.toString();
+
+        return handleExceptionInternal(code, message);
+    }
+
+
+    // request dto 바인딩 실패 시 발생하는 에러
+    @Override
+    protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         CommonCode code = CommonCode.BAD_REQUEST;
         List<ObjectError> errorList = ex.getBindingResult().getAllErrors();
 

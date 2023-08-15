@@ -447,7 +447,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_영상_상세_조회_http_request">HTTP request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/videos/fc6918e9-9a8a-4319-b539-3fac844d503c HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/videos/3f2c4f7b-59eb-4cdf-939b-363676b554d3 HTTP/1.1
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
 Host: localhost:8080</code></pre>
@@ -584,6 +584,12 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 개수</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>viewCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회수</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>length</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
@@ -610,26 +616,27 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 678
+Content-Length: 699
 
 {
-  "timeStamp" : "2023/08/14 13:33:29",
+  "timeStamp" : "2023/08/15 17:12:09",
   "code" : "VIDEO-2003",
   "message" : "VIDEO-동영상 상세 정보 조회 성공",
   "data" : {
-    "uuid" : "fc6918e9-9a8a-4319-b539-3fac844d503c",
+    "uuid" : "3f2c4f7b-59eb-4cdf-939b-363676b554d3",
     "title" : "타이틀",
     "tag" : "#해시 #태그",
     "user" : {
-      "userId" : "52d6b564-258d-4f02-a9c5-e7d17f2e2c9c",
+      "userId" : "f8d88011-53c8-4cc7-ad6f-a3dfcbfa75ef",
       "nickname" : "닉네임",
       "email" : "이메일",
       "profileImg" : "프로필 이미지 s3 경로"
     },
     "videoUrl" : "동영상 s3 경로",
     "thumbnailUrl" : "썸네일 이미지 s3 경로",
-    "likeCount" : 3,
-    "commentCount" : 11,
+    "likeCount" : 0,
+    "commentCount" : 0,
+    "viewCount" : 0,
     "length" : 107800,
     "createdAt" : null,
     "liked" : false

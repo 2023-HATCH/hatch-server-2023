@@ -1,0 +1,6 @@
+
+// api 명 : h3
+== *Get Chat Messages*
+채팅 메세지 목록 조회 api
+
+operation::get-chat-messages[snippets='http-request,request-headers,path-parameters,response-fields-beneath-data,http-response']
