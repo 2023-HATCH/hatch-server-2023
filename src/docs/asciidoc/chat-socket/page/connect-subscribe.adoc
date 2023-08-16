@@ -22,10 +22,10 @@ $ _INFO_:Connect STOMP server success, url = ws://localhost:8080/ws-popo, connec
 - chatRoomId : 채팅방 식별자
 
 
-==== Subscribe Stage Request URL Path
+==== Subscribe Chat Request URL Path
 [source,http,options="nowrap"]
 ----
-/topic/chats/messages/{chatRoomId}
+/topic/chats/rooms/{chatRoomId}
 ----
 
 ==== Subscribe log
