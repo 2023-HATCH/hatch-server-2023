@@ -12,15 +12,19 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final JwtWebSocketInterceptor jwtWebSocketInterceptor;
+    private final StompExceptionHandler stompExceptionHandler;
 
-    public WebSocketConfig(JwtWebSocketInterceptor jwtWebSocketInterceptor) {
+    public WebSocketConfig(JwtWebSocketInterceptor jwtWebSocketInterceptor, StompExceptionHandler stompExceptionHandler) {
         this.jwtWebSocketInterceptor = jwtWebSocketInterceptor;
+        this.stompExceptionHandler = stompExceptionHandler;
     }
 
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-popo").setAllowedOriginPatterns("*"); //모든 곳으로부터의 요청 허용
+        registry
+                .setErrorHandler(stompExceptionHandler) // STOMP 단에서 발생하는 에러 잡아서 핸들링
+                .addEndpoint("/ws-popo").setAllowedOriginPatterns("*"); //모든 곳으로부터의 요청 허용
 //        registry.addEndpoint("/ws-popo").withSockJS(); //socketJS 사용 허용
     }
 
