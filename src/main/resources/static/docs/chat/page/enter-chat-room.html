@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Create Chat Room</title>
+<title>Enter Chat Room</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -441,31 +441,46 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_create_chat_room"><strong>Create Chat Room</strong></h2>
+<h2 id="_enter_chat_room"><strong>Enter Chat Room</strong></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>채팅방 생성 api</p>
+<p>채팅방 정보 조회(입장) api<br></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+채팅방 입장 시 요청하는 api입니다.<br>
+경우에 따른 처리<br>
+- 이 사용자와 처음 채팅을 시작하는 경우 : 새 채팅방 생성. 채팅방Id만 반환.<br>
+- 이 사용자와 채팅 시작한 적이 있을 경우 : 채팅방Id 와 이전 채팅 메세지 목록 반환 (size만큼)<br>
+</td>
+</tr>
+</table>
 </div>
 <div class="sect2">
-<h3 id="_create_chat_room_http_request">HTTP request</h3>
+<h3 id="_enter_chat_room_http_request">HTTP request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/chats/rooms HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /api/v1/chats/rooms?size=5 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 x-access-token: 액세스 토큰 값
 x-refresh-token: 리프레시 토큰 값
 Content-Length: 65
-X-CSRF-TOKEN: 8b1b870e-6068-489f-8791-c81f8dd975ad
+X-CSRF-TOKEN: fe125d66-f827-4a01-8fae-d0d20233ef1a
 Host: localhost:8080
 
 {
-  "opponentUserId" : "2a4db210-448e-4247-8f9e-35bc7320d815"
+  "opponentUserId" : "f9efd035-e30a-41fd-ae22-8a17b8b0d60b"
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_create_chat_room_request_headers">Request headers</h3>
+<h3 id="_enter_chat_room_request_headers">Request headers</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -490,7 +505,7 @@ Host: localhost:8080
 </table>
 </div>
 <div class="sect2">
-<h3 id="_create_chat_room_request_fields">Request fields</h3>
+<h3 id="_enter_chat_room_request_fields">Request fields</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -520,7 +535,7 @@ Host: localhost:8080
 </table>
 </div>
 <div class="sect2">
-<h3 id="_create_chat_room_response_fields-beneath-data">Response fields-beneath-data</h3>
+<h3 id="_enter_chat_room_response_fields-beneath-data">Response fields-beneath-data</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -541,23 +556,100 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성된 채팅방 식별자</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최근 채팅 메세지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회된 페이지 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회된 한 페이지 크기</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.messages[].chatMessageId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UUID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">채팅 메세지 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.messages[].createdAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 전송 시각</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.messages[].content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.messages[].sender.userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UUID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 전송자 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.messages[].sender.nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 전송자 닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.messages[].sender.profileImg</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 전송자 프로필사진</p></td>
+</tr>
 </tbody>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_create_chat_room_http_response">HTTP response</h3>
+<h3 id="_enter_chat_room_http_response">HTTP response</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 198
+Content-Length: 1008
 
 {
-  "timeStamp" : "2023/08/15 17:11:49",
+  "timeStamp" : "2023/08/17 01:45:07",
   "code" : "CHAT-2100",
-  "message" : "[채팅] 채팅방 생성 성공",
+  "message" : "[채팅] 채팅방 정보 조회(입장) 성공",
   "data" : {
-    "chatRoomId" : "e0f37cc1-f34a-41d7-a77a-046438f3b723"
+    "chatRoomId" : "8e8bdda4-dbd4-4810-bf12-b6961aae7426",
+    "recentMessages" : {
+      "page" : 0,
+      "size" : 5,
+      "messages" : [ {
+        "chatMessageId" : "824499b9-5f9f-4231-85bd-e389deac2664",
+        "createdAt" : "2023/08/17 01:45:07",
+        "sender" : {
+          "userId" : "aa8b424b-535f-4eca-a660-3515c21a0ce0",
+          "nickname" : "스펀지밥",
+          "profileImg" : "http://testurl"
+        },
+        "content" : "안녕하세요~ 11"
+      }, {
+        "chatMessageId" : "946784d1-8fa2-4cb2-8109-0fd0d5c47902",
+        "createdAt" : "2023/08/17 01:45:07",
+        "sender" : {
+          "userId" : "2cc3a75a-bf3f-4a77-8eb0-a5e0339fc265",
+          "nickname" : "뚱이",
+          "profileImg" : "http://testurl2"
+        },
+        "content" : "아이스크림 먹자!!!!! 22"
+      } ]
+    }
   }
 }</code></pre>
 </div>
@@ -569,7 +661,7 @@ Content-Length: 198
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-15 16:40:22 +0900
+Last updated 2023-08-17 01:38:20 +0900
 </div>
 </div>
 </body>

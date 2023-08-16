@@ -1,5 +1,6 @@
 package hatch.hatchserver2023.domain.chat.dto;
 
+import hatch.hatchserver2023.domain.chat.domain.ChatMessage;
 import hatch.hatchserver2023.domain.chat.domain.ChatRoom;
 import hatch.hatchserver2023.domain.chat.domain.UserChatRoom;
 import hatch.hatchserver2023.domain.user.domain.User;
@@ -7,8 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,6 +35,26 @@ public class ChatModel {
                 chatRoomInfos.add(chatRoomInfo);
             }
             return chatRoomInfos;
+        }
+    }
+
+    @ToString
+    @Getter
+    @Builder
+    public static class EnterChatRoom {
+        private UUID chatRoomId;
+        private Slice<ChatMessage> chatMessages;
+
+        public static EnterChatRoom toModel(UUID chatRoomId) {
+            return EnterChatRoom.builder()
+                    .chatRoomId(chatRoomId)
+                    .build();
+        }
+        public static EnterChatRoom toModel(UUID chatRoomId, Slice<ChatMessage> chatMessages) {
+            return EnterChatRoom.builder()
+                    .chatRoomId(chatRoomId)
+                    .chatMessages(chatMessages)
+                    .build();
         }
     }
 }
