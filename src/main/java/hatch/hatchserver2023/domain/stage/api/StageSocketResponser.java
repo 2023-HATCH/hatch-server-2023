@@ -1,7 +1,7 @@
 package hatch.hatchserver2023.domain.stage.api;
 
+import hatch.hatchserver2023.domain.stage.StageModel;
 import hatch.hatchserver2023.domain.stage.domain.Music;
-import hatch.hatchserver2023.domain.stage.dto.MusicResponseDto;
 import hatch.hatchserver2023.domain.stage.dto.StageSocketResponseDto;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 //@Slf4j
 @Component
@@ -54,8 +55,8 @@ public class StageSocketResponser {
         sendToStage(SocketResponseType.PLAY_END);
     }
 
-    public void startMVP(UserResponseDto.SimpleUserProfile mvpUSer) {
-        sendToStage(SocketResponseType.MVP_START, StageSocketResponseDto.StartMvp.toDto(mvpUSer));
+    public void startMVP(int mvpPlayerNum, List<StageModel.PlayerResultInfo> playerResultInfos) { //int mvpPlayerNum, List<UserResponseDto.SimpleUserProfile> users
+        sendToStage(SocketResponseType.MVP_START, StageSocketResponseDto.PlayResult.toDto(mvpPlayerNum, playerResultInfos));
     }
 
     public void endMvp() {

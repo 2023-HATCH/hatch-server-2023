@@ -10,9 +10,7 @@ import hatch.hatchserver2023.domain.chat.repository.UserChatRoomRepository;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.global.common.response.code.ChatStatusCode;
-import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.ChatException;
-import hatch.hatchserver2023.global.common.response.exception.UserException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -41,22 +40,28 @@ public class ChatService {
     }
 
     @Transactional //TODO : 사용법...
-    public UUID createChatRoom(User user, UUID opponentUserId) {
+    public ChatModel.EnterChatRoom enterChatRoom(User user, User opponentUser, Integer size) {
         log.info("[SERVICE] createChatRoom");
-        // TODO : 이미 이 사용자와 방이 존재할 경우 예외처리
 
-        User opponentUser = userRepository.findByUuid(opponentUserId)
-                .orElseThrow(() -> new UserException(UserStatusCode.UUID_NOT_FOUND));
+        Optional<ChatRoom> chatRoomOp = getOpponentChatRoom(user, opponentUser);
 
-        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.builder().build());
+        if(chatRoomOp.isPresent()) {
+            UUID chatRoomId = chatRoomOp.get().getUuid();
+            Slice<ChatMessage> chatMessages = getChatMessages(chatRoomId, 0, size);
+            return ChatModel.EnterChatRoom.toModel(chatRoomId, chatMessages);
+        }
+        else {
+            // 새 채팅방 생성
+            ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.builder().build());
 
-        saveUserChatRoom(user, chatRoom);
-        saveUserChatRoom(opponentUser, chatRoom);
+            saveUserChatRoom(chatRoom, user);
+            saveUserChatRoom(chatRoom, opponentUser);
 
-        return chatRoom.getUuid();
+            return ChatModel.EnterChatRoom.toModel(chatRoom.getUuid());
+        }
     }
 
-    private void saveUserChatRoom(User user, ChatRoom chatRoom) {
+    private void saveUserChatRoom(ChatRoom chatRoom, User user) {
         UserChatRoom userChatRoom = UserChatRoom.builder()
                 .chatRoom(chatRoom)
                 .user(user)
@@ -66,19 +71,9 @@ public class ChatService {
 
     public List<ChatModel.ChatRoomInfo> getChatRoomInfos(User user) {
         log.info("[SERVICE] getChatRoomInfos");
-        List<UserChatRoom> myUserChatRooms = userChatRoomRepository.findAllByUser(user); //내가 참여중인 채팅방 목록 가져옴
+        List<UserChatRoom> opponentUserChatRooms = getOpponentChatRooms(user);
 
-        // 채팅방 참여 정보 중 내가 참여중인 채팅방이면서 참여자가 내가 아닌 채팅방 목록을 가녀옴
-        List<UserChatRoom> userChatRooms = new ArrayList<>();
-        for(UserChatRoom myUserChatRoom : myUserChatRooms){
-            ChatRoom myChatRoom = myUserChatRoom.getChatRoom();
-            UserChatRoom userChatRoom = userChatRoomRepository.findByChatRoomNotMeOne(myChatRoom.getId(), user.getId());
-            if(userChatRoom != null){
-                userChatRooms.add(userChatRoom);
-            }
-        }
-
-        return ChatModel.ChatRoomInfo.toModels(userChatRooms); //fetch lazy 에러 안생김
+        return ChatModel.ChatRoomInfo.toModels(opponentUserChatRooms); //fetch lazy 에러 안생김
     }
 
     public Slice<ChatMessage> getChatMessages(UUID chatRoomId, Integer page, Integer size) {
@@ -103,9 +98,47 @@ public class ChatService {
         return chatMessageRepository.save(chatMessage);
     }
 
+
+    /**
+     * 이 사용자와 이미 채팅방이 존재하는지 확인하고 존재한다면 태팅방을 반환하는 메서드
+     * @param user
+     * @param opponentUser
+     * @return
+     */
+    private Optional<ChatRoom> getOpponentChatRoom(User user, User opponentUser) {
+        List<UserChatRoom> opponentUserChatRooms = getOpponentChatRooms(user);
+
+        for(UserChatRoom userChatRoom : opponentUserChatRooms) {
+            if(userChatRoom.getUser().getId().equals(opponentUser.getId())) {
+                Optional.of(userChatRoom.getChatRoom());
+                break;
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * 이 사용자와 함께 채팅방이 만들어져 있는 유저들의 UserChatRoom 목록을 반환하는 메서드
+     * @param user
+     * @return
+     */
+    private List<UserChatRoom> getOpponentChatRooms(User user) {
+        List<UserChatRoom> myUserChatRooms = userChatRoomRepository.findAllByUser(user); //내가 참여중인 채팅방 목록 가져옴
+
+        // 채팅방 참여 정보 중 내가 참여중인 채팅방이면서 참여자가 내가 아닌 채팅방 목록을 가녀옴
+        List<UserChatRoom> userChatRooms = new ArrayList<>();
+        for(UserChatRoom myUserChatRoom : myUserChatRooms) {
+            ChatRoom myChatRoom = myUserChatRoom.getChatRoom();
+            UserChatRoom userChatRoom = userChatRoomRepository.findByChatRoomNotMeOne(myChatRoom.getId(), user.getId());
+            if(userChatRoom != null) { // 현재 로직상 한쪽이 채팅방을 나갈 수 없으므로 항상 not null 인 게 맞긴 하지만 확인차..
+                userChatRooms.add(userChatRoom);
+            }
+        }
+        return userChatRooms;
+    }
+
     private ChatRoom getChatRoom(UUID chatRoomId) {
-        ChatRoom chatRoom = chatRoomRepository.findByUuid(chatRoomId)
+        return chatRoomRepository.findByUuid(chatRoomId)
                 .orElseThrow(() -> new ChatException(ChatStatusCode.CHAT_ROOM_UUID_NOT_FOUND));
-        return chatRoom;
     }
 }

@@ -5,6 +5,7 @@ import hatch.hatchserver2023.domain.chat.domain.ChatMessage;
 import hatch.hatchserver2023.domain.chat.dto.ChatModel;
 import hatch.hatchserver2023.domain.chat.dto.ChatRequestDto;
 import hatch.hatchserver2023.domain.chat.dto.ChatResponseDto;
+import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.ChatStatusCode;
@@ -28,26 +29,30 @@ import java.util.UUID;
 @RequestMapping("api/v1/chats")
 public class ChatController {
     private final ChatService chatService;
+    private final UserUtilService userUtilService;
 
-    public ChatController(ChatService chatService) {
+    public ChatController(ChatService chatService, UserUtilService userUtilService) {
         this.chatService = chatService;
+        this.userUtilService = userUtilService;
     }
 
 
     /**
-     * 채딩방 생성 api
+     * 채딩방 입장 api : 새 채팅방 생성 또는 기존 채팅방 반환
      * @param requestDto
      * @param user
      * @return
      */
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    @PostMapping("/rooms")
-    public ResponseEntity<CommonResponse> createChatRoom(@RequestBody @Valid ChatRequestDto.CreateChatRoom requestDto, //@RequestParam @NotNull UUID opponentUserId,
+    @PutMapping("/rooms")
+    public ResponseEntity<CommonResponse> enterChatRoom(@RequestParam @NotNull @Min(0) Integer size,
+                                                         @RequestBody @Valid ChatRequestDto.CreateChatRoom requestDto, //@RequestParam @NotNull UUID opponentUserId,
                                                          @AuthenticationPrincipal @NotNull User user) {
-        log.info("[API] POST /chats/rooms");
-        UUID chatRoomId = chatService.createChatRoom(user, UUID.fromString(requestDto.getOpponentUserId()));
-        return ResponseEntity.ok().body(CommonResponse.toResponse(ChatStatusCode.POST_CREATE_CHAT_ROOM_SUCCESS,
-                ChatResponseDto.CreateChatRoom.toDto(chatRoomId)));
+        log.info("[API] PUT /chats/rooms");
+        User opponentUser = userUtilService.findOneByUuid(UUID.fromString(requestDto.getOpponentUserId()));
+        ChatModel.EnterChatRoom enterChatRoom = chatService.enterChatRoom(user, opponentUser, size);
+        return ResponseEntity.ok().body(CommonResponse.toResponse(ChatStatusCode.PUT_ENTER_CHAT_ROOM_SUCCESS,
+                ChatResponseDto.EnterChatRoom.toDto(enterChatRoom)));
     }
 
     /**
@@ -60,7 +65,7 @@ public class ChatController {
     @GetMapping("/rooms")
     public ResponseEntity<CommonResponse> getChatRooms(@AuthenticationPrincipal @NotNull User user) {
         log.info("[API] GET /chats/rooms");
-        List<ChatModel.ChatRoomInfo> chatRoomInfos = chatService.getChatRoomInfos(user);
+        List<ChatModel.ChatRoomInfo> chatRoomInfos = chatService.getChatRoomInfos(user); // TODO : List UserChatRoom 으로?
         return ResponseEntity.ok().body(CommonResponse.toResponse(ChatStatusCode.GET_CHAT_ROOMS_SUCCESS,
                 ChatResponseDto.GetChatRooms.toDto(chatRoomInfos)));
     }
@@ -77,7 +82,7 @@ public class ChatController {
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GetMapping("/rooms/{chatRoomId}/messages")
     public ResponseEntity<CommonResponse> getChatMessages(@PathVariable @NotNull UUID chatRoomId,
-                                                          @RequestParam @NotNull @Min(0) Integer page, @RequestParam @NotNull Integer size) {
+                                                          @RequestParam @NotNull @Min(0) Integer page, @RequestParam @NotNull @Min(0) Integer size) {
         log.info("[API] GET /chats/rooms/{chatRoomId}/messages");
         Slice<ChatMessage> chatMessages = chatService.getChatMessages(chatRoomId, page, size);
         return ResponseEntity.ok().body(CommonResponse.toResponse(ChatStatusCode.GET_CHAT_MESSAGES_SUCCESS,

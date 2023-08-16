@@ -1,8 +1,8 @@
 package hatch.hatchserver2023.domain.stage.dto;
 
+import hatch.hatchserver2023.domain.stage.StageModel;
 import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -92,15 +92,32 @@ public class StageSocketResponseDto {
         }
     }
 
+//    @ToString
+//    @Getter
+//    @Builder
+//    public static class StartMvp {
+//        private UserResponseDto.SimpleUserProfile mvpUser;
+//
+//        public static StartMvp toDto(UserResponseDto.SimpleUserProfile mvpUser) {
+//            return StartMvp.builder()
+//                    .mvpUser(mvpUser)
+//                    .build();
+//        }
+//    }
+
+
+
     @ToString
     @Getter
     @Builder
-    public static class StartMvp {
-        private UserResponseDto.SimpleUserProfile mvpUser;
+    public static class PlayResult {
+        private int mvpPlayerNum;
+        private List<StageModel.PlayerResultInfo> playerInfos;
 
-        public static StartMvp toDto(UserResponseDto.SimpleUserProfile mvpUser) {
-            return StartMvp.builder()
-                    .mvpUser(mvpUser)
+        public static PlayResult toDto(int mvpPlayerNum, List<StageModel.PlayerResultInfo> playerResultInfos) {
+            return PlayResult.builder()
+                    .mvpPlayerNum(mvpPlayerNum)
+                    .playerInfos(playerResultInfos)
                     .build();
         }
     }
