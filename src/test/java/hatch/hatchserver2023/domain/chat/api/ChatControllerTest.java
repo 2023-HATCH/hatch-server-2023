@@ -177,7 +177,7 @@ class ChatControllerTest {
         when(chatService.enterChatRoom(any(User.class), any(User.class), eq(size))).thenReturn(model);
 
         //then
-        MockHttpServletRequestBuilder requestPut = put("/api/v1/chats/rooms")
+        MockHttpServletRequestBuilder requestPut = RestDocumentationRequestBuilders.put("/api/v1/chats/rooms")
                 .content(requestDtoString)
                 .param("size", String.valueOf(size))
                 .header("x-access-token", "액세스 토큰 값")
@@ -218,12 +218,16 @@ class ChatControllerTest {
                                         headerWithName("x-access-token").description("액세스 토큰 값"),
                                         headerWithName("x-refresh-token").description("리프레시 토큰 값")
                                 ),
+                                requestParameters(
+                                        parameterWithName("size").description("(필수) 채팅방 이미 존재 시 조회할 최근 채팅 메세지 개수")
+                                ),
                                 requestFields(
                                         fieldWithPath("opponentUserId").type("UUID").description("채팅 상대방 유저 식별자").attributes(field("constraints", "공백 불가"))
                                 ),
                                 responseFields(
                                         beneathPath("data"),
                                         fieldWithPath("chatRoomId").type("UUID").description("생성된 채팅방 식별자"),
+                                        fieldWithPath("recentMessages").type("-").description("최근 채팅 메세지").optional(),
                                         fieldWithPath("recentMessages.page").type("Integer").description("조회된 페이지 번호"),
                                         fieldWithPath("recentMessages.size").type("Integer").description("조회된 한 페이지 크기"),
                                         fieldWithPath("recentMessages.messages[].chatMessageId").type("UUID").description("채팅 메세지 식별자"),
