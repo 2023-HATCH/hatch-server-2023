@@ -27,6 +27,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -46,6 +47,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -130,7 +133,7 @@ public class VideoControllerViewCountTest {
 //        when(videoCacheUtil.addViewCount(any(Video.class)))
 
         //then
-        MockHttpServletRequestBuilder requestGet = get("/api/v1/videos/"+videoId+"/view")
+        MockHttpServletRequestBuilder requestGet = RestDocumentationRequestBuilders.get("/api/v1/videos/{videoId}/view", videoId.toString())
                 .header("x-access-token", "액세스 토큰 값")
                 .header("x-refresh-token", "리프레시 토큰 값")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -150,6 +153,9 @@ public class VideoControllerViewCountTest {
         resultActions
                 .andDo(
                         docs.document(
+                                pathParameters(
+                                        parameterWithName("videoId").description("영상 식별자")
+                                ),
                                 requestHeaders(
                                         headerWithName("x-access-token").description("액세스 토큰 값").optional(),
                                         headerWithName("x-refresh-token").description("리프레시 토큰 값. 이 요청은 토큰 둘다 안보내도 정상 동작합니다. 토큰을 보낸다면 갱신 로직이 적용됩니다.").optional()
