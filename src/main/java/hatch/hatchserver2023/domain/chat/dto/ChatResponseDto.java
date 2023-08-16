@@ -20,12 +20,15 @@ public class ChatResponseDto {
     @ToString
     @Getter
     @Builder
-    public static class CreateChatRoom {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class EnterChatRoom {
         private UUID chatRoomId;
+        private GetChatMessages recentMessages;
 
-        public static CreateChatRoom toDto(UUID chatRoomId) {
-            return CreateChatRoom.builder()
-                    .chatRoomId(chatRoomId)
+        public static EnterChatRoom toDto(ChatModel.EnterChatRoom enterChatRoom) {
+            return EnterChatRoom.builder()
+                    .chatRoomId(enterChatRoom.getChatRoomId())
+                    .recentMessages(GetChatMessages.toDto(enterChatRoom.getChatMessages()))
                     .build();
         }
     }

@@ -6,6 +6,7 @@ import hatch.hatchserver2023.domain.chat.domain.ChatMessage;
 import hatch.hatchserver2023.domain.chat.domain.ChatRoom;
 import hatch.hatchserver2023.domain.chat.dto.ChatModel;
 import hatch.hatchserver2023.domain.chat.dto.ChatRequestDto;
+import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.response.code.ChatStatusCode;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
@@ -53,8 +54,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -75,6 +75,9 @@ class ChatControllerTest {
 
     @MockBean
     private ChatService chatService;
+
+    @MockBean
+    private UserUtilService userUtilService;
 
     private UUID userId1;
     private User user1;
@@ -128,33 +131,82 @@ class ChatControllerTest {
 
     @WithCustomAuth(nickname = "nicknameTest", profileImg = "http://testurl", role="ROLE_USER") // @AuthenticationPrincipal 처리
     @Test
-    void createChatRoom() throws Exception {
+    void enterChatRoom() throws Exception {
         //given
+        //요청 데이터
+        int size = 5; // 이전 채팅 메세지 조회할 개수
         UUID opponentUserId = UUID.randomUUID();
         ChatRequestDto.CreateChatRoom requestDto = ChatRequestDto.CreateChatRoom.builder()
                 .opponentUserId(String.valueOf(opponentUserId))
                 .build();
         String requestDtoString = new ObjectMapper().writeValueAsString(requestDto);
 
+        //응답될 채팅 메세지 데이터
+        String chatContent1 = "안녕하세요~ 11";
+        String chatContent2 = "아이스크림 먹자!!!!! 22";
+        ZonedDateTime recentSendAt1 = ZonedDateTime.now();
+        ZonedDateTime recentSendAt2 = ZonedDateTime.now();
+        ChatRoom chatRoom1 = ChatRoom.builder()
+                .uuid(chatRoomId1)
+                .recentContent(chatContent1)
+                .recentSendAt(recentSendAt1)
+                .build();
+        ChatMessage chatMessage1 = ChatMessage.builder()
+                .uuid(UUID.randomUUID())
+                .chatRoom(chatRoom1)
+                .sender(user1)
+                .content(chatContent1)
+                .build();
+        ChatMessage chatMessage2 = ChatMessage.builder()
+                .uuid(UUID.randomUUID())
+                .chatRoom(chatRoom1)
+                .sender(user2)
+                .content(chatContent2)
+                .build();
+        chatMessage1.updateForTestCode(recentSendAt1);
+        chatMessage2.updateForTestCode(recentSendAt2);
+        List<ChatMessage> chatMessageList = List.of(chatMessage1, chatMessage2);
+
+        Pageable pageable = PageRequest.of(0, size);
+        Slice<ChatMessage> chatMessages = new SliceImpl<ChatMessage>(chatMessageList, pageable, false);
+        ChatModel.EnterChatRoom model = ChatModel.EnterChatRoom.toModel(chatRoom1.getUuid(), chatMessages);
+
+
         //when
-        when(chatService.createChatRoom(any(User.class), eq(opponentUserId))).thenReturn(chatRoomId1);
+        when(userUtilService.findOneByUuid(opponentUserId)).thenReturn(user1);
+        when(chatService.enterChatRoom(any(User.class), any(User.class), eq(size))).thenReturn(model);
 
         //then
-        MockHttpServletRequestBuilder requestPost = post("/api/v1/chats/rooms")
+        MockHttpServletRequestBuilder requestPut = put("/api/v1/chats/rooms")
                 .content(requestDtoString)
+                .param("size", String.valueOf(size))
                 .header("x-access-token", "액세스 토큰 값")
                 .header("x-refresh-token", "리프레시 토큰 값")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf().asHeader()); // csrf가 request parameter 로 들어갈 경우 문서화 필수 오류 해결
 
-        ResultActions resultActions = mockMvc.perform(requestPost);
+        ResultActions resultActions = mockMvc.perform(requestPut);
 
-        StatusCode code = ChatStatusCode.POST_CREATE_CHAT_ROOM_SUCCESS;
+        StatusCode code = ChatStatusCode.PUT_ENTER_CHAT_ROOM_SUCCESS;
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(code.getCode()))
                 .andExpect(jsonPath("$.message").value(code.getMessage()))
                 .andExpect(jsonPath("$.data.chatRoomId").value(chatRoomId1.toString()))
+                .andExpect(jsonPath("$.data.recentMessages.page").value(0))
+                .andExpect(jsonPath("$.data.recentMessages.size").value(size))
+                .andExpect(jsonPath("$.data.recentMessages.messages[0].chatMessageId").value(chatMessageList.get(0).getUuid().toString()))
+                .andExpect(jsonPath("$.data.recentMessages.messages[0].createdAt").value(chatMessageList.get(0).getCreatedAtString()))
+                .andExpect(jsonPath("$.data.recentMessages.messages[0].content").value(chatMessageList.get(0).getContent()))
+                .andExpect(jsonPath("$.data.recentMessages.messages[0].sender.userId").value(user1.getUuid().toString()))
+                .andExpect(jsonPath("$.data.recentMessages.messages[0].sender.nickname").value(user1.getNickname()))
+                .andExpect(jsonPath("$.data.recentMessages.messages[0].sender.profileImg").value(user1.getProfileImg()))
+                .andExpect(jsonPath("$.data.recentMessages.messages[1].chatMessageId").value(chatMessageList.get(1).getUuid().toString()))
+                .andExpect(jsonPath("$.data.recentMessages.messages[1].createdAt").value(chatMessageList.get(1).getCreatedAtString()))
+                .andExpect(jsonPath("$.data.recentMessages.messages[1].content").value(chatMessageList.get(1).getContent()))
+                .andExpect(jsonPath("$.data.recentMessages.messages[1].sender.userId").value(user2.getUuid().toString()))
+                .andExpect(jsonPath("$.data.recentMessages.messages[1].sender.nickname").value(user2.getNickname()))
+                .andExpect(jsonPath("$.data.recentMessages.messages[1].sender.profileImg").value(user2.getProfileImg()))
                 .andDo(print())
         ;
 
@@ -171,7 +223,15 @@ class ChatControllerTest {
                                 ),
                                 responseFields(
                                         beneathPath("data"),
-                                        fieldWithPath("chatRoomId").type("UUID").description("생성된 채팅방 식별자")
+                                        fieldWithPath("chatRoomId").type("UUID").description("생성된 채팅방 식별자"),
+                                        fieldWithPath("recentMessages.page").type("Integer").description("조회된 페이지 번호"),
+                                        fieldWithPath("recentMessages.size").type("Integer").description("조회된 한 페이지 크기"),
+                                        fieldWithPath("recentMessages.messages[].chatMessageId").type("UUID").description("채팅 메세지 식별자"),
+                                        fieldWithPath("recentMessages.messages[].createdAt").type("LocalDateTime").description("메세지 전송 시각"),
+                                        fieldWithPath("recentMessages.messages[].content").type(JsonFieldType.STRING).description("메세지 내용"),
+                                        fieldWithPath("recentMessages.messages[].sender.userId").type("UUID").description("메세지 전송자 식별자"),
+                                        fieldWithPath("recentMessages.messages[].sender.nickname").type(JsonFieldType.STRING).description("메세지 전송자 닉네임"),
+                                        fieldWithPath("recentMessages.messages[].sender.profileImg").type(JsonFieldType.STRING).description("메세지 전송자 프로필사진").optional()
                                 )
                         )
                 )
@@ -275,11 +335,6 @@ class ChatControllerTest {
                 .recentContent(chatContent1)
                 .recentSendAt(recentSendAt1)
                 .build();
-        ChatRoom chatRoom2 = ChatRoom.builder()
-                .uuid(chatRoomId2)
-                .recentContent(chatContent2)
-                .recentSendAt(recentSendAt2)
-                .build();
         ChatMessage chatMessage1 = ChatMessage.builder()
                 .uuid(UUID.randomUUID())
                 .chatRoom(chatRoom1)
@@ -288,7 +343,7 @@ class ChatControllerTest {
                 .build();
         ChatMessage chatMessage2 = ChatMessage.builder()
                 .uuid(UUID.randomUUID())
-                .chatRoom(chatRoom2)
+                .chatRoom(chatRoom1)
                 .sender(user2)
                 .content(chatContent2)
                 .build();
