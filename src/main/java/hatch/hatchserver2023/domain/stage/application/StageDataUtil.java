@@ -151,24 +151,24 @@ public class StageDataUtil { //public 이 상수KEY는 다른 곳에서 한번�
     }
 
     /**
-     * 플레이 직후 playerNum이 mvpPlayerNum에 해당하는 플레이어 사용자 정보 가져오기
-     * @param mvpPlayerNum
+     * 플레이 직후 playerNum에 해당하는 플레이어 사용자 정보 가져오기
+     * @param playerNum
      * @return
      */
-    public UserResponseDto.SimpleUserProfile getMvpUserInfo(int mvpPlayerNum) {
-        Object userObject = redisDao.getValuesHash(StageDataUtil.KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(mvpPlayerNum));
+    public UserResponseDto.SimpleUserProfile getPlayerUserInfo(int playerNum) {
+        Object userObject = redisDao.getValuesHash(StageDataUtil.KEY_STAGE_PLAYER_INFO_HASH, String.valueOf(playerNum));
         if(userObject==null) {
             throw new StageException(StageStatusCode.FAIL_GET_PLAYER_USER_FROM_REDIS);
         }
         String userJson = userObject.toString();
 
-        UserResponseDto.SimpleUserProfile mvpUser;
+        UserResponseDto.SimpleUserProfile userInfo;
         try {
-            mvpUser = objectMapperUtil.toOriginalType(userJson, UserResponseDto.SimpleUserProfile.class);
+            userInfo = objectMapperUtil.toOriginalType(userJson, UserResponseDto.SimpleUserProfile.class);
         } catch (JsonProcessingException e) {
             throw new StageException(StageStatusCode.FAIL_GET_MVP_USER_INFO_FROM_REDIS_JSON);
         }
-        return mvpUser;
+        return userInfo;
     }
 
     /**
