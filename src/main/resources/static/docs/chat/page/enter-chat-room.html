@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>Create Chat Room</title>
+<title>Enter Chat Room</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -441,31 +441,46 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_create_chat_room"><strong>Create Chat Room</strong></h2>
+<h2 id="_enter_chat_room"><strong>Enter Chat Room</strong></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>채팅방 생성 api</p>
+<p>채팅방 정보 조회(입장) api<br></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+채팅방 입장 시 요청하는 api입니다.<br>
+경우에 따른 처리<br>
+- 이 사용자와 처음 채팅을 시작하는 경우 : 새 채팅방 생성. 채팅방Id만 반환. 채팅메세지 반환하지 않음. 필수true는 채팅메세지 반환 시 필수라는 뜻입니다<br>
+- 이 사용자와 채팅 시작한 적이 있을 경우 : 채팅방Id 와 이전 채팅 메세지 목록 반환 (size만큼)<br>
+</td>
+</tr>
+</table>
 </div>
 <div class="sect2">
-<h3 id="_create_chat_room_http_request">HTTP request</h3>
+<h3 id="_enter_chat_room_http_request">HTTP request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/chats/rooms HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /api/v1/chats/rooms?size=5 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 x-access-token: 액세스 토큰 값
 x-refresh-token: 리프레시 토큰 값
 Content-Length: 65
-X-CSRF-TOKEN: 686d7670-9d0e-48c9-92b8-0f5f29288e53
+X-CSRF-TOKEN: 21e5a095-1c84-4c8a-9403-98f117e699fd
 Host: localhost:8080
 
 {
-  "opponentUserId" : "ee58a797-376a-4ea9-b82c-1d3765424e48"
+  "opponentUserId" : "f0cdb913-c2f1-4ca5-b888-b8f2f4e4d39c"
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_create_chat_room_request_headers">Request headers</h3>
+<h3 id="_enter_chat_room_request_headers">Request headers</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -490,7 +505,7 @@ Host: localhost:8080
 </table>
 </div>
 <div class="sect2">
-<h3 id="_create_chat_room_request_fields">Request fields</h3>
+<h3 id="_enter_chat_room_request_fields">Request fields</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -520,7 +535,7 @@ Host: localhost:8080
 </table>
 </div>
 <div class="sect2">
-<h3 id="_create_chat_room_response_fields-beneath-data">Response fields-beneath-data</h3>
+<h3 id="_enter_chat_room_response_fields-beneath-data">Response fields-beneath-data</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -541,23 +556,94 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성된 채팅방 식별자</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회된 페이지 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회된 한 페이지 크기</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.messages[].chatMessageId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UUID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">채팅 메세지 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.messages[].createdAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 전송 시각</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.messages[].content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.messages[].sender.userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UUID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 전송자 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.messages[].sender.nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 전송자 닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>recentMessages.messages[].sender.profileImg</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메세지 전송자 프로필사진</p></td>
+</tr>
 </tbody>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_create_chat_room_http_response">HTTP response</h3>
+<h3 id="_enter_chat_room_http_response">HTTP response</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 198
+Content-Length: 993
 
 {
-  "timeStamp" : "2023/08/16 15:17:46",
+  "timeStamp" : "2023/08/17 01:31:16",
   "code" : "CHAT-2100",
   "message" : "[채팅] 채팅방 생성 성공",
   "data" : {
-    "chatRoomId" : "fa0c2417-5499-4f1f-b774-42e7bf7a2e4b"
+    "chatRoomId" : "789dc6e1-b54b-40ea-8d80-8233d0b2c4ad",
+    "recentMessages" : {
+      "page" : 0,
+      "size" : 5,
+      "messages" : [ {
+        "chatMessageId" : "a0c9c60f-f0ff-4c3a-a980-15417530e168",
+        "createdAt" : "2023/08/17 01:31:15",
+        "sender" : {
+          "userId" : "3785b726-686b-449e-a176-8c99af0325f9",
+          "nickname" : "스펀지밥",
+          "profileImg" : "http://testurl"
+        },
+        "content" : "안녕하세요~ 11"
+      }, {
+        "chatMessageId" : "567d1637-0084-425d-b680-38ecf628c018",
+        "createdAt" : "2023/08/17 01:31:15",
+        "sender" : {
+          "userId" : "2a316e9f-ee1e-4c62-9cac-d2e268c4a60e",
+          "nickname" : "뚱이",
+          "profileImg" : "http://testurl2"
+        },
+        "content" : "아이스크림 먹자!!!!! 22"
+      } ]
+    }
   }
 }</code></pre>
 </div>
@@ -569,7 +655,7 @@ Content-Length: 198
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-16 15:14:43 +0900
+Last updated 2023-08-17 01:27:04 +0900
 </div>
 </div>
 </body>
