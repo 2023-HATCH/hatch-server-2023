@@ -11,7 +11,6 @@ import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
-import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,8 +41,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -219,7 +216,7 @@ public class UserControllerTest {
                 .uuid(UUID.randomUUID())
                 .title("타이틀 1")
                 .tag("#해시 #태그")
-                .userId(user1)
+                .user(user1)
                 .videoUrl("동영상 s3 경로 1")
                 .thumbnailUrl("썸네일 이미지 s3 경로 1")
                 .likeCount(3)
@@ -232,7 +229,7 @@ public class UserControllerTest {
                 .uuid(UUID.randomUUID())
                 .title("타이틀 2")
                 .tag("#해시 #태그 #2")
-                .userId(user1)
+                .user(user1)
                 .videoUrl("동영상 s3 경로 2")
                 .thumbnailUrl("썸네일 이미지 s3 경로 2")
                 .likeCount(5)
@@ -279,8 +276,8 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.data.videoList[1].uuid").value(video2.getUuid().toString()))
                 .andExpect(jsonPath("$.data.videoList[0].title").value(video1.getTitle()))
                 .andExpect(jsonPath("$.data.videoList[1].title").value(video2.getTitle()))
-                .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUserId().getUuid().toString()))
-                .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUserId().getUuid().toString()))
+                .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUser().getUuid().toString()))
+                .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUser().getUuid().toString()))
         ;
 
         resultActions

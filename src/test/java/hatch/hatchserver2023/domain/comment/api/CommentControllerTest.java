@@ -1,7 +1,6 @@
 package hatch.hatchserver2023.domain.comment.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hatch.hatchserver2023.domain.comment.api.CommentController;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.comment.application.CommentService;
 import hatch.hatchserver2023.domain.comment.domain.Comment;
@@ -108,7 +107,7 @@ public class CommentControllerTest {
                 .uuid(UUID.randomUUID())
                 .title("타이틀")
                 .tag("#해시 #태그")
-                .userId(user)
+                .user(user)
                 .videoUrl("동영상 s3 경로")
                 .thumbnailUrl("썸네일 이미지 s3 경로")
                 .likeCount(3)
@@ -118,15 +117,15 @@ public class CommentControllerTest {
 
         comment1 = Comment.builder()
                 .uuid(UUID.randomUUID())
-                .userId(user)
-                .videoId(video)
+                .user(user)
+                .video(video)
                 .content("댓글을 작성했어요!")
                 .build();
 
         comment2 = Comment.builder()
                 .uuid(UUID.randomUUID())
-                .userId(user)
-                .videoId(video)
+                .user(user)
+                .video(video)
                 .content("또 다른 댓글을 썼습니다")
                 .build();
     }
@@ -166,7 +165,7 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.message").value(code.getMessage()))
                 .andExpect(jsonPath("$.data.uuid").value(comment1.getUuid().toString()))
                 .andExpect(jsonPath("$.data.content").value(comment1.getContent()))
-                .andExpect(jsonPath("$.data.user.userId").value(comment1.getUserId().getUuid().toString()))
+                .andExpect(jsonPath("$.data.user.userId").value(comment1.getUser().getUuid().toString()))
         ;
 
         resultActions
@@ -271,8 +270,8 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.data.commentList[1].uuid").value(comment2.getUuid().toString()))
                 .andExpect(jsonPath("$.data.commentList[0].content").value(comment1.getContent()))
                 .andExpect(jsonPath("$.data.commentList[1].content").value(comment2.getContent()))
-                .andExpect(jsonPath("$.data.commentList[0].user.userId").value(comment1.getUserId().getUuid().toString()))
-                .andExpect(jsonPath("$.data.commentList[1].user.userId").value(comment2.getUserId().getUuid().toString()))
+                .andExpect(jsonPath("$.data.commentList[0].user.userId").value(comment1.getUser().getUuid().toString()))
+                .andExpect(jsonPath("$.data.commentList[1].user.userId").value(comment2.getUser().getUuid().toString()))
         ;
 
         resultActions

@@ -243,7 +243,7 @@ public class VideoService {
 
         // 영상 builder로 만들고
         Video uploadedVideo = Video.builder()
-                .userId(user)
+                .user(user)
                 .title(title)
                 .tag(tag)
                 .videoUrl(videoUrl)

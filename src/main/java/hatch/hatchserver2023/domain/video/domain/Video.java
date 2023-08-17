@@ -8,7 +8,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
@@ -26,7 +25,7 @@ public class Video extends BaseTimeEntity {
     //작성자
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)    //다대일 관계에서 FK는 다 쪽에 있는 것. 연관 관계의 주인
-    private User userId;
+    private User user;
 
     //제목
     @Column(nullable = false, length = 50)
@@ -74,10 +73,10 @@ public class Video extends BaseTimeEntity {
     //== 생성자 ==//
     // builder 생성자
     @Builder
-    private Video(Long id, UUID uuid, User userId, String title, String tag, String videoUrl, String thumbnailUrl, int length, int viewCount, int likeCount, int commentCount) {
+    private Video(Long id, UUID uuid, User user, String title, String tag, String videoUrl, String thumbnailUrl, int length, int viewCount, int likeCount, int commentCount) {
         this.id = id;
         this.uuid = uuid;
-        this.userId = userId;
+        this.user = user;
         this.title = title;
         this.tag = tag;
         this.videoUrl = videoUrl;

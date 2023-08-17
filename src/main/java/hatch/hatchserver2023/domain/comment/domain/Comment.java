@@ -28,13 +28,13 @@ public class Comment extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "video_id", nullable = false) //다대일 관계에서 FK는 다 쪽에 있는 것. 연관 관계의 주인
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Video videoId;
+    private Video video;
 
     //작성자
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false) //다대일 관계에서 FK는 다 쪽에 있는 것. 연관 관계의 주인
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User userId;
+    private User user;
 
     //내용
     @Column(length = 200)
@@ -49,10 +49,10 @@ public class Comment extends BaseTimeEntity {
 
     //== 생성자 ==//
     @Builder
-    private Comment(UUID uuid, Video videoId, User userId, String content) {
+    private Comment(UUID uuid, Video video, User user, String content) {
         this.uuid = uuid;
-        this.videoId = videoId;
-        this.userId = userId;
+        this.video = video;
+        this.user = user;
         this.content = content;
     }
 
