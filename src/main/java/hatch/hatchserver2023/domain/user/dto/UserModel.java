@@ -22,4 +22,16 @@ public class UserModel {
                     .build();
         }
     }
+
+    @ToString
+    @Builder
+    @Getter
+    public static class ProfileInfo {
+
+        private User user;
+        private boolean isMe;
+        private boolean isFollowing;
+        private int followingCount;
+        private int followerCount;
+    }
 }

@@ -141,12 +141,20 @@ public class UserControllerTest {
     void getProfile() throws Exception {
         //given
         boolean isMe = false;
-        given(userUtilService.findOneByUuid(user1.getUuid()))
-                .willReturn(user1);
-        given(userUtilService.countFollower(user1))
-                .willReturn(2);
-        given(userUtilService.countFollowing(user1))
-                .willReturn(1);
+        boolean isFollowing = true;
+        int followingCount = user1.getFollowingCount();
+        int followerCount = user1.getFollowerCount();
+
+        UserModel.ProfileInfo profileInfo = UserModel.ProfileInfo.builder()
+                                                    .user(user1)
+                                                    .isMe(isMe)
+                                                    .isFollowing(isFollowing)
+                                                    .followingCount(followingCount)
+                                                    .followerCount(followerCount)
+                                                    .build();
+
+        given(userUtilService.getProfile(eq(user1.getUuid()), any()))
+                .willReturn(profileInfo);
 
         //when
         StatusCode code = UserStatusCode.GET_PROFILE_SUCCESS;
@@ -185,6 +193,7 @@ public class UserControllerTest {
                                         beneathPath("data"),
                                         fieldWithPath("userId").type(JsonFieldType.STRING).description("사용자 식별자 UUID"),
                                         fieldWithPath("isMe").type(JsonFieldType.BOOLEAN).description("로그인한 사용자가 자신의 프로필을 확인하는지 여부"),
+                                        fieldWithPath("isFollowing").type(JsonFieldType.BOOLEAN).description("로그인한 사용자가 해당 사용자를 팔로잉하는지 여부 (비회원이면 false)"),
                                         fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
                                         fieldWithPath("profileImg").type(JsonFieldType.STRING).description("프로필 이미지 경로"),
