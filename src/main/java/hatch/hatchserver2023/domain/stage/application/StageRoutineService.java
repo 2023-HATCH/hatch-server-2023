@@ -78,6 +78,7 @@ public class StageRoutineService {
 
                 // 플레이 시작
                 int playTime = startPlay(music);
+                log.info("StageRoutineUtil sleep playTime : {}", playTime);
                 TimeUnit.SECONDS.sleep(playTime);
                 endPlay();
 
@@ -142,7 +143,7 @@ public class StageRoutineService {
         stageDataUtil.setStageStatus(STAGE_STATUS_PLAY);
 
         final int readyTime = 5;
-        int musicTime = 10; //TODO : 개발 편의 위해 잠시 //music.getLength()
+        int musicTime = (int) Math.ceil(music.getLength()/1000.0); //밀리초 올림해서 초단위로 변경 //TODO : 개발 편의 위해 잠시 //music.getLength()/100
 
         stageDataUtil.setStageStatusStartTime();
         stageSocketResponser.startPlay();
