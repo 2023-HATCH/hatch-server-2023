@@ -155,7 +155,12 @@ public class UserUtilService {
     //프로필 수정
     public void updateProfile(User user, String introduce, String instagramId, String twitterId) {
 
-        user.updateProfile(introduce, instagramId, twitterId);
+        //수정하는 값이 빈 텍스트면 null로 변환
+        String introduceNullable = Objects.equals(introduce, "") ? null : introduce;
+        String instagramIdNullable = Objects.equals(instagramId, "") ? null : instagramId;
+        String twitterIdNullable = Objects.equals(twitterId, "") ? null : twitterId;
+
+        user.updateProfile(introduceNullable, instagramIdNullable, twitterIdNullable);
         userRepository.save(user);
     }
 
