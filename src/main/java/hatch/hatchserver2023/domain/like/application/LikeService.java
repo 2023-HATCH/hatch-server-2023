@@ -101,11 +101,11 @@ public class LikeService {
         if (loginUser == null) {
             videoInfoList = likeSlice.stream()
                     .map(like -> VideoModel.VideoInfo.builder()
-                            .video(like.getVideoId())
+                            .video(like.getVideo())
                             .isLiked(false)
-                            .viewCount(videoCacheUtil.getViewCount(like.getVideoId()))
-                            .likeCount(videoCacheUtil.getLikeCount(like.getVideoId()))
-                            .commentCount(videoCacheUtil.getCommentCount(like.getVideoId()))
+                            .viewCount(videoCacheUtil.getViewCount(like.getVideo()))
+                            .likeCount(videoCacheUtil.getLikeCount(like.getVideo()))
+                            .commentCount(videoCacheUtil.getCommentCount(like.getVideo()))
                             .build())
                     .collect(Collectors.toList());
         }
@@ -113,11 +113,11 @@ public class LikeService {
         else{
             videoInfoList = likeSlice.stream()
                     .map(like -> VideoModel.VideoInfo.builder()
-                            .video(like.getVideoId())
-                            .isLiked(isAlreadyLiked(like.getVideoId(), loginUser))
-                            .viewCount(videoCacheUtil.getViewCount(like.getVideoId()))
-                            .likeCount(videoCacheUtil.getLikeCount(like.getVideoId()))
-                            .commentCount(videoCacheUtil.getCommentCount(like.getVideoId()))
+                            .video(like.getVideo())
+                            .isLiked(isAlreadyLiked(like.getVideo(), loginUser))
+                            .viewCount(videoCacheUtil.getViewCount(like.getVideo()))
+                            .likeCount(videoCacheUtil.getLikeCount(like.getVideo()))
+                            .commentCount(videoCacheUtil.getCommentCount(like.getVideo()))
                             .build())
                     .collect(Collectors.toList());
         }

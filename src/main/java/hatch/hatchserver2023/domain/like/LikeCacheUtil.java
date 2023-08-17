@@ -191,10 +191,10 @@ public class LikeCacheUtil {
             if(status.equals(CACHE_LIKE_INFO_ADD)){
                 //add 이면 like 객체 새로 생성
                 like = Like.builder()
-                        .userId(user)
-                        .videoId(video).build();
+                        .user(user)
+                        .video(video).build();
                 addLikes.add(like);
-                log.info("[SCHEDULED] added like info user : {}, video : {}", like.getUserId().getNickname(), like.getVideoId().getTitle());
+                log.info("[SCHEDULED] added like info user : {}, video : {}", like.getUser().getNickname(), like.getVideo().getTitle());
             }
             else if(status.equals(CACHE_LIKE_INFO_DELETE)){
                 // delete 이면 RDB 에서 삭제할 데이터를 가져옴

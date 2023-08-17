@@ -120,7 +120,7 @@ public class VideoControllerViewCountTest {
                 .uuid(videoId)
                 .title("타이틀")
                 .tag("#해시 #태그")
-                .userId(user)
+                .user(user)
                 .videoUrl("동영상 s3 경로")
                 .thumbnailUrl("썸네일 이미지 s3 경로")
                 .likeCount(3)

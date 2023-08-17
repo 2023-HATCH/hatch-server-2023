@@ -110,6 +110,7 @@ public class UserResponseDto {
     public static class Profile {
         private UUID userId;
         private Boolean isMe;   //자기자신 프로필 조회 여부
+        private Boolean isFollowing;   //현재 사용자가 해당 사용자를 팔로우하는지 여부
         private String nickname;
         private String email;
         private String profileImg;
@@ -121,18 +122,21 @@ public class UserResponseDto {
         private ZonedDateTime createdAt;
         private ZonedDateTime modifiedAt;
 
-        public static Profile toDto(User user, Boolean isMe, int followingCount, int followerCount) {
+        public static Profile toDto(UserModel.ProfileInfo profileInfo) {
+            User user = profileInfo.getUser();
+
             return Profile.builder()
                     .userId(user.getUuid())
-                    .isMe(isMe)
+                    .isMe(profileInfo.isMe())
+                    .isFollowing(profileInfo.isFollowing())
                     .nickname(user.getNickname())
                     .email(user.getEmail())
                     .profileImg(user.getProfileImg())
                     .introduce(user.getIntroduce())
                     .instagramId(user.getInstagramAccount())
                     .twitterId(user.getTwitterAccount())
-                    .followerCount(followerCount)
-                    .followingCount(followingCount)
+                    .followerCount(profileInfo.getFollowerCount())
+                    .followingCount(profileInfo.getFollowingCount())
                     .createdAt(user.getCreatedAt())
                     .modifiedAt(user.getModifiedAt())
                     .build();

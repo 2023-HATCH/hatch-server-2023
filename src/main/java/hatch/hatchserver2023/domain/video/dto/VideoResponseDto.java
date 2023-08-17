@@ -44,7 +44,7 @@ public class VideoResponseDto {
 
         // redis cache 에서 likeCount, commentCount, viewCount 가져옴
         public static GetVideo toDto(VideoModel.VideoInfo videoInfo){
-            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(videoInfo.getVideo().getUserId());
+            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(videoInfo.getVideo().getUser());
 
             return GetVideo.builder()
                     .uuid(videoInfo.getVideo().getUuid())
