@@ -22,7 +22,7 @@ public class CommentResponseDto {
 
 
         public static CommentResponseDto.CreateComment toDto(Comment comment){
-            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(comment.getUserId());
+            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(comment.getUser());
 
             return CommentResponseDto.CreateComment.builder()
                     .uuid(comment.getUuid())
@@ -44,7 +44,7 @@ public class CommentResponseDto {
 
 
         public static CommentResponseDto.GetComment toDto(Comment comment){
-            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(comment.getUserId());
+            UserResponseDto.CommunityUserInfo userInfo = UserResponseDto.CommunityUserInfo.toDto(comment.getUser());
 
             return CommentResponseDto.GetComment.builder()
                     .uuid(comment.getUuid())

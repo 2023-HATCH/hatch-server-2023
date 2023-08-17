@@ -63,13 +63,47 @@ public class UserUtilService {
         return user;
     }
 
+
+    /**
+     * 프로필 조회
+     *
+      * @param userId
+     * @param loginUser
+     * @return profileInfo
+     */
+    public UserModel.ProfileInfo getProfile(UUID userId, User loginUser) {
+
+        User user = findOneByUuid(userId);
+
+        // 프로필 조회하는 주체가 자기자신의 프로필을 보는지 여부
+        boolean isMe = loginUser != null && loginUser.getUuid().equals(user.getUuid());
+
+        //현재 사용자가 해당 사용자를 팔로우하는지 여부(비회원이면 False)
+        boolean isFollowing = loginUser != null && isFollowing(loginUser, user);
+
+        //팔로워 수, 팔로잉 수
+        //TODO: 팔로워, 팔로잉 count를 조회할 때 마다 하는 방식으로 하는데, redis를 쓰던지, db에 저장하던지 다른 방식을 생각해봐야함
+        int followerCount = countFollower(user);
+        int followingCount = countFollowing(user);
+
+        UserModel.ProfileInfo profileInfo = UserModel.ProfileInfo.builder()
+                                                    .user(user)
+                                                    .isMe(isMe)
+                                                    .isFollowing(isFollowing)
+                                                    .followerCount(followerCount)
+                                                    .followingCount(followingCount)
+                                                    .build();
+
+        return profileInfo;
+    }
+
     //팔로워 수 세기
-    public int countFollower(User toUser) {
+    private int countFollower(User toUser) {
         return followRepository.countByToUser(toUser);
     }
 
     //팔로잉 수 세기
-    public int countFollowing(User fromUser) {
+    private int countFollowing(User fromUser) {
         return followRepository.countByFromUser(fromUser);
     }
 
@@ -120,6 +154,17 @@ public class UserUtilService {
 
     //프로필 수정
     public void updateProfile(User user, String introduce, String instagramId, String twitterId) {
+
+        //빈 텍스트이거나 null이면 기존 데이터를 유지
+        if(introduce == null || Objects.equals(introduce, "")) {
+            introduce = user.getIntroduce();
+        }
+        if(instagramId == null || Objects.equals(instagramId, "")) {
+            instagramId = user.getInstagramAccount();
+        }
+        if(twitterId == null || Objects.equals(twitterId, "")) {
+            twitterId = user.getTwitterAccount();
+        }
 
         user.updateProfile(introduce, instagramId, twitterId);
         userRepository.save(user);

@@ -11,7 +11,6 @@ import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
-import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,8 +41,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -141,12 +138,20 @@ public class UserControllerTest {
     void getProfile() throws Exception {
         //given
         boolean isMe = false;
-        given(userUtilService.findOneByUuid(user1.getUuid()))
-                .willReturn(user1);
-        given(userUtilService.countFollower(user1))
-                .willReturn(2);
-        given(userUtilService.countFollowing(user1))
-                .willReturn(1);
+        boolean isFollowing = true;
+        int followingCount = user1.getFollowingCount();
+        int followerCount = user1.getFollowerCount();
+
+        UserModel.ProfileInfo profileInfo = UserModel.ProfileInfo.builder()
+                                                    .user(user1)
+                                                    .isMe(isMe)
+                                                    .isFollowing(isFollowing)
+                                                    .followingCount(followingCount)
+                                                    .followerCount(followerCount)
+                                                    .build();
+
+        given(userUtilService.getProfile(eq(user1.getUuid()), any()))
+                .willReturn(profileInfo);
 
         //when
         StatusCode code = UserStatusCode.GET_PROFILE_SUCCESS;
@@ -185,6 +190,7 @@ public class UserControllerTest {
                                         beneathPath("data"),
                                         fieldWithPath("userId").type(JsonFieldType.STRING).description("사용자 식별자 UUID"),
                                         fieldWithPath("isMe").type(JsonFieldType.BOOLEAN).description("로그인한 사용자가 자신의 프로필을 확인하는지 여부"),
+                                        fieldWithPath("isFollowing").type(JsonFieldType.BOOLEAN).description("로그인한 사용자가 해당 사용자를 팔로잉하는지 여부 (비회원이면 false)"),
                                         fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
                                         fieldWithPath("profileImg").type(JsonFieldType.STRING).description("프로필 이미지 경로"),
@@ -210,7 +216,7 @@ public class UserControllerTest {
                 .uuid(UUID.randomUUID())
                 .title("타이틀 1")
                 .tag("#해시 #태그")
-                .userId(user1)
+                .user(user1)
                 .videoUrl("동영상 s3 경로 1")
                 .thumbnailUrl("썸네일 이미지 s3 경로 1")
                 .likeCount(3)
@@ -223,7 +229,7 @@ public class UserControllerTest {
                 .uuid(UUID.randomUUID())
                 .title("타이틀 2")
                 .tag("#해시 #태그 #2")
-                .userId(user1)
+                .user(user1)
                 .videoUrl("동영상 s3 경로 2")
                 .thumbnailUrl("썸네일 이미지 s3 경로 2")
                 .likeCount(5)
@@ -270,8 +276,8 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.data.videoList[1].uuid").value(video2.getUuid().toString()))
                 .andExpect(jsonPath("$.data.videoList[0].title").value(video1.getTitle()))
                 .andExpect(jsonPath("$.data.videoList[1].title").value(video2.getTitle()))
-                .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUserId().getUuid().toString()))
-                .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUserId().getUuid().toString()))
+                .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUser().getUuid().toString()))
+                .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUser().getUuid().toString()))
         ;
 
         resultActions
