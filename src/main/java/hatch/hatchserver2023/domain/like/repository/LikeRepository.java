@@ -15,18 +15,17 @@ import java.util.Optional;
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
     //사용자의 좋아요 목록 찾기
-    public Slice<Like> findAllByUserId(User user, Pageable pageable);
+    public Slice<Like> findAllByUser(User user, Pageable pageable);
 
     //한 동영상의 좋아요 목록 찾기
-    public List<Like> findAllByVideoId(Video video);
+    public List<Like> findAllByVideo(Video video);
 
     //단 하나의 좋아요 찾기
-    public Optional<Like> findByVideoIdAndUserId(Video video, User user);
+    public Optional<Like> findByVideoAndUser(Video video, User user);
 
-    public Optional<Like> findByVideoIdAndUserId(long videoId, long userId);
+    public Optional<Like> findByVideoAndUser(long videoId, long userId);
 
     //한 동영상의 좋아요 개수 세기
-    //TODO: 최적화 방법 고민
-    public long countByVideoId(Video video);
+    public long countByVideo(Video video);
 
 }
