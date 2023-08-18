@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +30,27 @@ import java.util.Set;
 @RestControllerAdvice // controller 단부터 발생하는 에러 핸들러
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private static final String ERROR_WS_SEND_URL = "/topic/errors";
+    private final SimpMessagingTemplate simpMessagingTemplate;
+
+    public GlobalExceptionHandler(SimpMessagingTemplate simpMessagingTemplate) {
+        this.simpMessagingTemplate = simpMessagingTemplate;
+    }
+
+    // 내가 만든 예외 - socket 통신 중 @MessageMapping 된 메서드에서 발생한 경우
+    @MessageExceptionHandler(DefaultException.class)
+    public void handleSocketMessageDefaultException(DefaultException e, Principal stompPrincipal) {
+        StatusCode code = e.getCode();
+        handleSocketMessageExceptionInternal(code, stompPrincipal);
+    }
+
+    //  socket 통신 중 @MessageMapping 된 메서드에서 발생한 경우
+    @MessageExceptionHandler(Exception.class) // 자식 클래스의 핸들러가 우선순위가 더 높으므로, DefaultException 에 해당하면 그 핸들러로 처리됨
+    public void handleSocketMessageException(Exception e, Principal stompPrincipal) {
+        handleSocketMessageExceptionInternal(e, stompPrincipal);
+    }
+
+    // 내가 만든 예외
     @ExceptionHandler(DefaultException.class)
     public ResponseEntity<Object> handleDefaultException(DefaultException e){
         StatusCode code = e.getCode();
@@ -100,6 +124,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String message = builder.toString();
 
         return handleExceptionInternal(code, message);
+    }
+
+
+    private void handleSocketMessageExceptionInternal(StatusCode code, Principal stompPrincipal) {
+        CommonResponse errorResponse = CommonResponse.toErrorResponse(code);
+        simpMessagingTemplate.convertAndSendToUser(stompPrincipal.getName(), ERROR_WS_SEND_URL, errorResponse); // 특정 사용자에게만 응답 전송
+    }
+
+    private void handleSocketMessageExceptionInternal(Exception e, Principal stompPrincipal) {
+        CommonResponse errorResponse = CommonResponse.toErrorResponse(e);
+        simpMessagingTemplate.convertAndSendToUser(stompPrincipal.getName(), ERROR_WS_SEND_URL, errorResponse); // 특정 사용자에게만 응답 전송
     }
 
 
