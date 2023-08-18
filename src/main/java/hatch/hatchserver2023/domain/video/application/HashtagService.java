@@ -70,12 +70,12 @@ public class HashtagService {
 
         if(hashtag.isPresent()){
             // 검색한 해시태그가 존재한다면, videoList 제작
-            Slice<VideoHashtag> mapSlice = videoHashtagRepository.findAllByHashtagId(hashtag.get(), pageable);
+            Slice<VideoHashtag> mapSlice = videoHashtagRepository.findAllByHashtag(hashtag.get(), pageable);
             hasNext = mapSlice.hasNext();
             List<VideoHashtag> mapList = mapSlice.getContent();
 
             for (VideoHashtag map : mapList){
-                videoList.add(map.getVideoId());
+                videoList.add(map.getVideo());
             }
         }  // 검색한 해시태그가 없다면 videoList는 빈 배열
 
@@ -142,8 +142,8 @@ public class HashtagService {
 
             //매핑 테이블에도 추가
             VideoHashtag map = VideoHashtag.builder()
-                                .videoId(video)
-                                .hashtagId(hashtag)
+                                .video(video)
+                                .hashtag(hashtag)
                                 .build();
 
             videoHashtagRepository.save(map);

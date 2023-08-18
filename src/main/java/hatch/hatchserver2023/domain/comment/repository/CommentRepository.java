@@ -13,9 +13,9 @@ import java.util.UUID;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    public List<Comment> findAllByVideoId(Video video);
+    public List<Comment> findAllByVideo(Video video);
 
-    public List<Comment> findByVideoIdAndUserId(Video videoId, User userId);
+    public List<Comment> findByVideoAndUser(Video video, User user);
 
     public Optional<Comment> findByUuid(UUID uuid);
 }

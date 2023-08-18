@@ -124,7 +124,7 @@ public class VideoControllerTest {
                 .uuid(UUID.randomUUID())
                 .title("타이틀")
                 .tag("#해시 #태그")
-                .userId(user)
+                .user(user)
                 .videoUrl("동영상 s3 경로")
                 .thumbnailUrl("썸네일 이미지 s3 경로")
                 .likeCount(3)
@@ -137,7 +137,7 @@ public class VideoControllerTest {
                 .uuid(UUID.randomUUID())
                 .title("타이틀 1")
                 .tag("#해시 #태그 #1")
-                .userId(user)
+                .user(user)
                 .videoUrl("동영상 s3 경로 1")
                 .thumbnailUrl("썸네일 이미지 s3 경로 1")
                 .likeCount(5)
@@ -199,7 +199,7 @@ public class VideoControllerTest {
                         .andExpect(jsonPath("$.message").value(code.getMessage()))
                         .andExpect(jsonPath("$.data.uuid").value(video1.getUuid().toString()))
                         .andExpect(jsonPath("$.data.title").value(video1.getTitle()))
-                        .andExpect(jsonPath("$.data.user.userId").value(video1.getUserId().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.user.userId").value(video1.getUser().getUuid().toString()))
                         .andExpect(jsonPath("$.data.videoUrl").value(video1.getVideoUrl()))
                         .andExpect(jsonPath("$.data.liked").value(isLiked))
                 ;
@@ -328,8 +328,8 @@ public class VideoControllerTest {
                         .andExpect(jsonPath("$.data.videoList[1].uuid").value(video2.getUuid().toString()))
                         .andExpect(jsonPath("$.data.videoList[0].title").value(video1.getTitle()))
                         .andExpect(jsonPath("$.data.videoList[1].title").value(video2.getTitle()))
-                        .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUserId().getUuid().toString()))
-                        .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUserId().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUser().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUser().getUuid().toString()))
                         ;
 
                 resultActions
@@ -416,8 +416,8 @@ public class VideoControllerTest {
                         .andExpect(jsonPath("$.data.videoList[1].uuid").value(video2.getUuid().toString()))
                         .andExpect(jsonPath("$.data.videoList[0].title").value(video1.getTitle()))
                         .andExpect(jsonPath("$.data.videoList[1].title").value(video2.getTitle()))
-                        .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUserId().getUuid().toString()))
-                        .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUserId().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUser().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUser().getUuid().toString()))
                 ;
 
                 resultActions
@@ -596,8 +596,8 @@ public class VideoControllerTest {
                         .andExpect(jsonPath("$.data.videoList[1].uuid").value(video2.getUuid().toString()))
                         .andExpect(jsonPath("$.data.videoList[0].title").value(video1.getTitle()))
                         .andExpect(jsonPath("$.data.videoList[1].title").value(video2.getTitle()))
-                        .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUserId().getUuid().toString()))
-                        .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUserId().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUser().getUuid().toString()))
+                        .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUser().getUuid().toString()))
                 ;
 
                 resultActions

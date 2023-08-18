@@ -86,14 +86,17 @@ public class LikeCacheUtil {
      */
     public boolean isLiked(Video video, User user) {
         // 레디스에 존재하는지 확인
+        log.info("레디스에 존재하는지 확인");
         Object statusObject = redisDao.getValuesHash(toLikeInfoKey(video.getId()), String.valueOf(user.getId()));
 
         // 레디스에 없으면 RDB 조회
         if(statusObject == null) {
-            return likeRepository.findByVideoIdAndUserId(video, user).isPresent();
+            log.info("레디스에 없으면 RDB 조회");
+            return likeRepository.findByVideoAndUser(video, user).isPresent();
         }
         else{
             // 레디스에 있으면 add 로 저장되어있는지
+            log.info("레디스에 있으면 add 로 저장되어있는지");
             return statusObject.toString().equals(CACHE_LIKE_INFO_ADD);
         }
     }
@@ -191,10 +194,10 @@ public class LikeCacheUtil {
             if(status.equals(CACHE_LIKE_INFO_ADD)){
                 //add 이면 like 객체 새로 생성
                 like = Like.builder()
-                        .userId(user)
-                        .videoId(video).build();
+                        .user(user)
+                        .video(video).build();
                 addLikes.add(like);
-                log.info("[SCHEDULED] added like info user : {}, video : {}", like.getUserId().getNickname(), like.getVideoId().getTitle());
+                log.info("[SCHEDULED] added like info user : {}, video : {}", like.getUser().getNickname(), like.getVideo().getTitle());
             }
             else if(status.equals(CACHE_LIKE_INFO_DELETE)){
                 // delete 이면 RDB 에서 삭제할 데이터를 가져옴
@@ -225,7 +228,7 @@ public class LikeCacheUtil {
     }
 
     private Like getLike(Video video, User user) throws VideoException {
-        return likeRepository.findByVideoIdAndUserId(video, user)
+        return likeRepository.findByVideoAndUser(video, user)
                 .orElseThrow(() -> new VideoException(VideoStatusCode.LIKE_NOT_FOUND));
     }
 

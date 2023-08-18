@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 public enum ChatStatusCode implements StatusCode {
 
     //2xx
-    POST_CREATE_CHAT_ROOM_SUCCESS(HttpStatus.CREATED, "2100", "채팅방 생성 성공"), //201
+    PUT_ENTER_CHAT_ROOM_SUCCESS(HttpStatus.CREATED, "2100", "채팅방 정보 조회(입장) 성공"), //201
     GET_CHAT_ROOMS_SUCCESS(HttpStatus.OK, "2000", "채팅방 목록 조회 성공"), //200
     GET_CHAT_MESSAGES_SUCCESS(HttpStatus.OK, "2001", "채팅 메세지 목록 조회 성공"), //200
 

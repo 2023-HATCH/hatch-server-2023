@@ -43,8 +43,8 @@ public class CommentService {
 
         Comment comment = Comment.builder()
                 .content(content)
-                .userId(user)
-                .videoId(video)
+                .user(user)
+                .video(video)
                 .build();
 
         commentRepository.save(comment);
@@ -68,14 +68,14 @@ public class CommentService {
                 .orElseThrow(() -> new VideoException(VideoStatusCode.COMMENT_NOT_FOUND));
 
         //자신이 작성한 댓글이 아닌 다른 댓글을 삭제하려고 하면 에러 발생
-        if(!comment.getUserId().getUuid().equals(user.getUuid())){
+        if(!comment.getUser().getUuid().equals(user.getUuid())){
             throw new VideoException(VideoStatusCode.NOT_YOUR_COMMENT);
         }
 
         commentRepository.delete(comment);
 
         // redis 에 댓글 수 저장 (감소)
-        videoCacheUtil.decreaseCommentCount(comment.getVideoId());
+        videoCacheUtil.decreaseCommentCount(comment.getVideo());
     }
 
 
@@ -89,7 +89,7 @@ public class CommentService {
 
         Video video = getVideo(videoId);
 
-        List<Comment> commentList = commentRepository.findAllByVideoId(video);
+        List<Comment> commentList = commentRepository.findAllByVideo(video);
 
         return commentList;
     }

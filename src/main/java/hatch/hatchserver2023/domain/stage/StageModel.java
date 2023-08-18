@@ -1,7 +1,7 @@
 package hatch.hatchserver2023.domain.stage;
 
 import hatch.hatchserver2023.domain.stage.domain.Music;
-import hatch.hatchserver2023.domain.stage.dto.MusicResponseDto;
+import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -30,6 +30,30 @@ public class StageModel {
                     .currentMusic(music)
                     .build();
         }
+    }
+
+
+
+    @ToString
+    @Getter
+    @Builder
+    public static class PlayerResultInfo {
+        private int playerNum;
+        private float similarity;
+        private UserResponseDto.SimpleUserProfile player;
+
+        public static PlayerResultInfo toDto(int playerNum, float similarity, UserResponseDto.SimpleUserProfile player) {
+            return PlayerResultInfo.builder()
+                    .playerNum(playerNum)
+                    .similarity(similarity)
+                    .player(player)
+                    .build();
+        }
+
+//        public static List<PlayerProfile> toDtos(List<Float> similarities, Map<Integer, UserResponseDto.SimpleUserProfile> players) {
+//            for()
+//            return
+//        }
     }
 
 }

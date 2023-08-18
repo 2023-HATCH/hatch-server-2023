@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface VideoHashtagRepository extends JpaRepository<VideoHashtag, Long> {
 
-    public List<VideoHashtag> findAllByVideoId(Video videoId);
-    public Slice<VideoHashtag> findAllByHashtagId(Hashtag hashtagId, Pageable pageable);
+    public List<VideoHashtag> findAllByVideo(Video video);
+    public Slice<VideoHashtag> findAllByHashtag(Hashtag hashtag, Pageable pageable);
 }

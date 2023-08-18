@@ -92,7 +92,7 @@ public class LikeService {
         User user = userRepository.findByUuid(userId)
                 .orElseThrow(() -> new AuthException(UserStatusCode.UUID_NOT_FOUND));
 
-        Slice<Like> likeSlice = likeRepository.findAllByUserId(user, pageable);
+        Slice<Like> likeSlice = likeRepository.findAllByUser(user, pageable);
 
         //각 좋아요에서 영상 얻어오기
         List<VideoModel.VideoInfo> videoInfoList;
@@ -101,11 +101,11 @@ public class LikeService {
         if (loginUser == null) {
             videoInfoList = likeSlice.stream()
                     .map(like -> VideoModel.VideoInfo.builder()
-                            .video(like.getVideoId())
+                            .video(like.getVideo())
                             .isLiked(false)
-                            .viewCount(videoCacheUtil.getViewCount(like.getVideoId()))
-                            .likeCount(videoCacheUtil.getLikeCount(like.getVideoId()))
-                            .commentCount(videoCacheUtil.getCommentCount(like.getVideoId()))
+                            .viewCount(videoCacheUtil.getViewCount(like.getVideo()))
+                            .likeCount(videoCacheUtil.getLikeCount(like.getVideo()))
+                            .commentCount(videoCacheUtil.getCommentCount(like.getVideo()))
                             .build())
                     .collect(Collectors.toList());
         }
@@ -113,11 +113,11 @@ public class LikeService {
         else{
             videoInfoList = likeSlice.stream()
                     .map(like -> VideoModel.VideoInfo.builder()
-                            .video(like.getVideoId())
-                            .isLiked(isAlreadyLiked(like.getVideoId(), loginUser))
-                            .viewCount(videoCacheUtil.getViewCount(like.getVideoId()))
-                            .likeCount(videoCacheUtil.getLikeCount(like.getVideoId()))
-                            .commentCount(videoCacheUtil.getCommentCount(like.getVideoId()))
+                            .video(like.getVideo())
+                            .isLiked(isAlreadyLiked(like.getVideo(), loginUser))
+                            .viewCount(videoCacheUtil.getViewCount(like.getVideo()))
+                            .likeCount(videoCacheUtil.getLikeCount(like.getVideo()))
+                            .commentCount(videoCacheUtil.getCommentCount(like.getVideo()))
                             .build())
                     .collect(Collectors.toList());
         }
@@ -142,7 +142,7 @@ public class LikeService {
         Video video = videoRepository.findByUuid(videoId)
                 .orElseThrow(() -> new VideoException(VideoStatusCode.VIDEO_NOT_FOUND));
 
-        return likeRepository.countByVideoId(video);
+        return likeRepository.countByVideo(video);
     }
 
 

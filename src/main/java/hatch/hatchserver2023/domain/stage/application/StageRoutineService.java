@@ -1,6 +1,7 @@
 package hatch.hatchserver2023.domain.stage.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import hatch.hatchserver2023.domain.stage.StageModel;
 import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
 import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.stage.repository.MusicRepository;
@@ -77,6 +78,7 @@ public class StageRoutineService {
 
                 // 플레이 시작
                 int playTime = startPlay(music);
+                log.info("StageRoutineUtil sleep playTime : {}", playTime);
                 TimeUnit.SECONDS.sleep(playTime);
                 endPlay();
 
@@ -141,7 +143,7 @@ public class StageRoutineService {
         stageDataUtil.setStageStatus(STAGE_STATUS_PLAY);
 
         final int readyTime = 5;
-        int musicTime = 10; //TODO : 개발 편의 위해 잠시 //music.getLength()
+        int musicTime = (int) Math.ceil(music.getLength()/1000.0); //밀리초 올림해서 초단위로 변경 //TODO : 개발 편의 위해 잠시 //music.getLength()/100
 
         stageDataUtil.setStageStatusStartTime();
         stageSocketResponser.startPlay();
@@ -159,16 +161,40 @@ public class StageRoutineService {
     private void startMVP() {
         log.info("StageRoutineUtil startMVP");
 
-        int mvpPlayerNum = getMvpPlayerNum();
+        Map<Integer, Float> similarities = new HashMap<Integer, Float>();
+        int mvpPlayerNum = getSimilarityAndMvp(similarities);
 
-        // mvp 선정된 playerNum에 해당하는 플레이어 사용자정보 가져오기
-        UserResponseDto.SimpleUserProfile mvpUser = stageDataUtil.getMvpUserInfo(mvpPlayerNum);
+        // redis 에서 playerNum 전부의 사용자 정보 가져와서 playerNum과 유사도 더한 플레이어 결과 정보로 만듦
+//        Map<Integer, UserResponseDto.SimpleUserProfile> players = new HashMap<Integer, UserResponseDto.SimpleUserProfile>();
+        List<StageModel.PlayerResultInfo> playerResultInfos = new ArrayList<>();
+        for(int i=0; i<STAGE_PLAYER_COUNT_VALUE; i++) {
+            try{
+                UserResponseDto.SimpleUserProfile player = stageDataUtil.getPlayerUserInfo(i);
+                Float similarity = similarities.get(i)==null ? -100f : similarities.get(i);
+                StageModel.PlayerResultInfo playerResultInfo = StageModel.PlayerResultInfo.builder()
+                        .playerNum(i)
+                        .similarity(similarity)
+                        .player(player)
+                        .build();
+                playerResultInfos.add(playerResultInfo);
+            } catch(StageException e){
+                if(e.getCode() == StageStatusCode.FAIL_GET_PLAYER_USER_FROM_REDIS) {
+                    log.info("startMVP : player of this playerNum not exist. skip");
+                }
+                else {
+                    throw e;
+                }
+            }
+        }
+
+//        // mvp 선정된 playerNum에 해당하는 플레이어 사용자정보 가져오기
+//        UserResponseDto.SimpleUserProfile mvpUser = stageDataUtil.getPlayerUserInfo(mvpPlayerNum);
 
         // 상태 변경, 응답
         stageDataUtil.setStageStatus(STAGE_STATUS_MVP);
 
         stageDataUtil.setStageStatusStartTime();
-        stageSocketResponser.startMVP(mvpUser);
+        stageSocketResponser.startMVP(mvpPlayerNum, playerResultInfos);
 
         // 캐치, 플레이 데이터 초기화
         initPlayData();
@@ -207,7 +233,7 @@ public class StageRoutineService {
      * 각 플레이어들의 유사도를 계산하여 MVP를 선정하고 MVP유저의 playerNum을 반환하는 메서드
      * @return
      */
-    private int getMvpPlayerNum() {
+    private int getSimilarityAndMvp(Map<Integer, Float> similarities) {
         float maxSimilarity = -100;  //TODO : 서버측 테스트를 위해 유사도 기본값을 -99보다 작게 함 (추후 -2로 변경)
         int maxPlayerNum = 0; //TODO : 테스트가 용이하도록 아무도 플레이 스켈레톤을 전송하지 않으면 playerNum 0 번 유저가 mvp 가 되도록 설정
 
@@ -238,6 +264,9 @@ public class StageRoutineService {
             }catch (NullPointerException e) {
                 throw new StageException(StageStatusCode.MUSIC_NOT_FOUND);
             }
+
+            // 유사도 모으기
+            similarities.put(i, similarity);
 
             // mvp 선정
             if(maxSimilarity<similarity) {

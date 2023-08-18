@@ -1,6 +1,5 @@
 package hatch.hatchserver2023.domain.like.api;
 
-import hatch.hatchserver2023.domain.like.api.LikeController;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.video.domain.Video;
@@ -105,7 +104,7 @@ public class LikeControllerTest {
                 .uuid(UUID.randomUUID())
                 .title("타이틀")
                 .tag("#해시 #태그")
-                .userId(user)
+                .user(user)
                 .videoUrl("동영상 s3 경로")
                 .thumbnailUrl("썸네일 이미지 s3 경로")
                 .likeCount(3)
@@ -118,7 +117,7 @@ public class LikeControllerTest {
                 .uuid(UUID.randomUUID())
                 .title("타이틀 1")
                 .tag("#해시 #태그 #1")
-                .userId(user)
+                .user(user)
                 .videoUrl("동영상 s3 경로 1")
                 .thumbnailUrl("썸네일 이미지 s3 경로 1")
                 .likeCount(5)
@@ -277,8 +276,8 @@ public class LikeControllerTest {
                 .andExpect(jsonPath("$.data.videoList[1].uuid").value(video2.getUuid().toString()))
                 .andExpect(jsonPath("$.data.videoList[0].title").value(video1.getTitle()))
                 .andExpect(jsonPath("$.data.videoList[1].title").value(video2.getTitle()))
-                .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUserId().getUuid().toString()))
-                .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUserId().getUuid().toString()))
+                .andExpect(jsonPath("$.data.videoList[0].user.userId").value(video1.getUser().getUuid().toString()))
+                .andExpect(jsonPath("$.data.videoList[1].user.userId").value(video2.getUser().getUuid().toString()))
         ;
 
         resultActions
