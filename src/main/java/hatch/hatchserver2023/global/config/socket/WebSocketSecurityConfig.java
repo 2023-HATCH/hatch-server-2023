@@ -15,6 +15,7 @@ public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBro
                 .simpTypeMatchers(SimpMessageType.CONNECT, SimpMessageType.HEARTBEAT, SimpMessageType.UNSUBSCRIBE, SimpMessageType.DISCONNECT).permitAll()
                 .simpDestMatchers("/app/**").authenticated() //발행 - 인증된 사용자만 허용
                 .simpSubscribeDestMatchers("/topic/**").authenticated() //구독 - 인증된 사용자만 허용
+                .simpSubscribeDestMatchers("/user/**").authenticated() //특정 사용자 경로 구독 - 인증된 사용자만 허용 //TODO -> 이거 막히는 건 왜 핸들링 안될까
                 .anyMessage().denyAll() //그 외 모두 비허용
                 ;
     }

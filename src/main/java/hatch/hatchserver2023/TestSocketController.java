@@ -10,6 +10,7 @@ import hatch.hatchserver2023.global.common.response.exception.ChatException;
 import hatch.hatchserver2023.global.common.response.exception.DefaultException;
 import hatch.hatchserver2023.global.common.response.socket.SocketResponseType;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.security.Principal;
 
 @Slf4j
 @Controller
@@ -31,10 +33,11 @@ public class TestSocketController {
 
 
     @MessageMapping("/test/exception")
-    public void makeException() throws DefaultException {
+    public void makeException(Principal principal) throws DefaultException {
         log.info("[WS] /test/exception");
+        log.info("session principal name : {}", principal.getName());
 
-        throw new ChatException(ChatStatusCode.CHAT_ROOM_UUID_NOT_FOUND);
+        throw new ChatException(ChatStatusCode.CHAT_ROOM_UUID_NOT_FOUND); // GlobalExceptionHandler 에서 잡아서 처리됨
 
 //        simpMessagingTemplate.convertAndSend(TEST_WS_SEND_URL, "에러 없음");
     }

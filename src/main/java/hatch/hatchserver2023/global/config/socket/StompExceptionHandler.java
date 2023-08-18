@@ -1,6 +1,7 @@
 package hatch.hatchserver2023.global.config.socket;
 
 import hatch.hatchserver2023.global.common.response.code.CommonCode;
+import hatch.hatchserver2023.global.common.response.exception.ChatException;
 import hatch.hatchserver2023.global.common.response.exception.DefaultException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,8 @@ import java.util.Objects;
 @Component
 public class StompExceptionHandler extends StompSubProtocolErrorHandler {
     /**
+     * => 여기서는 interceptor 단에서 발생한 에러만 잡아주는 듯..
+     *
      * 원래 Stomp 에러는
      *     StompSubProtocolErrorHandler 의 handleClientMessageProcessingError() 를 호출해 처리하고
      *     처리가 끝나면 handerInternal() 을 호출해 메세지를 전송함.
