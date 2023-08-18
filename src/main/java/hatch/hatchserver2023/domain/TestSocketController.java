@@ -1,4 +1,4 @@
-package hatch.hatchserver2023;
+package hatch.hatchserver2023.domain;
 
 import hatch.hatchserver2023.domain.chat.domain.ChatMessage;
 import hatch.hatchserver2023.domain.chat.dto.ChatRequestDto;
@@ -23,13 +23,9 @@ import java.security.Principal;
 @Slf4j
 @Controller
 public class TestSocketController {
-    private final String TEST_WS_SEND_URL = "/topic/test";
+//    private final String TEST_WS_SEND_URL = "/topic/test";
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
-
-    public TestSocketController(SimpMessagingTemplate simpMessagingTemplate) {
-        this.simpMessagingTemplate = simpMessagingTemplate;
-    }
+//    private final SimpMessagingTemplate simpMessagingTemplate;
 
 
     @MessageMapping("/test/exception")
@@ -38,7 +34,5 @@ public class TestSocketController {
         log.info("session principal name : {}", principal.getName());
 
         throw new ChatException(ChatStatusCode.CHAT_ROOM_UUID_NOT_FOUND); // GlobalExceptionHandler 에서 잡아서 처리됨
-
-//        simpMessagingTemplate.convertAndSend(TEST_WS_SEND_URL, "에러 없음");
     }
 }

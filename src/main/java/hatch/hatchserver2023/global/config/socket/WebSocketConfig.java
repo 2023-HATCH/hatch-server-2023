@@ -24,14 +24,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-popo")
                 .setAllowedOriginPatterns("*") //모든 곳으로부터의 요청 허용
-                .setHandshakeHandler(new CustomHandshakeHandler()) // StompPrincipal 설정해주는 핸들러
+                .setHandshakeHandler(new CustomHandshakeHandler()) // StompPrincipal 생성해주는 핸들러
         ;
 
-        registry.addEndpoint("/ws-popo")
-                .setAllowedOriginPatterns("*") //모든 곳으로부터의 요청 허용
-                .setHandshakeHandler(new CustomHandshakeHandler()) // StompPrincipal 설정해주는 핸들러
-                .withSockJS() //socketJS 사용한 요청
-        ;
+        // socketJS 사용 버전
+//        registry.addEndpoint("/ws-popo")
+//                .setAllowedOriginPatterns("*") //모든 곳으로부터의 요청 허용
+//                .setHandshakeHandler(new CustomHandshakeHandler()) // StompPrincipal 설정해주는 핸들러
+//                .withSockJS() //socketJS 사용한 요청
+//        ;
 
         registry.setErrorHandler(stompExceptionHandler); // interceptor 단에서 발생하는 에러 잡아서 핸들링
     }
@@ -40,7 +41,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/topic"); //구독, 전송
         registry.setApplicationDestinationPrefixes("/app"); //발행
-        registry.setUserDestinationPrefix("/user"); // 특정 사용자에게 발행되는 경로 구독
+        registry.setUserDestinationPrefix("/user"); // 구독 - 특정 사용자에게만 발행되는 경로
     }
 
     //(jwt 인증) interceptor 추가

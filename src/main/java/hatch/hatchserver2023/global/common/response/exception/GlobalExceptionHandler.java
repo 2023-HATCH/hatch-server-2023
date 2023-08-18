@@ -37,18 +37,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
-//    // 내가 만든 예외 - socket 통신 중 @MessageMapping 된 메서드에서 발생한 경우
-//    @MessageExceptionHandler(DefaultException.class)
-//    public void handleSocketMessageDefaultException(DefaultException e) {
-//        log.info("[HANDLER] GlobalExceptionHandler handleSocketMessageDefaultException");
-//    }
-
     // 내가 만든 예외 - socket 통신 중 @MessageMapping 된 메서드에서 발생한 경우
     @MessageExceptionHandler(DefaultException.class)
     public void handleSocketMessageDefaultException(DefaultException e, Principal stompPrincipal) {
-        log.info("[HANDLER] GlobalExceptionHandler handleSocketMessageDefaultException");
         StatusCode code = e.getCode();
         handleSocketMessageExceptionInternal(code, stompPrincipal);
+    }
+
+    //  socket 통신 중 @MessageMapping 된 메서드에서 발생한 경우
+    @MessageExceptionHandler(Exception.class) // 자식 클래스의 핸들러가 우선순위가 더 높으므로, DefaultException 에 해당하면 그 핸들러로 처리됨
+    public void handleSocketMessageException(Exception e, Principal stompPrincipal) {
+        handleSocketMessageExceptionInternal(e, stompPrincipal);
     }
 
     // 내가 만든 예외
@@ -130,6 +129,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private void handleSocketMessageExceptionInternal(StatusCode code, Principal stompPrincipal) {
         CommonResponse errorResponse = CommonResponse.toErrorResponse(code);
+        simpMessagingTemplate.convertAndSendToUser(stompPrincipal.getName(), ERROR_WS_SEND_URL, errorResponse); // 특정 사용자에게만 응답 전송
+    }
+
+    private void handleSocketMessageExceptionInternal(Exception e, Principal stompPrincipal) {
+        CommonResponse errorResponse = CommonResponse.toErrorResponse(e);
         simpMessagingTemplate.convertAndSendToUser(stompPrincipal.getName(), ERROR_WS_SEND_URL, errorResponse); // 특정 사용자에게만 응답 전송
     }
 

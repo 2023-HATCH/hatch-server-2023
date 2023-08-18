@@ -55,7 +55,7 @@ public class StompExceptionHandler extends StompSubProtocolErrorHandler {
 
     // TODO : ?
     private Throwable convertThrowException(Throwable exception) {
-        if(exception instanceof MessageDeliveryException) { // TODO : 뭐지? 이게 언제 나는 에러지?
+        if(exception instanceof MessageDeliveryException) { // MessageDeliveryException : 스프링에서 message delivery 과정에서 발생시키는 예외. 내가 발생시켜도 됨
             return exception.getCause();
         }
         return exception;
