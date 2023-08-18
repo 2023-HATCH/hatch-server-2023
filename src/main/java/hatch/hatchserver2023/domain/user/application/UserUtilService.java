@@ -118,7 +118,7 @@ public class UserUtilService {
     public Slice<VideoModel.VideoInfo> getUsersVideoList(UUID userId, User loginUser, Pageable pageable) {
         User user = findOneByUuid(userId);
 
-        Slice<Video> videoSlice = videoRepository.findAllByUserId(user, pageable);
+        Slice<Video> videoSlice = videoRepository.findAllByUser(user, pageable);
 
         List<VideoModel.VideoInfo> videoInfoList;
 

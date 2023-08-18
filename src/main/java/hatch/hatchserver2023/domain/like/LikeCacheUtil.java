@@ -86,14 +86,17 @@ public class LikeCacheUtil {
      */
     public boolean isLiked(Video video, User user) {
         // 레디스에 존재하는지 확인
+        log.info("레디스에 존재하는지 확인");
         Object statusObject = redisDao.getValuesHash(toLikeInfoKey(video.getId()), String.valueOf(user.getId()));
 
         // 레디스에 없으면 RDB 조회
         if(statusObject == null) {
-            return likeRepository.findByVideoIdAndUserId(video, user).isPresent();
+            log.info("레디스에 없으면 RDB 조회");
+            return likeRepository.findByVideoAndUser(video, user).isPresent();
         }
         else{
             // 레디스에 있으면 add 로 저장되어있는지
+            log.info("레디스에 있으면 add 로 저장되어있는지");
             return statusObject.toString().equals(CACHE_LIKE_INFO_ADD);
         }
     }
@@ -225,7 +228,7 @@ public class LikeCacheUtil {
     }
 
     private Like getLike(Video video, User user) throws VideoException {
-        return likeRepository.findByVideoIdAndUserId(video, user)
+        return likeRepository.findByVideoAndUser(video, user)
                 .orElseThrow(() -> new VideoException(VideoStatusCode.LIKE_NOT_FOUND));
     }
 

@@ -89,7 +89,7 @@ public class CommentService {
 
         Video video = getVideo(videoId);
 
-        List<Comment> commentList = commentRepository.findAllByVideoId(video);
+        List<Comment> commentList = commentRepository.findAllByVideo(video);
 
         return commentList;
     }

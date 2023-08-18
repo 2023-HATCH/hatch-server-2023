@@ -1,6 +1,5 @@
 package hatch.hatchserver2023.domain.video.domain;
 
-import hatch.hatchserver2023.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.OnDelete;
@@ -20,19 +19,19 @@ public class VideoHashtag {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "video_id", nullable = false) //다대일 관계에서 FK는 다 쪽에 있는 것. 연관 관계의 주인
-    private Video videoId;
+    private Video video;
 
     //작성자
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "hashtag_id", nullable = false) //다대일 관계에서 FK는 다 쪽에 있는 것. 연관 관계의 주인
-    private Hashtag hashtagId;
+    private Hashtag hashtag;
 
     //== 생성자 ==//
     @Builder
-    private VideoHashtag(Video videoId, Hashtag hashtagId) {
-        this.videoId = videoId;
-        this.hashtagId = hashtagId;
+    private VideoHashtag(Video video, Hashtag hashtag) {
+        this.video = video;
+        this.hashtag = hashtag;
     }
 
     //기본생성자

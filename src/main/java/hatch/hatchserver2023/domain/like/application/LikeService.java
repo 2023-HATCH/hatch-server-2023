@@ -92,7 +92,7 @@ public class LikeService {
         User user = userRepository.findByUuid(userId)
                 .orElseThrow(() -> new AuthException(UserStatusCode.UUID_NOT_FOUND));
 
-        Slice<Like> likeSlice = likeRepository.findAllByUserId(user, pageable);
+        Slice<Like> likeSlice = likeRepository.findAllByUser(user, pageable);
 
         //각 좋아요에서 영상 얻어오기
         List<VideoModel.VideoInfo> videoInfoList;
@@ -142,7 +142,7 @@ public class LikeService {
         Video video = videoRepository.findByUuid(videoId)
                 .orElseThrow(() -> new VideoException(VideoStatusCode.VIDEO_NOT_FOUND));
 
-        return likeRepository.countByVideoId(video);
+        return likeRepository.countByVideo(video);
     }
 
 
