@@ -15,6 +15,21 @@ ws://(api서버주소):8080/ws-popo
 $ _INFO_:Connect STOMP server success, url = ws://localhost:8080/ws-popo, connectHeader = {"x-access-token" : "액세스 토큰 값"}
 ----
 
+== *Subscribe Error Response*
+소켓 통신 중 발생하는 에러 메세지 수신을 위한 구독 +
+에러를 발생시킨 사용자에게만 응답으로 알려줌
+
+==== URL Path
+[source,http,options="nowrap"]
+----
+/user/topic/errors
+----
+
+==== Subscribe log
+[source,http,options="nowrap"]
+----
+$ _INFO_:subscribe destination /user/topic/errors success
+----
 
 == *Subscribe Stage*
 스테이지 구독 요청 (스테이지 진행상황과 라이브톡 수신)

@@ -447,7 +447,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_프로필_조회_http_request">HTTP request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/users/profile/724aa72a-e395-4725-936a-1780fee63492 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/users/profile/f2fb59fe-096c-4665-8b2d-ecf93c2fc5a6 HTTP/1.1
 headerXAccessToken: headerXAccessToken
 headerXRefreshToken: headerXRefreshToken
 Host: localhost:8080</code></pre>
@@ -531,6 +531,12 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자가 자신의 프로필을 확인하는지 여부</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>isFollowing</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자가 해당 사용자를 팔로잉하는지 여부 (비회원이면 false)</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>nickname</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
@@ -599,23 +605,24 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 563
+Content-Length: 590
 
 {
-  "timeStamp" : "2023/08/17 01:45:19",
+  "timeStamp" : "2023/08/19 20:27:03",
   "code" : "USER-2011",
   "message" : "[사용자] 사용자 프로필 조회 성공",
   "data" : {
-    "userId" : "724aa72a-e395-4725-936a-1780fee63492",
+    "userId" : "f2fb59fe-096c-4665-8b2d-ecf93c2fc5a6",
     "isMe" : false,
+    "isFollowing" : true,
     "nickname" : "user1",
     "email" : "user1@gmail.com",
     "profileImg" : "프로필 이미지 경로",
     "introduce" : "user1 입니다",
     "instagramId" : "인스타 계정1",
     "twitterId" : "트위터 계정1",
-    "followingCount" : 1,
-    "followerCount" : 2,
+    "followingCount" : 0,
+    "followerCount" : 0,
     "createdAt" : null,
     "modifiedAt" : null
   }
