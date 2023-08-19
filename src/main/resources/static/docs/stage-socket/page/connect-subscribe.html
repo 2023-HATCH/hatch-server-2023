@@ -465,6 +465,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
+<h2 id="_subscribe_error_response"><strong>Subscribe Error Response</strong></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>소켓 통신 중 발생하는 에러 메세지 수신을 위한 구독<br>
+에러를 발생시킨 사용자에게만 응답으로 알려줌</p>
+</div>
+<div class="sect3">
+<h4 id="_url_path">URL Path</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">/user/topic/errors</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_subscribe_log">Subscribe log</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">$ _INFO_:subscribe destination /user/topic/errors success</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_subscribe_stage"><strong>Subscribe Stage</strong></h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -479,7 +504,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect3">
-<h4 id="_subscribe_log">Subscribe log</h4>
+<h4 id="_subscribe_log_2">Subscribe log</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">$ _INFO_:subscribe destination /topic/stage success</code></pre>
@@ -492,7 +517,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-04 15:26:15 +0900
+Last updated 2023-08-19 20:23:34 +0900
 </div>
 </div>
 </body>

@@ -445,11 +445,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_user">USER</a>
 <ul class="sectlevel1">
-<li><a href="#_user"><strong>USER</strong></a></li>
+<li><a href="#_user_2"><strong>USER</strong></a>
+<ul class="sectlevel2">
 <li><a href="#_follow"><strong>FOLLOW</strong></a></li>
+</ul>
+</li>
 <li><a href="#_new_chat"><strong>(NEW) Chat</strong></a></li>
 <li><a href="#_new_chat_socket"><strong>(NEW) Chat (Socket)</strong></a></li>
+</ul>
+</li>
 <li><a href="#_community">COMMUNITY</a>
 <ul class="sectlevel1">
 <li><a href="#_video"><strong>Video</strong></a></li>
@@ -473,7 +480,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_status_code">Status Code</a>
 <ul class="sectlevel2">
 <li><a href="#_common">COMMON</a></li>
-<li><a href="#_user_2">USER</a></li>
+<li><a href="#_user_3">USER</a></li>
 <li><a href="#_chat">CHAT</a></li>
 <li><a href="#_stage_3">STAGE</a></li>
 <li><a href="#_talk_2">TALK</a></li>
@@ -486,13 +493,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div id="content">
-<div id="preamble">
-<div class="sectionbody">
+<h1 id="_user" class="sect0"><a class="link" href="#_user">USER</a></h1>
+<div class="openblock partintro">
+<div class="content">
 <hr>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_user"><a class="link" href="#_user"><strong>USER</strong></a></h2>
+<h2 id="_user_2"><a class="link" href="#_user_2"><strong>USER</strong></a></h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -509,18 +517,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><a href="like/page/get-liked-video-list.html" target="_blank" rel="noopener">(VIDEO&#8594;USER) 사용자 좋아요 영상 목록 조회 (URI 변경 X)</a></p>
 </li>
 <li>
-<p><a href="user/page/update-profile.adoc" target="_blank" rel="noopener">(NEW) 프로필 수정</a></p>
+<p><a href="user/page/update-profile.html" target="_blank" rel="noopener">(NEW) 프로필 수정</a></p>
 </li>
 <li>
 <p><a href="user/page/search-user.html" target="_blank" rel="noopener">(NEW) 계정 검색</a></p>
 </li>
 </ul>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_follow"><a class="link" href="#_follow"><strong>FOLLOW</strong></a></h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_follow"><a class="link" href="#_follow"><strong>FOLLOW</strong></a></h3>
 <div class="literalblock">
 <div class="content">
 <pre>팔로우 하는 사람: FromUser
@@ -530,15 +535,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p><a href="follow/page/add-follow.adoc" target="_blank" rel="noopener">(NEW) 팔로우 추가</a></p>
+<p><a href="follow/page/add-follow.html" target="_blank" rel="noopener">(NEW) 팔로우 추가</a></p>
 </li>
 <li>
-<p><a href="follow/page/delete-follow.adoc" target="_blank" rel="noopener">(NEW) 팔로우 삭제</a></p>
+<p><a href="follow/page/delete-follow.html" target="_blank" rel="noopener">(NEW) 팔로우 삭제</a></p>
 </li>
 <li>
-<p><a href="follow/page/get-follow-list.adoc" target="_blank" rel="noopener">(NEW) 팔로워/팔로잉 목록 조회</a></p>
+<p><a href="follow/page/get-follow-list.html" target="_blank" rel="noopener">(NEW) 팔로워/팔로잉 목록 조회</a></p>
 </li>
 </ul>
+</div>
 </div>
 </div>
 </div>
@@ -847,7 +853,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 159
 
-{"timeStamp":"2023/08/17 01:45:04","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
+{"timeStamp":"2023/08/19 20:26:46","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
 </div>
 </div>
 </div>
@@ -908,7 +914,7 @@ Content-Length: 159
 </table>
 </div>
 <div class="sect2">
-<h3 id="_user_2"><a class="link" href="#_user_2">USER</a></h3>
+<h3 id="_user_3"><a class="link" href="#_user_3">USER</a></h3>
 <div class="paragraph">
 <p>사용자 상태 코드</p>
 </div>
@@ -1395,7 +1401,7 @@ Content-Length: 159
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-16 15:14:43 +0900
+Last updated 2023-08-18 13:04:52 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
