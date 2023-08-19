@@ -30,13 +30,11 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final UserChatRoomRepository userChatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
-    private final UserRepository userRepository;
 
-    public ChatService(ChatRoomRepository chatRoomRepository, UserChatRoomRepository userChatRoomRepository, ChatMessageRepository chatMessageRepository, UserRepository userRepository) {
+    public ChatService(ChatRoomRepository chatRoomRepository, UserChatRoomRepository userChatRoomRepository, ChatMessageRepository chatMessageRepository) {
         this.chatRoomRepository = chatRoomRepository;
         this.userChatRoomRepository = userChatRoomRepository;
         this.chatMessageRepository = chatMessageRepository;
-        this.userRepository = userRepository;
     }
 
     @Transactional //TODO : 사용법...
