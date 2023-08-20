@@ -41,15 +41,21 @@ public class ChatService {
     public ChatModel.EnterChatRoom enterChatRoom(User user, User opponentUser, Integer size) {
         log.info("[SERVICE] createChatRoom");
 
+        if(user.getId().equals(opponentUser.getId())){
+            throw new ChatException(ChatStatusCode.CANNOT_CHAT_MYSELF);
+        }
+
         Optional<ChatRoom> chatRoomOp = getOpponentChatRoom(user, opponentUser);
 
         if(chatRoomOp.isPresent()) {
+            log.info("createChatRoom : already exist");
             UUID chatRoomId = chatRoomOp.get().getUuid();
             Slice<ChatMessage> chatMessages = getChatMessages(chatRoomId, 0, size);
             return ChatModel.EnterChatRoom.toModel(chatRoomId, chatMessages);
         }
         else {
             // 새 채팅방 생성
+            log.info("createChatRoom : create new one");
             ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.builder().build());
 
             saveUserChatRoom(chatRoom, user);
@@ -108,8 +114,7 @@ public class ChatService {
 
         for(UserChatRoom userChatRoom : opponentUserChatRooms) {
             if(userChatRoom.getUser().getId().equals(opponentUser.getId())) {
-                Optional.of(userChatRoom.getChatRoom());
-                break;
+                return Optional.of(userChatRoom.getChatRoom());
             }
         }
         return Optional.empty();
