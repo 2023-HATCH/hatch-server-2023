@@ -15,12 +15,14 @@ import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Transactional(readOnly = true)
 @Service
 public class StageRoutineService {
     public static final String STAGE_STATUS_WAIT = "WAIT";
@@ -287,17 +289,17 @@ public class StageRoutineService {
         List<Float[]> floatArrays = new ArrayList<>();
 
         //set 을 순서대로 돌면서 Float[] 로 만들고 floatArrays 에 모음
-        for (String arrayString : skeletonStringSet) {
+        for (String skeletonArrayString : skeletonStringSet) {
             // String -> List<Object> 로 형변환
-            List list;
+            List skeletonPointObjects;
             try {
-                list = objectMapperUtil.toOriginalType(arrayString, List.class);
+                skeletonPointObjects = objectMapperUtil.toOriginalType(skeletonArrayString, List.class); // Set 에 문자열로 저장되어있던 배열을 하나씩 꺼내 List로 변환 - Object형의 좌표값들로 구성된 List(스켈레톤 1개)
             } catch (JsonProcessingException e) {
-                throw new StageException(StageStatusCode.FAIL_SAVE_MVP_USER_INFO_JSON);
+                throw new StageException(StageStatusCode.FAIL_CONVERT_REDIS_SKELETON_DATA_TO_ARRAY);
             }
 
             // List<Object> -> List<Float> 로 형변환
-            List<Float> floatList = (List<Float>) list.stream().map(value -> Float.parseFloat(value.toString())).collect(Collectors.toList());
+            List<Float> floatList = (List<Float>) skeletonPointObjects.stream().map(value -> Float.parseFloat(value.toString())).collect(Collectors.toList());
 
             // 모으기 (List<List<Float>>)
             floatArrays.add(floatList.toArray(new Float[0]));

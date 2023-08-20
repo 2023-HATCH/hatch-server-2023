@@ -31,14 +31,12 @@ public class LikeCacheUtil {
 
     private final RedisDao redisDao;
     private final VideoCacheUtil videoCacheUtil;
-    private final VideoRepository videoRepository;
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
 
-    public LikeCacheUtil(RedisDao redisDao, VideoCacheUtil videoCacheUtil, VideoRepository videoRepository, LikeRepository likeRepository, UserRepository userRepository) {
+    public LikeCacheUtil(RedisDao redisDao, VideoCacheUtil videoCacheUtil, LikeRepository likeRepository, UserRepository userRepository) {
         this.redisDao = redisDao;
         this.videoCacheUtil = videoCacheUtil;
-        this.videoRepository = videoRepository;
         this.likeRepository = likeRepository;
         this.userRepository = userRepository;
     }
@@ -172,6 +170,8 @@ public class LikeCacheUtil {
      * @param deleteLikes
      */
     private void makeLikes(String key, Video video, List<Like> addLikes, List<Like> deleteLikes) {
+        // TODO : UserRepository 의존성 없애려면 redisDao.getHashKeys()랑 getUser()를 UserService에서 처리하고 그 결과를 List<User>로 받아와서 반복문 돌면 됨
+
         Set<String> userIds = redisDao.getHashKeys(key);
         for(String userId : userIds) {
             log.info("[SCHEDULED] hashKey userId : {}", userId);

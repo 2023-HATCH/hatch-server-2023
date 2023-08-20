@@ -10,12 +10,14 @@ import hatch.hatchserver2023.global.common.response.exception.DefaultException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @Slf4j
+@Transactional(readOnly = true) // service는 아니지만 music은 로직이 단순해 예외적으로 service 없이 controller에서 로직을 처리하므로 트랜잭션 적용
 @RestController
 @RequestMapping("api/v1/musics")
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ public class MusicController {
      *  @input title, singer, length, answer, concept, music_url
       * @return success
      */
+    @Transactional
     @PostMapping("/save")
     public ResponseEntity<Object> saveMusic(@RequestBody MusicRequestDto request) {
 
@@ -54,6 +57,7 @@ public class MusicController {
     }
 
     //삭제
+    @Transactional
     @DeleteMapping("/delete/{title}")
     public ResponseEntity<CommonResponse> deleteMusic(@PathVariable String title) {
         Music music = musicRepository.findByTitle(title);

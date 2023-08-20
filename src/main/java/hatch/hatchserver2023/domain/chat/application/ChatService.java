@@ -8,7 +8,6 @@ import hatch.hatchserver2023.domain.chat.repository.ChatMessageRepository;
 import hatch.hatchserver2023.domain.chat.repository.ChatRoomRepository;
 import hatch.hatchserver2023.domain.chat.repository.UserChatRoomRepository;
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.global.common.response.code.ChatStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.ChatException;
 import hatch.hatchserver2023.global.common.response.exception.DefaultException;

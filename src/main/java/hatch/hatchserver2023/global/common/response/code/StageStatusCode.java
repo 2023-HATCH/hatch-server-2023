@@ -18,7 +18,7 @@ public enum StageStatusCode implements StatusCode {
     STAGE_STATUS_NOT_CATCH(HttpStatus.INTERNAL_SERVER_ERROR, "5003", "스테이지 상태가 캐치가 아님"), //500
     STAGE_STATUS_NOT_PLAY(HttpStatus.INTERNAL_SERVER_ERROR, "5004", "스테이지 상태가 플레이가 아님"), //500
 //    STAGE_PLAYER_NUM_OUT_OF_BOUNDS(HttpStatus.INTERNAL_SERVER_ERROR, "5005", "스테이지 플레이어 번호가 유효 범위를 벗어남"), //500
-    FAIL_SAVE_MVP_USER_INFO_JSON(HttpStatus.INTERNAL_SERVER_ERROR, "5006", "스테이지 플레이어 사용자 정보 json 변환 저장 실패"), //500
+    FAIL_CONVERT_REDIS_SKELETON_DATA_TO_ARRAY(HttpStatus.INTERNAL_SERVER_ERROR, "5006", "스테이지 플레이어 스켈레톤 정보 배열로 변환 실패"), //500
     FAIL_GET_MVP_USER_INFO_FROM_REDIS_JSON(HttpStatus.INTERNAL_SERVER_ERROR, "5007", "스테이지 mvp 사용자 정보 json 맵핑 실패"), //500
     STAGE_STATUS_NOT_MVP(HttpStatus.INTERNAL_SERVER_ERROR, "5008", "스테이지 상태가 캐치가 아님"), //500
     NOT_ENTERED_USER(HttpStatus.INTERNAL_SERVER_ERROR, "5009", "스테이지에 입장했던 사용자가 아니기에 퇴장할 수 없음"), //500
