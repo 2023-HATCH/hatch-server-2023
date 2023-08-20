@@ -18,6 +18,7 @@ public enum ChatStatusCode implements StatusCode {
 
     //5xx
 
+    CANNOT_CHAT_MYSELF(HttpStatus.INTERNAL_SERVER_ERROR, "5001", "자기 자신과 채팅방을 만들 수 없음"), //500
     ;
 
 
