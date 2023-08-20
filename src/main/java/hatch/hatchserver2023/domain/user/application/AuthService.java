@@ -6,6 +6,7 @@ import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.global.config.security.jwt.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
-//@RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class AuthService {
 
@@ -27,6 +28,7 @@ public class AuthService {
         this.jwtProvider = jwtProvider;
     }
 
+    @Transactional //signUp 을 여기서 사용함 - 나중에 로직 개선하기
     public User signUpAndLogin(@Valid KakaoDto.GetUserInfo userInfo, HttpServletResponse servletResponse) {
         log.info("[SERVICE] signUpAndLogin");
         Optional<User> userOp = userRepository.findByKakaoAccountNumber(userInfo.getKakaoAccountNumber());
