@@ -6,11 +6,13 @@ import hatch.hatchserver2023.domain.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 //import java.awt.print.Pageable;
 import java.util.List;
 
 @Slf4j
+@Transactional(readOnly = true)
 @Service
 public class TalkService {
     private final TalkRepository talkRepository;
@@ -25,6 +27,7 @@ public class TalkService {
      * @param sender : 전송한 사용자
      * @return
      */
+    @Transactional
     public TalkMessage saveTalkMessage(TalkMessage talkMessage, User sender) {
         log.info("[SERVICE] saveTalkMessage");
         talkMessage.updateUser(sender);
