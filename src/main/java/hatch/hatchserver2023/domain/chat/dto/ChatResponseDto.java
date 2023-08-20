@@ -26,10 +26,16 @@ public class ChatResponseDto {
         private GetChatMessages recentMessages;
 
         public static EnterChatRoom toDto(ChatModel.EnterChatRoom enterChatRoom) {
-            return EnterChatRoom.builder()
-                    .chatRoomId(enterChatRoom.getChatRoomId())
-                    .recentMessages(GetChatMessages.toDto(enterChatRoom.getChatMessages()))
-                    .build();
+            if(enterChatRoom.getChatMessages()!=null){
+                return EnterChatRoom.builder()
+                        .chatRoomId(enterChatRoom.getChatRoomId())
+                        .recentMessages(GetChatMessages.toDto(enterChatRoom.getChatMessages()))
+                        .build();
+            }else{
+                return EnterChatRoom.builder()
+                        .chatRoomId(enterChatRoom.getChatRoomId())
+                        .build();
+            }
         }
     }
 
