@@ -8,9 +8,9 @@ import hatch.hatchserver2023.domain.chat.repository.ChatMessageRepository;
 import hatch.hatchserver2023.domain.chat.repository.ChatRoomRepository;
 import hatch.hatchserver2023.domain.chat.repository.UserChatRoomRepository;
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.global.common.response.code.ChatStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.ChatException;
+import hatch.hatchserver2023.global.common.response.exception.DefaultException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
+@Transactional(readOnly = true)
 @Service
 public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
@@ -37,7 +38,7 @@ public class ChatService {
         this.chatMessageRepository = chatMessageRepository;
     }
 
-    @Transactional //TODO : 사용법...
+    @Transactional(rollbackFor = ChatException.class) // 로직상 발생시킨 에러 발생 시 롤백시킬 것
     public ChatModel.EnterChatRoom enterChatRoom(User user, User opponentUser, Integer size) {
         log.info("[SERVICE] createChatRoom");
 
@@ -89,6 +90,8 @@ public class ChatService {
     }
 
 
+
+    @Transactional
     public ChatMessage sendChatMessage(UUID chatRoomId, String content, User user) {
         log.info("[SERVICE] sendChatMessage");
         ChatRoom chatRoom = getChatRoom(chatRoomId);
@@ -140,6 +143,7 @@ public class ChatService {
         return userChatRooms;
     }
 
+    @Transactional(rollbackFor = ChatException.class)
     private ChatRoom getChatRoom(UUID chatRoomId) {
         return chatRoomRepository.findByUuid(chatRoomId)
                 .orElseThrow(() -> new ChatException(ChatStatusCode.CHAT_ROOM_UUID_NOT_FOUND));
