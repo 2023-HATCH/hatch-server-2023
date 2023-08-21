@@ -89,6 +89,7 @@ public class LikeService {
      */
     public Slice<VideoModel.VideoInfo> getLikedVideoList(UUID userId, User loginUser, Pageable pageable){
 
+        //TODO : repository 의존성 제거
         User user = userRepository.findByUuid(userId)
                 .orElseThrow(() -> new AuthException(UserStatusCode.UUID_NOT_FOUND));
 

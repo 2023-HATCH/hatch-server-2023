@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 
 @Slf4j
+//@Transactional(readOnly = true) // repository가 쓰이는 곳에 없음. 다 redis 임
 @Service
 public class StageSocketService {
     private final StageDataUtil stageDataUtil;
