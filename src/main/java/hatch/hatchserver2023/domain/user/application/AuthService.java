@@ -3,7 +3,7 @@ package hatch.hatchserver2023.domain.user.application;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.KakaoDto;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
-import hatch.hatchserver2023.global.config.redis.RedisFCMTokenDao;
+import hatch.hatchserver2023.global.config.redis.FcmTokenDao;
 import hatch.hatchserver2023.global.config.security.jwt.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,12 +23,12 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
-    private final RedisFCMTokenDao redisFCMTokenDao;
+    private final FcmTokenDao FCMTokenDao;
 
-    public AuthService(UserRepository userRepository, JwtProvider jwtProvider, RedisFCMTokenDao redisFCMTokenDao) {
+    public AuthService(UserRepository userRepository, JwtProvider jwtProvider, FcmTokenDao FCMTokenDao) {
         this.userRepository = userRepository;
         this.jwtProvider = jwtProvider;
-        this.redisFCMTokenDao = redisFCMTokenDao;
+        this.FCMTokenDao = FCMTokenDao;
     }
 
     @Transactional //signUp 을 여기서 사용함 - 나중에 로직 개선하기
@@ -48,7 +48,7 @@ public class AuthService {
 
         setTokenCookies(user.getUuid(), user.getRoles(), servletResponse);
 
-        redisFCMTokenDao.saveToken(user, fcmToken);
+        FCMTokenDao.saveToken(user, fcmToken);
 
         return user;
     }
@@ -70,7 +70,7 @@ public class AuthService {
     public void logout(User user, HttpServletResponse servletResponse) {
         log.info("[SERVICE] logout");
         removeTokenCookies(servletResponse);
-        redisFCMTokenDao.deleteToken(user);
+        FCMTokenDao.deleteToken(user);
     }
 
 

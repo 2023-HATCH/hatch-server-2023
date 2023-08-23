@@ -3,6 +3,7 @@ package hatch.hatchserver2023.global.config.firebase;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ import java.io.InputStream;
 
 @Slf4j
 @Component
-public class FCMInitializer {
+public class FcmInitializer {
 
     @Value("${firebase.secret-key.json}")
     private String keyJson;
@@ -36,4 +37,9 @@ public class FCMInitializer {
             log.info("FCMInitializer initialize complete");
         }
     }
+
+    // getInstance() 중복코드 줄여볼까 싶었는데 어떻게 짜야 될지 모르겠음
+//    public FirebaseMessaging firebaseMessaging() {
+//        return FirebaseMessaging.getInstance(firebaseApp);
+//    }
 }

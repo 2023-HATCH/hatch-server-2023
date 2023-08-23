@@ -9,7 +9,6 @@ import hatch.hatchserver2023.domain.video.application.HashtagService;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
-import hatch.hatchserver2023.global.config.redis.RedisFCMTokenDao;
 import hatch.hatchserver2023.global.config.security.jwt.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

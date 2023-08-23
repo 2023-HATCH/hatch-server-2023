@@ -4,11 +4,11 @@ import hatch.hatchserver2023.domain.user.domain.User;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RedisFCMTokenDao {
+public class FcmTokenDao {
     private static final String KEY_FCM_TOKEN = "user:fcm:token:";
     private final RedisDao redisDao;
 
-    public RedisFCMTokenDao(RedisDao redisDao) {
+    public FcmTokenDao(RedisDao redisDao) {
         this.redisDao = redisDao;
     }
 
@@ -22,6 +22,10 @@ public class RedisFCMTokenDao {
 
     public void deleteToken(User user) {
         redisDao.deleteValues(toFCMTokenKey(user));
+    }
+
+    public boolean isTokenExist(User user) {
+        return redisDao.isKeyExist(toFCMTokenKey(user));
     }
 
     private String toFCMTokenKey(User user) {

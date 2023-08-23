@@ -58,13 +58,13 @@ public class JwtProvider {
 
     public Cookie resetAccessTokenCookie() {
         Cookie cookie = resetTokenCookie(ACCESS_TOKEN_NAME);
-        cookie.setMaxAge(ACCESS_COOKIE_MAX_AGE);
+        cookie.setMaxAge(0);
         return cookie;
     }
 
     public Cookie resetRefreshTokenCookie() {
         Cookie cookie = resetTokenCookie(REFRESH_TOKEN_NAME);
-        cookie.setMaxAge(REFRESH_COOKIE_MAX_AGE);
+        cookie.setMaxAge(0);
         return cookie;
     }
 
