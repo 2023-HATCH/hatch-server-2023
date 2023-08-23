@@ -18,7 +18,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 //@WebFilter(urlPatterns = {"/api/v1/test/*"})
-@WebFilter(urlPatterns = {"/api/v1/users/*", "/api/v1/chats/*", "/api/v1/stage/*", "/api/v1/talks/*", "/api/v1/test/auth/*", "/api/v1/videos/*", "/api/v1/likes/*", "/api/v1/comments/*"}) //ws pub?
+@WebFilter(urlPatterns = {"/api/v1/auth/logout", "/api/v1/users/*", "/api/v1/chats/*", "/api/v1/stage/*", "/api/v1/talks/*", "/api/v1/test/auth/*", "/api/v1/videos/*", "/api/v1/likes/*", "/api/v1/comments/*"}) //ws pub?
 public class JwtAuthenticationFilter implements Filter { //OncePerRequestFilter ?
     private final JwtProvider jwtProvider;
 

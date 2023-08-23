@@ -81,6 +81,7 @@ public class ChatService {
         return ChatModel.ChatRoomInfo.toModels(opponentUserChatRooms); //fetch lazy 에러 안생김
     }
 
+    @Transactional(rollbackFor = ChatException.class)
     public Slice<ChatMessage> getChatMessages(UUID chatRoomId, Integer page, Integer size) {
         log.info("[SERVICE] getChatMessages");
         ChatRoom chatRoom = getChatRoom(chatRoomId);
@@ -91,18 +92,28 @@ public class ChatService {
 
 
 
-    @Transactional
-    public ChatMessage sendChatMessage(UUID chatRoomId, String content, User user) {
+    @Transactional(rollbackFor = ChatException.class)
+    public ChatModel.SendChatMessage sendChatMessage(UUID chatRoomId, String content, User user) {
         log.info("[SERVICE] sendChatMessage");
         ChatRoom chatRoom = getChatRoom(chatRoomId);
 
+        // 이 채팅방의 상대 유저 찾기
+        User opponentUser = getOpponentUser(chatRoom, user);
+
+        // 채팅 메세지 생성
         ChatMessage chatMessage = ChatMessage.builder()
                         .chatRoom(chatRoom)
                         .sender(user)
                         .content(content)
                         .build();
+        ChatMessage savedChatMessage = chatMessageRepository.save(chatMessage);
 
-        return chatMessageRepository.save(chatMessage);
+        return ChatModel.SendChatMessage.toModel(savedChatMessage, opponentUser);
+    }
+
+    private User getOpponentUser(ChatRoom chatRoom, User user) {
+        UserChatRoom opponentUserChatRoom = userChatRoomRepository.findByChatRoomNotMeOne(chatRoom.getId(), user.getId());
+        return opponentUserChatRoom.getUser();
     }
 
 
@@ -143,7 +154,6 @@ public class ChatService {
         return userChatRooms;
     }
 
-    @Transactional(rollbackFor = ChatException.class)
     private ChatRoom getChatRoom(UUID chatRoomId) {
         return chatRoomRepository.findByUuid(chatRoomId)
                 .orElseThrow(() -> new ChatException(ChatStatusCode.CHAT_ROOM_UUID_NOT_FOUND));

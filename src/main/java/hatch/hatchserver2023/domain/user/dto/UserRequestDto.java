@@ -13,10 +13,15 @@ public class UserRequestDto {
         @NotBlank
         private String kakaoAccessToken;
 
+//        @NotBlank
+        private String fcmNotificationToken;
+
         public KakaoLogin() {
         }
-        public KakaoLogin(String kakaoAccessToken) {
+
+        public KakaoLogin(String kakaoAccessToken, String fcmNotificationToken) {
             this.kakaoAccessToken = kakaoAccessToken;
+            this.fcmNotificationToken = fcmNotificationToken;
         }
     }
 
