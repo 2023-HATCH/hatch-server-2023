@@ -58,4 +58,5 @@ jwt:
 ### Firebase secret key (FCM) ###
 firebase:
   secret-key:
-    json: ${FIREBASE_SECRET_KEY_JSON}
+    path: ${FIREBASE_SECRET_KEY_FILE_PATH}
+#    json: ${FIREBASE_SECRET_KEY_JSON}
