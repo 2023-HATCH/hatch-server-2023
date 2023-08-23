@@ -13,9 +13,10 @@ ARG JAR_FILE=build/libs/*.jar
 # 변수에 저장된 것을 컨테이너 실행시 이름을 app.jar파일로 변경하여 컨테이너에 저장
 COPY ${JAR_FILE} app.jar
 
+## 이거 여기서 하는 거 아닌 거 같은데?? 여기는 이미지 생성할 때 할 명령이잖아 난 이미지 실행될 때 써야 하고..
 ## key 파일 복사하기 - 호스트에 있는 파일을 컨테이너 내 특정 경로로 복사
 ## 복사하기 COPY <호스트경로> <컨테이너 내 경로> (절대경로)
-COPY /home/ubuntu/jh/secret/firebase/popo-fcm-key.json /src/main/resources/secret/firebase/popo-fcm-key.json
+#COPY /home/ubuntu/jh/secret/firebase/popo-fcm-key.json /src/main/resources/secret/firebase/popo-fcm-key.json
 #ARG FCM_KEY_FILE=
 
 # 빌드된 이미지가 run될 때 실행할 명령어
