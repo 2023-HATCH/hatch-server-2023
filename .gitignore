@@ -1,3 +1,6 @@
+## JH - key file path
+**/src/main/resources/secret/
+
 HELP.md
 .gradle
 build/
