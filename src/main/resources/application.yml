@@ -54,3 +54,8 @@ cloud:
 jwt:
   token:
     secretKey: ${JWT_TOKEN_SECRET_KEY}
+
+### Firebase secret key (FCM) ###
+firebase:
+  secret-key:
+    json: ${FIREBASE_SECRET_KEY_JSON}
