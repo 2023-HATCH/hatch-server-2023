@@ -4,8 +4,11 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.stream.JsonReader;
+import hatch.hatchserver2023.global.common.ObjectMapperUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -17,19 +20,27 @@ import java.io.InputStream;
 @Component
 public class FcmInitializer {
 
-    @Value("${firebase.secret-key.json}")
-    private String keyJson;
+//    @Value("${firebase.secret-key.json}")
+//    private String keyJson;
+
+    @Value("${firebase.secret-key.path}")
+    private String filePath;
 
     @PostConstruct
     public void initialize() throws IOException {
         log.info("FCMInitializer initialize");
-        InputStream inputStream = new ByteArrayInputStream(keyJson.getBytes()); // String 으로 받은 환경변수값 json 을 inputstream 으로 변형
+
+        // 리눅스에서 에러남
+//        InputStream inputStream = new ByteArrayInputStream(keyJson.getBytes()); // String 으로 받은 환경변수값 json 을 inputstream 으로 변형
+
+        ClassPathResource resource = new ClassPathResource(filePath);
+        InputStream inputStream = resource.getInputStream();
 
         GoogleCredentials credentials = GoogleCredentials.fromStream(inputStream);
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
-                .setProjectId("popo-2023")
+                .setProjectId("poket-pose") //프로젝트 생성할 때 오타나서 프로젝트명 poket이 맞음
                 .build();
 
         if(FirebaseApp.getApps().isEmpty()) {
