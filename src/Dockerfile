@@ -15,7 +15,7 @@ COPY ${JAR_FILE} app.jar
 
 ## key 파일 복사하기 - 호스트에 있는 파일을 컨테이너 내 특정 경로로 복사
 ## 복사하기 COPY <호스트경로> <컨테이너 내 경로> (절대경로)
-COPY ~/jh/secret/firebase/popo-fcm-key.json /src/main/resources/secret/firebase/popo-fcm-key.json
+COPY /home/ubuntu/jh/secret/firebase/popo-fcm-key.json /src/main/resources/secret/firebase/popo-fcm-key.json
 #ARG FCM_KEY_FILE=
 
 # 빌드된 이미지가 run될 때 실행할 명령어
