@@ -67,7 +67,7 @@ public class AuthService {
         servletResponse.addCookie(refreshTokenCookie);
     }
 
-    public void logout(User user, HttpServletResponse servletResponse) {
+    public void kakaoLogout(User user, HttpServletResponse servletResponse) {
         log.info("[SERVICE] logout");
         removeTokenCookies(servletResponse);
         FCMTokenDao.deleteToken(user);

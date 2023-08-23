@@ -66,9 +66,9 @@ public class AuthController {
 
         validLoginType(type);
 
-        authService.logout(user, servletResponse);
+        authService.kakaoLogout(user, servletResponse);
 
-        return ResponseEntity.ok().body(CommonResponse.toResponse(UserStatusCode.LOGOUT_SUCCESS));
+        return ResponseEntity.ok().body(CommonResponse.toResponse(UserStatusCode.KAKAO_LOGOUT_SUCCESS));
     }
 
 
