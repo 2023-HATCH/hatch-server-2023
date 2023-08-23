@@ -7,10 +7,9 @@ import hatch.hatchserver2023.domain.user.dto.KakaoDto;
 import hatch.hatchserver2023.domain.user.dto.UserRequestDto;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
-import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.AuthException;
-import lombok.RequiredArgsConstructor;
+import hatch.hatchserver2023.global.config.redis.RedisFCMTokenDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,10 +29,12 @@ public class AuthController {
 
     private final KakaoService kakaoService;
     private final AuthService authService;
+    private final RedisFCMTokenDao redisFCMTokenDao;
 
-    public AuthController(KakaoService kakaoService, AuthService authService) {
+    public AuthController(KakaoService kakaoService, AuthService authService, RedisFCMTokenDao redisFCMTokenDao) {
         this.kakaoService = kakaoService;
         this.authService = authService;
+        this.redisFCMTokenDao = redisFCMTokenDao;
     }
 
     /**
@@ -54,6 +55,8 @@ public class AuthController {
 
         KakaoDto.GetUserInfo userInfo = kakaoService.getUserInfo(requestDto.getKakaoAccessToken());
         User loginUser = authService.signUpAndLogin(userInfo, servletResponse);
+
+        redisFCMTokenDao.saveToken(loginUser, requestDto.getFcmNotificationToken());
 
         return ResponseEntity.ok().body(CommonResponse.toResponse(UserStatusCode.KAKAO_LOGIN_SUCCESS, UserResponseDto.KakaoLogin.toDto(loginUser)));
     }
