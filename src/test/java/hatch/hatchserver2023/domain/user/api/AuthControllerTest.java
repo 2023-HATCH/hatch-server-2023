@@ -1,6 +1,5 @@
 package hatch.hatchserver2023.domain.user.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hatch.hatchserver2023.domain.user.application.AuthService;
 import hatch.hatchserver2023.domain.user.application.KakaoService;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
@@ -26,10 +24,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -41,8 +37,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.UUID;
 
-import static hatch.hatchserver2023.global.config.restdocs.RestDocsConfig.field;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -125,7 +119,7 @@ class AuthControllerTest {
 
         //when
         when(kakaoService.getUserInfo(requestDto.getKakaoAccessToken())).thenReturn(kakaoInfoDto);
-        when(authService.signUpAndLogin(any(KakaoDto.GetUserInfo.class), any())).thenReturn(resultUser);
+        when(authService.signUpAndLogin(any(KakaoDto.GetUserInfo.class), requestDto.getFcmNotificationToken(), any())).thenReturn(resultUser);
 
         //then
         MockHttpServletRequestBuilder requestPost = post("/api/v1/auth/login")

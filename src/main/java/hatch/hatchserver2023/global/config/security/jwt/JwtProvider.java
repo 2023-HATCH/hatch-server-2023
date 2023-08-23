@@ -56,6 +56,18 @@ public class JwtProvider {
         return cookie;
     }
 
+    public Cookie resetAccessTokenCookie() {
+        Cookie cookie = resetTokenCookie(ACCESS_TOKEN_NAME);
+        cookie.setMaxAge(ACCESS_COOKIE_MAX_AGE);
+        return cookie;
+    }
+
+    public Cookie resetRefreshTokenCookie() {
+        Cookie cookie = resetTokenCookie(REFRESH_TOKEN_NAME);
+        cookie.setMaxAge(REFRESH_COOKIE_MAX_AGE);
+        return cookie;
+    }
+
     public Cookie renewalRefreshTokenCookie(String refreshToken){
         String uuid = getUserPK(refreshToken);
         List<String> roles = getRoles(refreshToken);
@@ -79,6 +91,15 @@ public class JwtProvider {
         log.info("jwtProvider createTokenCookie");
         String token = createToken(userPK, roles, validTime);
         Cookie cookie = new Cookie(tokenType, token);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+//        cookie.setSecure(true); //https 상에서만 동작
+        return cookie;
+    }
+
+    private Cookie resetTokenCookie(String tokenType) {
+        log.info("jwtProvider resetTokenCookie");
+        Cookie cookie = new Cookie(tokenType, "");
         cookie.setPath("/");
         cookie.setHttpOnly(true);
 //        cookie.setSecure(true); //https 상에서만 동작

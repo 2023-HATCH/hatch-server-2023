@@ -12,9 +12,11 @@ import hatch.hatchserver2023.global.common.response.exception.AuthException;
 import hatch.hatchserver2023.global.config.redis.RedisFCMTokenDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -29,14 +31,13 @@ public class AuthController {
 
     private final KakaoService kakaoService;
     private final AuthService authService;
-    private final RedisFCMTokenDao redisFCMTokenDao;
 
-    public AuthController(KakaoService kakaoService, AuthService authService, RedisFCMTokenDao redisFCMTokenDao) {
+    public AuthController(KakaoService kakaoService, AuthService authService) {
         this.kakaoService = kakaoService;
         this.authService = authService;
-        this.redisFCMTokenDao = redisFCMTokenDao;
     }
 
+    //TODO : 명세
     /**
      * 카카오 회원가입 & 로그인 한번에 진행되는 api
      * @param type : "kakao" 고정값
@@ -54,12 +55,24 @@ public class AuthController {
         validLoginType(type);
 
         KakaoDto.GetUserInfo userInfo = kakaoService.getUserInfo(requestDto.getKakaoAccessToken());
-        User loginUser = authService.signUpAndLogin(userInfo, servletResponse);
-
-        redisFCMTokenDao.saveToken(loginUser, requestDto.getFcmNotificationToken());
-
+        User loginUser = authService.signUpAndLogin(userInfo, requestDto.getFcmNotificationToken(), servletResponse);
         return ResponseEntity.ok().body(CommonResponse.toResponse(UserStatusCode.KAKAO_LOGIN_SUCCESS, UserResponseDto.KakaoLogin.toDto(loginUser)));
     }
+
+    //TODO : 명세
+    @DeleteMapping("/logout")
+    public ResponseEntity<CommonResponse> logout(@RequestParam @NotBlank String type,
+                                                 @AuthenticationPrincipal User user,
+                                                 HttpServletResponse servletResponse) {
+        log.info("[API] DELETE /users/logout");
+
+        validLoginType(type);
+
+        authService.logout(user, servletResponse);
+
+        return ResponseEntity.ok().body(CommonResponse.toResponse(UserStatusCode.LOGOUT_SUCCESS));
+    }
+
 
     private void validLoginType(String type) {
         if(!type.equals(LOGIN_TYPE_KAKAO)){
