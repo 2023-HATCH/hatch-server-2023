@@ -5,7 +5,6 @@ import hatch.hatchserver2023.domain.comment.domain.Comment;
 import hatch.hatchserver2023.domain.video.VideoCacheUtil;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.comment.repository.CommentRepository;
-import hatch.hatchserver2023.domain.video.repository.VideoRepository;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.VideoException;
 import lombok.extern.slf4j.Slf4j;
@@ -19,12 +18,10 @@ import java.util.UUID;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final VideoRepository videoRepository;
     private final VideoCacheUtil videoCacheUtil;
 
-    public CommentService(CommentRepository commentRepository, VideoRepository videoRepository, VideoCacheUtil videoCacheUtil){
+    public CommentService(CommentRepository commentRepository, VideoCacheUtil videoCacheUtil){
         this.commentRepository = commentRepository;
-        this.videoRepository = videoRepository;
         this.videoCacheUtil = videoCacheUtil;
     }
 
@@ -33,13 +30,11 @@ public class CommentService {
      * 댓글 등록
      *
      * @param content
-     * @param videoId
+     * @param video
      * @param user
      * @return comment
      */
-    public Comment createComment(String content, UUID videoId, User user){
-
-        Video video = getVideo(videoId);
+    public Comment createComment(String content, Video video, User user){
 
         Comment comment = Comment.builder()
                 .content(content)
@@ -82,22 +77,13 @@ public class CommentService {
     /**
      * 비디오의 댓글 목록 조회
      *
-     * @param videoId
+     * @param video
      * @return commentList
      */
-    public List<Comment> getCommentList(UUID videoId) {
-
-        Video video = getVideo(videoId);
+    public List<Comment> getCommentList(Video video) {
 
         List<Comment> commentList = commentRepository.findAllByVideo(video);
 
         return commentList;
-    }
-
-
-    // videoUuid로 Video 객체를 DB에서 찾아오는 함수
-    private Video getVideo(UUID videoId) {
-        return videoRepository.findByUuid(videoId)
-                .orElseThrow(() -> new VideoException(VideoStatusCode.VIDEO_NOT_FOUND));
     }
 }
