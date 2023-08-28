@@ -154,9 +154,25 @@ public class HashtagService {
 
     }
 
+    /**
+     * 영상 삭제 시 연관 해시태그들도 같이 삭제
+     *
+     * @param video
+     */
+    @Transactional
+    public void deleteHashtagByVideo(Video video){
+
+        List<VideoHashtag> maps = videoHashtagRepository.findAllByVideo(video);
+        List<Hashtag> hashtagList = maps.stream()
+                .map(VideoHashtag::getHashtag)
+                .collect(Collectors.toList());
+
+        hashtagList.forEach(hashtagRepository::delete);
+    }
+
     //해시태그 삭제 - 테스트용
     @Transactional
-    public void delete(String title){
+    public void deleteByTitle(String title){
         Hashtag hashtag = hashtagRepository.findByTitle(title).get();
 
         //해시태그 db에서 삭제

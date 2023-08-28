@@ -45,12 +45,14 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final S3Service s3Service;
     private final LikeService likeService;
+    private final HashtagService hashtagService;
     private final VideoCacheUtil videoCacheUtil;
 
-    public VideoService(VideoRepository videoRepository, S3Service s3Service, LikeService likeService, VideoCacheUtil videoCacheUtil) {
+    public VideoService(VideoRepository videoRepository, S3Service s3Service, LikeService likeService, HashtagService hashtagService, VideoCacheUtil videoCacheUtil) {
         this.videoRepository = videoRepository;
         this.s3Service = s3Service;
         this.likeService = likeService;
+        this.hashtagService = hashtagService;
         this.videoCacheUtil = videoCacheUtil;
     }
 
@@ -78,6 +80,7 @@ public class VideoService {
      * @param uuid
      * @return isSuccess
      */
+    // TODO: rollback 추가?
     @Transactional
     public void deleteOne(UUID uuid){
         Video video = getVideo(uuid);
@@ -87,6 +90,9 @@ public class VideoService {
         if(!Objects.equals(video.getThumbnailUrl(), DEFAULT_THUMBNAIL_URL)){
             s3Service.delete(video.getThumbnailUrl());
         }
+
+        //연관 Hashtag DB에서 삭제
+        hashtagService.deleteHashtagByVideo(video);
 
         //Video 데이터 DB에서 삭제
         videoRepository.delete(video);
