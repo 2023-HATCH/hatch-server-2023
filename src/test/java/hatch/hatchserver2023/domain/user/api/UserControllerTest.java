@@ -436,7 +436,8 @@ public class UserControllerTest {
                                         fieldWithPath("userId").type(JsonFieldType.STRING).description("사용자 식별자 UUID"),
                                         fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-                                        fieldWithPath("profileImg").type(JsonFieldType.STRING).description("프로필 이미지 경로")
+                                        fieldWithPath("profileImg").type(JsonFieldType.STRING).description("프로필 이미지 경로"),
+                                        fieldWithPath("introduce").type(JsonFieldType.STRING).description("자기소개")
                                 )
                         )
                 );

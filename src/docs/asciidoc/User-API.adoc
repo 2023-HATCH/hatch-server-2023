@@ -11,7 +11,7 @@
 
 - link:user/page/update-profile.html[ 프로필 수정,window=_blank]
 
-- link:user/page/search-user.html[ 계정 검색,window=_blank]
+- link:user/page/search-user.html[ (UPDATE) 계정 검색,window=_blank]
 
 
 
