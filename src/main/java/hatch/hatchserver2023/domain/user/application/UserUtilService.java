@@ -154,18 +154,25 @@ public class UserUtilService {
     }
 
 
-    //프로필 수정
+    /**
+     * 프로필 수정
+     *
+     * @param user
+     * @param introduce
+     * @param instagramId
+     * @param twitterId
+     */
     @Transactional
     public void updateProfile(User user, String introduce, String instagramId, String twitterId) {
 
         //빈 텍스트이거나 null이면 기존 데이터를 유지
-        if(introduce == null || Objects.equals(introduce, "")) {
+        if(introduce == null) {
             introduce = user.getIntroduce();
         }
-        if(instagramId == null || Objects.equals(instagramId, "")) {
+        if(instagramId == null) {
             instagramId = user.getInstagramAccount();
         }
-        if(twitterId == null || Objects.equals(twitterId, "")) {
+        if(twitterId == null) {
             twitterId = user.getTwitterAccount();
         }
 
