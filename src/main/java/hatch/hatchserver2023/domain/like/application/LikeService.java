@@ -78,7 +78,7 @@ public class LikeService {
      */
     public Slice<VideoModel.VideoInfo> getLikedVideoList(User user, User loginUser, Pageable pageable){
 
-        Slice<Like> likeSlice = likeRepository.findAllByUser(user, pageable);
+        Slice<Like> likeSlice = likeRepository.findAllByUserOrderByCreatedAtDesc(user, pageable);
 
         //각 좋아요에서 영상 얻어오기
         List<VideoModel.VideoInfo> videoInfoList;
