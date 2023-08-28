@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.apache.commons.fileupload.FileItem;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional
 public class VideoService {
 
     private final VideoRepository videoRepository;
@@ -75,6 +77,7 @@ public class VideoService {
      * @param uuid
      * @return isSuccess
      */
+    @Transactional
     public void deleteOne(UUID uuid){
         Video video = getVideo(uuid);
 
@@ -222,6 +225,7 @@ public class VideoService {
      * @param tag
      * @return video
      */
+    @Transactional
     public Video createVideo(MultipartFile video, User user, String title, String tag) {
         log.info("[VideoService] Single video Upload");
 

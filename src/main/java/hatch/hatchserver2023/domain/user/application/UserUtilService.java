@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class UserUtilService {
 
     private final UserRepository userRepository;
@@ -153,6 +155,7 @@ public class UserUtilService {
 
 
     //프로필 수정
+    @Transactional
     public void updateProfile(User user, String introduce, String instagramId, String twitterId) {
 
         //빈 텍스트이거나 null이면 기존 데이터를 유지
@@ -204,6 +207,7 @@ public class UserUtilService {
      * @param fromUser
      * @param toUser
      */
+    @Transactional
     public void addFollow(User fromUser, User toUser) {
         if (fromUser.getUuid().equals(toUser.getUuid())) {
             throw new UserException(UserStatusCode.CANT_FOLLOW_YOURSELF);
@@ -224,6 +228,7 @@ public class UserUtilService {
      * @param fromUser
      * @param toUser
      */
+    @Transactional
     public void deleteFollow(User fromUser, User toUser) {
 
         Follow follow = followRepository.findByFromUserAndToUser(fromUser, toUser)

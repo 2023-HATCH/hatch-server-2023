@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class HashtagService {
 
     private final HashtagRepository hashtagRepository;
@@ -122,6 +124,7 @@ public class HashtagService {
      * @param video
      * @return null
      */
+    @Transactional(rollbackFor = Exception.class)
     public void saveHashtag(String tag, Video video){
         // tag를 파싱
         String[] parsedTags = tag.split("#");
@@ -152,6 +155,7 @@ public class HashtagService {
     }
 
     //해시태그 삭제 - 테스트용
+    @Transactional
     public void delete(String title){
         Hashtag hashtag = hashtagRepository.findByTitle(title).get();
 

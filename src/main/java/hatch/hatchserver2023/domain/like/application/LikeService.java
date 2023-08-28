@@ -9,35 +9,28 @@ import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.like.repository.LikeRepository;
 import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
-import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
-import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
-import hatch.hatchserver2023.global.common.response.exception.AuthException;
-import hatch.hatchserver2023.global.common.response.exception.VideoException;
 import hatch.hatchserver2023.domain.like.LikeCacheUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class LikeService {
 
     private final LikeRepository likeRepository;
-    private final VideoRepository videoRepository;
-    private final UserRepository userRepository;
     private final VideoCacheUtil videoCacheUtil;
     private final LikeCacheUtil likeCacheUtil;
 
-    public LikeService(LikeRepository likeRepository, VideoRepository videoRepository, UserRepository userRepository, VideoCacheUtil videoCacheUtil, LikeCacheUtil likeCacheUtil){
+    public LikeService(LikeRepository likeRepository, VideoCacheUtil videoCacheUtil, LikeCacheUtil likeCacheUtil){
         this.likeRepository = likeRepository;
-        this.videoRepository = videoRepository;
-        this.userRepository = userRepository;
         this.videoCacheUtil = videoCacheUtil;
         this.likeCacheUtil = likeCacheUtil;
     }
@@ -51,6 +44,7 @@ public class LikeService {
      * @param user
      * @return likeUuid
      */
+    @Transactional
     public void addLike(Video video, User user){
 
         // redis 에 좋아요 데이터 저장, 좋아요 수 저장
@@ -64,6 +58,7 @@ public class LikeService {
      * @param video
      * @param user
      */
+    @Transactional
     public void deleteLike(Video video, User user){
 
 //        Like like = likeRepository.findByVideoIdAndUserId(video, user)

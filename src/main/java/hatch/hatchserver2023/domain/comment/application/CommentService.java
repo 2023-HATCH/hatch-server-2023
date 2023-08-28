@@ -9,12 +9,14 @@ import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.VideoException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -34,6 +36,7 @@ public class CommentService {
      * @param user
      * @return comment
      */
+    @Transactional
     public Comment createComment(String content, Video video, User user){
 
         Comment comment = Comment.builder()
@@ -57,6 +60,7 @@ public class CommentService {
      * @param commentId
      * @param user
      */
+    @Transactional
     public void deleteComment(UUID commentId, User user){
 
         Comment comment = commentRepository.findByUuid(commentId)
