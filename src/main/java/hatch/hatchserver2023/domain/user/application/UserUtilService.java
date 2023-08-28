@@ -212,6 +212,9 @@ public class UserUtilService {
         if (fromUser.getUuid().equals(toUser.getUuid())) {
             throw new UserException(UserStatusCode.CANT_FOLLOW_YOURSELF);
         }
+        if (followRepository.findByFromUserAndToUser(fromUser, toUser).isPresent()){
+            throw new UserException(UserStatusCode.ALREADY_FOLLOWED);
+        }
 
         Follow follow = Follow.builder()
                 .fromUser(fromUser)
