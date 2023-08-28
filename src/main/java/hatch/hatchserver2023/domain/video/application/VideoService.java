@@ -32,6 +32,7 @@ import javax.imageio.ImageIO;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -81,9 +82,11 @@ public class VideoService {
     public void deleteOne(UUID uuid){
         Video video = getVideo(uuid);
 
-        // S3에 올라가 있는 동영상과 썸네일 또한 삭제
+        // S3에 올라가 있는 동영상과 썸네일 또한 삭제. 디폴트 썸네일이면 삭제 X
         s3Service.delete(video.getVideoUrl());
-        s3Service.delete(video.getThumbnailUrl());
+        if(!Objects.equals(video.getThumbnailUrl(), DEFAULT_THUMBNAIL_URL)){
+            s3Service.delete(video.getThumbnailUrl());
+        }
 
         //Video 데이터 DB에서 삭제
         videoRepository.delete(video);
