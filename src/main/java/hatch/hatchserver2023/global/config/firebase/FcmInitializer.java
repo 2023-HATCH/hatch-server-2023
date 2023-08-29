@@ -37,9 +37,9 @@ public class FcmInitializer {
 
         // 절대경로로 파일 읽어오기
         String basePath = new File("").getAbsolutePath();
-        log.info("basePath : {}", basePath);
+//        log.info("basePath : {}", basePath);
         String fileAbsolutePath = basePath + filePath;
-        log.info("fileAbsolutePath : {}", fileAbsolutePath);
+//        log.info("fileAbsolutePath : {}", fileAbsolutePath);
 
         InputStream inputStream = new FileInputStream(new File(fileAbsolutePath));
 
