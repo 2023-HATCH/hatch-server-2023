@@ -6,7 +6,7 @@ sudo docker ps -a -q --filter "name=popoback" | grep -q . && docker stop popobac
 #sudo docker rmi backtony/awsstudy:1.0
 sudo docker rmi realginger/popoback:1.0
 
-# 도커허브 이미지 pull
+# 도커허브 이미지 pullq
 sudo docker pull realginger/popoback:1.0
 
 # 도커 run
