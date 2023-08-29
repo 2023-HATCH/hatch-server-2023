@@ -27,5 +27,5 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 
     public Slice<Video> findAllByOrderByViewCountDesc(Pageable pageable);
 
-    public Slice<Video> findAllByUser(User user, Pageable pageable);
+    public Slice<Video> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
 }

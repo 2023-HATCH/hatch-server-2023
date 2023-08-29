@@ -120,7 +120,7 @@ public class TestController {
     //해시태그 삭제 - 테스트용
     @DeleteMapping("/tags/{title}")
     public boolean deleteHashtag(@PathVariable String title){
-        hashtagService.delete(title);
+        hashtagService.deleteByTitle(title);
         return true;
     }
 

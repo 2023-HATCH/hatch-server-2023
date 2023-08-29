@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
     //사용자의 좋아요 목록 찾기
-    public Slice<Like> findAllByUser(User user, Pageable pageable);
+    public Slice<Like> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
 
     //한 동영상의 좋아요 목록 찾기
     public List<Like> findAllByVideo(Video video);

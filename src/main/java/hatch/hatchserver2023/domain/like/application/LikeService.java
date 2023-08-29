@@ -9,35 +9,28 @@ import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.like.repository.LikeRepository;
 import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
-import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
-import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
-import hatch.hatchserver2023.global.common.response.exception.AuthException;
-import hatch.hatchserver2023.global.common.response.exception.VideoException;
 import hatch.hatchserver2023.domain.like.LikeCacheUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class LikeService {
 
     private final LikeRepository likeRepository;
-    private final VideoRepository videoRepository;
-    private final UserRepository userRepository;
     private final VideoCacheUtil videoCacheUtil;
     private final LikeCacheUtil likeCacheUtil;
 
-    public LikeService(LikeRepository likeRepository, VideoRepository videoRepository, UserRepository userRepository, VideoCacheUtil videoCacheUtil, LikeCacheUtil likeCacheUtil){
+    public LikeService(LikeRepository likeRepository, VideoCacheUtil videoCacheUtil, LikeCacheUtil likeCacheUtil){
         this.likeRepository = likeRepository;
-        this.videoRepository = videoRepository;
-        this.userRepository = userRepository;
         this.videoCacheUtil = videoCacheUtil;
         this.likeCacheUtil = likeCacheUtil;
     }
@@ -47,14 +40,12 @@ public class LikeService {
     /**
      * 좋아요 추가
      *
-     * @param videoId
+     * @param video
      * @param user
      * @return likeUuid
      */
-    public void addLike(UUID videoId, User user){
-        // 비디오 존재 유무 확인
-        Video video = videoRepository.findByUuid(videoId)
-                .orElseThrow(() -> new VideoException(VideoStatusCode.VIDEO_NOT_FOUND));
+    @Transactional
+    public void addLike(Video video, User user){
 
         // redis 에 좋아요 데이터 저장, 좋아요 수 저장
         likeCacheUtil.addLike(video, user);
@@ -64,13 +55,11 @@ public class LikeService {
     /**
      * 좋아요 삭제
      *
-     * @param videoId
+     * @param video
      * @param user
      */
-    public void deleteLike(UUID videoId, User user){
-
-        Video video = videoRepository.findByUuid(videoId)
-                .orElseThrow(() -> new VideoException(VideoStatusCode.VIDEO_NOT_FOUND));
+    @Transactional
+    public void deleteLike(Video video, User user){
 
 //        Like like = likeRepository.findByVideoIdAndUserId(video, user)
 //                .orElseThrow(() -> new VideoException(VideoStatusCode.LIKE_NOT_FOUND));
@@ -82,18 +71,14 @@ public class LikeService {
     /**
      * 어느 사용자의 좋아요 누른 영상 목록 조회
      *
-     * @param userId
+     * @param user
      * @param loginUser
      * @param pageable
      * @return likedVideoList
      */
-    public Slice<VideoModel.VideoInfo> getLikedVideoList(UUID userId, User loginUser, Pageable pageable){
+    public Slice<VideoModel.VideoInfo> getLikedVideoList(User user, User loginUser, Pageable pageable){
 
-        //TODO : repository 의존성 제거
-        User user = userRepository.findByUuid(userId)
-                .orElseThrow(() -> new AuthException(UserStatusCode.UUID_NOT_FOUND));
-
-        Slice<Like> likeSlice = likeRepository.findAllByUser(user, pageable);
+        Slice<Like> likeSlice = likeRepository.findAllByUserOrderByCreatedAtDesc(user, pageable);
 
         //각 좋아요에서 영상 얻어오기
         List<VideoModel.VideoInfo> videoInfoList;
@@ -134,14 +119,11 @@ public class LikeService {
     /**
      * 한 동영상의 좋아요 갯수 세기
      *
-     * @param videoId
+     * @param video
      * @return videoCount
      */
 
-    public long countLike(UUID videoId){
-
-        Video video = videoRepository.findByUuid(videoId)
-                .orElseThrow(() -> new VideoException(VideoStatusCode.VIDEO_NOT_FOUND));
+    public long countLike(Video video){
 
         return likeRepository.countByVideo(video);
     }

@@ -1,7 +1,9 @@
 package hatch.hatchserver2023.domain.like.api;
 
+import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.like.application.LikeService;
+import hatch.hatchserver2023.domain.video.application.VideoService;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
@@ -68,6 +70,10 @@ public class LikeControllerTest {
 
     @MockBean
     LikeService likeService;
+    @MockBean
+    VideoService videoService;
+    @MockBean
+    UserUtilService userUtilService;
 
     private Video video1;
     private Video video2;
@@ -133,7 +139,9 @@ public class LikeControllerTest {
     void addLike() throws Exception {
 
         //given
-//        given(likeService.addLike(eq(video1.getUuid()), any()))
+        given(videoService.findOne(video1.getUuid()))
+                .willReturn(video1);
+//        given(likeService.addLike(eq(video1), any()))
 //                .willReturn(video1.getUuid());
 
         //when
@@ -185,7 +193,9 @@ public class LikeControllerTest {
     void deleteLike() throws Exception {
 
         //given
-//        given(likeService.deleteLike(eq(video.getUuid()), any(User.class)));
+        given(videoService.findOne(video1.getUuid()))
+                .willReturn(video1);
+//        given(likeService.deleteLike(eq(video1), any(User.class)));
 
         //when
         StatusCode code = VideoStatusCode.LIKE_DELETE_SUCCESS;
@@ -252,6 +262,8 @@ public class LikeControllerTest {
         List<VideoModel.VideoInfo> videoInfoList = Arrays.asList(videoInfo1, videoInfo2);
         Slice<VideoModel.VideoInfo> slice = new SliceImpl<>(videoInfoList, PageRequest.of(0, 2), false);
 
+        given(userUtilService.findOneByUuid(user.getUuid()))
+                .willReturn(user);
         given(likeService.getLikedVideoList(any(), any(), any(Pageable.class)))
                 .willReturn(slice);
 

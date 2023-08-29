@@ -103,6 +103,50 @@ public class UserResponseDto {
         }
     }
 
+
+    //계정 검색(CommunityInfo + introduce)
+    //TODO: 그냥 리스트로 보내면 어떻게 보이는지 보고 생각해보자
+    @ToString
+    @Getter
+    @Builder
+    public static class UserSearchInfo {
+
+        private UUID userId;
+        private String nickname;
+        private String email;
+        private String profileImg;
+        private String introduce;
+
+        public static UserSearchInfo toDto(User user) {
+            return UserSearchInfo.builder()
+                    .userId(user.getUuid())
+                    .nickname(user.getNickname())
+                    .email(user.getEmail())
+                    .profileImg(user.getProfileImg())
+                    .introduce(user.getIntroduce())
+                    .build();
+        }
+    }
+
+    @ToString
+    @Getter
+    @Builder
+    public static class UserSearchInfoList {
+
+        private List<UserSearchInfo> userList;
+
+        public static UserSearchInfoList toDto(List<User> users){
+
+            List<UserSearchInfo> infoList = users.stream()
+                                                .map(UserSearchInfo::toDto)
+                                                .collect(Collectors.toList());
+
+            return UserSearchInfoList.builder()
+                    .userList(infoList)
+                    .build();
+        }
+    }
+
     //프로필 조회
     @ToString
     @Getter
