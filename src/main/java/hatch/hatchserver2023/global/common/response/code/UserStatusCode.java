@@ -17,6 +17,8 @@ public enum UserStatusCode implements StatusCode {
     GET_FOLLOW_LIST_SUCCESS_FOR_USER(HttpStatus.OK, "2023", "회원: 팔로잉/팔로워 목록 조회 성공"), //200
     GET_FOLLOW_LIST_SUCCESS_FOR_ANONYMOUS(HttpStatus.OK, "2024", "비회원: 팔로잉/팔로워 목록 조회 성공"), //200
 
+    KAKAO_LOGOUT_SUCCESS(HttpStatus.NO_CONTENT, "2400", "카카오 로그인 사용자의 로그아웃 성공"), //204
+
 
     // 4xx
     LOGIN_ID_NOT_EXIST(HttpStatus.UNAUTHORIZED, "4101", "로그인 아이디 존재하지 않음"), //401

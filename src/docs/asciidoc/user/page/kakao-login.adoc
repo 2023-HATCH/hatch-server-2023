@@ -1,4 +1,6 @@
 == *Kakao Login*
 카카오 회원가입 & 로그인 api
 
+NOTE: 로그인 백도어도 요청값 수정됨
+
 operation::login[snippets='http-request,request-parameters,request-fields,response-fields-beneath-data,http-response']

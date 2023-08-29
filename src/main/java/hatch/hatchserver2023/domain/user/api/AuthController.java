@@ -7,12 +7,11 @@ import hatch.hatchserver2023.domain.user.dto.KakaoDto;
 import hatch.hatchserver2023.domain.user.dto.UserRequestDto;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
-import hatch.hatchserver2023.global.common.response.code.CommonCode;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.AuthException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +35,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    //TODO : 명세
     /**
      * 카카오 회원가입 & 로그인 한번에 진행되는 api
      * @param type : "kakao" 고정값
@@ -53,10 +53,24 @@ public class AuthController {
         validLoginType(type);
 
         KakaoDto.GetUserInfo userInfo = kakaoService.getUserInfo(requestDto.getKakaoAccessToken());
-        User loginUser = authService.signUpAndLogin(userInfo, servletResponse);
-
+        User loginUser = authService.signUpAndLogin(userInfo, requestDto.getFcmNotificationToken(), servletResponse);
         return ResponseEntity.ok().body(CommonResponse.toResponse(UserStatusCode.KAKAO_LOGIN_SUCCESS, UserResponseDto.KakaoLogin.toDto(loginUser)));
     }
+
+    //TODO : 명세
+    @DeleteMapping("/logout")
+    public ResponseEntity<CommonResponse> logout(@RequestParam @NotBlank String type,
+                                                 @AuthenticationPrincipal User user,
+                                                 HttpServletResponse servletResponse) {
+        log.info("[API] DELETE /users/logout");
+
+        validLoginType(type);
+
+        authService.kakaoLogout(user, servletResponse);
+
+        return ResponseEntity.ok().body(CommonResponse.toResponse(UserStatusCode.KAKAO_LOGOUT_SUCCESS));
+    }
+
 
     private void validLoginType(String type) {
         if(!type.equals(LOGIN_TYPE_KAKAO)){

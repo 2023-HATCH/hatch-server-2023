@@ -57,4 +57,20 @@ public class ChatModel {
                     .build();
         }
     }
+
+
+    @ToString
+    @Getter
+    @Builder
+    public static class SendChatMessage {
+        private ChatMessage chatMessage;
+        private User opponentUser;
+
+        public static SendChatMessage toModel(ChatMessage chatMessage, User opponentUser) {
+            return SendChatMessage.builder()
+                    .chatMessage(chatMessage)
+                    .opponentUser(opponentUser)
+                    .build();
+        }
+    }
 }

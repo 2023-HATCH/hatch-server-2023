@@ -1,7 +1,10 @@
 // 도메인 명 : h1
 == *USER*
 
-- link:user/page/kakao-login.html[카카오 로그인 & 회원가입, window=_blank]
+- link:user/page/kakao-login.html[(UPDATE) 카카오 로그인 & 회원가입, window=_blank]
+
+- link:user/page/kakao-logout.html[(NEW) 카카오 로그아웃, window=_blank]
+
 
 - link:user/page/get-profile.html[ 프로필 조회,window=_blank]
 

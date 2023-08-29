@@ -44,7 +44,7 @@ public class TestController {
 
     @GetMapping("/bd/login")
     // 회원가입&로그인 백도어
-    public ResponseEntity<CommonResponse> kakaoSignUpAndLoginBackdoor(@RequestParam Long userNum,
+    public ResponseEntity<CommonResponse> kakaoSignUpAndLoginBackdoor(@RequestParam Long userNum, @RequestParam String fcmToken,
                                                                       HttpServletResponse servletResponse) {
         log.info("[API] GET /api/v1/test/bd/login");
         KakaoDto.GetUserInfo dto = KakaoDto.GetUserInfo.builder()
@@ -52,7 +52,7 @@ public class TestController {
                 .nickname("user_" + userNum)
                 .profileImg(null)
                 .build();
-        User user = authService.signUpAndLogin(dto, servletResponse);
+        User user = authService.signUpAndLogin(dto, fcmToken, servletResponse);
         return ResponseEntity.ok().body(CommonResponse.toResponse(CommonCode.CREATED, UserResponseDto.KakaoLogin.toDto(user)));
     }
 

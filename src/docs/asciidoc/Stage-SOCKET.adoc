@@ -19,7 +19,7 @@
 
 -
 
-- link:stage-socket/page/mvp-start.html['(UPDATE) (응답) MVP세리머니 시작, MVP 정보', window=_blank]
+- link:stage-socket/page/mvp-start.html['(응답) MVP세리머니 시작, MVP 정보', window=_blank]
 - link:stage-socket/page/mvp-skeleton-send.html[MVP세리머니 스켈레톤 전송, window=_blank]
 - link:stage-socket/page/mvp-end.html[(응답) MVP세리머니 끝, window=_blank]
 
