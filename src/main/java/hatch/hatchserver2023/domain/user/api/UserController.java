@@ -126,7 +126,7 @@ public class UserController {
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 UserStatusCode.SEARCH_USERS_SUCCESS,
-                UserResponseDto.CommunityUserInfoList.toDto(userList)));
+                UserResponseDto.UserSearchInfoList.toDto(userList)));
     }
 
     /**

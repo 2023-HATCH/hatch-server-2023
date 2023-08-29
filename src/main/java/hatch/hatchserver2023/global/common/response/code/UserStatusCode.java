@@ -41,6 +41,7 @@ public enum UserStatusCode implements StatusCode {
     KAKAO_CONNECTION_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "5003", "카카오 사용자 정보 가져오기 실패"), //500
     KAKAO_NICKNAME_EMPTY(HttpStatus.INTERNAL_SERVER_ERROR, "5004", "카카오 사용자 정보에 닉네임 값이 없음"), //500
     CANT_FOLLOW_YOURSELF(HttpStatus.INTERNAL_SERVER_ERROR, "5011", "자기 자신을 팔로우할 수 없음"),     //500
+    ALREADY_FOLLOWED(HttpStatus.INTERNAL_SERVER_ERROR, "5012", "이미 팔로우 했음")
     ;
 
     private final HttpStatus status;

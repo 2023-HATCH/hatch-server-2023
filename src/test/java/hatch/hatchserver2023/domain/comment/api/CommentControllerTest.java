@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.comment.application.CommentService;
 import hatch.hatchserver2023.domain.comment.domain.Comment;
+import hatch.hatchserver2023.domain.video.application.VideoService;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.comment.dto.CommentRequestDto;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
@@ -71,6 +72,8 @@ public class CommentControllerTest {
 
     @MockBean
     CommentService commentService;
+    @MockBean
+    VideoService videoService;
 
     private Video video;
     private User user;
@@ -139,7 +142,10 @@ public class CommentControllerTest {
 
         String content = comment1.getContent();
 
-        given(commentService.createComment(eq(content), eq(video.getUuid()), any()))
+        given(videoService.findOne(video.getUuid()))
+                .willReturn(video);
+
+        given(commentService.createComment(eq(content), eq(video), any()))
                 .willReturn(comment1);
 
         CommentRequestDto requestDto = new CommentRequestDto(content);
@@ -250,7 +256,10 @@ public class CommentControllerTest {
         //given
         List<Comment> commentList = Arrays.asList(comment1, comment2);
 
-        given(commentService.getCommentList(video.getUuid()))
+        given(videoService.findOne(video.getUuid()))
+                .willReturn(video);
+
+        given(commentService.getCommentList(video))
                 .willReturn(commentList);
 
         //when

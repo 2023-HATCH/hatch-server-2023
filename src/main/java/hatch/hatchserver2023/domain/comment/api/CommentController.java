@@ -6,6 +6,8 @@ import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.comment.application.CommentService;
 import hatch.hatchserver2023.domain.comment.domain.Comment;
 import hatch.hatchserver2023.domain.comment.dto.CommentRequestDto;
+import hatch.hatchserver2023.domain.video.application.VideoService;
+import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.dto.VideoResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
@@ -25,9 +27,11 @@ import java.util.UUID;
 public class CommentController {
 
     private final CommentService commentService;
+    private final VideoService videoService;
 
-    public CommentController(CommentService commentService){
+    public CommentController(CommentService commentService, VideoService videoService){
         this.commentService = commentService;
+        this.videoService = videoService;
     }
 
 
@@ -46,7 +50,9 @@ public class CommentController {
                                              @PathVariable UUID videoId,
                                              @RequestBody @Valid CommentRequestDto request){
 
-        Comment comment = commentService.createComment(request.getContent(), videoId, user);
+        Video video = videoService.findOne(videoId);
+
+        Comment comment = commentService.createComment(request.getContent(), video, user);
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.COMMENT_REGISTER_SUCCESS,
@@ -85,7 +91,9 @@ public class CommentController {
     @GetMapping("/{videoId}")
     public ResponseEntity<CommonResponse> getCommentList(@PathVariable UUID videoId){
 
-        List<Comment> commentList = commentService.getCommentList(videoId);
+        Video video = videoService.findOne(videoId);
+
+        List<Comment> commentList = commentService.getCommentList(video);
 
         return ResponseEntity.ok(CommonResponse.toResponse(
                 VideoStatusCode.GET_COMMENT_LIST_SUCCESS,

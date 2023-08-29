@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.apache.commons.fileupload.FileItem;
@@ -31,23 +32,27 @@ import javax.imageio.ImageIO;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 
 @Slf4j
 @Service
+@Transactional
 public class VideoService {
 
     private final VideoRepository videoRepository;
     private final S3Service s3Service;
     private final LikeService likeService;
+    private final HashtagService hashtagService;
     private final VideoCacheUtil videoCacheUtil;
 
-    public VideoService(VideoRepository videoRepository, S3Service s3Service, LikeService likeService, VideoCacheUtil videoCacheUtil) {
+    public VideoService(VideoRepository videoRepository, S3Service s3Service, LikeService likeService, HashtagService hashtagService, VideoCacheUtil videoCacheUtil) {
         this.videoRepository = videoRepository;
         this.s3Service = s3Service;
         this.likeService = likeService;
+        this.hashtagService = hashtagService;
         this.videoCacheUtil = videoCacheUtil;
     }
 
@@ -75,12 +80,19 @@ public class VideoService {
      * @param uuid
      * @return isSuccess
      */
+    // TODO: rollback 추가?
+    @Transactional
     public void deleteOne(UUID uuid){
         Video video = getVideo(uuid);
 
-        // S3에 올라가 있는 동영상과 썸네일 또한 삭제
+        // S3에 올라가 있는 동영상과 썸네일 또한 삭제. 디폴트 썸네일이면 삭제 X
         s3Service.delete(video.getVideoUrl());
-        s3Service.delete(video.getThumbnailUrl());
+        if(!Objects.equals(video.getThumbnailUrl(), DEFAULT_THUMBNAIL_URL)){
+            s3Service.delete(video.getThumbnailUrl());
+        }
+
+        //연관 Hashtag DB에서 삭제
+        hashtagService.deleteHashtagByVideo(video);
 
         //Video 데이터 DB에서 삭제
         videoRepository.delete(video);
@@ -222,6 +234,7 @@ public class VideoService {
      * @param tag
      * @return video
      */
+    @Transactional
     public Video createVideo(MultipartFile video, User user, String title, String tag) {
         log.info("[VideoService] Single video Upload");
 

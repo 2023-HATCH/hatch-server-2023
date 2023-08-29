@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class HashtagService {
 
     private final HashtagRepository hashtagRepository;
@@ -122,6 +124,7 @@ public class HashtagService {
      * @param video
      * @return null
      */
+    @Transactional(rollbackFor = Exception.class)
     public void saveHashtag(String tag, Video video){
         // tag를 파싱
         String[] parsedTags = tag.split("#");
@@ -151,8 +154,25 @@ public class HashtagService {
 
     }
 
+    /**
+     * 영상 삭제 시 연관 해시태그들도 같이 삭제
+     *
+     * @param video
+     */
+    @Transactional
+    public void deleteHashtagByVideo(Video video){
+
+        List<VideoHashtag> maps = videoHashtagRepository.findAllByVideo(video);
+        List<Hashtag> hashtagList = maps.stream()
+                .map(VideoHashtag::getHashtag)
+                .collect(Collectors.toList());
+
+        hashtagList.forEach(hashtagRepository::delete);
+    }
+
     //해시태그 삭제 - 테스트용
-    public void delete(String title){
+    @Transactional
+    public void deleteByTitle(String title){
         Hashtag hashtag = hashtagRepository.findByTitle(title).get();
 
         //해시태그 db에서 삭제
