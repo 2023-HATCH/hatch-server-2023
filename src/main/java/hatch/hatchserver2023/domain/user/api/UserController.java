@@ -37,6 +37,23 @@ public class UserController {
         this.likeService = likeService;
     }
 
+    /**
+     * 전체 유저 조회
+     *
+     * @param loginUser
+     * @return userList except login user
+     */
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @GetMapping("/all")
+    public ResponseEntity<CommonResponse> getAllUser(@AuthenticationPrincipal User loginUser) {
+        List<User> userList = userUtilService.findAll(loginUser);
+
+        return ResponseEntity.ok(CommonResponse.toResponse(
+                UserStatusCode.GET_ALL_USER_SUCCESS,
+                UserResponseDto.UserSearchInfoList.toDto(userList)
+        ));
+    }
+
 
     /**
      * 프로필 조회
