@@ -67,6 +67,22 @@ public class UserUtilService {
 
 
     /**
+     * 전체 유저 조회
+     *
+     * @param loginUser
+     * @return userList except login user
+     */
+    public List<User> findAll(User loginUser) {
+        List<User> userList = userRepository.findAll();
+
+        //로그인한 사용자 자신은 제외
+        return userList.stream()
+                .filter(user -> !Objects.equals(user.getUuid(), loginUser.getUuid()))
+                .collect(Collectors.toList());
+    }
+
+
+    /**
      * 프로필 조회
      *
       * @param userId

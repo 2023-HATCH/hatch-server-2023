@@ -16,6 +16,7 @@ public enum UserStatusCode implements StatusCode {
     DELETE_FOLLOW_SUCCESS(HttpStatus.OK, "2022", "팔로우 삭제 성공"), //200
     GET_FOLLOW_LIST_SUCCESS_FOR_USER(HttpStatus.OK, "2023", "회원: 팔로잉/팔로워 목록 조회 성공"), //200
     GET_FOLLOW_LIST_SUCCESS_FOR_ANONYMOUS(HttpStatus.OK, "2024", "비회원: 팔로잉/팔로워 목록 조회 성공"), //200
+    GET_ALL_USER_SUCCESS(HttpStatus.OK, "2031", "로그인 유저를 제외한 전체 사용자 목록 조회 성공"), //200
 
     KAKAO_LOGOUT_SUCCESS(HttpStatus.NO_CONTENT, "2400", "카카오 로그인 사용자의 로그아웃 성공"), //204
 
