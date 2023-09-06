@@ -41,13 +41,13 @@ public class FcmNotificationUtil {
 
     private Message createMessage(String type, String token, String dto) {
         Notification notification = Notification.builder()
-                .setTitle(type)
-                .setBody(dto)
+                .setTitle(type) // TODO : nickname
+                .setBody(dto) // TODO : content
                 .build();
 
         return Message.builder()
                 .setToken(token)
-                .setNotification(notification)
+                .setNotification(notification) //TODO : putData() // chatRoomId, type
                 .build();
     }
 }
