@@ -41,6 +41,6 @@ public class ChatSocketController {
         simpMessagingTemplate.convertAndSend(CHAT_WS_SEND_URL_PREFIX + requestDto.getChatRoomId(),
                 CommonResponse.toSocketResponse(SocketResponseType.CHAT_MESSAGE, ChatResponseDto.SendChatMessage.toDto(model.getChatMessage())));
 
-        fcmNotificationUtil.sendChatMessageNotification(model.getOpponentUser(), ChatResponseDto.BasicChatMessage.toDto(model.getChatMessage()));
+        fcmNotificationUtil.sendChatMessageNotification(model.getOpponentUser(), requestDto.getChatRoomId(), ChatResponseDto.BasicChatMessage.toDto(model.getChatMessage()));
     }
 }

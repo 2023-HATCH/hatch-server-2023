@@ -11,17 +11,23 @@ import hatch.hatchserver2023.global.config.redis.FcmTokenDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Slf4j
 @Component
 public class FcmNotificationUtil {
-    private static final String FCM_SEND_CHAT_MESSAGE_TITLE = "CHAT_MESSAGE";
+    private static final String DATA_KEY_SEND_CHAT_MESSAGE_TYPE = "type";
+    private static final String DATA_KEY_SEND_CHAT_MESSAGE_CHAT_ROOM_ID = "chatRoomId";
+
+    private static final String FCM_SEND_CHAT_MESSAGE_TYPE = "SEND_CHAT_MESSAGE";
+
     private final FcmTokenDao fcmTokenDao;
 
     public FcmNotificationUtil(FcmTokenDao fcmTokenDao) {
         this.fcmTokenDao = fcmTokenDao;
     }
 
-    public void sendChatMessageNotification(User receiver, ChatResponseDto.BasicChatMessage requestDto) {
+    public void sendChatMessageNotification(User receiver, UUID chatRoomId, ChatResponseDto.BasicChatMessage requestDto) {
         log.info("[FCM] sendChatMessageNotification");
 
         if(!fcmTokenDao.isTokenExist(receiver)) {
@@ -29,7 +35,7 @@ public class FcmNotificationUtil {
         }
 
         String token = fcmTokenDao.getToken(receiver);
-        Message message = createMessage(FCM_SEND_CHAT_MESSAGE_TITLE, token, requestDto.toString());  //TODO : 상수화
+        Message message = createMessage(token, chatRoomId, requestDto);
 
         send(message);
     }
@@ -39,15 +45,17 @@ public class FcmNotificationUtil {
         FirebaseMessaging.getInstance().sendAsync(message); //비동기로 알림 요청 처리
     }
 
-    private Message createMessage(String type, String token, String dto) {
+    private Message createMessage(String token, UUID chatRoomId, ChatResponseDto.BasicChatMessage dto) {
         Notification notification = Notification.builder()
-                .setTitle(type) // TODO : nickname
-                .setBody(dto) // TODO : content
+                .setTitle(dto.getSender().getNickname())
+                .setBody(dto.getContent())
                 .build();
 
         return Message.builder()
                 .setToken(token)
-                .setNotification(notification) //TODO : putData() // chatRoomId, type
+                .setNotification(notification)
+                .putData(DATA_KEY_SEND_CHAT_MESSAGE_TYPE, FCM_SEND_CHAT_MESSAGE_TYPE)
+                .putData(DATA_KEY_SEND_CHAT_MESSAGE_CHAT_ROOM_ID, String.valueOf(chatRoomId))
                 .build();
     }
 }
