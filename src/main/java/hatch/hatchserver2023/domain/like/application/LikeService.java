@@ -2,14 +2,11 @@ package hatch.hatchserver2023.domain.like.application;
 
 
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.domain.like.domain.Like;
-import hatch.hatchserver2023.domain.video.VideoCacheUtil;
+import hatch.hatchserver2023.domain.video.application.VideoCacheUtil;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.like.repository.LikeRepository;
 import hatch.hatchserver2023.domain.video.dto.VideoModel;
-import hatch.hatchserver2023.domain.video.repository.VideoRepository;
-import hatch.hatchserver2023.domain.like.LikeCacheUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

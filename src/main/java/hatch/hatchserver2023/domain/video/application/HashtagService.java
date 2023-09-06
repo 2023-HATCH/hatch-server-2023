@@ -2,7 +2,6 @@ package hatch.hatchserver2023.domain.video.application;
 
 import hatch.hatchserver2023.domain.like.application.LikeService;
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.domain.video.VideoCacheUtil;
 import hatch.hatchserver2023.domain.video.domain.Hashtag;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.domain.VideoHashtag;

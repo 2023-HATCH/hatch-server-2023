@@ -1,4 +1,4 @@
-package hatch.hatchserver2023.domain.video;
+package hatch.hatchserver2023.domain.video.application;
 
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;

@@ -2,7 +2,7 @@ package hatch.hatchserver2023.domain.comment.application;
 
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.comment.domain.Comment;
-import hatch.hatchserver2023.domain.video.VideoCacheUtil;
+import hatch.hatchserver2023.domain.video.application.VideoCacheUtil;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.comment.repository.CommentRepository;
 import hatch.hatchserver2023.global.common.response.code.VideoStatusCode;
