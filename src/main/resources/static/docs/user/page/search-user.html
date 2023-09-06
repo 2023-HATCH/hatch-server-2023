@@ -527,6 +527,12 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 경로</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>introduce</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">자기소개</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -536,28 +542,31 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 716
+Content-Length: 842
 
 {
-  "timeStamp" : "2023/08/23 23:33:14",
+  "timeStamp" : "2023/09/06 23:15:17",
   "code" : "USER-2015",
   "message" : "[사용자] 계정 검색 성공",
   "data" : {
     "userList" : [ {
-      "userId" : "4c56ff8f-9ea8-4bc3-92d3-32d751ee3a90",
+      "userId" : "158014f4-647b-4163-b1e9-c7a8c54e8bec",
       "nickname" : "user1",
       "email" : "user1@gmail.com",
-      "profileImg" : "프로필 이미지 경로"
+      "profileImg" : "프로필 이미지 경로",
+      "introduce" : "user1 입니다"
     }, {
-      "userId" : "49e861dc-25a4-446e-a2d4-620dcdca4d4c",
+      "userId" : "5ecb622b-f068-4c87-9ac7-a06f680ff6c8",
       "nickname" : "user2",
       "email" : "user2@gmail.com",
-      "profileImg" : "프로필 이미지 경로 2"
+      "profileImg" : "프로필 이미지 경로 2",
+      "introduce" : "user2 입니다 :)"
     }, {
-      "userId" : "57b7ba10-7316-4860-8af9-7864272e0072",
+      "userId" : "a741ff32-d7bb-4488-b55f-2d7da1d49bf4",
       "nickname" : "user3",
       "email" : "user3@gmail.com",
-      "profileImg" : "프로필 이미지 경로 3"
+      "profileImg" : "프로필 이미지 경로 3",
+      "introduce" : "user3 입니다 XD"
     } ]
   }
 }</code></pre>
@@ -570,7 +579,7 @@ Content-Length: 716
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-16 15:14:43 +0900
+Last updated 2023-08-24 02:24:33 +0900
 </div>
 </div>
 </body>
