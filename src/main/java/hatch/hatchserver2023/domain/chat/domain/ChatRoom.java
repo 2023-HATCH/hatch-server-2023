@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 import java.util.UUID;
 
 @Getter
@@ -43,6 +44,11 @@ public class ChatRoom extends BaseTimeEntity {
     public void prePersist() {
         this.uuid = UUID.randomUUID();
         super.prePersist(); //BaseTimeEntity
+    }
+
+    public void updateRecentDatas(String recentContent, String recentSendAt) {
+        this.recentContent = recentContent;
+        this.recentSendAt = ZonedDateTime.parse(recentSendAt, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").withZone(TimeZone.getTimeZone("Asia/Seoul").toZoneId()));
     }
 
 

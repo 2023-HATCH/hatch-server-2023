@@ -36,6 +36,10 @@ public class ChatModel {
             }
             return chatRoomInfos;
         }
+
+        public void updateChatRoom(ChatRoom chatRoom) {
+            this.chatRoom = chatRoom;
+        }
     }
 
     @ToString

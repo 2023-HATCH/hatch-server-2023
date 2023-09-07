@@ -1,4 +1,4 @@
-package hatch.hatchserver2023.domain.video;
+package hatch.hatchserver2023.domain.video.application;
 
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;
@@ -229,25 +229,6 @@ public class VideoCacheUtil {
         return updatedCount;
     }
 
-    /**
-     * Redis 에서 String자료형의 데이터 존재여부 확인 후 Redis또는 RDB에서 가져옴 -> String 을 Hash로 바꿔서 쓸모 사라짐
-     * @param key
-     * @param video
-     * @return
-     */
-    private int getStringCacheData(String key, Video video) {
-        Object countObject = redisDao.getValues(key);
-
-        int commentCount;
-        if(countObject == null) {
-            // redis 에 없으면 RDB에서 가져온 데이터 사용
-            commentCount = video.getViewCount();
-        } else {
-            // redis 에 있으면 그걸로 사용
-            commentCount = Integer.parseInt(countObject.toString());
-        }
-        return commentCount;
-    }
 
     private void saveVideoCountData(long videoId, String hashKey, int count) {
         redisDao.setValuesHash(toVideoCountDataKey(videoId), hashKey, count);
@@ -276,4 +257,27 @@ public class VideoCacheUtil {
         String[] keySplit = key.split(":");
         return Long.parseLong(keySplit[keySplit.length-1]);
     }
+
+
+    /**
+     * Redis 에서 String자료형의 데이터 존재여부 확인 후 Redis또는 RDB에서 가져옴 -> String 을 Hash로 바꿔서 쓸모 사라짐
+     * @param key
+     * @param video
+     * @return
+     */
+/*
+    private int getStringCacheData(String key, Video video) {
+        Object countObject = redisDao.getValues(key);
+
+        int commentCount;
+        if(countObject == null) {
+            // redis 에 없으면 RDB에서 가져온 데이터 사용
+            commentCount = video.getViewCount();
+        } else {
+            // redis 에 있으면 그걸로 사용
+            commentCount = Integer.parseInt(countObject.toString());
+        }
+        return commentCount;
+    }
+*/
 }

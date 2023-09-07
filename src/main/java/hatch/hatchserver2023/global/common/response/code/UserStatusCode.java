@@ -28,6 +28,7 @@ public enum UserStatusCode implements StatusCode {
     UUID_NOT_FOUND(HttpStatus.UNAUTHORIZED, "4103", "이 UUID 에 해당하는 사용자 없음"), //401
     UUID_IS_NULL(HttpStatus.UNAUTHORIZED, "4104", "UUID 값이 비었음"), //401
     COOKIE_LIST_IS_EMPTY(HttpStatus.UNAUTHORIZED, "4105", "쿠키 목록이 비었음"), //401
+    FCM_NOTIFICATION_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "4106", "알림을 보낼 수 없음. FCM 알림 토큰이 존재하지 않는 사용자임"), //401
 
     USER_PRE_FORBIDDEN(HttpStatus.FORBIDDEN, "4306", "사용자 권한 부족 (api 메서드 단위)"), //403
 

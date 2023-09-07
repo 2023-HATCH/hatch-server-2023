@@ -6,7 +6,7 @@ import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserModel;
 import hatch.hatchserver2023.domain.user.repository.FollowRepository;
 import hatch.hatchserver2023.domain.user.repository.UserRepository;
-import hatch.hatchserver2023.domain.video.VideoCacheUtil;
+import hatch.hatchserver2023.domain.video.application.VideoCacheUtil;
 import hatch.hatchserver2023.domain.video.domain.Video;
 import hatch.hatchserver2023.domain.video.dto.VideoModel;
 import hatch.hatchserver2023.domain.video.repository.VideoRepository;

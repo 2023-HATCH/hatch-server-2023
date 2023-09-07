@@ -10,7 +10,6 @@ import hatch.hatchserver2023.domain.chat.repository.UserChatRoomRepository;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.response.code.ChatStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.ChatException;
-import hatch.hatchserver2023.global.common.response.exception.DefaultException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Transactional(readOnly = true)
@@ -32,10 +32,13 @@ public class ChatService {
     private final UserChatRoomRepository userChatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
 
-    public ChatService(ChatRoomRepository chatRoomRepository, UserChatRoomRepository userChatRoomRepository, ChatMessageRepository chatMessageRepository) {
+    private final ChatCacheUtil chatCacheUtil;
+
+    public ChatService(ChatRoomRepository chatRoomRepository, UserChatRoomRepository userChatRoomRepository, ChatMessageRepository chatMessageRepository, ChatCacheUtil chatCacheUtil) {
         this.chatRoomRepository = chatRoomRepository;
         this.userChatRoomRepository = userChatRoomRepository;
         this.chatMessageRepository = chatMessageRepository;
+        this.chatCacheUtil = chatCacheUtil;
     }
 
     @Transactional(rollbackFor = ChatException.class) // 로직상 발생시킨 에러 발생 시 롤백시킬 것
@@ -77,8 +80,17 @@ public class ChatService {
     public List<ChatModel.ChatRoomInfo> getChatRoomInfos(User user) {
         log.info("[SERVICE] getChatRoomInfos");
         List<UserChatRoom> opponentUserChatRooms = getOpponentChatRooms(user);
+        List<ChatModel.ChatRoomInfo> chatRoomInfos = ChatModel.ChatRoomInfo.toModels(opponentUserChatRooms); //fetch lazy 에러 안생김
 
-        return ChatModel.ChatRoomInfo.toModels(opponentUserChatRooms); //fetch lazy 에러 안생김
+        // redis 에 캐싱되어있는 최근 전송 데이터가 반영된 chatRoom 으로 바꿔줌
+        List<ChatModel.ChatRoomInfo> updatedChatRoomInfos = chatRoomInfos.stream().peek(info -> // peek : 여기서 map과 동일하게 쓰임
+                info.updateChatRoom(chatCacheUtil.getRecentUpdatedChatRoom(info.getChatRoom()))
+        ).collect(Collectors.toList());
+        log.info("updatedChatRoomInfos.get(0) : {}", updatedChatRoomInfos.get(0).getChatRoom().getRecentContent());
+        log.info("updatedChatRoomInfos.get(1) : {}", updatedChatRoomInfos.get(1).getChatRoom().getRecentContent());
+        log.info("updatedChatRoomInfos.get(1) : {}", updatedChatRoomInfos.get(1).getChatRoom().getRecentSendAt());
+
+        return updatedChatRoomInfos;
     }
 
     @Transactional(rollbackFor = ChatException.class)
@@ -107,6 +119,8 @@ public class ChatService {
                         .content(content)
                         .build();
         ChatMessage savedChatMessage = chatMessageRepository.save(chatMessage);
+
+        chatCacheUtil.saveRecentContent(savedChatMessage.getChatRoom(), savedChatMessage.getContent(), savedChatMessage.getCreatedAtString());
 
         return ChatModel.SendChatMessage.toModel(savedChatMessage, opponentUser);
     }
