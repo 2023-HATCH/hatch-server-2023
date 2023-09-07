@@ -1,0 +1,98 @@
+
+// api 명 : h3
+== *Mid Score*
+(응답) 스테이지 중간점수 정보 전달
+
+NOTE: MVP Start 와 응답 동일합니다. 가장 중간 유사도가 높은 사용자를 mvp 로 선정한 결과도 보내줍니다.
+
+- 플레이에 참여한 사용자들의 playerNum과 중간 유사도값을 포함한 정보를 보내줍니다.
+- 정상적인 유사도 값은 -1과 1 사이입니다. +
+플레이에 참여했지만 스켈레톤을 한개도 보내지 않은 사용자의 유사도는 `-100` 입니다. +
+플레이에 참여하여 유사도를 계산할 수 없을 정도로 스켈레톤을 너무 적게 보낸 사용자의 유사도는 `-99` 입니다.
+
+==== Response fields
+|===
+|필드명|타입|필수여부|설명
+|`+timeStamp+`
+|`+LocalDateTime+`
+|true
+|응답 시각
+|`+type+`
+|`+String+`
+|true
+|소켓 통신 유형. 고정값(MID_SCORE)
+|`+message+`
+|`+String+`
+|true
+|소켓 통신 유형 설명
+|`+data.mvpPlayerNum+`
+|`+Integer+`
+|true
+|MVP 사용자 플레이어 번호(playerNum)
+|`+data.playerInfos+`
+|`+-+`
+|true
+|플레이어들 정보
+|`+data.playerInfos.playerNum+`
+|`+Integer+`
+|true
+|이 사용자의 플레이어 번호
+|`+data.playerInfos.similarity+`
+|`+Float+`
+|true
+|이 사용자의 유사도
+|`+data.playerInfos.player.userId+`
+|`+UUID+`
+|true
+|사용자 식별자
+|`+data.playerInfos.player.nickname+`
+|`+String+`
+|true
+|사용자 닉네임
+|`+data.playerInfos.player.profileImg+`
+|`+String+`
+|false
+|사용자 프로필 이미지 url
+|===
+
+
+==== Response body
+[source,http,options="nowrap"]
+----
+$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
+content-length: 283
+message-id: 7e698390-06df-6ece-56b5-94b60d6e675c-38
+subscription:sub-0
+content-type:application/json
+destination:/topic/stage
+content-length: 283
+
+{
+    "timeStamp": "2023/08/16 23:00:17",
+    "type": "MID_SCORE",
+    "message": "스테이지 플레이 중간점수 전달",
+    "data": {
+        "mvpPlayerNum": 0,
+        "playerInfos": [
+            {
+                "playerNum": 0,
+                "similarity": -99.0,
+                "player": {
+                    "userId": "8bd9357c-ff99-4db8-96c9-486d1aaf942f",
+                    "nickname": "user_33",
+                    "profileImg": null
+                }
+            },
+            {
+                "playerNum": 1,
+                "similarity": -100.0,
+                "player": {
+                    "userId": "8bd9357c-ff99-4db8-96c9-486d1aaf942f",
+                    "nickname": "user_3",
+                    "profileImg": null
+                }
+            }
+        ]
+    }
+}
+----
