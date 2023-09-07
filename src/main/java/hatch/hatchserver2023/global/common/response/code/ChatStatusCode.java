@@ -13,8 +13,8 @@ public enum ChatStatusCode implements StatusCode {
 
     //4xx
     CHAT_ROOM_UUID_NOT_FOUND(HttpStatus.NOT_FOUND, "4400", "이 uuid 에 해당하는 채팅방을 찾을 수 없음"), //404
-    CHAT_NOTIFICATION_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "4401", "채팅 푸시알림 전송 실패 - 수신자의 알림 토큰이 존재하지 않음"), //404
-
+//    CHAT_NOTIFICATION_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "4401", "채팅 푸시알림 전송 실패 - 수신자의 알림 토큰이 존재하지 않음"), //404
+    CHAT_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "4402", "이 id 에 해당하는 채팅방을 찾을 수 없음"), //404
 
 
     //5xx

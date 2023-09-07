@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -95,6 +97,16 @@ public class RedisDao {
         values.put(key, String.valueOf(hashKey), String.valueOf(data));
     }
 
+    /**
+     * Hash 에 데이터를 여러개 저장하는 메서드
+     * @param key : 해시 키값. 해시의 이름같은 것
+     * @param datas : map 형식의 데이터
+     */
+    public void setValuesAllHash(String key, Map datas) {
+        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
+        values.putAll(key, datas);
+    }
+
 
     ///////// == get method == /////////
     /**
@@ -175,6 +187,16 @@ public class RedisDao {
     public Object getValuesHash(String key, Object hashKey) {
         HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
         return values.get(key, hashKey); //TODO : String.valueOf(hashKey) 거나 serializer 바꾸거나
+    }
+
+    /**
+     * Hash 에서 데이터를 여러개 가져오는 메서드
+     * @param key : 해시 키값. 객체의 이름과 비슷함
+     * @param hashKeys : 이 해시 내에서의 찾으려는 키값. 객체의 필드명과 비슷함
+     */
+    public List<Object> getValuesAllHash(String key, List<Object> hashKeys) {
+        HashOperations<String, Object, Object> values = redisTemplate.opsForHash();
+        return values.multiGet(key, hashKeys); // 반환값 순서는 해시키 순서와 같게 옴
     }
 
     /**
