@@ -1,3 +1,36 @@
 == 댓글 등록
 
+NOTE: 가장 아래에 댓글 작성 푸시알림 관련 명세가 있습니다.
+
 operation::post-add-comment[snippets='http-request,request-headers,request-body,response-fields-beneath-data,http-response']
+
+=== Push Notification fields
+
+푸시알림 시 전달되는 데이터 정보
+
+NOTE: 김수빈 사용자가 "안녕하세요~" 라는 댓글을 작성하면, +
+title은 "안녕하세요~", content는 "김수빈님이 댓글을 남겼습니다." 라고 푸시알림이 오게됩니다.
+
+|===
+|전달방식|필드명|타입|필수여부|설명
+|title
+|`+-+`
+|`+String+`
+|true
+|작성한 댓글 내용
+|content
+|`+-+`
+|`+String+`
+|true
+|댓글 작성자의 닉네임 + "님이 댓글을 남겼습니다."
+|data
+|`+type+`
+|`+String+`
+|true
+|알림 유형. 고정값(ADD_COMMENT)
+|data
+|`+commentId+`
+|`+UUID+`
+|true
+|생성된 댓글의 UUID
+|===
