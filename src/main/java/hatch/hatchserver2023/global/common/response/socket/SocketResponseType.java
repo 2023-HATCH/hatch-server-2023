@@ -22,7 +22,7 @@ public enum SocketResponseType implements StatusCode {
 
     STAGE_EXIT( "STAGE_EXIT", "스테이지 퇴장"),
     STAGE_ROUTINE_STOP( "STAGE_ROUTINE_STOP", "스테이지 진행 멈춤"),
-    ;
+    MID_SCORE("MID_SCORE", "스테이지 플레이 중간점수 전달");
 
     private final String type;
     private final String message;

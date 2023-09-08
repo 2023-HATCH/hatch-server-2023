@@ -51,11 +51,15 @@ public class StageSocketResponser {
         sendToStage(SocketResponseType.PLAY_START);
     }
 
+    public void sendMidScore(int mvpPlayerNum, List<StageModel.PlayerResultInfo> playerResultInfos) {
+        sendToStage(SocketResponseType.MID_SCORE, StageSocketResponseDto.PlayResult.toDto(mvpPlayerNum, playerResultInfos));
+    }
+
     public void endPlay() {
         sendToStage(SocketResponseType.PLAY_END);
     }
 
-    public void startMVP(int mvpPlayerNum, List<StageModel.PlayerResultInfo> playerResultInfos) { //int mvpPlayerNum, List<UserResponseDto.SimpleUserProfile> users
+    public void startMVP(int mvpPlayerNum, List<StageModel.PlayerResultInfo> playerResultInfos) {
         sendToStage(SocketResponseType.MVP_START, StageSocketResponseDto.PlayResult.toDto(mvpPlayerNum, playerResultInfos));
     }
 
