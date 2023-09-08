@@ -2,7 +2,7 @@
 
 
 
-- link:comment/page/post-add-comment.html[댓글 추가, window=_blank]
+- link:comment/page/post-add-comment.html[ (UPDATE) 댓글 추가, window=_blank]
 
 
 - link:comment/page/delete-comment.html[댓글 삭제, window=_blank]

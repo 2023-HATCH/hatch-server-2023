@@ -16,7 +16,7 @@ public class FcmNotificationUtil {
 
     // 푸시 알림 유형. 이곳에 상수값을 추가해서 사용할 것. key 값이 type 인 데이터의 value 값으로 사용됨
     public static final String TYPE_SEND_CHAT_MESSAGE = "SEND_CHAT_MESSAGE";
-//    public static final String TYPE_ADD_COMMENT = "ADD_COMMENT"; // 예시
+    public static final String TYPE_ADD_COMMENT = "ADD_COMMENT";
     
     private final FcmTokenDao fcmTokenDao;
 
