@@ -21,10 +21,12 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final VideoCacheUtil videoCacheUtil;
+    private final CommentFcmUtil commentFcmUtil;
 
-    public CommentService(CommentRepository commentRepository, VideoCacheUtil videoCacheUtil){
+    public CommentService(CommentRepository commentRepository, VideoCacheUtil videoCacheUtil, CommentFcmUtil commentFcmUtil){
         this.commentRepository = commentRepository;
         this.videoCacheUtil = videoCacheUtil;
+        this.commentFcmUtil = commentFcmUtil;
     }
 
 
@@ -49,6 +51,9 @@ public class CommentService {
 
         // redis 에 댓글 수 저장 (증가)
         videoCacheUtil.increaseCommentCount(video);
+
+        // 푸시알림 보내기
+        commentFcmUtil.sendAddCommentNotification(video.getUser(), comment);
 
         return comment;
     }
