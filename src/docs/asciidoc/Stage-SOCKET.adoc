@@ -15,6 +15,7 @@
 
 - link:stage-socket/page/play-start.html[(응답) 플레이 시작, window=_blank]
 - link:stage-socket/page/play-skeleton-send.html[플레이 스켈레톤 전송, window=_blank]
+- link:stage-socket/page/mid-score.html[(NEW) (응답) 중간점수 전달, window=_blank]
 - link:stage-socket/page/play-end.html[(응답) 플레이 끝, window=_blank]
 
 -
