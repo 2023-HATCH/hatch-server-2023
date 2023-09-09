@@ -34,11 +34,13 @@ public class StageRoutineService {
     private static final String STAGE_STATUS_MVP_END = "MVP_END";
 
     public static final int STAGE_PLAYER_COUNT_VALUE = 3;
+    public static final int STAGE_MID_SCORE_NUM_WHEN_ALL = -1;
 
     private static final int STAGE_CATCH_TIME = 3;
     private static final int STAGE_CATCH_AGAIN_INTERVAL = 2;
     private static final int STAGE_MVP_TIME = 7;
     public static final int STAGE_CATCH_SUCCESS_LAST_INDEX = 2;
+    private static final int STAGE_MID_SCORE_TIME_INTERVAL = 4;
 
     private final UserRepository userRepository;
     private final MusicRepository musicRepository;
@@ -79,9 +81,13 @@ public class StageRoutineService {
                 }
 
                 // 플레이 시작
+//                int playTime = startPlay(music);
+//                log.info("StageRoutineUtil sleep playTime : {}", playTime);
+//                TimeUnit.SECONDS.sleep(playTime);
+                
                 int playTime = startPlay(music);
-                log.info("StageRoutineUtil sleep playTime : {}", playTime);
-                TimeUnit.SECONDS.sleep(playTime);
+                repeatMidScore(playTime);
+
                 endPlay();
 
                 // MVP 시작
@@ -153,6 +159,26 @@ public class StageRoutineService {
         return readyTime + musicTime;
     }
 
+    private void repeatMidScore(int playTimeRemain) throws InterruptedException {
+        int midScoreNum = 0;
+        while(playTimeRemain > STAGE_MID_SCORE_TIME_INTERVAL) {
+            TimeUnit.SECONDS.sleep(STAGE_MID_SCORE_TIME_INTERVAL);
+            sendMidScore(midScoreNum);
+            midScoreNum += 1;
+            playTimeRemain -= STAGE_MID_SCORE_TIME_INTERVAL;
+        }
+
+        TimeUnit.SECONDS.sleep(playTimeRemain);
+    }
+
+    private void sendMidScore(int midScoreNum) {
+        Map<Integer, Float> similarities = new HashMap<Integer, Float>();
+        int mvpPlayerNum = getSimilarityAndMvp(similarities, false, midScoreNum);
+
+        List<StageModel.PlayerResultInfo> playerResultInfos = getPlayerResultInfos(similarities);
+        stageSocketResponser.sendMidScore(mvpPlayerNum, playerResultInfos);
+    }
+
     private void endPlay() {
         log.info("StageRoutineUtil endPlay");
         stageDataUtil.setStageStatus(STAGE_STATUS_PLAY_END);
@@ -164,33 +190,10 @@ public class StageRoutineService {
         log.info("StageRoutineUtil startMVP");
 
         Map<Integer, Float> similarities = new HashMap<Integer, Float>();
-        int mvpPlayerNum = getSimilarityAndMvp(similarities);
+        int mvpPlayerNum = getSimilarityAndMvp(similarities, true, STAGE_MID_SCORE_NUM_WHEN_ALL);
 
         // redis 에서 playerNum 전부의 사용자 정보 가져와서 playerNum과 유사도 더한 플레이어 결과 정보로 만듦
-//        Map<Integer, UserResponseDto.SimpleUserProfile> players = new HashMap<Integer, UserResponseDto.SimpleUserProfile>();
-        List<StageModel.PlayerResultInfo> playerResultInfos = new ArrayList<>();
-        for(int i=0; i<STAGE_PLAYER_COUNT_VALUE; i++) {
-            try{
-                UserResponseDto.SimpleUserProfile player = stageDataUtil.getPlayerUserInfo(i);
-                Float similarity = similarities.get(i)==null ? -100f : similarities.get(i);
-                StageModel.PlayerResultInfo playerResultInfo = StageModel.PlayerResultInfo.builder()
-                        .playerNum(i)
-                        .similarity(similarity)
-                        .player(player)
-                        .build();
-                playerResultInfos.add(playerResultInfo);
-            } catch(StageException e){
-                if(e.getCode() == StageStatusCode.FAIL_GET_PLAYER_USER_FROM_REDIS) {
-                    log.info("startMVP : player of this playerNum not exist. skip");
-                }
-                else {
-                    throw e;
-                }
-            }
-        }
-
-//        // mvp 선정된 playerNum에 해당하는 플레이어 사용자정보 가져오기
-//        UserResponseDto.SimpleUserProfile mvpUser = stageDataUtil.getPlayerUserInfo(mvpPlayerNum);
+        List<StageModel.PlayerResultInfo> playerResultInfos = getPlayerResultInfos(similarities);
 
         // 상태 변경, 응답
         stageDataUtil.setStageStatus(STAGE_STATUS_MVP);
@@ -199,7 +202,7 @@ public class StageRoutineService {
         stageSocketResponser.startMVP(mvpPlayerNum, playerResultInfos);
 
         // 캐치, 플레이 데이터 초기화
-        initPlayData();
+        initDataAfterPlay();
     }
 
     private void endMVP() {
@@ -215,6 +218,8 @@ public class StageRoutineService {
 //            log.info("endMVP set STAGE_ENTER_USER_COUNT = 0");
             stageDataUtil.setStageStatus(STAGE_STATUS_WAIT);
         }
+
+        initDataAfterMvp();
     }
 
 
@@ -235,34 +240,52 @@ public class StageRoutineService {
      * 각 플레이어들의 유사도를 계산하여 MVP를 선정하고 MVP유저의 playerNum을 반환하는 메서드
      * @return
      */
-    private int getSimilarityAndMvp(Map<Integer, Float> similarities) {
-        float maxSimilarity = -100;  //TODO : 서버측 테스트를 위해 유사도 기본값을 -99보다 작게 함 (추후 -2로 변경)
-        int maxPlayerNum = 0; //TODO : 테스트가 용이하도록 아무도 플레이 스켈레톤을 전송하지 않으면 playerNum 0 번 유저가 mvp 가 되도록 설정
+    private int getSimilarityAndMvp(Map<Integer, Float> similarities, boolean isAll, int midScoreNum) {
+        float maxSimilarity = -100;  // 계산할 스켈레톤이 없는 경우 -100 으로 응답됨
+        int maxPlayerNum = 0; // 아무도 플레이 스켈레톤을 전송하지 않으면 playerNum 0 번 유저가 mvp 가 되도록 설정
 
         // 유사도 계산하여 mvp 정하기
         for(int i = 0; i<STAGE_PLAYER_COUNT_VALUE; i++){
+
+            String previousIndex = null;
+            int startIndex = 0; // 전체일 경우 0부터 시작
+            if(!isAll){ // 전체가 아닐 경우
+                // 스켈레톤 가져와야 하는 시작 지점 가져옴
+                previousIndex = redisDao.getValues(StageDataUtil.KEY_STAGE_PLAYER_SKELETON_MID_INDEX + i);
+                if(previousIndex!=null){
+                    startIndex = Integer.parseInt(previousIndex)+1; // 직전 인덱스의 다음 인덱스부터 가져옴
+                }
+            }
+            log.info("previousIndex : {}", previousIndex);
+            log.info("startIndex : {}", startIndex);
+
             // redis 에 저장해둔 스켈레톤 가져옴
-            Set<String> skeletonStringSet = redisDao.getValuesZSetAll(StageDataUtil.KEY_STAGE_PLAYER_SKELETON +i);
+            Set<String> skeletonStringSet = getSkeletonData(i, startIndex);
             if(skeletonStringSet==null || skeletonStringSet.isEmpty()) { // 이 유저의 스켈레톤이 비어있을 경우
                 continue;
+            } else {
+                // 이번에 가져온 스켈레톤 개수 + 이전 인덱스 - 1로 인덱스 값 업데이트
+                int nextIndex = startIndex+skeletonStringSet.size()-1;
+                redisDao.setValues(StageDataUtil.KEY_STAGE_PLAYER_SKELETON_MID_INDEX + i, nextIndex);
+                log.info("nextIndex : {}", nextIndex);
             }
 
             // 원래 자료형으로 형변환
             Float[][] skeletonFloatArray = skeletonToFloatArrays(skeletonStringSet);
-            log.info("endPlay skeletonFloatArray size : {}", skeletonFloatArray.length);
-            log.info("endPlay skeletonFloatArray : {}", skeletonFloatArray);
-//            log.info("endPlay skeletonFloatArray[0] : {}", skeletonFloatArray[0]);
-//            log.info("endPlay skeletonFloatArray[0][0] : {}", skeletonFloatArray[0][0]);
-//            log.info("endPlay skeletonFloatArray[0][0] : {}", skeletonFloatArray[1][0]);
+            log.info("getSimilarityAndMvp : skeletonFloatArray size : {}", skeletonFloatArray.length);
+            log.info("getSimilarityAndMvp : skeletonFloatArray : {}", skeletonFloatArray);
+//            log.info("getSimilarityAndMvp skeletonFloatArray[0] : {}", skeletonFloatArray[0]);
+//            log.info("getSimilarityAndMvp skeletonFloatArray[0][0] : {}", skeletonFloatArray[0][0]);
+//            log.info("getSimilarityAndMvp skeletonFloatArray[0][0] : {}", skeletonFloatArray[1][0]);
 
             String title = stageDataUtil.getStageMusic().getTitle();
             // 유사도 계산
             float similarity;
 //            float similarity=0f;
             try{
-                similarity = aiService.calculateSimilarity(title, skeletonFloatArray); //TODO
-                log.info("endPlay skeletonFloatArray size 2 : {}", skeletonFloatArray.length);
-                log.info("endPlay music {} playerNum {} similarity : {}", title, i, similarity);
+                similarity = aiService.calculateSimilarity(title, skeletonFloatArray, midScoreNum);
+                log.info("getSimilarityAndMvp : skeletonFloatArray size 2 : {}", skeletonFloatArray.length);
+                log.info("getSimilarityAndMvp : music {} playerNum {} similarity : {}", title, i, similarity);
             }catch (NullPointerException e) {
                 throw new StageException(StageStatusCode.MUSIC_NOT_FOUND);
             }
@@ -278,6 +301,40 @@ public class StageRoutineService {
         }
         return maxPlayerNum;
     }
+
+    private Set<String> getSkeletonData(int i, int startIndex) {
+        return redisDao.getValuesZSet(StageDataUtil.KEY_STAGE_PLAYER_SKELETON + i, startIndex, -1);
+    }
+
+    /**
+     * 각 플레이어의 사용자정보, playerNum, 유사도를 합쳐서 유사도 응답으로 만드는 메서드
+     * @param similarities
+     * @return
+     */
+    private List<StageModel.PlayerResultInfo> getPlayerResultInfos(Map<Integer, Float> similarities) {
+        List<StageModel.PlayerResultInfo> playerResultInfos = new ArrayList<>();
+        for(int i=0; i<STAGE_PLAYER_COUNT_VALUE; i++) {
+            try{
+                UserResponseDto.SimpleUserProfile player = stageDataUtil.getPlayerUserInfo(i);
+                Float similarity = similarities.get(i)==null ? -100f : similarities.get(i);
+                StageModel.PlayerResultInfo playerResultInfo = StageModel.PlayerResultInfo.builder()
+                        .playerNum(i)
+                        .similarity(similarity)
+                        .player(player)
+                        .build();
+                playerResultInfos.add(playerResultInfo);
+            } catch(StageException e){
+                if(e.getCode() == StageStatusCode.FAIL_GET_PLAYER_USER_FROM_REDIS) {
+                    log.info("getPlayerResultInfos : player of this playerNum not exist. skip");
+                }
+                else {
+                    throw e;
+                }
+            }
+        }
+        return playerResultInfos;
+    }
+
 
 
     /**
@@ -310,13 +367,22 @@ public class StageRoutineService {
     }
 
     /**
-     * 플레이 데이터 초기화 메서드
+     * 캐치, 플레이 데이터 초기화 메서드
      */
-    private void initPlayData() {
+    private void initDataAfterPlay() {
         for (int i=0; i<=STAGE_CATCH_SUCCESS_LAST_INDEX; i++) {
-            redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_SKELETON +i);
+            redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_SKELETON + i);
         }
+    }
+
+    /**
+     * MVP 종료 후 이번 스테이지 데이터를 초기화하는 메서드
+     */
+    private void initDataAfterMvp() {
         redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_INFO_HASH);
+        for (int i=0; i<=STAGE_CATCH_SUCCESS_LAST_INDEX; i++) {
+            redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_SKELETON_MID_INDEX + i);
+        }
     }
 
     private int getSendStageUserCount() {

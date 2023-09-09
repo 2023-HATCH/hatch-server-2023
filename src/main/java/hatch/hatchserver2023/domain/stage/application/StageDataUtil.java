@@ -29,6 +29,7 @@ public class StageDataUtil { //public 이 상수KEY는 다른 곳에서 한번�
 
     public static final String KEY_STAGE_PLAYER_INFO_HASH = KEY_PREFIX_STAGE+"player:info";
     public static final String KEY_STAGE_PLAYER_SKELETON = KEY_PREFIX_STAGE+"player:skeleton:";
+    public static final String KEY_STAGE_PLAYER_SKELETON_MID_INDEX = KEY_PREFIX_STAGE+"player:skeleton:midIndex:";
 
     private final RedisDao redisDao;
 
