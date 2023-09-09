@@ -447,7 +447,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_동영상의_댓글_목록_조회_http_request">HTTP request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/comments/48b257cf-8c47-4696-b3df-c1ee70237493 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/comments/afab1a3e-bd94-4e5f-95b7-27964af6aa90 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -544,25 +544,25 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 876
 
 {
-  "timeStamp" : "2023/09/08 02:08:22",
+  "timeStamp" : "2023/09/09 19:40:15",
   "code" : "VIDEO-2022",
   "message" : "VIDEO-댓글 목록 조회 성공",
   "data" : {
     "commentList" : [ {
-      "uuid" : "c6ed1ebb-83dc-4fb5-859b-e23f5ba45228",
+      "uuid" : "e1aa1131-46ef-4e52-8694-3f394f9ee0d1",
       "content" : "댓글을 작성했어요!",
       "user" : {
-        "userId" : "6b3360ba-d152-4b88-bd36-72e773191328",
+        "userId" : "a5cfb684-b83a-445c-8040-6dd50cb7490b",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"
       },
       "createdAt" : null
     }, {
-      "uuid" : "62d5bcca-1d8d-452e-8941-e465015bd35d",
+      "uuid" : "e4bf686f-e38a-4b0e-b999-3cc01edaa802",
       "content" : "또 다른 댓글을 썼습니다",
       "user" : {
-        "userId" : "6b3360ba-d152-4b88-bd36-72e773191328",
+        "userId" : "a5cfb684-b83a-445c-8040-6dd50cb7490b",
         "nickname" : "닉네임",
         "email" : "이메일",
         "profileImg" : "프로필 이미지 s3 경로"

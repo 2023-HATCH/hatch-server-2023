@@ -450,11 +450,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_get_chat_messages_http_request">HTTP request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/chats/rooms/129cefcf-984b-4e11-b3b4-edf4adc3cacb/messages?page=0&amp;size=5 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/chats/rooms/d157fa5f-0012-4ac1-a4b2-def6243cb274/messages?page=0&amp;size=5 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 x-access-token: 액세스 토큰 값
 x-refresh-token: 리프레시 토큰 값
-X-CSRF-TOKEN: 9bf24bb4-a111-40ef-8475-4cfbd696b6d6
+X-CSRF-TOKEN: bfdc38a4-d6e2-4f90-8d34-e6ffef3d374b
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -582,26 +582,26 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 872
 
 {
-  "timeStamp" : "2023/09/08 02:08:19",
+  "timeStamp" : "2023/09/09 19:40:13",
   "code" : "CHAT-2001",
   "message" : "[채팅] 채팅 메세지 목록 조회 성공",
   "data" : {
     "page" : 0,
     "size" : 5,
     "messages" : [ {
-      "chatMessageId" : "1302dcd8-9184-4f72-b428-e80d0267a1a5",
-      "createdAt" : "2023/09/08 02:08:19",
+      "chatMessageId" : "e014cb2b-99e2-47eb-99d3-d71d4068d09f",
+      "createdAt" : "2023/09/09 19:40:13",
       "sender" : {
-        "userId" : "c46dad20-cd46-4af2-be5f-d8299197b5f4",
+        "userId" : "1ab3bcf3-5c66-416f-b6d6-d1d2cf22846a",
         "nickname" : "스펀지밥",
         "profileImg" : "http://testurl"
       },
       "content" : "안녕하세요~ 11"
     }, {
-      "chatMessageId" : "88f2a532-a9e2-4f00-a23e-b73894391873",
-      "createdAt" : "2023/09/08 02:08:19",
+      "chatMessageId" : "44531fe8-4452-4508-a800-6dc17f1fbdfc",
+      "createdAt" : "2023/09/09 19:40:13",
       "sender" : {
-        "userId" : "1c60ac64-553d-4b34-958b-d7519e404c1f",
+        "userId" : "64dfb29a-6eaf-44b6-a081-a945e8f8cdda",
         "nickname" : "뚱이",
         "profileImg" : "http://testurl2"
       },
