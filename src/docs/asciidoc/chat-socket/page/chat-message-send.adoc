@@ -133,4 +133,9 @@ content-length:274
 |`+UUID+`
 |true
 |메세지가 보내진 채팅방의 고유값
+|data
+|`+opponentUserNickname+`
+|`+String+`
+|true
+|메세지를 보낸 상대 사용자 닉네임
 |===

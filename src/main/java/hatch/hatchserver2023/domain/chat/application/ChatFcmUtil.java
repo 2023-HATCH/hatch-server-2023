@@ -16,6 +16,7 @@ import java.util.UUID;
 @Component
 public class ChatFcmUtil {
     private static final String KEY_SEND_CHAT_MESSAGE_CHAT_ROOM_ID = "chatRoomId";
+    private static final String KEY_SEND_CHAT_MESSAGE_NICKNAME = "opponentUserNickname";
 
     private final FcmNotificationUtil fcmNotificationUtil;
 
@@ -70,6 +71,7 @@ public class ChatFcmUtil {
                 .setNotification(notification)
                 .putData(FcmNotificationUtil.DATA_KEY_TYPE, FcmNotificationUtil.TYPE_SEND_CHAT_MESSAGE) // type : 푸시알림의 공통 속성. key 값은 고정이며 value 에 푸시알림 종류를 명시함
                 .putData(KEY_SEND_CHAT_MESSAGE_CHAT_ROOM_ID, String.valueOf(chatRoomId)) // 채팅 메세지 전송 푸시알림 시 전달해야하는 데이터. 이런식으로 상황에 따라 필요한 데이터를 추가해 보낼 수 있음
+                .putData(KEY_SEND_CHAT_MESSAGE_NICKNAME, dto.getSender().getNickname())
                 .build();
     }
 }
