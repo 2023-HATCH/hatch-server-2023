@@ -33,4 +33,9 @@ title은 "안녕하세요~", content는 "김수빈님이 댓글을 남겼습니�
 |`+UUID+`
 |true
 |생성된 댓글의 UUID
+|data
+|`+videoId+`
+|`+UUID+`
+|true
+|댓글이 생성된 영상 UUID
 |===
