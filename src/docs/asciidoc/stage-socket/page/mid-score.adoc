@@ -83,8 +83,8 @@ NOTE: MVP Start 와 응답 동일합니다. 가장 중간 유사도가 높은 �
                     "nickname": "user_1",
                     "profileImg": null
                 },
-                "usedUserFrameCount": 2,
-                "usedAnswerFrameCount": 12
+                "usedUserFrameCount": 3,
+                "usedAnswerFrameCount": 252
             },
             {
                 "playerNum": 1,

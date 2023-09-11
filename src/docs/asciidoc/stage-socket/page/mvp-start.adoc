@@ -90,7 +90,7 @@ content-length: 283
                     "profileImg": null
                 },
                 "usedUserFrameCount": 2,
-                "usedAnswerFrameCount": 12
+                "usedAnswerFrameCount": 48
             },
             {
                 "playerNum": 1,
