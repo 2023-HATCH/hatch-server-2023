@@ -51,6 +51,15 @@
 |`+String+`
 |false
 |사용자 프로필 이미지 url
+
+|`+data.playerInfos.usedUserFrameCount+`
+|`+Integer+`
+|true
+|유사도 계산에 사용된 사용자 스켈레톤 수
+|`+data.playerInfos.usedAnswerFrameCount+`
+|`+Integer+`
+|true
+|유사도 계산에 사용된 정답 스켈레톤 수
 |===
 
 
@@ -79,7 +88,9 @@ content-length: 283
                     "userId": "8bd9357c-ff99-4db8-96c9-486d1aaf942f",
                     "nickname": "user_33",
                     "profileImg": null
-                }
+                },
+                "usedUserFrameCount": 2,
+                "usedAnswerFrameCount": 12
             },
             {
                 "playerNum": 1,
@@ -88,7 +99,9 @@ content-length: 283
                     "userId": "8bd9357c-ff99-4db8-96c9-486d1aaf942f",
                     "nickname": "user_3",
                     "profileImg": null
-                }
+                },
+                "usedUserFrameCount": 0,
+                "usedAnswerFrameCount": 0
             }
         ]
     }
