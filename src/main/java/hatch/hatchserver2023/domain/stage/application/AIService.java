@@ -1,6 +1,7 @@
 package hatch.hatchserver2023.domain.stage.application;
 
 import hatch.hatchserver2023.domain.stage.domain.Music;
+import hatch.hatchserver2023.domain.stage.dto.AIModel;
 import hatch.hatchserver2023.domain.stage.dto.AISimilarityRequestDto;
 import hatch.hatchserver2023.domain.stage.dto.StageRequestDto;
 import hatch.hatchserver2023.domain.stage.dto.StageResponseDto;
@@ -40,19 +41,21 @@ public class AIService {
      * @return
      */
     // TODO: 어떤 사용자인지도 필요한가?
-//    public Float calculateSimilarity(String musicTitle, Float[][] sequence) {
-    public Float calculateSimilarity(String musicTitle, Float[][] sequence, int midScoreNum) {
+//    public Float calculateSimilarity(String musicTitle, Float[][] sequence, int midScoreNum) {
+    public AIModel.SimilarityCalculateInfo calculateSimilarity(String musicTitle, Float[][] sequence, int midScoreNum) {
         // 곡명으로 음악 찾기
         Music music = musicRepository.findByTitle(musicTitle);
         Float[][] answer = music.getAnswer();
 
         AISimilarityRequestDto requestDto;
+        int usedAnswerFrameCount = 0;
         if(midScoreNum == StageRoutineService.STAGE_MID_SCORE_NUM_WHEN_ALL){ // 중간점수가 아닌 전체 점수일 경우
             // ai 서버로 요청할 안무 두 개
             requestDto = AISimilarityRequestDto.builder()
                     .seq1(answer)
                     .seq2(sequence)
                     .build();
+            usedAnswerFrameCount = answer.length;
         }
         else{ // 중간점수일 경우
             int start = midScoreNum*ANSWER_SKELETON_FPS_AVG;
@@ -65,6 +68,7 @@ public class AIService {
                     .seq1(answerSlice)
                     .seq2(sequence)
                     .build();
+            usedAnswerFrameCount = answerSlice.length;
         }
 //        log.info("calculateSimilarity : requestDto");
 //        log.info(requestDto.toString());
@@ -79,7 +83,8 @@ public class AIService {
                 .toEntity(StageResponseDto.GetSimilarity.class)
                 .block();
 
-        return response.getBody().getSimilarity();
+//        return response.getBody().getSimilarity();
+        return AIModel.SimilarityCalculateInfo.toDto(response.getBody().getSimilarity(), usedAnswerFrameCount);
     }
 
     /**

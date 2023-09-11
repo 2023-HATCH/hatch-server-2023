@@ -1,6 +1,7 @@
 package hatch.hatchserver2023.domain.stage.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import hatch.hatchserver2023.domain.stage.dto.AIModel;
 import hatch.hatchserver2023.domain.stage.dto.StageModel;
 import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
 import hatch.hatchserver2023.domain.stage.domain.Music;
@@ -173,9 +174,10 @@ public class StageRoutineService {
 
     private void sendMidScore(int midScoreNum) {
         Map<Integer, Float> similarities = new HashMap<Integer, Float>();
-        int mvpPlayerNum = getSimilarityAndMvp(similarities, false, midScoreNum);
+        List<StageModel.SimilarityFrameCount> frameCounts = new ArrayList<>();
+        int mvpPlayerNum = getSimilarityAndMvp(similarities, false, midScoreNum, frameCounts);
 
-        List<StageModel.PlayerResultInfo> playerResultInfos = getPlayerResultInfos(similarities);
+        List<StageModel.PlayerResultInfo> playerResultInfos = getPlayerResultInfos(similarities, frameCounts);
         stageSocketResponser.sendMidScore(mvpPlayerNum, playerResultInfos);
     }
 
@@ -190,10 +192,11 @@ public class StageRoutineService {
         log.info("StageRoutineUtil startMVP");
 
         Map<Integer, Float> similarities = new HashMap<Integer, Float>();
-        int mvpPlayerNum = getSimilarityAndMvp(similarities, true, STAGE_MID_SCORE_NUM_WHEN_ALL);
+        List<StageModel.SimilarityFrameCount> frameCounts = new ArrayList<>();
+        int mvpPlayerNum = getSimilarityAndMvp(similarities, true, STAGE_MID_SCORE_NUM_WHEN_ALL, frameCounts);
 
         // redis 에서 playerNum 전부의 사용자 정보 가져와서 playerNum과 유사도 더한 플레이어 결과 정보로 만듦
-        List<StageModel.PlayerResultInfo> playerResultInfos = getPlayerResultInfos(similarities);
+        List<StageModel.PlayerResultInfo> playerResultInfos = getPlayerResultInfos(similarities, frameCounts);
 
         // 상태 변경, 응답
         stageDataUtil.setStageStatus(STAGE_STATUS_MVP);
@@ -240,7 +243,7 @@ public class StageRoutineService {
      * 각 플레이어들의 유사도를 계산하여 MVP를 선정하고 MVP유저의 playerNum을 반환하는 메서드
      * @return
      */
-    private int getSimilarityAndMvp(Map<Integer, Float> similarities, boolean isAll, int midScoreNum) {
+    private int getSimilarityAndMvp(Map<Integer, Float> similarities, boolean isAll, int midScoreNum, List<StageModel.SimilarityFrameCount> frameCounts) {
         float maxSimilarity = -100;  // 계산할 스켈레톤이 없는 경우 -100 으로 응답됨
         int maxPlayerNum = 0; // 아무도 플레이 스켈레톤을 전송하지 않으면 playerNum 0 번 유저가 mvp 가 되도록 설정
 
@@ -262,6 +265,8 @@ public class StageRoutineService {
             // redis 에 저장해둔 스켈레톤 가져옴
             Set<String> skeletonStringSet = getSkeletonData(i, startIndex);
             if(skeletonStringSet==null || skeletonStringSet.isEmpty()) { // 이 유저의 스켈레톤이 비어있을 경우
+                // 사용된 프레임 수 정보 저장
+                frameCounts.add(StageModel.SimilarityFrameCount.toDto(0, 0));
                 continue;
             } else {
                 // 이번에 가져온 스켈레톤 개수 + 이전 인덱스 - 1로 인덱스 값 업데이트
@@ -272,7 +277,8 @@ public class StageRoutineService {
 
             // 원래 자료형으로 형변환
             Float[][] skeletonFloatArray = skeletonToFloatArrays(skeletonStringSet);
-            log.info("getSimilarityAndMvp : skeletonFloatArray size : {}", skeletonFloatArray.length);
+            int userSkeletonSize = skeletonFloatArray.length;
+            log.info("getSimilarityAndMvp : skeletonFloatArray size : {}", userSkeletonSize);
 //            log.info("getSimilarityAndMvp : skeletonFloatArray : {}", skeletonFloatArray);
 //            log.info("getSimilarityAndMvp skeletonFloatArray[0] : {}", skeletonFloatArray[0]);
 //            log.info("getSimilarityAndMvp skeletonFloatArray[0][0] : {}", skeletonFloatArray[0][0]);
@@ -282,8 +288,10 @@ public class StageRoutineService {
             // 유사도 계산
             float similarity;
 //            float similarity=0f;
+            AIModel.SimilarityCalculateInfo calculateInfo;
             try{
-                similarity = aiService.calculateSimilarity(title, skeletonFloatArray, midScoreNum);
+                calculateInfo = aiService.calculateSimilarity(title, skeletonFloatArray, midScoreNum);
+                similarity = calculateInfo.getSimilarity();
                 log.info("getSimilarityAndMvp : skeletonFloatArray size 2 : {}", skeletonFloatArray.length);
                 log.info("getSimilarityAndMvp : music {} playerNum {} similarity : {}", title, i, similarity);
             }catch (NullPointerException e) {
@@ -298,7 +306,12 @@ public class StageRoutineService {
                 maxSimilarity = similarity;
                 maxPlayerNum = i;
             }
+
+            // 사용된 프레임 수 정보 저장
+            frameCounts.add(StageModel.SimilarityFrameCount.toDto(userSkeletonSize, calculateInfo.getUsedAnswerFrameCount()));
         }
+
+        log.info("getSimilarityAndMvp : frameCounts.size() : {}", frameCounts.size());
         return maxPlayerNum;
     }
 
@@ -311,17 +324,15 @@ public class StageRoutineService {
      * @param similarities
      * @return
      */
-    private List<StageModel.PlayerResultInfo> getPlayerResultInfos(Map<Integer, Float> similarities) {
+    private List<StageModel.PlayerResultInfo> getPlayerResultInfos(Map<Integer, Float> similarities, List<StageModel.SimilarityFrameCount> frameCounts) {
         List<StageModel.PlayerResultInfo> playerResultInfos = new ArrayList<>();
         for(int i=0; i<STAGE_PLAYER_COUNT_VALUE; i++) {
             try{
                 UserResponseDto.SimpleUserProfile player = stageDataUtil.getPlayerUserInfo(i);
                 Float similarity = similarities.get(i)==null ? -100f : similarities.get(i);
-                StageModel.PlayerResultInfo playerResultInfo = StageModel.PlayerResultInfo.builder()
-                        .playerNum(i)
-                        .similarity(similarity)
-                        .player(player)
-                        .build();
+                StageModel.SimilarityFrameCount frameCount = frameCounts.get(i);
+
+                StageModel.PlayerResultInfo playerResultInfo = StageModel.PlayerResultInfo.toDto(i, similarity, player, frameCount.getUsedUserFrameCount(), frameCount.getUsedAnswerFrameCount());
                 playerResultInfos.add(playerResultInfo);
             } catch(StageException e){
                 if(e.getCode() == StageStatusCode.FAIL_GET_PLAYER_USER_FROM_REDIS) {

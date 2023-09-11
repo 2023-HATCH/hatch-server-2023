@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.List;
+
 public class StageModel {
 
     @ToString
@@ -58,6 +60,38 @@ public class StageModel {
 //            for()
 //            return
 //        }
+    }
+
+
+
+    @ToString
+    @Getter
+    @Builder
+    public static class SimilarityResultInfo {
+        private int mvpPlayerNum;
+        private List<SimilarityFrameCount> frameCounts;
+
+        public static SimilarityResultInfo toDto(int mvpPlayerNum, List<SimilarityFrameCount> frameCounts) {
+            return SimilarityResultInfo.builder()
+                    .mvpPlayerNum(mvpPlayerNum)
+                    .frameCounts(frameCounts)
+                    .build();
+        }
+    }
+
+    @ToString
+    @Getter
+    @Builder
+    public static class SimilarityFrameCount {
+        private int usedUserFrameCount;
+        private int usedAnswerFrameCount;
+
+        public static SimilarityFrameCount toDto(int usedUserFrameCount, int usedAnswerFrameCount) {
+            return SimilarityFrameCount.builder()
+                    .usedUserFrameCount(usedUserFrameCount)
+                    .usedAnswerFrameCount(usedAnswerFrameCount)
+                    .build();
+        }
     }
 
 }
