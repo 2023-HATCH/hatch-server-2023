@@ -1,6 +1,5 @@
 package hatch.hatchserver2023.domain.stage.dto;
 
-import hatch.hatchserver2023.domain.stage.StageModel;
 import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.user.domain.User;
 import lombok.Builder;
