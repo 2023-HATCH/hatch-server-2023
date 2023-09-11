@@ -220,6 +220,7 @@ public class StageDataUtil { //public 이 상수KEY는 다른 곳에서 한번�
         //플레이 스켈레톤 데이터 초기화
         for (int i=0; i<=StageRoutineService.STAGE_CATCH_SUCCESS_LAST_INDEX; i++) {
             redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_SKELETON +i);
+            redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_SKELETON_MID_INDEX +i);
         }
         redisDao.deleteValues(StageDataUtil.KEY_STAGE_PLAYER_INFO_HASH); // 플레이어 데이터
     }
