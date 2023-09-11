@@ -58,8 +58,8 @@ public class AIService {
             usedAnswerFrameCount = answer.length;
         }
         else{ // 중간점수일 경우
-            int start = midScoreNum*ANSWER_SKELETON_FPS_AVG;
-            int end = (midScoreNum+1)*ANSWER_SKELETON_FPS_AVG;
+            int start = midScoreNum*StageRoutineService.STAGE_MID_SCORE_TIME_INTERVAL*ANSWER_SKELETON_FPS_AVG;
+            int end = (midScoreNum+1)*StageRoutineService.STAGE_MID_SCORE_TIME_INTERVAL*ANSWER_SKELETON_FPS_AVG;
             Float[][] answerSlice = Arrays.copyOfRange(answer, start, end);
             log.info("calculateSimilarity : ai answerSlice start : {}, end : {}", start, end);
 

@@ -36,12 +36,12 @@ public class StageRoutineService {
 
     public static final int STAGE_PLAYER_COUNT_VALUE = 3;
     public static final int STAGE_MID_SCORE_NUM_WHEN_ALL = -1;
+    public static final int STAGE_CATCH_SUCCESS_LAST_INDEX = 2;
+    public static final int STAGE_MID_SCORE_TIME_INTERVAL = 4;
 
     private static final int STAGE_CATCH_TIME = 3;
     private static final int STAGE_CATCH_AGAIN_INTERVAL = 2;
     private static final int STAGE_MVP_TIME = 7;
-    public static final int STAGE_CATCH_SUCCESS_LAST_INDEX = 2;
-    private static final int STAGE_MID_SCORE_TIME_INTERVAL = 4;
 
     private final UserRepository userRepository;
     private final MusicRepository musicRepository;
