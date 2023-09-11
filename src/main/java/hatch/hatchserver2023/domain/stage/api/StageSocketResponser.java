@@ -1,17 +1,15 @@
 package hatch.hatchserver2023.domain.stage.api;
 
-import hatch.hatchserver2023.domain.stage.StageModel;
+import hatch.hatchserver2023.domain.stage.dto.StageModel;
 import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.stage.dto.StageSocketResponseDto;
 import hatch.hatchserver2023.domain.user.domain.User;
-import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.socket.SocketResponseType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 
 //@Slf4j
 @Component

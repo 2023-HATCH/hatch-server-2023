@@ -53,22 +53,23 @@ NOTE: MVP Start 와 응답 동일합니다. 가장 중간 유사도가 높은 �
 |`+String+`
 |false
 |사용자 프로필 이미지 url
+
+|`+data.playerInfos.usedUserFrameCount+`
+|`+Integer+`
+|true
+|유사도 계산에 사용된 사용자 스켈레톤 수
+|`+data.playerInfos.usedAnswerFrameCount+`
+|`+Integer+`
+|true
+|유사도 계산에 사용된 정답 스켈레톤 수
 |===
 
 
 ==== Response body
 [source,http,options="nowrap"]
 ----
-$ _INFO_:Receive subscribed message from destination /topic/stage, content = MESSAGE
-content-length: 283
-message-id: 7e698390-06df-6ece-56b5-94b60d6e675c-38
-subscription:sub-0
-content-type:application/json
-destination:/topic/stage
-content-length: 283
-
 {
-    "timeStamp": "2023/08/16 23:00:17",
+    "timeStamp": "2023/09/11 11:18:20",
     "type": "MID_SCORE",
     "message": "스테이지 플레이 중간점수 전달",
     "data": {
@@ -78,19 +79,23 @@ content-length: 283
                 "playerNum": 0,
                 "similarity": -99.0,
                 "player": {
-                    "userId": "8bd9357c-ff99-4db8-96c9-486d1aaf942f",
-                    "nickname": "user_33",
+                    "userId": "d6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+                    "nickname": "user_1",
                     "profileImg": null
-                }
+                },
+                "usedUserFrameCount": 3,
+                "usedAnswerFrameCount": 252
             },
             {
                 "playerNum": 1,
                 "similarity": -100.0,
                 "player": {
-                    "userId": "8bd9357c-ff99-4db8-96c9-486d1aaf942f",
-                    "nickname": "user_3",
+                    "userId": "a6b023a8-f502-4f1f-ae6c-a8383ec6e2a1",
+                    "nickname": "user_11",
                     "profileImg": null
-                }
+                },
+                "usedUserFrameCount": 0,
+                "usedAnswerFrameCount": 0
             }
         ]
     }

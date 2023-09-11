@@ -534,6 +534,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">사용자 프로필 이미지 url</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.playerInfos.usedUserFrameCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유사도 계산에 사용된 사용자 스켈레톤 수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.playerInfos.usedAnswerFrameCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유사도 계산에 사용된 정답 스켈레톤 수</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -563,7 +575,9 @@ content-length: 283
                     "userId": "8bd9357c-ff99-4db8-96c9-486d1aaf942f",
                     "nickname": "user_33",
                     "profileImg": null
-                }
+                },
+                "usedUserFrameCount": 2,
+                "usedAnswerFrameCount": 48
             },
             {
                 "playerNum": 1,
@@ -572,7 +586,9 @@ content-length: 283
                     "userId": "8bd9357c-ff99-4db8-96c9-486d1aaf942f",
                     "nickname": "user_3",
                     "profileImg": null
-                }
+                },
+                "usedUserFrameCount": 0,
+                "usedAnswerFrameCount": 0
             }
         ]
     }
@@ -586,7 +602,7 @@ content-length: 283
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-24 02:24:33 +0900
+Last updated 2023-09-11 11:49:50 +0900
 </div>
 </div>
 </body>

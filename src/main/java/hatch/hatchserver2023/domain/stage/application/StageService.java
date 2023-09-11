@@ -1,6 +1,6 @@
 package hatch.hatchserver2023.domain.stage.application;
 
-import hatch.hatchserver2023.domain.stage.StageModel;
+import hatch.hatchserver2023.domain.stage.dto.StageModel;
 import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
 import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.user.domain.User;
@@ -9,7 +9,6 @@ import hatch.hatchserver2023.global.common.response.exception.StageException;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
