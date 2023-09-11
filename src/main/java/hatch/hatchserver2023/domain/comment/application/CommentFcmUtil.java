@@ -17,6 +17,7 @@ import java.util.UUID;
 public class CommentFcmUtil {
 
     private static final String KEY_ADD_COMMENT_ID = "commentId";
+    private static final String KEY_VIDEO_OF_ADD_COMMENT_ID= "videoId";
 
     private final FcmNotificationUtil fcmNotificationUtil;
 
@@ -25,7 +26,7 @@ public class CommentFcmUtil {
     }
 
     //푸시 알림 로직
-    public void sendAddCommentNotification(User receiver, Comment comment){
+    public void sendAddCommentNotification(User receiver, Comment comment, UUID videoId){
         log.info("[FCM] sendAddCommentNotification");
 
         // FCM 토큰이 존재하는 사용자인지 확인
@@ -40,7 +41,7 @@ public class CommentFcmUtil {
 
         // FCM 토큰 가져와서 알림 요청 내용(Message) 생성
         String token = fcmNotificationUtil.getFcmToken(receiver);
-        Message message = createMessage(token, comment);
+        Message message = createMessage(token, comment, videoId);
 
         // 알림 전송 요청
         fcmNotificationUtil.send(message);
@@ -48,7 +49,7 @@ public class CommentFcmUtil {
 
 
     //알림 요청 내용(Message)를 생성
-    private Message createMessage(String token, Comment comment){
+    private Message createMessage(String token, Comment comment, UUID videoId){
         //푸시알림 객체 생성
         Notification notification = Notification.builder()
                 .setTitle(comment.getContent())  //푸시알림의 제목
@@ -60,7 +61,8 @@ public class CommentFcmUtil {
                 .setToken(token)
                 .setNotification(notification)
                 .putData(FcmNotificationUtil.DATA_KEY_TYPE, FcmNotificationUtil.TYPE_ADD_COMMENT)   //푸시 알림의 type
-                .putData(KEY_ADD_COMMENT_ID, String.valueOf(comment.getUuid())) //푸시알림 시 전달해야하는 데이터
+                .putData(KEY_ADD_COMMENT_ID, String.valueOf(comment.getUuid())) //푸시알림 시 전달해야하는 데이터 1
+                .putData(KEY_VIDEO_OF_ADD_COMMENT_ID, String.valueOf(videoId)) //푸시알림 시 전달해야하는 데이터 2
                 .build();
     }
 }

@@ -53,7 +53,7 @@ public class CommentService {
         videoCacheUtil.increaseCommentCount(video);
 
         // 푸시알림 보내기
-        commentFcmUtil.sendAddCommentNotification(video.getUser(), comment);
+        commentFcmUtil.sendAddCommentNotification(video.getUser(), comment, video.getUuid());
 
         return comment;
     }
