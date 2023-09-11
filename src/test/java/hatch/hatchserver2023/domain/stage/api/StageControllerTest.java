@@ -1,6 +1,6 @@
 package hatch.hatchserver2023.domain.stage.api;
 
-import hatch.hatchserver2023.domain.stage.StageModel;
+import hatch.hatchserver2023.domain.stage.dto.StageModel;
 import hatch.hatchserver2023.domain.stage.application.StageRoutineService;
 import hatch.hatchserver2023.domain.stage.application.StageService;
 import hatch.hatchserver2023.domain.stage.application.StageSocketService;

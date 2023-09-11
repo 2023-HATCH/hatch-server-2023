@@ -1,7 +1,7 @@
 package hatch.hatchserver2023.domain.stage.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import hatch.hatchserver2023.domain.stage.StageModel;
+import hatch.hatchserver2023.domain.stage.dto.StageModel;
 import hatch.hatchserver2023.domain.stage.api.StageSocketResponser;
 import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.stage.repository.MusicRepository;
@@ -273,7 +273,7 @@ public class StageRoutineService {
             // 원래 자료형으로 형변환
             Float[][] skeletonFloatArray = skeletonToFloatArrays(skeletonStringSet);
             log.info("getSimilarityAndMvp : skeletonFloatArray size : {}", skeletonFloatArray.length);
-            log.info("getSimilarityAndMvp : skeletonFloatArray : {}", skeletonFloatArray);
+//            log.info("getSimilarityAndMvp : skeletonFloatArray : {}", skeletonFloatArray);
 //            log.info("getSimilarityAndMvp skeletonFloatArray[0] : {}", skeletonFloatArray[0]);
 //            log.info("getSimilarityAndMvp skeletonFloatArray[0][0] : {}", skeletonFloatArray[0][0]);
 //            log.info("getSimilarityAndMvp skeletonFloatArray[0][0] : {}", skeletonFloatArray[1][0]);

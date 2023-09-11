@@ -1,6 +1,6 @@
 package hatch.hatchserver2023.domain.stage.api;
 
-import hatch.hatchserver2023.domain.stage.StageModel;
+import hatch.hatchserver2023.domain.stage.dto.StageModel;
 import hatch.hatchserver2023.domain.stage.application.StageService;
 import hatch.hatchserver2023.domain.stage.application.StageSocketService;
 import hatch.hatchserver2023.domain.stage.dto.StageResponseDto;
@@ -11,7 +11,6 @@ import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.global.common.response.CommonResponse;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
-import hatch.hatchserver2023.global.common.response.exception.StageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;

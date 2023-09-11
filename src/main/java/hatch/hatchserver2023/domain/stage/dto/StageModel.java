@@ -1,4 +1,4 @@
-package hatch.hatchserver2023.domain.stage;
+package hatch.hatchserver2023.domain.stage.dto;
 
 import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
@@ -41,12 +41,16 @@ public class StageModel {
         private int playerNum;
         private float similarity;
         private UserResponseDto.SimpleUserProfile player;
+        private int usedUserFrameCount;
+        private int usedAnswerFrameCount;
 
-        public static PlayerResultInfo toDto(int playerNum, float similarity, UserResponseDto.SimpleUserProfile player) {
+        public static PlayerResultInfo toDto(int playerNum, float similarity, UserResponseDto.SimpleUserProfile player, int usedUserFrameCount, int usedAnswerFrameCount) {
             return PlayerResultInfo.builder()
                     .playerNum(playerNum)
                     .similarity(similarity)
                     .player(player)
+                    .usedUserFrameCount(usedUserFrameCount)
+                    .usedAnswerFrameCount(usedAnswerFrameCount)
                     .build();
         }
 
