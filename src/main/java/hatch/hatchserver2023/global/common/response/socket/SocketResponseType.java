@@ -11,7 +11,7 @@ public enum SocketResponseType implements StatusCode {
     USER_COUNT( "USER_COUNT", "스테이지 인원수"),
 
     CATCH_START( "CATCH_START", "스테이지 캐치 시작"),
-    CATCH_END( "CATCH_END", "스테이지 캐치 끝"),
+    CATCH_END( StageStatusType.CATCH_END.getType(), StageStatusType.CATCH_END.getMessage()),
     CATCH_END_RESTART( "CATCH_END_RESTART", "스테이지 캐치 끝, 캐치 다시 시작"),
     PLAY_START( "PLAY_START", "스테이지 플레이 시작"),
     PLAY_SKELETON( "PLAY_SKELETON", "스테이지 플레이 스켈레톤 전달"),
