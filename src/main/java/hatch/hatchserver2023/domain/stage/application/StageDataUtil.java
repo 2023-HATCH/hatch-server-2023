@@ -7,6 +7,7 @@ import hatch.hatchserver2023.domain.user.dto.UserResponseDto;
 import hatch.hatchserver2023.global.common.ObjectMapperUtil;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.StageException;
+import hatch.hatchserver2023.global.common.response.socket.StageStatusType;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -41,11 +42,19 @@ public class StageDataUtil { //public 이 상수KEY는 다른 곳에서 한번�
     }
 
     /**
-     * 스테이지 상태 저장 메서드
+     * 스테이지 상태 저장 메서드 by String
      * @param status
      */
     public void setStageStatus(String status) {
         redisDao.setValues(KEY_STAGE_STATUS, status);
+    }
+
+    /**
+     * 스테이지 상태 저장 메서드 by enum
+     * @param status
+     */
+    public void setStageStatus(StageStatusType status) {
+        redisDao.setValues(KEY_STAGE_STATUS, status.getType());
     }
 
     /**
@@ -54,7 +63,7 @@ public class StageDataUtil { //public 이 상수KEY는 다른 곳에서 한번�
      */
     public String getStageStatus() {
         String stageStatus = redisDao.getValues(KEY_STAGE_STATUS);
-        return (stageStatus==null) ? StageRoutineService.STAGE_STATUS_WAIT : stageStatus;
+        return (stageStatus==null) ? StageStatusType.WAIT.getType() : stageStatus;
     }
 
     /**
@@ -70,7 +79,7 @@ public class StageDataUtil { //public 이 상수KEY는 다른 곳에서 한번�
      * @return
      */
     public Long getStageStatusStartTime(String status) {
-        if(status.equals(StageRoutineService.STAGE_STATUS_CATCH) || status.equals(StageRoutineService.STAGE_STATUS_PLAY) || status.equals(StageRoutineService.STAGE_STATUS_MVP)) { // !status.equals(StageRoutineService.STAGE_STATUS_WAIT) || !status.substring(status.length()-3).equals("_END") ??
+        if(status.equals(StageStatusType.CATCH.getType()) || status.equals(StageStatusType.PLAY.getType()) || status.equals(StageStatusType.MVP.getType())) { // !status.equals(StageRoutineService.STAGE_STATUS_WAIT) || !status.substring(status.length()-3).equals("_END") ??
             String startTimeString = redisDao.getValues(KEY_STAGE_STATUS_START_TIME);
             startTimeString = (startTimeString==null) ? "0" : startTimeString;
             return Long.parseLong(startTimeString);
