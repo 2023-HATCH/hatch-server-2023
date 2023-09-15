@@ -12,6 +12,7 @@ import hatch.hatchserver2023.domain.user.repository.UserRepository;
 import hatch.hatchserver2023.global.common.ObjectMapperUtil;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.StageException;
+import hatch.hatchserver2023.global.common.response.socket.StageStatusType;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -26,13 +27,6 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @Service
 public class StageRoutineService {
-    public static final String STAGE_STATUS_WAIT = "WAIT";
-    public static final String STAGE_STATUS_CATCH = "CATCH";
-    private static final String STAGE_STATUS_CATCH_END = "CATCH_END";
-    public static final String STAGE_STATUS_PLAY = "PLAY";
-    public static final String STAGE_STATUS_PLAY_END = "PLAY_END";
-    public static final String STAGE_STATUS_MVP = "MVP";
-    private static final String STAGE_STATUS_MVP_END = "MVP_END";
 
     public static final int STAGE_PLAYER_COUNT_VALUE = 3;
     public static final int STAGE_MID_SCORE_NUM_WHEN_ALL = -1;
@@ -108,7 +102,7 @@ public class StageRoutineService {
 
     private Music startCatch() {
         log.info("StageRoutineUtil startCatch");
-        stageDataUtil.setStageStatus(STAGE_STATUS_CATCH);
+        stageDataUtil.setStageStatus(StageStatusType.CATCH);
 
         // 음악 랜덤 선정
         Music music = musicRepository.findRandomOne().get(0);
@@ -121,7 +115,7 @@ public class StageRoutineService {
 
     private boolean endCatch() throws InterruptedException {
         log.info("StageRoutineUtil endCatch");
-        stageDataUtil.setStageStatus(STAGE_STATUS_CATCH_END);
+        stageDataUtil.setStageStatus(StageStatusType.CATCH_END);
 
         // TODO : 개발 편의를 위해 인원 검사 안함
 //        checkUserCountInEndCatch();
@@ -149,7 +143,7 @@ public class StageRoutineService {
 
     private int startPlay(Music music) {
         log.info("StageRoutineUtil startPlay");
-        stageDataUtil.setStageStatus(STAGE_STATUS_PLAY);
+        stageDataUtil.setStageStatus(StageStatusType.PLAY);
 
         final int readyTime = 5;
         int musicTime = (int) Math.ceil(music.getLength()/1000.0); //밀리초 올림해서 초단위로 변경 //TODO : 개발 편의 위해 잠시 //music.getLength()/100
@@ -183,7 +177,7 @@ public class StageRoutineService {
 
     private void endPlay() {
         log.info("StageRoutineUtil endPlay");
-        stageDataUtil.setStageStatus(STAGE_STATUS_PLAY_END);
+        stageDataUtil.setStageStatus(StageStatusType.PLAY_END);
 
         stageSocketResponser.endPlay();
     }
@@ -199,7 +193,7 @@ public class StageRoutineService {
         List<StageModel.PlayerResultInfo> playerResultInfos = getPlayerResultInfos(similarities, frameCounts);
 
         // 상태 변경, 응답
-        stageDataUtil.setStageStatus(STAGE_STATUS_MVP);
+        stageDataUtil.setStageStatus(StageStatusType.MVP);
 
         stageDataUtil.setStageStatusStartTime();
         stageSocketResponser.startMVP(mvpPlayerNum, playerResultInfos);
@@ -210,7 +204,7 @@ public class StageRoutineService {
 
     private void endMVP() {
         log.info("StageRoutineUtil endMVP");
-        stageDataUtil.setStageStatus(STAGE_STATUS_MVP_END);
+        stageDataUtil.setStageStatus(StageStatusType.MVP_END);
         redisDao.deleteValues(StageDataUtil.KEY_STAGE_MUSIC);
         stageSocketResponser.endMvp();
 
@@ -219,7 +213,7 @@ public class StageRoutineService {
 //        log.info("tempCheckStageEmpty STAGE_ENTER_USER_LIST set size : {}", size);
         if(userCount < 3) {
 //            log.info("endMVP set STAGE_ENTER_USER_COUNT = 0");
-            stageDataUtil.setStageStatus(STAGE_STATUS_WAIT);
+            stageDataUtil.setStageStatus(StageStatusType.WAIT);
         }
 
         initDataAfterMvp();

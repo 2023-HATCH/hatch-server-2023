@@ -61,7 +61,7 @@ public class ChatFcmUtil {
     private Message createMessage(String token, UUID chatRoomId, ChatResponseDto.BasicChatMessage dto) {
         // 푸시알림 객체 생성
         Notification notification = Notification.builder()
-                .setTitle(dto.getSender().getNickname()) // 푸시알림의 제목으로 보여질 내용
+                .setTitle("💬 " + dto.getSender().getNickname()) // 푸시알림의 제목으로 보여질 내용
                 .setBody(dto.getContent()) // 푸시알림의 내용으로 보여질 내용
                 .build();
 

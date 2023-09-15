@@ -487,6 +487,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_video_2">VIDEO</a></li>
 <li><a href="#_s3">S3</a></li>
 <li><a href="#_socket_response">SOCKET_RESPONSE</a></li>
+<li><a href="#_stage_status">STAGE_STATUS</a></li>
 </ul>
 </li>
 </ul>
@@ -859,7 +860,7 @@ Expires: 0
 X-Frame-Options: DENY
 Content-Length: 159
 
-{"timeStamp":"2023/09/11 11:52:14","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
+{"timeStamp":"2023/09/15 15:29:59","code":"COMMON-200","message":"[공통] 정상 처리","data":"Pocket Pose API Server : Health check ok. Server is running"}</code></pre>
 </div>
 </div>
 </div>
@@ -1427,6 +1428,70 @@ Content-Length: 159
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>MID_SCORE</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 플레이 중간점수 전달</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_stage_status"><a class="link" href="#_stage_status">STAGE_STATUS</a></h3>
+<div class="paragraph">
+<p>스테이지 진행상태 타입</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">코드</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>WAIT</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 대기중</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CATCH_START</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 캐치 시작</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CATCH</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 캐치중</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CATCH_END</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 캐치 끝</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CATCH_END_RESTART</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 캐치 끝, 캐치 다시 시작</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PLAY_START</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 플레이 시작</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PLAY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 플레이중</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PLAY_END</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 플레이 끝</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MVP_START</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 MVP세리머니 시작</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MVP</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 MVP세리머니중</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MVP_END</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">스테이지 MVP세리머니 끝</p></td>
 </tr>
 </tbody>
 </table>

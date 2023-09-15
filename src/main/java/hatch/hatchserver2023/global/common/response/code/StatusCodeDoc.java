@@ -1,6 +1,7 @@
 package hatch.hatchserver2023.global.common.response.code;
 
 import hatch.hatchserver2023.global.common.response.socket.SocketResponseType;
+import hatch.hatchserver2023.global.common.response.socket.StageStatusType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,7 +15,8 @@ public enum StatusCodeDoc {
     TALK("TALK", "라이브톡", "/talk", "라이브톡 상태 코드", TalkStatusCode.values()),
     S3("S3", "S3", "/s3", "S3 상태 코드", S3StatusCode.values()),
     VIDEO("VIDEO", "동영상", "/video", "동영상 상태 코드", VideoStatusCode.values()),
-    SOCKET_RESPONSE("SOCKET_RESPONSE", "소켓응답", "/socket-response", "소켓통신 응답 타입", SocketResponseType.values())
+    SOCKET_RESPONSE("SOCKET_RESPONSE", "소켓응답", "/socket-response", "소켓통신 응답 타입", SocketResponseType.values()),
+    STAGE_STATUS("STAGE_STATUS", "소켓응답", "/stage-status", "스테이지 진행상태 타입", StageStatusType.values())
     ;
 
     private final String initial;

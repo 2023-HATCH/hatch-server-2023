@@ -76,15 +76,22 @@ public class AIService {
         // ai 서버로 계산 요청
         WebClient client = WebClient.create(AI_SERVER_URL);
 
-        ResponseEntity<StageResponseDto.GetSimilarity> response = client.post()
-                .uri("/api/similarity")
-                .bodyValue(requestDto)
-                .retrieve()
-                .toEntity(StageResponseDto.GetSimilarity.class)
-                .block();
+        Float similarity;
+        try{
+            ResponseEntity<StageResponseDto.GetSimilarity> response = client.post()
+                    .uri("/api/similarity")
+                    .bodyValue(requestDto)
+                    .retrieve()
+                    .toEntity(StageResponseDto.GetSimilarity.class)
+                    .block();
+            similarity = response.getBody().getSimilarity();
+        } catch (Exception e) {
+            log.info("<ERROR> calculateSimilarity : ai server error");
+            similarity = -500f; // ai server error 시 유사도 -500.0 응답
+        }
 
 //        return response.getBody().getSimilarity();
-        return AIModel.SimilarityCalculateInfo.toDto(response.getBody().getSimilarity(), usedAnswerFrameCount);
+        return AIModel.SimilarityCalculateInfo.toDto(similarity, usedAnswerFrameCount);
     }
 
     /**

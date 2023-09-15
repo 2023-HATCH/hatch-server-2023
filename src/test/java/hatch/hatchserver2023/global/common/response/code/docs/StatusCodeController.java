@@ -2,6 +2,7 @@ package hatch.hatchserver2023.global.common.response.code.docs;
 
 import hatch.hatchserver2023.global.common.response.code.*;
 import hatch.hatchserver2023.global.common.response.socket.SocketResponseType;
+import hatch.hatchserver2023.global.common.response.socket.StageStatusType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,6 +54,11 @@ public class StatusCodeController {
     @GetMapping("/socket-response")
     public ResponseEntity<StatusCodeView> getSocketResponseType() {
         return getResponse(SocketResponseType.values());
+    }
+
+    @GetMapping("/stage-status")
+    public ResponseEntity<StatusCodeView> getStageStatusType() {
+        return getResponse(StageStatusType.values());
     }
 
     private ResponseEntity<StatusCodeView> getResponse(StatusCode[] statusCodes) {
