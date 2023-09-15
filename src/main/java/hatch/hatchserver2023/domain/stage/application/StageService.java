@@ -6,6 +6,7 @@ import hatch.hatchserver2023.domain.stage.domain.Music;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.StageException;
+import hatch.hatchserver2023.global.common.response.socket.StageStatusType;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -89,11 +90,11 @@ public class StageService {
     }
 
 
-    /**
-     * 스테이지 입장 로직 2 : 중복 입장 불가 버전
-     * @param user
-     * @return
-     */
+//    /**
+//     * 스테이지 입장 로직 2 : 중복 입장 불가 버전
+//     * @param user
+//     * @return
+//     */
 //    public int addStageUser(User user) {
 //        log.info("[SERVICE] addAndGetStageUserCount");
 //
@@ -118,23 +119,37 @@ public class StageService {
     // TODO : 스테이지가 진행 도중 멈춰버렸을 때 (왜?) 새로 누군가 입장 시 스테이지 처음부터 새로 run시키기.. how? 상태값이 아니면 진행중(Thread.sleep)인지 아닌지 어떻게 알지... 스레드..?
     private void runStageRoutine(int increasedCount) {
         String stageStatus = stageDataUtil.getStageStatus();
-        switch (stageStatus) {
-            case StageRoutineService.STAGE_STATUS_WAIT:
-                log.info("stage status : wait ");
-                if (increasedCount >= 3) {
-                    log.info("stage user count >= 3");
-                    stageRoutineService.startRoutine();
-                }
-                break;
-
-            case StageRoutineService.STAGE_STATUS_CATCH:
-                log.info("stage status : catch ");
-                break;
-
-            case StageRoutineService.STAGE_STATUS_MVP:
-                log.info("stage status : mvp ");
-                break;
+        if(stageStatus.equals(StageStatusType.WAIT.getType())) {
+            log.info("stage status : wait ");
+            if (increasedCount >= 3) {
+                log.info("stage user count >= 3");
+                stageRoutineService.startRoutine();
+            }
         }
+        else if(stageStatus.equals(StageStatusType.CATCH.getType())) {
+            log.info("stage status : catch ");
+        }
+        else if(stageStatus.equals(StageStatusType.MVP.getType())) {
+                log.info("stage status : mvp ");
+        }
+
+//        switch (stageStatus) {
+//            case StageRoutineService.STAGE_STATUS_WAIT:
+//                log.info("stage status : wait ");
+//                if (increasedCount >= 3) {
+//                    log.info("stage user count >= 3");
+//                    stageRoutineService.startRoutine();
+//                }
+//                break;
+//
+//            case StageRoutineService.STAGE_STATUS_CATCH:
+//                log.info("stage status : catch ");
+//                break;
+//
+//            case StageRoutineService.STAGE_STATUS_MVP:
+//                log.info("stage status : mvp ");
+//                break;
+//        }
     }
 
 
@@ -157,7 +172,7 @@ public class StageService {
     public void registerCatch(User user) {
         log.info("[SERVICE] registerCatch");
 
-        if(!stageDataUtil.getStageStatus().equals(StageRoutineService.STAGE_STATUS_CATCH)) {
+        if(!stageDataUtil.getStageStatus().equals(StageStatusType.CATCH.getType())) {
             throw new StageException(StageStatusCode.STAGE_STATUS_NOT_CATCH);
         }
 

@@ -40,6 +40,9 @@ public class ChatSocketController {
         simpMessagingTemplate.convertAndSend(CHAT_WS_SEND_URL_PREFIX + requestDto.getChatRoomId(),
                 CommonResponse.toSocketResponse(SocketResponseType.CHAT_MESSAGE, ChatResponseDto.SendChatMessage.toDto(model.getChatMessage())));
 
-        chatFcmUtil.sendChatMessageNotification(model.getOpponentUser(), requestDto.getChatRoomId(), ChatResponseDto.BasicChatMessage.toDto(model.getChatMessage()));
+        // 푸시알림 대상이 본인이 아닐 경우에만 푸시알림 보냄
+        if(!user.getId().equals(model.getOpponentUser().getId())){
+            chatFcmUtil.sendChatMessageNotification(model.getOpponentUser(), requestDto.getChatRoomId(), ChatResponseDto.BasicChatMessage.toDto(model.getChatMessage()));
+        }
     }
 }

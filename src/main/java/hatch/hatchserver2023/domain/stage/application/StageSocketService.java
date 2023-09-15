@@ -4,6 +4,7 @@ import hatch.hatchserver2023.domain.stage.dto.StageRequestDto;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.StageException;
+import hatch.hatchserver2023.global.common.response.socket.StageStatusType;
 import hatch.hatchserver2023.global.config.redis.RedisDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class StageSocketService {
         log.info("[SERVICE] savePlaySkeleton");
 
         String status = stageDataUtil.getStageStatus();
-        if(status==null || !status.equals(StageRoutineService.STAGE_STATUS_PLAY)) {
+        if(status==null || !status.equals(StageStatusType.PLAY.getType())) {
             throw new StageException(StageStatusCode.STAGE_STATUS_NOT_PLAY);
         }
 
@@ -42,7 +43,7 @@ public class StageSocketService {
 
     public void checkStageStatusMvp() {
         String status = stageDataUtil.getStageStatus();
-        if(status==null || !status.equals(StageRoutineService.STAGE_STATUS_MVP)) {
+        if(status==null || !status.equals(StageStatusType.MVP.getType())) {
             throw new StageException(StageStatusCode.STAGE_STATUS_NOT_MVP);
         }
     }

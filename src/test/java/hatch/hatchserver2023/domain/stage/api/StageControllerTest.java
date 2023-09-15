@@ -11,6 +11,7 @@ import hatch.hatchserver2023.domain.user.application.UserUtilService;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.response.code.StageStatusCode;
 import hatch.hatchserver2023.global.common.response.code.StatusCode;
+import hatch.hatchserver2023.global.common.response.socket.StageStatusType;
 import hatch.hatchserver2023.global.config.restdocs.RestDocsConfig;
 import hatch.hatchserver2023.global.config.security.WithCustomAuth;
 import lombok.extern.slf4j.Slf4j;
@@ -117,7 +118,7 @@ class StageControllerTest {
     void enterStage() throws Exception {
         //given
         int userCount = 1;
-        String stageStatus = StageRoutineService.STAGE_STATUS_WAIT;
+        String stageStatus = StageStatusType.WAIT.getType();
         long statusElapsedTime = 99L;
 
         UUID musicId = UUID.randomUUID();
