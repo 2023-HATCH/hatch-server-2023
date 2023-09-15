@@ -27,13 +27,6 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @Service
 public class StageRoutineService {
-//    public static final String STAGE_STATUS_WAIT = "WAIT";
-//    public static final String STAGE_STATUS_CATCH = "CATCH";
-//    private static final String STAGE_STATUS_CATCH_END = "CATCH_END";
-//    public static final String STAGE_STATUS_PLAY = "PLAY";
-//    public static final String STAGE_STATUS_PLAY_END = "PLAY_END";
-//    public static final String STAGE_STATUS_MVP = "MVP";
-//    private static final String STAGE_STATUS_MVP_END = "MVP_END";
 
     public static final int STAGE_PLAYER_COUNT_VALUE = 3;
     public static final int STAGE_MID_SCORE_NUM_WHEN_ALL = -1;

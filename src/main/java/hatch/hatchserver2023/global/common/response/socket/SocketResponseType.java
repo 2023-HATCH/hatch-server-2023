@@ -10,15 +10,16 @@ public enum SocketResponseType implements StatusCode {
 
     USER_COUNT( "USER_COUNT", "스테이지 인원수"),
 
-    CATCH_START( "CATCH_START", "스테이지 캐치 시작"),
-    CATCH_END( StageStatusType.CATCH_END.getType(), StageStatusType.CATCH_END.getMessage()),
-    CATCH_END_RESTART( "CATCH_END_RESTART", "스테이지 캐치 끝, 캐치 다시 시작"),
-    PLAY_START( "PLAY_START", "스테이지 플레이 시작"),
+    CATCH_START(StageStatusType.CATCH_START.getType(), StageStatusType.CATCH_START.getMessage()),
+    CATCH_END(StageStatusType.CATCH_END.getType(), StageStatusType.CATCH_END.getMessage()),
+    CATCH_END_RESTART(StageStatusType.CATCH_END_RESTART.getType(), StageStatusType.CATCH_END_RESTART.getMessage()),
+    PLAY_START(StageStatusType.PLAY_START.getType(), StageStatusType.PLAY_START.getMessage()),
     PLAY_SKELETON( "PLAY_SKELETON", "스테이지 플레이 스켈레톤 전달"),
-    PLAY_END( "PLAY_END", "스테이지 플레이 끝"),
-    MVP_START( "MVP_START", "스테이지 MVP세리머니 시작"),
+    PLAY_END(StageStatusType.PLAY_END.getType(), StageStatusType.PLAY_END.getMessage()),
+
+    MVP_START(StageStatusType.MVP_START.getType(), StageStatusType.MVP_START.getMessage()),
     MVP_SKELETON( "MVP_SKELETON", "스테이지 MVP세리머니 스켈레톤 전달"),
-    MVP_END( "MVP_END", "스테이지 MVP세리머니 끝"),
+    MVP_END(StageStatusType.MVP_END.getType(), StageStatusType.MVP_END.getMessage()),
 
     STAGE_EXIT( "STAGE_EXIT", "스테이지 퇴장"),
     STAGE_ROUTINE_STOP( "STAGE_ROUTINE_STOP", "스테이지 진행 멈춤"),
