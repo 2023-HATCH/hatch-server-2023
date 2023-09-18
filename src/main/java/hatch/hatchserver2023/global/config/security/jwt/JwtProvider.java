@@ -136,7 +136,7 @@ public class JwtProvider {
 //            throw new AuthException(AuthErrorCode.TOKEN_IS_EMPTY); //비회원?
         }
         else{
-            log.info("jwtProvider getToken {} : {}", tokenType, token);
+//            log.info("jwtProvider getToken {} : {}", tokenType, token);
             return token;
         }
     }
@@ -153,7 +153,8 @@ public class JwtProvider {
     public Authentication getAuthentication(String token) throws AuthException {
         String uuid = getUserPK(token);
         User user = getUser(uuid);
-        log.info("jwtProvider getAuthentication :  user " + user);
+//        log.info("jwtProvider getAuthentication :  user " + user);
+
 //        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUuid(), "", user.getAuthorities());  //principal에 uuid, authorities 설정
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());  //principal에 User 객체, authorities 설정
         return authentication;
@@ -170,7 +171,7 @@ public class JwtProvider {
             e.printStackTrace();
             throw new AuthException(UserStatusCode.TOKEN_CANNOT_RESOLVE); //토큰에서 회원 정보를 확인할 수 없을 때 throw
         }
-        log.info("jwtProvider getUserPKByToken userPK : {}", userPK);
+//        log.info("jwtProvider getUserPKByToken userPK : {}", userPK);
         return userPK;
     }
 
