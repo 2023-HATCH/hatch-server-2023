@@ -52,8 +52,8 @@ public class CommentFcmUtil {
     private Message createMessage(String token, Comment comment, UUID videoId){
         //푸시알림 객체 생성
         Notification notification = Notification.builder()
-                .setTitle(comment.getContent())  //푸시알림의 제목
-                .setBody(comment.getUser().getNickname()+"님이 댓글을 남겼습니다.")  //푸시알림의 내용
+                .setTitle("✉️"+comment.getUser().getNickname())  //푸시알림의 제목
+                .setBody(comment.getContent())  //푸시알림의 내용
                 .build();
 
         //요청 내용 생성 : 알림 받을 사용자의 토큰, 푸시알림 객체, 푸시알림에 보여질 내용 외에 전달해야하는 데이터들을 key-value 형태로 담아 생성
