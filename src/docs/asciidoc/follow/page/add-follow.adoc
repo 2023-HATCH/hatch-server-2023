@@ -1,3 +1,37 @@
 == 팔로우 추가
 
+NOTE: 가장 아래에 푸시알림 관련 명세가 있습니다.
+
 operation::add-follow[snippets='http-request,request-headers,path-parameters,response-fields-beneath-data,http-response']
+
+
+=== Push Notification fields
+
+푸시알림 시 전달되는 데이터 정보
+
+NOTE: 김수빈 사용자가 팔로우하면, +
+title은 "👋 김수빈", content는 "회원님을 팔로우 합니다." 라고 푸시알림이 오게됩니다.
+
+|===
+|전달방식|필드명|타입|필수여부|설명
+|title
+|`+-+`
+|`+String+`
+|true
+|👋  + 팔로우하는 사용자의 닉네임
+|content
+|`+-+`
+|`+String+`
+|true
+|회원님을 팔로우 합니다.
+|data
+|`+type+`
+|`+String+`
+|true
+|알림 유형. 고정값(ADD_FOLLOW)
+|data
+|`+followerId+`
+|`+UUID+`
+|true
+|팔로우 요청한 사용자의 UUID
+|===
