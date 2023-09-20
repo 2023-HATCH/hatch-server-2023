@@ -58,10 +58,11 @@ public class AIService {
             usedAnswerFrameCount = answer.length;
         }
         else{ // 중간점수일 경우
+            log.info("calculateSimilarity : ai answerSlice midScoreNum : {}", midScoreNum);
             int start = midScoreNum*StageRoutineService.STAGE_MID_SCORE_TIME_INTERVAL*ANSWER_SKELETON_FPS_AVG;
             int end = (midScoreNum+1)*StageRoutineService.STAGE_MID_SCORE_TIME_INTERVAL*ANSWER_SKELETON_FPS_AVG;
-            Float[][] answerSlice = Arrays.copyOfRange(answer, start, end);
             log.info("calculateSimilarity : ai answerSlice start : {}, end : {}", start, end);
+            Float[][] answerSlice = Arrays.copyOfRange(answer, start, end); // TODO : ERROR 에러나는 라인
 
             // ai 서버로 요청할 안무 두 개
             requestDto = AISimilarityRequestDto.builder()
