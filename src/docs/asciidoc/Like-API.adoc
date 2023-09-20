@@ -1,7 +1,7 @@
 == *LIKE*
 
 
-- link:like/page/add-like.html[좋아요 추가, window=_blank]
+- link:like/page/add-like.html[(UPDATE) 좋아요 추가, window=_blank]
 
 
 - link:like/page/delete-like.html[좋아요 삭제, window=_blank]

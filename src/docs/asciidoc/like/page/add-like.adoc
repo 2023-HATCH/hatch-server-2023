@@ -1,3 +1,37 @@
 == 좋아요 등록
 
+NOTE: 가장 아래에 푸시알림 관련 명세가 있습니다.
+
 operation::add-like[snippets='http-request,request-headers,path-parameters,response-fields-beneath-data,http-response']
+
+
+=== Push Notification fields
+
+푸시알림 시 전달되는 데이터 정보
+
+NOTE: 김수빈 사용자가 좋아요를 누르면 +
+title은 "❤️김수빈", content는 "회원님 영상에 좋아요를 남겼습니다." 라고 푸시알림이 오게됩니다.
+
+|===
+|전달방식|필드명|타입|필수여부|설명
+|title
+|`+-+`
+|`+String+`
+|true
+|❤️ + 좋아요 누른 사용자 닉네임
+|content
+|`+-+`
+|`+String+`
+|true
+|회원님 영상에 좋아요를 남겼습니다.
+|data
+|`+type+`
+|`+String+`
+|true
+|알림 유형. 고정값(ADD_LIKE)
+|data
+|`+videoId+`
+|`+UUID+`
+|true
+|좋아요 눌린 영상 UUID
+|===

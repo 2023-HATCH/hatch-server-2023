@@ -25,11 +25,13 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final VideoCacheUtil videoCacheUtil;
     private final LikeCacheUtil likeCacheUtil;
+    private final LikeFcmUtil likeFcmUtil;
 
-    public LikeService(LikeRepository likeRepository, VideoCacheUtil videoCacheUtil, LikeCacheUtil likeCacheUtil){
+    public LikeService(LikeRepository likeRepository, VideoCacheUtil videoCacheUtil, LikeCacheUtil likeCacheUtil, LikeFcmUtil likeFcmUtil){
         this.likeRepository = likeRepository;
         this.videoCacheUtil = videoCacheUtil;
         this.likeCacheUtil = likeCacheUtil;
+        this.likeFcmUtil = likeFcmUtil;
     }
 
 
@@ -46,6 +48,9 @@ public class LikeService {
 
         // redis 에 좋아요 데이터 저장, 좋아요 수 저장
         likeCacheUtil.addLike(video, user);
+
+        // 푸시알림 보내기
+        likeFcmUtil.sendAddLikeNotification(video.getUser(), user, video.getUuid());
     }
 
 
