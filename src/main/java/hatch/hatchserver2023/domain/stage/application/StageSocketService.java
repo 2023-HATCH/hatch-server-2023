@@ -26,7 +26,7 @@ public class StageSocketService {
 
 
     public void savePlaySkeleton(StageRequestDto.SendPlaySkeleton dto) {
-        log.info("[SERVICE] savePlaySkeleton");
+//        log.info("[SERVICE] savePlaySkeleton");  // TODO : 로그 임시 삭제
 
         String status = stageDataUtil.getStageStatus();
         if(status==null || !status.equals(StageStatusType.PLAY.getType())) {

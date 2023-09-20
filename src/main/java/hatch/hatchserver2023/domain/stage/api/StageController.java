@@ -69,7 +69,7 @@ public class StageController {
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GetMapping("/users")
     public ResponseEntity<CommonResponse> getStageUsers() {
-        log.info("[API] GET /stage/users");
+//        log.info("[API] GET /stage/users");   // TODO : 로그 임시 삭제
         List<Long> userIds = stageService.getStageEnterUserIds();
         List<User> users = userUtilService.getUsersById(userIds);
         return ResponseEntity.ok().body(CommonResponse.toResponse(

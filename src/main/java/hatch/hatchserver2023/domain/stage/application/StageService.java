@@ -158,7 +158,7 @@ public class StageService {
      * @return
      */
     public List<Long> getStageEnterUserIds() {
-        log.info("[SERVICE] getStageEnterUserProfiles");
+//        log.info("[SERVICE] getStageEnterUserProfiles");   // TODO : 로그 임시 삭제
         Set<String> userIdSet = stageDataUtil.getStageEnterUsers();
         List<String> userIds = new ArrayList<>(userIdSet);
         return userIds.stream().map(Long::parseLong).collect(Collectors.toList());

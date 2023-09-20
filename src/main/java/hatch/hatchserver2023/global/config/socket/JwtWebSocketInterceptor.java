@@ -46,7 +46,8 @@ public class JwtWebSocketInterceptor implements ChannelInterceptor {
      */
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        log.info("[INTERCEPTOR] WebSocketInterceptor preSend");
+//        log.info("[INTERCEPTOR] WebSocketInterceptor preSend"); // TODO : 로그 임시 삭제
+
 //        log.info("message : {}", message);
 //        log.info("native header : {}", headerAccessor.getHeader("nativeHeaders"));
 //        log.info("native header - Authorization : {}", headerAccessor.getFirstNativeHeader("Authorization"));
@@ -124,7 +125,7 @@ public class JwtWebSocketInterceptor implements ChannelInterceptor {
 
                 break;
             default:
-                log.info("[INTERCEPTOR] postSend command {}. sessionId {}", accessor.getCommand(), sessionId);
+//                log.info("[INTERCEPTOR] postSend command {}. sessionId {}", accessor.getCommand(), sessionId); // TODO : 로그 임시 삭제
                 break;
         }
 
