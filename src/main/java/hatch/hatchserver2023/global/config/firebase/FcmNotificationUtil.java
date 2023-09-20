@@ -18,6 +18,7 @@ public class FcmNotificationUtil {
     public static final String TYPE_SEND_CHAT_MESSAGE = "SEND_CHAT_MESSAGE";
     public static final String TYPE_ADD_COMMENT = "ADD_COMMENT";
     public static final String TYPE_ADD_LIKE = "ADD_LIKE";
+    public static final String TYPE_ADD_FOLLOW = "ADD_FOLLOW";
 
     private final FcmTokenDao fcmTokenDao;
 

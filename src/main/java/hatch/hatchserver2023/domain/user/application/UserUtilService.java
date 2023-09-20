@@ -36,13 +36,15 @@ public class UserUtilService {
     private final VideoRepository videoRepository;
     private final LikeService likeService;
     private final VideoCacheUtil videoCacheUtil;
+    private final FollowFcmUtil followFcmUtil;
 
-    public UserUtilService(UserRepository userRepository, FollowRepository followRepository, VideoRepository videoRepository, LikeService likeService, VideoCacheUtil videoCacheUtil) {
+    public UserUtilService(UserRepository userRepository, FollowRepository followRepository, VideoRepository videoRepository, LikeService likeService, VideoCacheUtil videoCacheUtil, FollowFcmUtil followFcmUtil) {
         this.userRepository = userRepository;
         this.followRepository = followRepository;
         this.videoRepository = videoRepository;
         this.likeService = likeService;
         this.videoCacheUtil = videoCacheUtil;
+        this.followFcmUtil = followFcmUtil;
     }
 
 
@@ -245,6 +247,9 @@ public class UserUtilService {
                 .build();
 
         followRepository.save(follow);
+
+        // 푸시알림 보내기
+        followFcmUtil.sendAddFollowNotification(toUser, fromUser);
     }
 
 

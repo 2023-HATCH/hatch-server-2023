@@ -2,8 +2,6 @@ package hatch.hatchserver2023.domain.like.application;
 
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
-import hatch.hatchserver2023.domain.comment.domain.Comment;
-import hatch.hatchserver2023.domain.like.domain.Like;
 import hatch.hatchserver2023.domain.user.domain.User;
 import hatch.hatchserver2023.global.common.response.code.UserStatusCode;
 import hatch.hatchserver2023.global.common.response.exception.AuthException;
@@ -53,7 +51,7 @@ public class LikeFcmUtil {
     private Message createMessage(String token, User likedUser, UUID videoId){
         //푸시알림 객체 생성
         Notification notification = Notification.builder()
-                .setTitle("❤️" + likedUser.getNickname())  //푸시알림의 제목
+                .setTitle("❤️ " + likedUser.getNickname())  //푸시알림의 제목
                 .setBody("회원님 영상에 좋아요를 남겼습니다.")  //푸시알림의 내용
                 .build();
 
