@@ -33,7 +33,7 @@ public class StageRoutineService {
     public static final int STAGE_CATCH_SUCCESS_LAST_INDEX = 2;
     public static final int STAGE_MID_SCORE_TIME_INTERVAL = 4;
 
-    private static final int STAGE_CATCH_TIME = 3;
+    private static final int STAGE_CATCH_TIME = 5;
     private static final int STAGE_CATCH_AGAIN_INTERVAL = 2;
     private static final int STAGE_MVP_TIME = 7;
 
