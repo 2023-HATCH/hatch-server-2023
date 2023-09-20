@@ -8,8 +8,8 @@ operation::post-add-comment[snippets='http-request,request-headers,request-body,
 
 푸시알림 시 전달되는 데이터 정보
 
-NOTE: 김수빈 사용자가 "안녕하세요~" 라는 댓글을 작성하면, +
-title은 "안녕하세요~", content는 "김수빈님이 댓글을 남겼습니다." 라고 푸시알림이 오게됩니다.
+NOTE: 김수빈 사용자가 "멋져요" 라는 댓글을 작성하면, +
+title은 "✉️ 김수빈", content는 "멋져요" 라고 푸시알림이 오게됩니다.
 
 |===
 |전달방식|필드명|타입|필수여부|설명
@@ -17,12 +17,12 @@ title은 "안녕하세요~", content는 "김수빈님이 댓글을 남겼습니�
 |`+-+`
 |`+String+`
 |true
-|작성한 댓글 내용
+|✉️  + 댓글 작성자의 닉네임
 |content
 |`+-+`
 |`+String+`
 |true
-|댓글 작성자의 닉네임 + "님이 댓글을 남겼습니다."
+|작성한 댓글 내용
 |data
 |`+type+`
 |`+String+`
