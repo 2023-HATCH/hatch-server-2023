@@ -33,9 +33,10 @@ public class StageRoutineService {
     public static final int STAGE_CATCH_SUCCESS_LAST_INDEX = 2;
     public static final int STAGE_MID_SCORE_TIME_INTERVAL = 4;
 
-    private static final int STAGE_CATCH_TIME = 3;
+    private static final int STAGE_CATCH_TIME = 5;
     private static final int STAGE_CATCH_AGAIN_INTERVAL = 2;
     private static final int STAGE_MVP_TIME = 7;
+    private static final int STAGE_PLAY_READY_TIME_INTERVAL = 5;
 
     private final UserRepository userRepository;
     private final MusicRepository musicRepository;
@@ -81,6 +82,7 @@ public class StageRoutineService {
 //                TimeUnit.SECONDS.sleep(playTime);
                 
                 int playTime = startPlay(music);
+                TimeUnit.SECONDS.sleep(STAGE_PLAY_READY_TIME_INTERVAL); // 플레이 대기시간
                 repeatMidScore(playTime);
 
                 endPlay();
@@ -145,13 +147,12 @@ public class StageRoutineService {
         log.info("StageRoutineUtil startPlay");
         stageDataUtil.setStageStatus(StageStatusType.PLAY);
 
-        final int readyTime = 5;
-        int musicTime = (int) Math.ceil(music.getLength()/1000.0); //밀리초 올림해서 초단위로 변경 //TODO : 개발 편의 위해 잠시 //music.getLength()/100
+        int musicTime = (int) Math.ceil(music.getLength()/1000.0); //밀리초 올림해서 초단위로 변경
 
         stageDataUtil.setStageStatusStartTime();
         stageSocketResponser.startPlay();
 
-        return readyTime + musicTime;
+        return musicTime;
     }
 
     private void repeatMidScore(int playTimeRemain) throws InterruptedException {

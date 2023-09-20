@@ -450,11 +450,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_get_chat_messages_http_request">HTTP request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/chats/rooms/8b228a56-901b-4836-95c7-2db561a3b28b/messages?page=0&amp;size=5 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/chats/rooms/db1d1f1b-7c99-4abb-9934-8191af16d985/messages?page=0&amp;size=5 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 x-access-token: 액세스 토큰 값
 x-refresh-token: 리프레시 토큰 값
-X-CSRF-TOKEN: e8403ca8-943c-4047-b1ae-4a4ef97ebadd
+X-CSRF-TOKEN: 6f79ccc7-03be-4325-926e-0cb2833ebdb7
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -582,26 +582,26 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 872
 
 {
-  "timeStamp" : "2023/09/15 15:30:03",
+  "timeStamp" : "2023/09/20 14:52:45",
   "code" : "CHAT-2001",
   "message" : "[채팅] 채팅 메세지 목록 조회 성공",
   "data" : {
     "page" : 0,
     "size" : 5,
     "messages" : [ {
-      "chatMessageId" : "d5662d6f-c389-4d7d-9a23-f65c4d3dc131",
-      "createdAt" : "2023/09/15 15:30:03",
+      "chatMessageId" : "95064352-2360-4352-857e-6e334a53253b",
+      "createdAt" : "2023/09/20 14:52:45",
       "sender" : {
-        "userId" : "2a0766d6-5637-42ad-bd9b-db055a38c44e",
+        "userId" : "860682e1-29a7-4493-805b-62862564b112",
         "nickname" : "스펀지밥",
         "profileImg" : "http://testurl"
       },
       "content" : "안녕하세요~ 11"
     }, {
-      "chatMessageId" : "25528808-5e7b-4961-98bb-671101dc8a98",
-      "createdAt" : "2023/09/15 15:30:03",
+      "chatMessageId" : "234f4eba-dd31-486a-b608-1943f0b7430d",
+      "createdAt" : "2023/09/20 14:52:45",
       "sender" : {
-        "userId" : "4499df4f-5d78-4b45-b155-fc66e5140331",
+        "userId" : "8b3fab77-2705-4d12-92e6-8ce589f56d2b",
         "nickname" : "뚱이",
         "profileImg" : "http://testurl2"
       },
@@ -618,7 +618,7 @@ Content-Length: 872
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-24 02:24:33 +0900
+Last updated 2023-09-20 13:25:46 +0900
 </div>
 </div>
 </body>
