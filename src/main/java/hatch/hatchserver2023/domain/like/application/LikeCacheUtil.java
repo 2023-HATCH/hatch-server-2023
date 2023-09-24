@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -191,12 +192,18 @@ public class LikeCacheUtil {
             // status 가 add인가 delete인가에 따라서 like 생성
             Like like;
             if(status.equals(CACHE_LIKE_INFO_ADD)){
-                //add 이면 like 객체 새로 생성
-                like = Like.builder()
-                        .user(user)
-                        .video(video).build();
-                addLikes.add(like);
-                log.info("[SCHEDULED] added like info user : {}, video : {}", like.getUser().getNickname(), like.getVideo().getTitle());
+                //add 이면 이미 DB에 존재하는 데이터인지 확인
+                Optional<Like> likeOp = likeRepository.findByVideoAndUser(video, user);
+                if(likeOp.isPresent()) {
+                    log.info("[SCHEDULED] this like already exist. skip");
+                }else{
+                    //존재하지 않으면 like 객체 새로 생성
+                    like = Like.builder()
+                            .user(user)
+                            .video(video).build();
+                    addLikes.add(like);
+                    log.info("[SCHEDULED] added like info user : {}, video : {}", like.getUser().getNickname(), like.getVideo().getTitle());
+                }
             }
             else if(status.equals(CACHE_LIKE_INFO_DELETE)){
                 // delete 이면 RDB 에서 삭제할 데이터를 가져옴

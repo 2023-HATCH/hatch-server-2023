@@ -116,7 +116,11 @@ public class KakaoService {
         String email = "";
         boolean hasEmail = kakao_account.getAsJsonObject().get("has_email").getAsBoolean();
         if (hasEmail) {
-            email = kakao_account.getAsJsonObject().get("email").getAsString();
+            try{
+                email = kakao_account.getAsJsonObject().get("email").getAsString();
+            } catch (Exception e) {
+                log.info("getEmail : cannot get email from kakao");
+            }
         }
         return email;
     }
