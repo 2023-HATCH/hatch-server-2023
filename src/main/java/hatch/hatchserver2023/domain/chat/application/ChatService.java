@@ -86,9 +86,9 @@ public class ChatService {
         List<ChatModel.ChatRoomInfo> updatedChatRoomInfos = chatRoomInfos.stream().peek(info -> // peek : 여기서 map과 동일하게 쓰임
                 info.updateChatRoom(chatCacheUtil.getRecentUpdatedChatRoom(info.getChatRoom()))
         ).collect(Collectors.toList());
-        log.info("updatedChatRoomInfos.get(0) : {}", updatedChatRoomInfos.get(0).getChatRoom().getRecentContent());
-        log.info("updatedChatRoomInfos.get(1) : {}", updatedChatRoomInfos.get(1).getChatRoom().getRecentContent());
-        log.info("updatedChatRoomInfos.get(1) : {}", updatedChatRoomInfos.get(1).getChatRoom().getRecentSendAt());
+//        log.info("updatedChatRoomInfos.get(0) : {}", updatedChatRoomInfos.get(0).getChatRoom().getRecentContent());
+//        log.info("updatedChatRoomInfos.get(1) : {}", updatedChatRoomInfos.get(1).getChatRoom().getRecentContent());
+//        log.info("updatedChatRoomInfos.get(1) : {}", updatedChatRoomInfos.get(1).getChatRoom().getRecentSendAt());
 
         return updatedChatRoomInfos;
     }
