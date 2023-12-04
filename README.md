@@ -95,6 +95,8 @@
 ## Preview
 [![PoPo Introduction Video](https://img.youtube.com/vi/6maF_XW2snk/0.jpg)](https://youtu.be/6maF_XW2snk)
 
+*(이미지를 클릭하면 데모영상 링크로 이동)*
+
 
 ## Service Introduction
 ![슬라이드1](https://github.com/2023-HATCH/hatch-server-2023/assets/81364415/b16ce13f-be62-486d-a9f4-9609b80c6967)
